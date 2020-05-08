@@ -1,8 +1,10 @@
+import * as d3 from './d3';
+
 import { Data } from './models/data.model';
 import { Options } from './models/options.model';
 
 // TODO import and treeshake
-declare var d3: any;
+// declare var d3: any;
 
 export function race(data: Data[], options: Options = {}) {
   const dataShape = options.dataShape || "";
@@ -31,8 +33,8 @@ export function race(data: Data[], options: Options = {}) {
 
   let margin: any;
   let svg: any;
-  let x: any;
-  let y: any;
+  let x: d3.ScaleLinear<number, number>;
+  let y: d3.ScaleLinear<number, number>;
   let xAxis: any;
   let barPadding: any;
   let dateCounterText: any;
@@ -207,7 +209,7 @@ export function race(data: Data[], options: Options = {}) {
     };
   }
 
-  function getDateSlice(data: Data[], date: string, topN: number, initialView = false) {
+  function getDateSlice(data: Data[], date: string, topN: number, initialView: boolean) {
     const dateSlice = data
       .filter((d) => d.date === date && !isNaN(d.value))
       .map((d) => {
@@ -226,8 +228,8 @@ export function race(data: Data[], options: Options = {}) {
   }
 
   function initialize() {
-    tickerDate.setFirst();
     initializeLastValues();
+    tickerDate.setFirst();
 
     function initializeLastValues() {
       lastValues = {};
@@ -247,7 +249,7 @@ export function race(data: Data[], options: Options = {}) {
     setRunning(true);
     ticker = d3.interval(showRace, tickDuration);
 
-    function showRace(_: Event) {
+    function showRace(_: number) {
       if (tickerDate.isLast()) {
         renderFrame();
         if (loop) {
@@ -442,7 +444,7 @@ export function race(data: Data[], options: Options = {}) {
 
       x = d3
         .scaleLinear()
-        .domain([0, d3.max(dateSlice, (d: Data) => d.value)])
+        .domain([0, d3.max(dateSlice, (d: Data) => d.value) as number])
         .range([margin.left, width - margin.right - 65]);
 
       y = d3
@@ -451,11 +453,11 @@ export function race(data: Data[], options: Options = {}) {
         .range([height - margin.bottom, margin.top]);
 
       xAxis = d3
-        .axisTop()
-        .scale(x)
+        .axisTop(x)
+        // .scale()
         .ticks(width > 500 ? 5 : 2)
         .tickSize(-(height - margin.top - margin.bottom))
-        .tickFormat((d: Data) => d3.format(",")(d));
+        .tickFormat((n: number | { valueOf(): number; }) => d3.format(",")(n));
 
       svg
         .append("g")
@@ -473,7 +475,7 @@ export function race(data: Data[], options: Options = {}) {
         .attr("class", "bar")
         .attr("x", x(0) + 1)
         .attr("width", (d: Data) => Math.abs(x(d.value) - x(0) - 1))
-        .attr("y", (d: Data) => y(d.rank) + 5)
+        .attr("y", (d: any) => y(d.rank) + 5)
         .attr("height", y(1) - y(0) - barPadding)
         .style("fill", (d: Data) => d.color);
 
@@ -486,7 +488,7 @@ export function race(data: Data[], options: Options = {}) {
         .append("text")
         .attr("class", "label")
         .attr("x", labelX)
-        .attr("y", (d: Data) => y(d.rank) + 5 + (y(1) - y(0)) / 2 + 1)
+        .attr("y", (d: Data) => y(d.rank as number) + 5 + (y(1) - y(0)) / 2 + 1)
         .style("text-anchor", "end")
         .html((d: Data) => d.name);
       svg
@@ -496,8 +498,8 @@ export function race(data: Data[], options: Options = {}) {
         .append("text")
         .attr("class", "valueLabel")
         .attr("x", (d: Data) => x(d.value) + 5)
-        .attr("y", (d: Data) => y(d.rank) + 5 + (y(1) - y(0)) / 2 + 1)
-        .text((d: Data) => d3.format(",.0f")(d.lastValue));
+        .attr("y", (d: Data) => y(d.rank as number) + 5 + (y(1) - y(0)) / 2 + 1)
+        .text((d: Data) => d3.format(",.0f")(d.lastValue as number));
 
       const strokeWidth = 10;
       dateCounterText = svg
@@ -571,7 +573,7 @@ export function race(data: Data[], options: Options = {}) {
   }
 
   function renderFrame() {
-    x.domain([0, d3.max(dateSlice, (d: Data) => d.value)]);
+    x.domain([0, d3.max(dateSlice, (d: Data) => d.value) as number]);
 
     svg
       .select(".xAxis")
@@ -594,14 +596,14 @@ export function race(data: Data[], options: Options = {}) {
       .transition()
       .duration(tickDuration)
       .ease(d3.easeLinear)
-      .attr("y", (d: Data) => y(d.rank) + 5);
+      .attr("y", (d: Data) => y(d.rank as number) + 5);
 
     bars
       .transition()
       .duration(tickDuration)
       .ease(d3.easeLinear)
       .attr("width", (d: Data) => Math.abs(x(d.value) - x(0) - 1))
-      .attr("y", (d: Data) => y(d.rank) + 5);
+      .attr("y", (d: Data) => y(d.rank as number) + 5);
 
     bars
       .exit()
@@ -625,14 +627,14 @@ export function race(data: Data[], options: Options = {}) {
       .transition()
       .duration(tickDuration)
       .ease(d3.easeLinear)
-      .attr("y", (d: Data) => y(d.rank) + 5 + (y(1) - y(0)) / 2 + 1);
+      .attr("y", (d: Data) => y(d.rank as number) + 5 + (y(1) - y(0)) / 2 + 1);
 
     labels
       .transition()
       .duration(tickDuration)
       .ease(d3.easeLinear)
       .attr("x", labelX)
-      .attr("y", (d: Data) => y(d.rank) + 5 + (y(1) - y(0)) / 2 + 1);
+      .attr("y", (d: Data) => y(d.rank as number) + 5 + (y(1) - y(0)) / 2 + 1);
 
     labels
       .exit()
@@ -653,20 +655,20 @@ export function race(data: Data[], options: Options = {}) {
       .attr("class", "valueLabel")
       .attr("x", (d: Data) => x(d.value) + 5)
       .attr("y", () => y(topN + 1) + 5)
-      .text((d: Data) => d3.format(",.0f")(d.lastValue))
+      .text((d: Data) => d3.format(",.0f")(d.lastValue as number))
       .transition()
       .duration(tickDuration)
       .ease(d3.easeLinear)
-      .attr("y", (d: Data) => y(d.rank) + 5 + (y(1) - y(0)) / 2 + 1);
+      .attr("y", (d: Data) => y(d.rank as number) + 5 + (y(1) - y(0)) / 2 + 1);
 
     valueLabels
       .transition()
       .duration(tickDuration)
       .ease(d3.easeLinear)
       .attr("x", (d: Data) => x(d.value) + 5)
-      .attr("y", (d: Data) => y(d.rank) + 5 + (y(1) - y(0)) / 2 + 1)
+      .attr("y", (d: Data) => y(d.rank as number) + 5 + (y(1) - y(0)) / 2 + 1)
       .tween("text", function (d: Data) {
-        const i = d3.interpolateRound(d.lastValue, d.value);
+        const i = d3.interpolateRound(d.lastValue as number, d.value);
         return function (t: any) {
           this.textContent = d3.format(",")(i(t));
         };
@@ -821,7 +823,7 @@ export function race(data: Data[], options: Options = {}) {
   };
 }
 
-export function loadData(URL: URL, type = "json") {
+export function loadData(URL: string, type = "json") {
   switch (type) {
     case "json":
       return d3.json(URL);

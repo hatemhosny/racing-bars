@@ -9,3 +9,5 @@ coverage
 *.log
 
 yarn.lock
+
+.rts2_cache*
