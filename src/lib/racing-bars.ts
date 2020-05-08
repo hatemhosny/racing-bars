@@ -3,9 +3,6 @@ import * as d3 from './d3';
 import { Data } from './models/data.model';
 import { Options } from './models/options.model';
 
-// TODO import and treeshake
-// declare var d3: any;
-
 export function race(data: Data[], options: Options = {}) {
   const dataShape = options.dataShape || "";
   const fillDateGaps = options.fillDateGaps; // [false, "years", "months", "days"]
