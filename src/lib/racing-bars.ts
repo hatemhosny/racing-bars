@@ -1,4 +1,4 @@
-import * as d3 from './d3';
+import * as d3 from 'd3';
 
 import { Data } from './models/data.model';
 import { Options } from './models/options.model';
@@ -54,12 +54,10 @@ export function race(data: Data[], options: Options = {}) {
 
   const tickerDate = tickerDateFactory(getDates(data));
 
-  let initialView = true;
   let dateSlice: Data[];
   initialize();
 
   renderInitalView();
-  initialView = false;
   renderFrame();
 
   startTicker();
@@ -162,8 +160,8 @@ export function race(data: Data[], options: Options = {}) {
 
     function updateDate() {
       currentDate = dates[dateCounter];
-      dateSlice = getDateSlice(data, tickerDate.getDate(), topN, initialView);
-      if (!initialView) { renderFrame(); }
+      dateSlice = getDateSlice(data, tickerDate.getDate(), topN);
+      renderFrame();
       element.dispatchEvent(
         new CustomEvent("dateChanged", {
           detail: { date: formatDate(currentDate, "YYYY-MM-DD") },
@@ -206,11 +204,11 @@ export function race(data: Data[], options: Options = {}) {
     };
   }
 
-  function getDateSlice(data: Data[], date: string, topN: number, initialView: boolean) {
+  function getDateSlice(data: Data[], date: string, topN: number) {
     const dateSlice = data
       .filter((d) => d.date === date && !isNaN(d.value))
       .map((d) => {
-        if (initialView) { return d; }
+        if (!lastValues) { return d; }
 
         const lastValue = lastValues[d.name].value;
         lastValues[d.name].date = d.date;
@@ -570,6 +568,8 @@ export function race(data: Data[], options: Options = {}) {
   }
 
   function renderFrame() {
+    if (!x) {return;}
+
     x.domain([0, d3.max(dateSlice, (d: Data) => d.value) as number]);
 
     svg

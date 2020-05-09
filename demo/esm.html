@@ -40,21 +40,19 @@
   <div id="container">
     <div id="race" class="race"></div>
   </div>
-  <script type="module" src="index.js">
-  //   import {race} from '../dist/index.js';
+  <!-- <script src="../node_modules/d3/dist/d3.min.js"></script> -->
+  <script type="module">
+    import { loadData, race } from '../dist/racing-bars.m.js';
 
-  //   console.log(race);
-
-  //   const options = {
-  //     title: "A Tale of 11 Years",
-  //     subTitle: "Top 10 Surgical Procedures",
-  //     dateCounterFormat: "MM/YYYY",
-  //     caption: "Aswan Heart Centre",
-  //     autorun: false,
-  //   };
-  // //  racingBars.loadData("data/procedures.json").then((data) => {
-  // //   racingBars.race(data, options);
-  // //   });
-
+    const options = {
+      title: 'A Tale of 11 Years',
+      subTitle: 'Top 10 Surgical Procedures',
+      dateCounterFormat: 'MM/YYYY',
+      caption: 'Aswan Heart Centre',
+      autorun: false
+    };
+    loadData('data/procedures.json').then(data => {
+      race(data, options);
+    });
   </script>
 </body>

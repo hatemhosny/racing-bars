@@ -14,8 +14,7 @@
     "describe": "npm-scripts-info",
     "build": "run-s clean build:microbundle",
     "build:microbundle": "microbundle build src/index.ts --external none",
-    "build:lib": "parcel build src/index.ts --global racingBars",
-    "build:parcel": "parcel build src/index.ts  -d dist/node --target node --bundle-node-modules",
+    "build:lib": "microbundle build src/index.ts",
     "build:tsc": "run-s clean && run-p build:tsc:*",
     "build:tsc:main": "tsc -p tsconfig.json",
     "build:tsc:module": "tsc -p tsconfig.module.json",
@@ -25,7 +24,7 @@
     "test": "run-s build test:*",
     "test:lint": "tslint --project . && prettier \"src/**/*.ts\" --list-different",
     "test:unit": "jest",
-    "watch": "run-s clean build:main && run-p \"build:main -- -w\" \"test:unit -- --watch\"",
+    "watch": "run-s clean build:lib && run-p \"build:lib -- -w\" \"test:unit -- --watch\"",
     "cov": "run-s build test:unit cov:html && open-cli coverage/index.html",
     "cov:html": "nyc report --reporter=html",
     "cov:send": "nyc report --reporter=lcov && codecov",
@@ -88,5 +87,9 @@
   },
   "prettier": {
     "singleQuote": true
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "jsdom"
   }
 }
