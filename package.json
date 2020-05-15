@@ -10,6 +10,7 @@
   "module": "dist/racing-bars.m.js",
   "types": "dist/racing-bars.d.ts",
   "source": "src/index.js",
+  "unpkg": "dist/racing-bars.umd.js",
   "scripts": {
     "describe": "npm-scripts-info",
     "start": "run-p serve dev",

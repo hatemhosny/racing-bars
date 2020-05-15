@@ -880,16 +880,3 @@ export function race(data: Data[], options: Options = {}) {
     }
   };
 }
-
-export function loadData(URL: string, type = 'json') {
-  switch (type) {
-    case 'json':
-      return d3.json(URL);
-    case 'csv':
-      return d3.csv(URL);
-    case 'tsv':
-      return d3.tsv(URL);
-    default:
-      throw new Error(`Unsupported data type: ${type}`);
-  }
-}
