@@ -1,1 +1,1 @@
-export {loadData, race} from './lib/racing-bars';
+export { loadData, race } from './lib/racing-bars';
