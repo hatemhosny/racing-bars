@@ -1,5 +1,5 @@
 import * as d3 from 'd3';
-
+console.log(d3);
 import { Data } from './models/data.model';
 import { Options } from './models/options.model';
 
@@ -39,6 +39,7 @@ export function race(data: Data[], options: Options = {}) {
   let lastValues: any;
   let running: boolean;
   let ticker: any;
+
   const element = document.querySelector(selector) as HTMLElement;
   const minHeight = 300;
   const minWidth = 500;
@@ -528,6 +529,12 @@ export function race(data: Data[], options: Options = {}) {
     }
 
     function renderControls() {
+      const icons = {
+        play: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-play"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>`,
+        pause: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-pause"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>`,
+        skipForward: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-skip-forward"><polygon points="5 4 15 12 5 20 5 4"></polygon><line x1="19" y1="5" x2="19" y2="19"></line></svg>`,
+        skipBack: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-skip-back"><polygon points="19 20 9 12 19 4 19 20"></polygon><line x1="5" y1="19" x2="5" y2="5"></line></svg>`,
+      }
       element.style.position = "relative";
 
       const controls = addElement("div", "controls", "", element);
@@ -535,16 +542,16 @@ export function race(data: Data[], options: Options = {}) {
       controls.style.top = "0";
       controls.style.right = margin.right + barPadding + "px";
 
-      const rewindButton = addElement("span", "rewind", "⏮︎", controls);
+      const rewindButton = addElement("div", "rewind", icons.skipBack, controls);
       rewindButton.addEventListener("click", rewindTicker);
 
-      const playButton = addElement("span", "play", "⏵︎", controls);
+      const playButton = addElement("div", "play", icons.play, controls);
       playButton.addEventListener("click", toggle);
 
-      const pauseButton = addElement("span", "pause", "⏸︎", controls);
+      const pauseButton = addElement("div", "pause", icons.pause, controls);
       pauseButton.addEventListener("click", toggle);
 
-      const fastforwardButton = addElement("span", "fastforward", "⏭︎", controls);
+      const fastforwardButton = addElement("div", "fastforward", icons.skipForward, controls);
       fastforwardButton.addEventListener("click", fastForwardTicker);
 
       switch (showControls) {

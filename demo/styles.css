@@ -44,11 +44,10 @@
 #race path.domain {
   display: none;
 }
-
 #race .controls {
   display: flex;
 }
-#race .controls span {
+#race .controls div {
   cursor: pointer;
   font-size: 24px;
   font-weight: 700;
@@ -62,4 +61,11 @@
   border-radius: 5px;
   margin: 5px;
   text-align: center;
+}
+#race .controls div:hover {
+  background: #aaaaaa;
+  color: black;
+}
+#race .controls div svg {
+  margin: 7px auto;
 }
