@@ -1,5 +1,5 @@
 import * as d3 from 'd3';
-console.log(d3);
+
 import { Data } from './models/data.model';
 import { Options } from './models/options.model';
 

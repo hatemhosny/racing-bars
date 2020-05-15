@@ -1,9 +1,7 @@
 {
   "extends": "./tsconfig",
   "compilerOptions": {
-    "target": "esnext",
-    "outDir": "build/module",
-    "module": "UMD"
+    "declaration": false
   },
   "exclude": [
     "node_modules/**"
