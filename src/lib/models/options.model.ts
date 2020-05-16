@@ -15,7 +15,7 @@ export interface Options {
   colorSeed?: any;
   disableGroupColors?: any;
   tickDuration?: any;
-  top_n?: any;
+  topN?: any;
   height?: any;
   width?: any;
   disableClickEvents?: any;

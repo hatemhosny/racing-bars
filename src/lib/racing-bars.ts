@@ -1,7 +1,6 @@
 import * as d3 from 'd3';
 
-import { Data } from './models/data.model';
-import { Options } from './models/options.model';
+import { Data, Options } from './models';
 
 export function race(data: Data[], options: Options = {}) {
   const dataShape = options.dataShape || '';
@@ -20,7 +19,7 @@ export function race(data: Data[], options: Options = {}) {
   const colorSeed = options.colorSeed || '';
   const disableGroupColors = options.disableGroupColors;
   const tickDuration = +options.tickDuration || 500;
-  const topN = +options.top_n || 10;
+  const topN = +options.topN || 10;
   const inputHeight = options.height;
   const inputWidth = options.width;
   const disableClickEvents = options.disableClickEvents || true;
@@ -152,17 +151,17 @@ export function race(data: Data[], options: Options = {}) {
 
       const missing = data
         .filter(d => d.date === dateRange[index - 1])
-        .map(d => {
+        .map(d =>
           // const value = {
           //   last: d.value,
           //   zero: 0,
           // }
-          return {
+          ({
             ...d,
             date
             // value: value[fillDateGapsValue],
-          };
-        });
+          })
+        );
 
       data.push(...missing);
     });
@@ -867,9 +866,7 @@ export function race(data: Data[], options: Options = {}) {
     dec: (value = 1) => {
       tickerDate.dec(value);
     },
-    getCurrentDate: () => {
-      return tickerDate.getDate();
-    },
+    getCurrentDate: () => tickerDate.getDate(),
     getDates: () =>
       tickerDate.getDates().map(date => formatDate(date, 'YYYY-MM-DD')),
     setDate: (inputDate: string | Date) => {
