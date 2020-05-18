@@ -14,11 +14,11 @@ export function createTicker(runningCallback: (running: boolean) => void) {
     dates: string[],
     tickerOptions: TickerOptions,
     updateDateCallback: (currentDate: string) => void,
-    _renderFrameFn: () => void
+    renderFrameCallback: () => void
   ) {
     tickDuration = tickerOptions.tickDuration;
     loopOption = tickerOptions.loop;
-    renderFrame = _renderFrameFn;
+    renderFrame = renderFrameCallback;
 
     let dateCounter = 0;
     let currentDate: string;

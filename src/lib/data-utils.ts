@@ -1,5 +1,5 @@
 import { formatDate, getDateString } from './dates';
-import { Data } from './models';
+import { Data, LastValues } from './models';
 import { getColor } from './utils';
 
 export function prepareData(
@@ -83,7 +83,7 @@ export function fillGaps(data: Data[], dates: string[], period: 'years' | 'month
   return data;
 }
 
-export function getDateSlice(data: Data[], date: string, lastValues: any, topN: number) {
+export function getDateSlice(data: Data[], date: string, lastValues: LastValues, topN: number) {
   return data
     .filter(d => d.date === date && !isNaN(d.value))
     .map(d => {

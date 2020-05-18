@@ -32,7 +32,7 @@ export interface RenderOptions {
   dateCounterFormat: string;
   labelsOnBars: boolean;
   labelsWidth: number;
-  showControls: 'all' | 'play' | 'none';
+  showControls: Options['showControls'];
   inputHeight?: string;
   inputWidth?: string;
   minHeight: number;

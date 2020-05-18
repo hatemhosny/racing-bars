@@ -1,6 +1,6 @@
 import { fillGaps, getDateSlice, prepareData } from './data-utils';
 import { filterDates, formatDate, getDateString, getDates } from './dates';
-import { ControlButtons, Data, Options, RenderOptions, TickerOptions } from './models';
+import { ControlButtons, Data, Options, RenderOptions, TickerOptions, LastValues } from './models';
 import { createRenderer } from './renderer';
 import { createTicker } from './ticker';
 
@@ -57,7 +57,7 @@ export function race(data: Data[], options: Options = {}) {
   // ********************
 
   const element = document.querySelector(selector) as HTMLElement;
-  let lastValues: any;
+  let lastValues: LastValues;
 
   data = filterDates(data, startDate, endDate);
   data = prepareData(data, dataShape, disableGroupColors, colorSeed);
@@ -98,9 +98,8 @@ export function race(data: Data[], options: Options = {}) {
   function renderInitalView() {
     renderer.renderInitalView(dateSlice);
     ticker.stop();
-
     const controlButtons = renderer.getControlButtons();
-    addListenersToControls(controlButtons);
+    registerControlButtonEvents(controlButtons);
   }
 
   function renderFrame() {
@@ -111,7 +110,7 @@ export function race(data: Data[], options: Options = {}) {
     renderer.renderAsRunning(running);
   }
 
-  function addListenersToControls(controlButtons: ControlButtons) {
+  function registerControlButtonEvents(controlButtons: ControlButtons) {
     if (!controlButtons) {
       return;
     }
@@ -209,7 +208,6 @@ export function race(data: Data[], options: Options = {}) {
   function registerClickEvents() {
     const svg = element.querySelector('svg') as SVGSVGElement;
     svg.addEventListener('click', ticker.toggle);
-
     element.addEventListener('dblclick', ticker.fastForward);
   }
 
