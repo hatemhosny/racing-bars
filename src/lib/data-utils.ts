@@ -2,7 +2,12 @@ import { formatDate, getDateString } from './dates';
 import { Data } from './models';
 import { getColor } from './utils';
 
-export function prepareData(data: Data[], dataShape: string, disableGroupColors: boolean, colorSeed: string) {
+export function prepareData(
+  data: Data[],
+  dataShape: string,
+  disableGroupColors: boolean,
+  colorSeed: string
+) {
   if (dataShape === 'wide') {
     data = wideDataToLong(data);
   }
@@ -79,21 +84,18 @@ export function fillGaps(data: Data[], dates: string[], period: 'years' | 'month
 }
 
 export function getDateSlice(data: Data[], date: string, lastValues: any, topN: number) {
-  const dateSlice = data
+  return data
     .filter(d => d.date === date && !isNaN(d.value))
     .map(d => {
-      if (!lastValues) {
+      if (!lastValues[d.name]) {
         return d;
       }
-
       const lastValue = lastValues[d.name].value;
       lastValues[d.name].date = d.date;
       lastValues[d.name].value = d.value;
       return { ...d, lastValue };
     })
     .sort((a, b) => b.value - a.value)
-    .slice(0, topN);
-  dateSlice.forEach((d, i) => (d.rank = i));
-
-  return dateSlice;
+    .slice(0, topN)
+    .map((d, i) => ({ ...d, rank: i }));
 }

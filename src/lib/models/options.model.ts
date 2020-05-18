@@ -23,3 +23,25 @@ export interface Options {
   showControls?: 'all' | 'play' | 'none';
   autorun?: boolean;
 }
+
+export interface RenderOptions {
+  selector: string;
+  title: string;
+  subTitle: string;
+  caption: string;
+  dateCounterFormat: string;
+  labelsOnBars: boolean;
+  labelsWidth: number;
+  showControls: 'all' | 'play' | 'none';
+  inputHeight?: string;
+  inputWidth?: string;
+  minHeight: number;
+  minWidth: number;
+  tickDuration: number;
+  topN: number;
+}
+
+export interface TickerOptions {
+  tickDuration: number;
+  loop: boolean;
+}

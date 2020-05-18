@@ -1,25 +1,10 @@
 import { fillGaps, getDateSlice, prepareData } from './data-utils';
 import { filterDates, formatDate, getDateString, getDates } from './dates';
-import { Data, Options } from './models';
-import { createRenderer } from './render';
+import { ControlButtons, Data, Options, RenderOptions, TickerOptions } from './models';
+import { createRenderer } from './renderer';
 import { createTicker } from './ticker';
 
 export function race(data: Data[], options: Options = {}) {
-  // ********************
-  //  Stateful functions
-  // ********************
-
-  const { renderInitalView, renderFrame, resize } = createRenderer();
-  const {
-    tickerDateFactory,
-    startTicker,
-    stopTicker,
-    rewindTicker,
-    loopTicker,
-    fastForwardTicker,
-    toggle
-  } = createTicker();
-
   // ********************
   // User-defined options
   // ********************
@@ -30,7 +15,6 @@ export function race(data: Data[], options: Options = {}) {
   const selector = options.selector || '#race';
   const startDate = options.startDate ? getDateString(options.startDate) : '';
   const endDate = options.endDate ? getDateString(options.endDate) : '';
-  const loop = options.loop || false;
   const colorSeed = options.colorSeed || '';
   const disableGroupColors = options.disableGroupColors || false;
   const tickDuration = Number(options.tickDuration) || 500;
@@ -39,7 +23,8 @@ export function race(data: Data[], options: Options = {}) {
   const disableKeyboardEvents = options.disableKeyboardEvents;
   const autorun = options.autorun !== false;
 
-  const renderOptions = {
+  const renderOptions: RenderOptions = {
+    selector,
     title: options.title || '18 years of Top Global Brands',
     subTitle: options.subTitle || 'Brand value, $m',
     caption: options.caption || 'Source: Interbrand',
@@ -55,6 +40,18 @@ export function race(data: Data[], options: Options = {}) {
     topN
   };
 
+  const tickerOptions: TickerOptions = {
+    loop: options.loop || false,
+    tickDuration
+  };
+
+  // ********************
+  //  Stateful functions
+  // ********************
+
+  const renderer = createRenderer(selector, renderOptions);
+  const ticker = createTicker(notifyRenderer);
+
   // ********************
   //   Create the chart
   // ********************
@@ -65,29 +62,24 @@ export function race(data: Data[], options: Options = {}) {
   data = filterDates(data, startDate, endDate);
   data = prepareData(data, dataShape, disableGroupColors, colorSeed);
 
+  const dates = getDates(data);
+
   if (fillDateGaps) {
-    data = fillGaps(data, getDates(data), fillDateGaps);
+    data = fillGaps(data, dates, fillDateGaps);
   }
 
-  const tickerDate = tickerDateFactory(
-    getDates(data),
-    tickDuration,
-    loop,
-    selector,
-    updateDateSlice,
-    runRenderFrame
-  );
+  const tickerDate = ticker.tickerDateFactory(dates, tickerOptions, updateDate, renderFrame);
 
   let dateSlice: Data[];
   initialize();
 
-  runRenderInitalView();
-  runRenderFrame();
+  renderInitalView();
+  renderFrame();
 
-  startTicker();
+  ticker.start();
 
   if (!autorun) {
-    stopTicker();
+    ticker.stop();
   }
 
   if (!disableClickEvents) {
@@ -97,52 +89,57 @@ export function race(data: Data[], options: Options = {}) {
     registerKeyboardEvents();
   }
 
-  window.addEventListener('resize', runResize);
+  window.addEventListener('resize', resize);
 
   // ********************
   //   Helper functions
   // ********************
 
-  function runRenderInitalView() {
-    const controlFns = {
-      rewindTicker,
-      toggle,
-      fastForwardTicker
-    };
+  function renderInitalView() {
+    renderer.renderInitalView(dateSlice);
+    ticker.stop();
 
-    renderInitalView(
-      selector,
-      dateSlice,
-      renderOptions,
-      tickerDate.getDate,
-      controlFns,
-      tickerDate.setRunning
-    );
+    const controlButtons = renderer.getControlButtons();
+    addListenersToControls(controlButtons);
   }
 
-  function runRenderFrame() {
-    renderFrame(dateSlice, renderOptions, tickerDate.getDate);
+  function renderFrame() {
+    renderer.renderFrame(dateSlice);
   }
 
-  function runResize() {
-    resize(element, renderOptions, reset);
+  function notifyRenderer(running: boolean) {
+    renderer.renderAsRunning(running);
+  }
+
+  function addListenersToControls(controlButtons: ControlButtons) {
+    if (!controlButtons) {
+      return;
+    }
+    controlButtons.rewind.addEventListener('click', ticker.rewind);
+    controlButtons.play.addEventListener('click', ticker.toggle);
+    controlButtons.pause.addEventListener('click', ticker.toggle);
+    controlButtons.fastforward.addEventListener('click', ticker.fastForward);
+  }
+
+  function resize() {
+    renderer.resize(reset);
 
     function reset() {
-      const currentlyRunning = tickerDate.isRunning();
-      stopTicker();
+      const currentlyRunning = ticker.isRunning();
+      ticker.stop();
       element.innerHTML = '';
       tickerDate.update();
-      runRenderInitalView();
+      renderInitalView();
 
       if (currentlyRunning) {
-        startTicker();
+        ticker.start();
       }
     }
   }
 
-  function updateDateSlice(currentDate: string) {
+  function updateDate(currentDate: string) {
     dateSlice = getDateSlice(data, tickerDate.getDate(), lastValues, topN);
-    runRenderFrame();
+    renderFrame();
     element.dispatchEvent(
       new CustomEvent('dateChanged', {
         detail: { date: formatDate(currentDate, 'YYYY-MM-DD') }
@@ -171,7 +168,6 @@ export function race(data: Data[], options: Options = {}) {
   function createScroller() {
     prepareDOM();
 
-    const dates = tickerDate.getDates();
     const step = document.body.clientHeight / dates.length;
 
     subscribeToEvents();
@@ -203,7 +199,7 @@ export function race(data: Data[], options: Options = {}) {
     function goToDate() {
       const index = Math.ceil(window.pageYOffset / step);
       if (index < dates.length) {
-        tickerDate.set(dates[index]);
+        tickerDate.setDate(dates[index]);
       } else {
         tickerDate.setLast();
       }
@@ -212,9 +208,9 @@ export function race(data: Data[], options: Options = {}) {
 
   function registerClickEvents() {
     const svg = element.querySelector('svg') as SVGSVGElement;
-    svg.addEventListener('click', toggle);
+    svg.addEventListener('click', ticker.toggle);
 
-    element.addEventListener('dblclick', fastForwardTicker);
+    element.addEventListener('dblclick', ticker.fastForward);
   }
 
   function registerKeyboardEvents() {
@@ -229,16 +225,16 @@ export function race(data: Data[], options: Options = {}) {
       // TODO: keyCode is deprecated
       switch (e.keyCode) {
         case keyCodes.spacebar:
-          toggle();
+          ticker.toggle();
           break;
         case keyCodes.a:
-          rewindTicker();
+          ticker.rewind();
           break;
         case keyCodes.s:
-          toggle();
+          ticker.toggle();
           break;
         case keyCodes.d:
-          fastForwardTicker();
+          ticker.fastForward();
           break;
       }
     });
@@ -251,21 +247,21 @@ export function race(data: Data[], options: Options = {}) {
   return {
     // TODO: validate user input
     start: () => {
-      if (!tickerDate.isRunning()) {
-        startTicker();
+      if (!ticker.isRunning()) {
+        ticker.start();
       }
     },
     stop: () => {
-      stopTicker();
+      ticker.stop();
     },
     rewind: () => {
-      rewindTicker();
+      ticker.rewind();
     },
     fastforward: () => {
-      fastForwardTicker();
+      ticker.fastForward();
     },
     loop: () => {
-      loopTicker();
+      ticker.loop();
     },
     inc: (value = 1) => {
       tickerDate.inc(value);
@@ -273,11 +269,11 @@ export function race(data: Data[], options: Options = {}) {
     dec: (value = 1) => {
       tickerDate.dec(value);
     },
-    getCurrentDate: () => tickerDate.getDate(),
-    getDates: () => tickerDate.getDates().map((date: string) => formatDate(date, 'YYYY-MM-DD')),
+    getDate: () => tickerDate.getDate(),
     setDate: (inputDate: string | Date) => {
-      tickerDate.set(getDateString(inputDate));
+      tickerDate.setDate(getDateString(inputDate));
     },
+    getAllDates: () => dates.map((date: string) => formatDate(date, 'YYYY-MM-DD')),
     createScroller: () => {
       createScroller();
     }

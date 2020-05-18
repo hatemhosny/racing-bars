@@ -1,26 +1,24 @@
 import * as d3 from 'd3';
 
-export function createTicker() {
-  let ticker: any;
-  let tickerDate: any;
+import { TickerDate, TickerOptions } from './models';
+
+export function createTicker(runningCallback: (running: boolean) => void) {
+  let ticker: d3.Timer;
+  let tickerDate: TickerDate;
   let running: boolean;
   let tickDuration: number;
-  let loop: boolean;
-  let selector: string;
-  let runRenderFrame: () => void;
+  let loopOption: boolean;
+  let renderFrame: () => void;
 
   function tickerDateFactory(
     dates: string[],
-    _tickDuration: number,
-    _loop: boolean,
-    _selector: string,
-    updateDateSlice: (currentDate: string) => void,
-    _runRenderFrame: () => void
+    tickerOptions: TickerOptions,
+    updateDateCallback: (currentDate: string) => void,
+    _renderFrameFn: () => void
   ) {
-    tickDuration = _tickDuration;
-    loop = _loop;
-    selector = _selector;
-    runRenderFrame = _runRenderFrame;
+    tickDuration = tickerOptions.tickDuration;
+    loopOption = tickerOptions.loop;
+    renderFrame = _renderFrameFn;
 
     let dateCounter = 0;
     let currentDate: string;
@@ -29,7 +27,7 @@ export function createTicker() {
 
     function updateDate() {
       currentDate = dates[dateCounter];
-      updateDateSlice(currentDate);
+      updateDateCallback(currentDate);
     }
 
     tickerDate = {
@@ -54,34 +52,31 @@ export function createTicker() {
       update: () => {
         updateDate();
       },
-      set: (date: string) => {
+      getDate: () => currentDate,
+      setDate: (date: string) => {
         const dateIndex = dates.indexOf(date);
         if (dateIndex > -1) {
           dateCounter = dateIndex;
           updateDate();
         }
       },
-      getDate: () => currentDate,
       isLast: () => currentDate === maxDate,
-      getDates: () => [...dates],
-      isRunning: () => running,
-      setRunning: (flag: boolean) => setRunning(flag)
     };
 
     return tickerDate;
   }
 
-  function startTicker() {
+  function start() {
     setRunning(true);
     ticker = d3.interval(showRace, tickDuration);
 
     function showRace(_: number) {
       if (tickerDate.isLast()) {
-        runRenderFrame();
-        if (loop) {
-          loopTicker();
+        renderFrame();
+        if (loopOption) {
+          loop();
         } else {
-          stopTicker();
+          stop();
         }
       } else {
         tickerDate.inc();
@@ -89,61 +84,58 @@ export function createTicker() {
     }
   }
 
-  function stopTicker() {
-    ticker.stop();
+  function stop() {
+    if (ticker) {
+      ticker.stop();
+    }
     setRunning(false);
   }
 
-  function rewindTicker() {
-    stopTicker();
+  function rewind() {
+    stop();
     tickerDate.setFirst();
-    runRenderFrame();
+    renderFrame();
   }
 
-  function loopTicker() {
+  function loop() {
     tickerDate.setFirst();
-    runRenderFrame();
+    renderFrame();
   }
 
-  function fastForwardTicker() {
-    stopTicker();
+  function fastForward() {
+    stop();
     tickerDate.setLast();
-    runRenderFrame();
+    renderFrame();
   }
 
   function toggle() {
     if (tickerDate.isLast()) {
-      rewindTicker();
-      startTicker();
+      rewind();
+      start();
     } else if (running) {
-      stopTicker();
+      stop();
     } else {
-      startTicker();
+      start();
     }
   }
 
+  function isRunning() {
+    return running;
+  }
+
   function setRunning(flag = true) {
-    const playButton = document.querySelector(selector + ' .play') as HTMLElement;
-    const pauseButton = document.querySelector(selector + ' .pause') as HTMLElement;
-    if (flag) {
-      running = true;
-      playButton.style.display = 'none';
-      pauseButton.style.display = 'unset';
-    } else {
-      running = false;
-      playButton.style.display = 'unset';
-      pauseButton.style.display = 'none';
-    }
+    running = flag;
+    runningCallback(running);
   }
 
   return {
     tickerDateFactory,
-    startTicker,
-    stopTicker,
-    rewindTicker,
-    loopTicker,
-    fastForwardTicker,
+    start,
+    stop,
+    rewind,
+    loop,
+    fastForward,
     toggle,
-    setRunning
+    isRunning,
   };
 }

@@ -1,10 +1,11 @@
 import * as d3 from 'd3';
 
-import { Data, Options } from './models';
 import { formatDate } from './dates';
+import { icons } from './icons';
+import { ControlButtons, Data, Options, RenderOptions } from './models';
 import { getHeight, getWidth } from './utils';
 
-export function createRenderer() {
+export function createRenderer(selector: string, renderOptions: RenderOptions) {
   let margin: any;
   let svg: any;
   let x: d3.ScaleLinear<number, number>;
@@ -15,38 +16,33 @@ export function createRenderer() {
   let labelX: number | ((d: Data) => number);
   let height: number;
   let width: number;
+  let controlButtons: ControlButtons;
 
-  function renderInitalView(
-    selector: string,
-    dateSlice: Data[],
-    renderOptions: any,
-    getDateFn: () => string,
-    controlFns: any,
-    setRunningFn: (flag: boolean) => void
-  ) {
+  function renderInitalView(dateSlice: Data[]) {
     const {
-      inputHeight,
-      inputWidth,
-      minHeight,
-      minWidth,
-      labelsOnBars,
-      labelsWidth,
-      topN,
+      selector,
       title,
       subTitle,
       caption,
       dateCounterFormat,
-      showControls
+      labelsOnBars,
+      labelsWidth,
+      showControls,
+      inputHeight,
+      inputWidth,
+      minHeight,
+      minWidth,
+      topN
     } = renderOptions;
 
+    const currentDate = dateSlice.length > 0 ? dateSlice[0].date : '';
     const element = document.querySelector(selector) as HTMLElement;
 
     height = getHeight(element, minHeight, inputHeight);
     width = getWidth(element, minWidth, inputWidth);
 
     renderInitialFrame();
-    renderControls(element, showControls, controlFns);
-    setRunningFn(false);
+    renderControls(element, showControls);
 
     function renderInitialFrame() {
       svg = d3
@@ -144,7 +140,7 @@ export function createRenderer() {
         .attr('x', width - margin.right - barPadding)
         .attr('y', height - 40)
         .style('text-anchor', 'end')
-        .html(formatDate(getDateFn(), dateCounterFormat))
+        .html(formatDate(currentDate, dateCounterFormat))
         .call(halo, strokeWidth);
 
       svg
@@ -171,14 +167,7 @@ export function createRenderer() {
     function renderControls(
       element: HTMLElement,
       showControls: Options['showControls'],
-      controlFns: any
     ) {
-      const icons = {
-        play: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-play"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>`,
-        pause: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-pause"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>`,
-        skipForward: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-skip-forward"><polygon points="5 4 15 12 5 20 5 4"></polygon><line x1="19" y1="5" x2="19" y2="19"></line></svg>`,
-        skipBack: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-skip-back"><polygon points="19 20 9 12 19 4 19 20"></polygon><line x1="5" y1="19" x2="5" y2="5"></line></svg>`
-      };
       element.style.position = 'relative';
 
       const controls = addElement('div', 'controls', '', element);
@@ -187,16 +176,16 @@ export function createRenderer() {
       controls.style.right = margin.right + barPadding + 'px';
 
       const rewindButton = addElement('div', 'rewind', icons.skipBack, controls);
-      rewindButton.addEventListener('click', controlFns.rewindTicker);
-
       const playButton = addElement('div', 'play', icons.play, controls);
-      playButton.addEventListener('click', controlFns.toggle);
-
       const pauseButton = addElement('div', 'pause', icons.pause, controls);
-      pauseButton.addEventListener('click', controlFns.toggle);
-
       const fastforwardButton = addElement('div', 'fastforward', icons.skipForward, controls);
-      fastforwardButton.addEventListener('click', controlFns.fastForwardTicker);
+
+      controlButtons = {
+        rewind: rewindButton,
+        play: playButton,
+        pause: pauseButton,
+        fastforward: fastforwardButton,
+      }
 
       switch (showControls) {
         case 'play':
@@ -218,12 +207,13 @@ export function createRenderer() {
     }
   }
 
-  function renderFrame(dateSlice: Data[], renderOptions: any, getDateFn: () => string) {
+  function renderFrame(dateSlice: Data[]) {
     if (!x) {
       return;
     }
 
     const { tickDuration, topN, dateCounterFormat } = renderOptions;
+    const currentDate = dateSlice.length > 0 ? dateSlice[0].date : '';
 
     x.domain([0, d3.max(dateSlice, (d: Data) => d.value) as number]);
 
@@ -333,17 +323,19 @@ export function createRenderer() {
       .attr('y', () => y(topN + 1) + 5)
       .remove();
 
-    dateCounterText.html(formatDate(getDateFn(), dateCounterFormat));
+    dateCounterText.html(formatDate(currentDate, dateCounterFormat));
   }
 
-  function resize(element: HTMLElement, renderOptions: any, resetFn: () => void) {
+  function resize(resetFn: () => void) {
     if (
-      (!renderOptions.height && !renderOptions.width) ||
-      String(renderOptions.height).startsWith('window') ||
-      String(renderOptions.width).startsWith('window')
+      (!renderOptions.inputHeight && !renderOptions.inputWidth) ||
+      String(renderOptions.inputHeight).startsWith('window') ||
+      String(renderOptions.inputWidth).startsWith('window')
     ) {
-      height = getHeight(element, renderOptions.minHeight, renderOptions.height);
-      width = getWidth(element, renderOptions.minWidth, renderOptions.width);
+      const element = document.querySelector(selector) as HTMLElement;
+
+      height = getHeight(element, renderOptions.minHeight, renderOptions.inputHeight);
+      width = getWidth(element, renderOptions.minWidth, renderOptions.inputWidth);
 
       const currentPosition = element.style.position; // "fixed" if scrolling
       resetFn();
@@ -351,9 +343,23 @@ export function createRenderer() {
     }
   }
 
+  function renderAsRunning(running: boolean) {
+    if (running) {
+      controlButtons.play.style.display = 'none';
+      controlButtons.pause.style.display = 'unset';
+    } else {
+      controlButtons.play.style.display = 'unset';
+      controlButtons.pause.style.display = 'none';
+    }
+  }
+
   return {
     renderInitalView,
     renderFrame,
-    resize
+    resize,
+    renderAsRunning,
+    getRenderedHeight: () => height,
+    getRenderedWidth: () => width,
+    getControlButtons: () => ({...controlButtons}),
   };
 }
