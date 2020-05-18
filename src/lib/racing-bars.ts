@@ -1,18 +1,29 @@
 import { fillGaps, getDateSlice, prepareData } from './data-utils';
 import { filterDates, formatDate, getDateString, getDates } from './dates';
 import { Data, Options } from './models';
-import { renderInitalView, renderFrame, resize } from './render';
-import {
-  tickerDateFactory,
-  startTicker,
-  stopTicker,
-  rewindTicker,
-  fastForwardTicker,
-  toggle,
-  loopTicker
-} from './ticker';
+import { createRenderer } from './render';
+import { createTicker } from './ticker';
 
 export function race(data: Data[], options: Options = {}) {
+  // ********************
+  //  Stateful functions
+  // ********************
+
+  const { renderInitalView, renderFrame, resize } = createRenderer();
+  const {
+    tickerDateFactory,
+    startTicker,
+    stopTicker,
+    rewindTicker,
+    loopTicker,
+    fastForwardTicker,
+    toggle
+  } = createTicker();
+
+  // ********************
+  // User-defined options
+  // ********************
+
   const dataShape = options.dataShape || 'long';
   const fillDateGaps = options.fillDateGaps;
   // const fillDateGapsValue = options.fillDateGapsValue || "last";
@@ -43,6 +54,10 @@ export function race(data: Data[], options: Options = {}) {
     tickDuration,
     topN
   };
+
+  // ********************
+  //   Create the chart
+  // ********************
 
   const element = document.querySelector(selector) as HTMLElement;
   let lastValues: any;
@@ -83,6 +98,10 @@ export function race(data: Data[], options: Options = {}) {
   }
 
   window.addEventListener('resize', runResize);
+
+  // ********************
+  //   Helper functions
+  // ********************
 
   function runRenderInitalView() {
     const controlFns = {
@@ -224,6 +243,10 @@ export function race(data: Data[], options: Options = {}) {
       }
     });
   }
+
+  // ********************
+  //      Public API
+  // ********************
 
   return {
     // TODO: validate user input

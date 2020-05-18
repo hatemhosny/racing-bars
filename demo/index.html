@@ -41,6 +41,10 @@
     <div id="race" class="race"></div>
   </div>
 
+  <div id="container2">
+    <div id="race2" class="race"></div>
+  </div>
+
   <script src="scripts/d3.min.js"></script>
   <script src="scripts/racing-bars.umd.js"></script>
   <script>
@@ -49,10 +53,24 @@
       subTitle: 'Top 10 Surgical Procedures',
       dateCounterFormat: 'MM/YYYY',
       caption: 'Aswan Heart Centre',
-      autorun: false
+      autorun: false,
+      height: 400,
     };
     racingBars.loadData('data/procedures.json').then(data => {
       racingBars.race(data, options);
+    });
+
+    const options2 = {
+      selector: '#race2',
+      title: 'A second Tale of 11 Years',
+      subTitle: 'Top 10 Surgical Procedures',
+      dateCounterFormat: 'MM/YYYY',
+      caption: 'Aswan Heart Centre',
+      autorun: false,
+      height: 400,
+    };
+    racingBars.loadData('data/procedures.json').then(data => {
+      racingBars.race(data, options2);
     });
   </script>
 </body>
