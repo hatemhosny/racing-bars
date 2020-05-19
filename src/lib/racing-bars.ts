@@ -3,6 +3,7 @@ import { filterDates, formatDate, getDateString, getDates } from './dates';
 import { ControlButtons, Data, Options, RenderOptions, TickerOptions, LastValues } from './models';
 import { createRenderer } from './renderer';
 import { createTicker } from './ticker';
+import * as styles from "./styles";
 
 export function race(data: Data[], options: Options = {}) {
   // ********************
@@ -19,9 +20,10 @@ export function race(data: Data[], options: Options = {}) {
   const disableGroupColors = options.disableGroupColors || false;
   const tickDuration = Number(options.tickDuration) || 500;
   const topN = Number(options.topN) || 10;
-  const disableClickEvents = options.disableClickEvents || true;
+  const disableClickEvents = options.disableClickEvents !== false;
   const disableKeyboardEvents = options.disableKeyboardEvents;
   const autorun = options.autorun !== false;
+  const embedStyles = options.embedStyles !== false;
 
   const renderOptions: RenderOptions = {
     selector,
@@ -57,6 +59,11 @@ export function race(data: Data[], options: Options = {}) {
   // ********************
 
   const element = document.querySelector(selector) as HTMLElement;
+
+  if (embedStyles) {
+    styles.embedStyles();
+  }
+
   let lastValues: LastValues;
 
   data = filterDates(data, startDate, endDate);
