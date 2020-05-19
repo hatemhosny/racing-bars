@@ -52,4 +52,3 @@ export function getWidth(element: HTMLElement, minWidth: number, width?: string)
   }
   return newWidth > minWidth ? newWidth : minWidth;
 }
-

@@ -37,8 +37,8 @@ export function formatDate(dateStr: string, format: string) {
   const month = dateStr.slice(4, 6);
   const day = dateStr.slice(6, 8);
   const date = new Date(`${year}-${month}-${day}`);
-  const weekDayIndex = date.getDay();
-  const monthNames: any = {
+  const weekDayIndex = String(date.getDay());
+  const monthNames: { [key: string]: string } = {
     '01': 'Jan',
     '02': 'Feb',
     '03': 'Mar',
@@ -53,7 +53,7 @@ export function formatDate(dateStr: string, format: string) {
     '12': 'Dec'
   };
 
-  const weekDays: any = {
+  const weekDays: { [key: string]: string } = {
     '0': 'Sun',
     '1': 'Mon',
     '2': 'Tue',

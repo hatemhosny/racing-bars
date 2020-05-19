@@ -7,4 +7,4 @@ export interface TickerDate {
   setDate: (date: string) => void;
   getDate: () => string;
   isLast: () => boolean;
-};
+}

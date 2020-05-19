@@ -6,12 +6,12 @@ import { ControlButtons, Data, Options, RenderOptions } from './models';
 import { getHeight, getWidth } from './utils';
 
 export function createRenderer(selector: string, renderOptions: RenderOptions) {
-  let margin: any;
+  let margin: { top: number; right: number; bottom: number; left: number };
   let svg: any;
   let x: d3.ScaleLinear<number, number>;
   let y: d3.ScaleLinear<number, number>;
-  let xAxis: any;
-  let barPadding: any;
+  let xAxis: d3.Axis<number | { valueOf(): number }>;
+  let barPadding: number;
   let dateCounterText: any;
   let labelX: number | ((d: Data) => number);
   let height: number;
@@ -107,7 +107,7 @@ export function createRenderer(selector: string, renderOptions: RenderOptions) {
         .attr('class', 'bar')
         .attr('x', x(0) + 1)
         .attr('width', (d: Data) => Math.abs(x(d.value) - x(0) - 1))
-        .attr('y', (d: any) => y(d.rank) + 5)
+        .attr('y', (d: Data) => y(d.rank as number) + 5)
         .attr('height', y(1) - y(0) - barPadding)
         .style('fill', (d: Data) => d.color);
 
@@ -164,10 +164,7 @@ export function createRenderer(selector: string, renderOptions: RenderOptions) {
       }
     }
 
-    function renderControls(
-      element: HTMLElement,
-      showControls: Options['showControls'],
-    ) {
+    function renderControls(element: HTMLElement, showControls: Options['showControls']) {
       element.style.position = 'relative';
 
       const controls = addElement('div', 'controls', '', element);
@@ -184,8 +181,8 @@ export function createRenderer(selector: string, renderOptions: RenderOptions) {
         rewind: rewindButton,
         play: playButton,
         pause: pauseButton,
-        fastforward: fastforwardButton,
-      }
+        fastforward: fastforwardButton
+      };
 
       switch (showControls) {
         case 'play':
@@ -309,7 +306,7 @@ export function createRenderer(selector: string, renderOptions: RenderOptions) {
       .attr('y', (d: Data) => y(d.rank as number) + 5 + (y(1) - y(0)) / 2 + 1)
       .tween('text', function(d: Data) {
         const i = d3.interpolateRound(d.lastValue as number, d.value);
-        return function(t: any) {
+        return function(t: number) {
           this.textContent = d3.format(',')(i(t));
         };
       });
@@ -360,6 +357,6 @@ export function createRenderer(selector: string, renderOptions: RenderOptions) {
     renderAsRunning,
     getRenderedHeight: () => height,
     getRenderedWidth: () => width,
-    getControlButtons: () => ({...controlButtons}),
+    getControlButtons: () => ({ ...controlButtons })
   };
 }

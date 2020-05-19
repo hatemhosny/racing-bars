@@ -1,7 +1,4 @@
-export function loadData(
-  URL: string,
-  type: 'json' | 'csv' | 'tsv' | 'xml' = 'json'
-) {
+export function loadData(URL: string, type: 'json' | 'csv' | 'tsv' | 'xml' = 'json') {
   switch (type) {
     case 'json':
       return d3.json(URL);
