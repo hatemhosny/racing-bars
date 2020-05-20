@@ -32,7 +32,7 @@ export function createRenderer(selector: string, renderOptions: RenderOptions) {
       inputWidth,
       minHeight,
       minWidth,
-      topN
+      topN,
     } = renderOptions;
 
     const currentDate = dateSlice.length > 0 ? dateSlice[0].date : '';
@@ -45,11 +45,7 @@ export function createRenderer(selector: string, renderOptions: RenderOptions) {
     renderControls(element, showControls);
 
     function renderInitialFrame() {
-      svg = d3
-        .select(selector)
-        .append('svg')
-        .attr('width', width)
-        .attr('height', height);
+      svg = d3.select(selector).append('svg').attr('width', width).attr('height', height);
 
       const labelsArea = labelsOnBars ? 0 : labelsWidth;
 
@@ -57,22 +53,14 @@ export function createRenderer(selector: string, renderOptions: RenderOptions) {
         top: 80,
         right: 0,
         bottom: 5,
-        left: 0 + labelsArea
+        left: 0 + labelsArea,
       };
 
       barPadding = (height - (margin.bottom + margin.top)) / (topN * 5);
 
-      svg
-        .append('text')
-        .attr('class', 'title')
-        .attr('y', 24)
-        .html(title);
+      svg.append('text').attr('class', 'title').attr('y', 24).html(title);
 
-      svg
-        .append('text')
-        .attr('class', 'subTitle')
-        .attr('y', 55)
-        .html(subTitle);
+      svg.append('text').attr('class', 'subTitle').attr('y', 55).html(subTitle);
 
       x = d3
         .scaleLinear()
@@ -153,7 +141,7 @@ export function createRenderer(selector: string, renderOptions: RenderOptions) {
 
       function halo(text: any, strokeWidth: number) {
         text
-          .select(function() {
+          .select(function () {
             return this.parentNode.insertBefore(this.cloneNode(true), this);
           })
           .style('fill', '#ffffff')
@@ -181,7 +169,7 @@ export function createRenderer(selector: string, renderOptions: RenderOptions) {
         rewind: rewindButton,
         play: playButton,
         pause: pauseButton,
-        fastforward: fastforwardButton
+        fastforward: fastforwardButton,
       };
 
       switch (showControls) {
@@ -214,12 +202,7 @@ export function createRenderer(selector: string, renderOptions: RenderOptions) {
 
     x.domain([0, d3.max(dateSlice, (d: Data) => d.value) as number]);
 
-    svg
-      .select('.xAxis')
-      .transition()
-      .duration(tickDuration)
-      .ease(d3.easeLinear)
-      .call(xAxis);
+    svg.select('.xAxis').transition().duration(tickDuration).ease(d3.easeLinear).call(xAxis);
 
     const bars = svg.selectAll('.bar').data(dateSlice, (d: Data) => d.name);
 
@@ -304,9 +287,9 @@ export function createRenderer(selector: string, renderOptions: RenderOptions) {
       .ease(d3.easeLinear)
       .attr('x', (d: Data) => x(d.value) + 5)
       .attr('y', (d: Data) => y(d.rank as number) + 5 + (y(1) - y(0)) / 2 + 1)
-      .tween('text', function(d: Data) {
+      .tween('text', function (d: Data) {
         const i = d3.interpolateRound(d.lastValue as number, d.value);
-        return function(t: number) {
+        return function (t: number) {
           this.textContent = d3.format(',')(i(t));
         };
       });
@@ -357,6 +340,6 @@ export function createRenderer(selector: string, renderOptions: RenderOptions) {
     renderAsRunning,
     getRenderedHeight: () => height,
     getRenderedWidth: () => width,
-    getControlButtons: () => ({ ...controlButtons })
+    getControlButtons: () => ({ ...controlButtons }),
   };
 }

@@ -162,7 +162,7 @@ export function race(data: Data[], options: Options = {}) {
 
     function initializeLastValues() {
       lastValues = {};
-      data.forEach(d => {
+      data.forEach((d) => {
         d.lastValue = d.value;
         if (!lastValues[d.name] || d.date < lastValues[d.name].date) {
           lastValues[d.name] = {
@@ -222,7 +222,7 @@ export function race(data: Data[], options: Options = {}) {
   }
 
   function registerKeyboardEvents() {
-    document.addEventListener('keypress', function(e) {
+    document.addEventListener('keypress', function (e) {
       const keyCodes = {
         spacebar: 32,
         a: 97,

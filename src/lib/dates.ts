@@ -3,7 +3,7 @@ import { zeroPad } from './utils';
 
 export function getDates(data: Data[]) {
   const uniqueDates = new Set<string>();
-  data.forEach(d => {
+  data.forEach((d) => {
     uniqueDates.add(d.date);
   });
   return Array.from(uniqueDates).sort();
@@ -11,8 +11,8 @@ export function getDates(data: Data[]) {
 
 export function filterDates(data: Data[], startDate: string, endDate: string) {
   return data
-    .filter(d => (startDate ? d.date >= startDate : true))
-    .filter(d => (endDate ? d.date <= endDate : true));
+    .filter((d) => (startDate ? d.date >= startDate : true))
+    .filter((d) => (endDate ? d.date <= endDate : true));
 }
 
 export function getDateString(inputDate: string | Date) {
@@ -50,7 +50,7 @@ export function formatDate(dateStr: string, format: string) {
     '09': 'Sep',
     '10': 'Oct',
     '11': 'Nov',
-    '12': 'Dec'
+    '12': 'Dec',
   };
 
   const weekDays: { [key: string]: string } = {
@@ -60,7 +60,7 @@ export function formatDate(dateStr: string, format: string) {
     '3': 'Wed',
     '4': 'Thu',
     '5': 'Fri',
-    '6': 'Sat'
+    '6': 'Sat',
   };
 
   return format

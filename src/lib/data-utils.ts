@@ -6,12 +6,12 @@ export function prepareData(
   data: Data[],
   dataShape: string,
   disableGroupColors: boolean,
-  colorSeed: string
+  colorSeed: string,
 ) {
   if (dataShape === 'wide') {
     data = wideDataToLong(data);
   }
-  return data.map(item => {
+  return data.map((item) => {
     const d = { ...item };
     d.value = isNaN(+d.value) ? 0 : +d.value;
     d.date = getDateString(d.date);
@@ -27,7 +27,7 @@ export function wideDataToLong(wide: any) {
       long.push({
         date: item.date,
         name: key,
-        value: Number(value)
+        value: Number(value),
       });
     }
   });
@@ -47,7 +47,7 @@ export function fillGaps(data: Data[], dates: string[], period: 'years' | 'month
     },
     days: (dt: Date) => {
       dt.setDate(dt.getDate() + 1);
-    }
+    },
   };
   if (!next[period]) {
     return data;
@@ -59,22 +59,22 @@ export function fillGaps(data: Data[], dates: string[], period: 'years' | 'month
   }
 
   dateRange.forEach((date, index) => {
-    if (data.filter(d => d.date === date).length > 0) {
+    if (data.filter((d) => d.date === date).length > 0) {
       return;
     }
 
     const missing = data
-      .filter(d => d.date === dateRange[index - 1])
-      .map(d =>
+      .filter((d) => d.date === dateRange[index - 1])
+      .map((d) =>
         // const value = {
         //   last: d.value,
         //   zero: 0,
         // }
         ({
           ...d,
-          date
+          date,
           // value: value[fillDateGapsValue],
-        })
+        }),
       );
 
     data.push(...missing);
@@ -85,8 +85,8 @@ export function fillGaps(data: Data[], dates: string[], period: 'years' | 'month
 
 export function getDateSlice(data: Data[], date: string, lastValues: LastValues, topN: number) {
   return data
-    .filter(d => d.date === date && !isNaN(d.value))
-    .map(d => {
+    .filter((d) => d.date === date && !isNaN(d.value))
+    .map((d) => {
       if (!lastValues[d.name]) {
         return d;
       }

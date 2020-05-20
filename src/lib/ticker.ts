@@ -14,7 +14,7 @@ export function createTicker(runningCallback: (running: boolean) => void) {
     dates: string[],
     tickerOptions: TickerOptions,
     updateDateCallback: (currentDate: string) => void,
-    renderFrameCallback: () => void
+    renderFrameCallback: () => void,
   ) {
     tickDuration = tickerOptions.tickDuration;
     loopOption = tickerOptions.loop;
@@ -60,7 +60,7 @@ export function createTicker(runningCallback: (running: boolean) => void) {
           updateDate();
         }
       },
-      isLast: () => currentDate === maxDate
+      isLast: () => currentDate === maxDate,
     };
 
     return tickerDate;
@@ -136,6 +136,6 @@ export function createTicker(runningCallback: (running: boolean) => void) {
     loop,
     fastForward,
     toggle,
-    isRunning
+    isRunning,
   };
 }

@@ -12,7 +12,7 @@ function css2ts() {
   stylesContent += '// You may edit that file instead: ' + path.relative('.', cssFile) + '\n\n';
   stylesContent += 'export const styles = `\n';
   stylesContent += css;
-  stylesContent += '`;';
+  stylesContent += '`;\n';
 
   fs.writeFileSync(tsFile, stylesContent);
 }
