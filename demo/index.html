@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <head>
   <meta charset="utf-8" />
-  <link rel="stylesheet" type="text/css" href="styles.css" />
   <style>
     #container {
       height: 95vh;
@@ -16,22 +15,6 @@
       /* width: 80vw;
       position: fixed;
       top: 0; */
-    }
-    .story {
-      margin-left: 80vw;
-    }
-    .p1 {
-      margin-top: 300px;
-    }
-    .links a {
-      display: inline-block;
-      width: 10%;
-      text-align: center;
-      background-color: azure;
-      border: #777777 1px solid;
-      margin: 3%;
-      padding: 15px;
-      font-size: large;
     }
   </style>
 </head>
@@ -49,14 +32,14 @@
   <script src="scripts/racing-bars.umd.js"></script>
   <script>
     const options = {
-      // selector: "#race",
+      selector: '.race',
       // dataShape: "wide",
       // fillDateGaps: "months",
       // fillDateGapsValue: "zero",
-      title: "A Tale of 11 Years",
-      subTitle: "Top 10 Surgical Procedures",
-      dateCounterFormat: "MM/YYYY",
-      caption: "Aswan Heart Centre",
+      title: 'A Tale of 11 Years',
+      subTitle: 'Top 10 Surgical Procedures',
+      dateCounterFormat: 'MM/YYYY',
+      caption: 'Aswan Heart Centre',
       // startDate: "2009-1-1",
       // endDate: "2010-12-31",
       loop: true,
@@ -67,7 +50,7 @@
       // disableClickEvents: true,
       // disableKeyboardEvents: true,
       // showControls: "all",
-      // autorun: false,
+      autorun: false,
       // colorSeed: "asdfs",
       // labelsOnBars: false,
       // labelsWidth: 250,
@@ -75,6 +58,5 @@
     racingBars.loadData('data/procedures.json').then(data => {
       racingBars.race(data, options);
     });
-
   </script>
 </body>

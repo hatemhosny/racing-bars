@@ -3,7 +3,7 @@ import { filterDates, formatDate, getDateString, getDates } from './dates';
 import { ControlButtons, Data, Options, RenderOptions, TickerOptions, LastValues } from './models';
 import { createRenderer } from './renderer';
 import { createTicker } from './ticker';
-import * as styles from "./styles";
+import * as styles from './styles';
 
 export function race(data: Data[], options: Options = {}) {
   // ********************
@@ -39,13 +39,22 @@ export function race(data: Data[], options: Options = {}) {
     minHeight: 300,
     minWidth: 500,
     tickDuration,
-    topN
+    topN,
   };
 
   const tickerOptions: TickerOptions = {
     loop: options.loop || false,
-    tickDuration
+    tickDuration,
   };
+
+  const element = document.querySelector(selector) as HTMLElement;
+  if (!element) {
+    throw new Error('Cannot find element with this selector: ' + selector);
+  }
+
+  if (embedStyles) {
+    styles.embedStyles();
+  }
 
   // ********************
   //  Stateful functions
@@ -57,12 +66,6 @@ export function race(data: Data[], options: Options = {}) {
   // ********************
   //   Create the chart
   // ********************
-
-  const element = document.querySelector(selector) as HTMLElement;
-
-  if (embedStyles) {
-    styles.embedStyles();
-  }
 
   let lastValues: LastValues;
 
@@ -148,8 +151,8 @@ export function race(data: Data[], options: Options = {}) {
     renderFrame();
     element.dispatchEvent(
       new CustomEvent('dateChanged', {
-        detail: { date: formatDate(currentDate, 'YYYY-MM-DD') }
-      })
+        detail: { date: formatDate(currentDate, 'YYYY-MM-DD') },
+      }),
     );
   }
 
@@ -164,7 +167,7 @@ export function race(data: Data[], options: Options = {}) {
         if (!lastValues[d.name] || d.date < lastValues[d.name].date) {
           lastValues[d.name] = {
             date: d.date,
-            value: d.value
+            value: d.value,
           };
         }
       });
@@ -224,7 +227,7 @@ export function race(data: Data[], options: Options = {}) {
         spacebar: 32,
         a: 97,
         d: 100,
-        s: 115
+        s: 115,
       };
 
       // TODO: keyCode is deprecated
@@ -281,6 +284,6 @@ export function race(data: Data[], options: Options = {}) {
     getAllDates: () => dates.map((date: string) => formatDate(date, 'YYYY-MM-DD')),
     createScroller: () => {
       createScroller();
-    }
+    },
   };
 }
