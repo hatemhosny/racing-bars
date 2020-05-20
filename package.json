@@ -101,6 +101,10 @@
   "jest": {
     "preset": "ts-jest",
     "testEnvironment": "jsdom",
-    "coverageReporters": ["json", "html", "lcov"]
+    "coverageReporters": [
+      "json",
+      "html",
+      "lcov"
+    ]
   }
 }

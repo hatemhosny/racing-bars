@@ -32,7 +32,7 @@
   <script src="scripts/racing-bars.umd.js"></script>
   <script>
     const options = {
-      selector: '.race',
+      selector: '#race',
       // dataShape: "wide",
       // fillDateGaps: "months",
       // fillDateGapsValue: "zero",
@@ -54,8 +54,9 @@
       // colorSeed: "asdfs",
       // labelsOnBars: false,
       // labelsWidth: 250,
+      // embedStyles: false,
     };
-    racingBars.loadData('data/procedures.json').then(data => {
+    racingBars.loadData('data/procedures.json').then((data) => {
       racingBars.race(data, options);
     });
   </script>
