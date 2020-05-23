@@ -1,3 +1,5 @@
+import * as d3 from 'd3';
+
 import { Data } from './models';
 
 export function getColor(d: Data, disableGroupColors: boolean, colorSeed: string) {

@@ -1,6 +1,28 @@
 ---
 id: doc2
-title: Document Number 2
+title: Bar Chart Race
 ---
 
-This is a link to [another document.](doc3.md) This is a link to an [external page.](http://www.example.com)
+import RacingBars from '../../dist/react/racing-bars.m.js';
+
+<RacingBars 
+  data="/data/procedures.json"
+  title="A Tale of 11 Years"
+  subTitle="Top 10 Surgical Procedures"
+  dateCounterFormat="MM/YYYY"
+  caption="Aswan Heart Centre"
+  loop={true}
+  autorun={false}
+/>
+
+```jsx {3} title="react-component.js"
+<RacingBars
+  data="/data/procedures.json"
+  title="A Tale of 11 Years"
+  subTitle="Top 10 Surgical Procedures"
+  dateCounterFormat="MM/YYYY"
+  caption="Aswan Heart Centre"
+  loop={true}
+  autorun={false}
+/>
+```
