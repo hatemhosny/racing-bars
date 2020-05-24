@@ -1,2 +1,2 @@
-export { embedStyles } from './embed-styles';
+export { styleInject } from './style-inject';
 export { styles } from './styles';

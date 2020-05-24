@@ -1,4 +1,4 @@
-import * as d3 from 'd3';
+import * as d3 from './d3';
 
 export function loadData(URL: string, type: 'json' | 'csv' | 'tsv' | 'xml' = 'json') {
   switch (type) {
