@@ -23,7 +23,7 @@ export function race(data: Data[], options: Options = {}) {
   const disableClickEvents = options.disableClickEvents !== false;
   const disableKeyboardEvents = options.disableKeyboardEvents;
   const autorun = options.autorun !== false;
-  const embedStyles = options.embedStyles !== false;
+  const injectStyles = options.injectStyles !== false;
 
   const renderOptions: RenderOptions = {
     selector,
@@ -52,8 +52,8 @@ export function race(data: Data[], options: Options = {}) {
     throw new Error('Cannot find element with this selector: ' + selector);
   }
 
-  if (embedStyles) {
-    styles.embedStyles();
+  if (injectStyles) {
+    styles.styleInject();
   }
 
   // ********************

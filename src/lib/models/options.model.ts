@@ -22,7 +22,7 @@ export interface Options {
   disableKeyboardEvents?: boolean;
   showControls?: 'all' | 'play' | 'none';
   autorun?: boolean;
-  embedStyles?: boolean;
+  injectStyles?: boolean;
 }
 
 export interface RenderOptions {
