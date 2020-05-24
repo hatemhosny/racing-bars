@@ -3,7 +3,7 @@ id: doc2
 title: Bar Chart Race
 ---
 
-import RacingBars from '../../dist/react/racing-bars.m.js';
+import RacingBars from '../../dist/react/racing-bars.esm.js';
 
 <RacingBars 
   data="/data/procedures.json"

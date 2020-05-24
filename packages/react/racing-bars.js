@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { loadData, race } from '../dist/racing-bars.m';
+import { loadData, race } from '../../dist/racing-bars.esm';
 
 export default class RacingBars extends React.Component {
   constructor(props) {
