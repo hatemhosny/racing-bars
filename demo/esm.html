@@ -42,7 +42,7 @@
   </div>
   <!-- <script src="../node_modules/d3/dist/d3.min.js"></script> -->
   <script type="module">
-    import { loadData, race } from '../dist/racing-bars.modern.js';
+    import { loadData, race } from '../dist/racing-bars.esm.js';
     // import { loadData, race } from '../build/main/lib/racing-bars.js';
 
     const options = {
@@ -50,9 +50,9 @@
       subTitle: 'Top 10 Surgical Procedures',
       dateCounterFormat: 'MM/YYYY',
       caption: 'Aswan Heart Centre',
-      autorun: false
+      autorun: false,
     };
-    loadData('data/procedures.json').then(data => {
+    loadData('data/procedures.json').then((data) => {
       race(data, options);
     });
   </script>

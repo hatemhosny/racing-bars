@@ -106,6 +106,7 @@ export function race(data: Data[], options: Options = {}) {
   // ********************
 
   function renderInitalView() {
+    element.innerHTML = '';
     renderer.renderInitalView(dateSlice);
     ticker.stop();
     const controlButtons = renderer.getControlButtons();
@@ -135,8 +136,6 @@ export function race(data: Data[], options: Options = {}) {
 
     function reset() {
       const currentlyRunning = ticker.isRunning();
-      ticker.stop();
-      element.innerHTML = '';
       tickerDate.update();
       renderInitalView();
 
