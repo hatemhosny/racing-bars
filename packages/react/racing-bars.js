@@ -1,28 +1,45 @@
+/* eslint-disable */
 import React from 'react';
+import { generateId, race } from '../../dist/racing-bars.esm';
+import { getData } from '../get-data';
 
-import { loadData, race } from '../../dist/racing-bars.esm';
-
-export default class RacingBars extends React.Component {
+export class RacingBarsComponent extends React.Component {
   constructor(props) {
     super(props);
-    this.options = { ...props };
+    this.props = props;
+    this.elementId = generateId();
   }
 
-  runRace() {
-    loadData(this.options.data).then((data) => {
-      race(data, this.options);
-    });
+  render() {
+    return React.createElement('div', { id: this.elementId });
   }
 
   componentDidMount() {
-    this.runRace();
+    setTimeout(() => {
+      this.runRace();
+    });
   }
 
-  // componentDidUpdate() {}
+  componentDidUpdate() {
+    setTimeout(() => {
+      this.runRace();
+    });
+  }
 
-  componentWillUnmount() {}
+  componentWillUnmount() {
+    this.cleanUp();
+  }
 
-  render() {
-    return React.createElement('div', { id: 'race', className: 'race' });
+  async runRace() {
+    this.cleanUp();
+    const { dataPromise, options } = getData(this.props, this.elementId);
+    const data = await dataPromise;
+    this.racer = race(data, options);
+  }
+
+  cleanUp() {
+    if (this.racer) {
+      this.racer.stop();
+    }
   }
 }

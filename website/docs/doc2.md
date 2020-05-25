@@ -3,10 +3,10 @@ id: doc2
 title: Bar Chart Race
 ---
 
-import RacingBars from '../../dist/react/racing-bars.esm.js';
+import { RacingBarsComponent as RacingBars, racingBars } from '../../dist/react/racing-bars.esm.js';
 
-<RacingBars 
-  data="/data/procedures.json"
+<RacingBars
+  data={globalThis.procedures}
   title="A Tale of 11 Years"
   subTitle="Top 10 Surgical Procedures"
   dateCounterFormat="MM/YYYY"
@@ -17,7 +17,7 @@ import RacingBars from '../../dist/react/racing-bars.esm.js';
 
 ```jsx {3} title="react-component.js"
 <RacingBars
-  data="/data/procedures.json"
+  data={globalThis.procedures}
   title="A Tale of 11 Years"
   subTitle="Top 10 Surgical Procedures"
   dateCounterFormat="MM/YYYY"

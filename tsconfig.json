@@ -40,7 +40,7 @@
     "types": ["node", "jest"],
     "typeRoots": ["node_modules/@types", "src/types"]
   },
-  "include": ["src/**/*.ts"],
+  "include": ["src/**/*.ts", "packages/**/*.ts", "packages/react/index.js"],
   "exclude": ["node_modules/**"],
   "compileOnSave": true
 }

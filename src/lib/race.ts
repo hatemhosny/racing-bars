@@ -53,7 +53,7 @@ export function race(data: Data[], options: Options = {}) {
   }
 
   if (injectStyles) {
-    styles.styleInject();
+    styles.styleInject(selector);
   }
 
   // ********************

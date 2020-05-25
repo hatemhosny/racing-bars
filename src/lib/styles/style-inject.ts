@@ -1,10 +1,13 @@
 import { styles } from './styles';
 
 // slightly modifed from https://github.com/egoist/style-inject
-export function styleInject(css = styles, { insertAt } = {} as { [key: string]: string }) {
+export function styleInject(selector: string, css = styles, insertAt = '') {
   if (!css || typeof document === 'undefined') {
     return;
   }
+
+  // replace with selector
+  css = css.split('.race').join(selector);
 
   const head = document.head || document.getElementsByTagName('head')[0];
   const style = document.createElement('style') as HTMLStyleElement | any;

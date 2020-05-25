@@ -29,6 +29,18 @@ export function random(seedStr: string) {
   return x - Math.floor(x);
 }
 
+export function randomString(prefix: string, n: number) {
+  const rnd = Array(3)
+    .fill(null)
+    .map(() => Math.random().toString(36).substr(2))
+    .join('');
+  return prefix + rnd.slice(-n);
+}
+
+export function generateId(prefix = 'racingbars', n = 8) {
+  return randomString(prefix, n);
+}
+
 export function getHeight(element: HTMLElement, minHeight: number, height?: string) {
   let newHeight;
   if (!height) {

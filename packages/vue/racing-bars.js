@@ -1,16 +1,45 @@
-import { loadData, race } from '../../dist/racing-bars.esm';
+import { generateId, race } from '../../dist/racing-bars.esm';
+import { getData } from '../get-data';
 
-export default {
+export const RacingBarsComponent = {
   name: 'racing-bars',
   inheritAttrs: false,
-  props: ['dataUrl'],
-  template: '<div id="race" class="race"></div>',
+  created() {
+    this.elementId = generateId();
+  },
+  render(createElement) {
+    return createElement('div', { domProps: { id: this.elementId } });
+  },
   mounted() {
     this.$nextTick(() => {
-      const options = this.$attrs;
-      loadData(this.dataUrl).then((data) => {
-        race(data, options);
-      });
+      this.runRace();
     });
+  },
+  updated() {
+    this.$nextTick(() => {
+      this.runRace();
+    });
+  },
+  destroyed() {
+    this.cleanUp();
+  },
+  methods: {
+    async runRace() {
+      function toCamelCase(attrs) {
+        const camelize = (s) => s.replace(/-./g, (x) => x.toUpperCase()[1]);
+        return Object.assign(...Object.keys(attrs).map((key) => ({ [camelize(key)]: attrs[key] })));
+      }
+
+      this.cleanUp();
+      const attrs = toCamelCase(this.$attrs);
+      const { dataPromise, options } = getData(attrs, this.elementId);
+      const data = await dataPromise;
+      this.racer = race(data, options);
+    },
+    cleanUp() {
+      if (this.racer) {
+        this.racer.stop();
+      }
+    },
   },
 };

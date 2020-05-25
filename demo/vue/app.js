@@ -1,8 +1,13 @@
-import RacingBars from '../../dist/vue/racing-bars.esm.js';
+import { RacingBarsComponent as RacingBars, racingBars } from '../../dist/vue/racing-bars.esm.js';
 
 export default {
   name: 'app',
   components: { RacingBars },
+  methods: {
+    getData() {
+      return racingBars.loadData('../data/procedures.json');
+    },
+  },
   template: `
   <racing-bars
     data-url="../data/procedures.json"
