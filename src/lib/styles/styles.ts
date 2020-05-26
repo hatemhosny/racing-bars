@@ -70,7 +70,8 @@ export const styles = `
   display: flex;
 }
 
-#selector .controls div {
+#selector .controls div,
+#selector .overlay div {
   cursor: pointer;
   font-size: 24px;
   font-weight: 700;
@@ -87,12 +88,41 @@ export const styles = `
   text-align: center;
 }
 
-#selector .controls div:hover {
+#selector .controls div:hover,
+#selector .overlay div:hover {
   background: #aaaaaa;
   color: black;
 }
 
-#selector .controls div svg {
+#selector .controls svg {
   margin: 7px auto;
+}
+
+#selector .overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  opacity: 0.7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#selector .overlay div {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 200px;
+  height: 200px;
+  -moz-border-radius: 100px;
+  -webkit-border-radius: 100px;
+  border-radius: 100px;
+}
+#selector .overlay svg {
+  height: 50%;
+  width: 50%;
 }
 `;

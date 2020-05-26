@@ -6,5 +6,6 @@ export interface TickerDate {
   update: () => void;
   setDate: (date: string) => void;
   getDate: () => string;
+  isFirst: () => boolean;
   isLast: () => boolean;
 }

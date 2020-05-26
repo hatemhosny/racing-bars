@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import * as d3 from './d3';
 
 import { formatDate } from './dates';
@@ -17,6 +18,10 @@ export function createRenderer(selector: string, renderOptions: RenderOptions) {
   let height: number;
   let width: number;
   let controlButtons: ControlButtons;
+  let showOverlays: Options['showOverlays'];
+  let overlay: HTMLElement;
+  let overlayPlay: HTMLElement;
+  let overlayRepeat: HTMLElement;
 
   function renderInitalView(dateSlice: Data[]) {
     const {
@@ -35,6 +40,8 @@ export function createRenderer(selector: string, renderOptions: RenderOptions) {
       topN,
     } = renderOptions;
 
+    showOverlays = renderOptions.showOverlays;
+
     const currentDate = dateSlice.length > 0 ? dateSlice[0].date : '';
     const element = document.querySelector(selector) as HTMLElement;
 
@@ -43,6 +50,7 @@ export function createRenderer(selector: string, renderOptions: RenderOptions) {
 
     renderInitialFrame();
     renderControls(element, showControls);
+    renderOverlays(element);
 
     function renderInitialFrame() {
       svg = d3.select(selector).append('svg').attr('width', width).attr('height', height);
@@ -157,18 +165,24 @@ export function createRenderer(selector: string, renderOptions: RenderOptions) {
       const buttons: any = {};
       const elementWidth = element.getBoundingClientRect().width;
 
+      const controlIcons = [
+        { skipBack: icons.skipBack },
+        { play: icons.play },
+        { pause: icons.pause },
+        { skipForward: icons.skipForward },
+      ];
       d3.select(selector)
         .append('div')
         .classed('controls', true)
         .style('width', width)
         .style('right', elementWidth - width + margin.right + barPadding + 'px')
         .selectAll('div')
-        .data(Object.entries(icons))
+        .data(controlIcons)
         .enter()
         .append('div')
-        .html((d: string[]) => d[1])
-        .each(function (d: string[]) {
-          const name = d[0];
+        .html((d) => Object.values(d)[0] as string)
+        .each(function (d) {
+          const name = Object.keys(d)[0];
           d3.select(this).classed(name, true);
           buttons[name] = this;
         });
@@ -181,6 +195,26 @@ export function createRenderer(selector: string, renderOptions: RenderOptions) {
       if (showControls === 'none') {
         d3.select(selector + ' .controls').style('display', 'none');
       }
+    }
+
+    function renderOverlays(element: HTMLElement) {
+      overlay = document.createElement('div');
+      overlay.classList.add('overlay');
+      element.appendChild(overlay);
+      overlay.style.minHeight = minHeight + 'px';
+      overlay.style.minWidth = minWidth + 'px';
+
+      overlayPlay = document.createElement('div');
+      overlayPlay.classList.add('overlayPlay');
+      overlayPlay.innerHTML = icons.overlayPlay;
+      overlay.appendChild(overlayPlay);
+
+      overlayRepeat = document.createElement('div');
+      overlayRepeat.classList.add('overlayRepeat');
+      overlayRepeat.innerHTML = icons.overlayRepeat;
+      overlay.appendChild(overlayRepeat);
+
+      updateControls(false, 'first');
     }
   }
 
@@ -315,7 +349,7 @@ export function createRenderer(selector: string, renderOptions: RenderOptions) {
     }
   }
 
-  function renderAsRunning(running: boolean) {
+  function updateControls(running: boolean, position: 'first' | 'last' | '' = '') {
     if (running) {
       controlButtons.play.style.display = 'none';
       controlButtons.pause.style.display = 'unset';
@@ -323,13 +357,30 @@ export function createRenderer(selector: string, renderOptions: RenderOptions) {
       controlButtons.play.style.display = 'unset';
       controlButtons.pause.style.display = 'none';
     }
+
+    const controls = document.querySelector('.controls') as HTMLElement;
+
+    if (position === 'first' && (showOverlays === 'all' || showOverlays === 'play')) {
+      controls.style.visibility = 'hidden';
+      overlay.style.display = 'flex';
+      overlayPlay.style.display = 'flex';
+      overlayRepeat.style.display = 'none';
+    } else if (position === 'last' && (showOverlays === 'all' || showOverlays === 'repeat')) {
+      controls.style.visibility = 'hidden';
+      overlay.style.display = 'flex';
+      overlayPlay.style.display = 'none';
+      overlayRepeat.style.display = 'flex';
+    } else {
+      controls.style.visibility = 'unset';
+      overlay.style.display = 'none';
+    }
   }
 
   return {
     renderInitalView,
     renderFrame,
     resize,
-    renderAsRunning,
+    updateControls,
     getRenderedHeight: () => height,
     getRenderedWidth: () => width,
     getControlButtons: () => ({ ...controlButtons }),

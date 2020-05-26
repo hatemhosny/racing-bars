@@ -2,7 +2,9 @@ import * as d3 from './d3';
 
 import { TickerDate, TickerOptions } from './models';
 
-export function createTicker(runningCallback: (running: boolean) => void) {
+export function createTicker(
+  runningCallback: (running: boolean, position: 'first' | 'last' | '') => void,
+) {
   let ticker: d3.Timer;
   let tickerDate: TickerDate;
   let running: boolean;
@@ -60,6 +62,7 @@ export function createTicker(runningCallback: (running: boolean) => void) {
           updateDate();
         }
       },
+      isFirst: () => currentDate === dates[0],
       isLast: () => currentDate === maxDate,
     };
 
@@ -69,6 +72,7 @@ export function createTicker(runningCallback: (running: boolean) => void) {
   function start() {
     setRunning(true);
     ticker = d3.interval(showRace, tickDuration);
+    runningCallback(running, '');
 
     function showRace(_: number) {
       if (tickerDate.isLast()) {
@@ -77,6 +81,7 @@ export function createTicker(runningCallback: (running: boolean) => void) {
           loop();
         } else {
           stop();
+          runningCallback(running, 'last');
         }
       } else {
         tickerDate.inc();
@@ -95,6 +100,7 @@ export function createTicker(runningCallback: (running: boolean) => void) {
     stop();
     tickerDate.setFirst();
     renderFrame();
+    runningCallback(running, 'first');
   }
 
   function loop() {
@@ -106,6 +112,7 @@ export function createTicker(runningCallback: (running: boolean) => void) {
     stop();
     tickerDate.setLast();
     renderFrame();
+    runningCallback(running, 'last');
   }
 
   function toggle() {
@@ -125,7 +132,8 @@ export function createTicker(runningCallback: (running: boolean) => void) {
 
   function setRunning(flag = true) {
     running = flag;
-    runningCallback(running);
+    const position = tickerDate.isLast() ? 'last' : tickerDate.isFirst() ? 'first' : '';
+    runningCallback(running, position);
   }
 
   return {

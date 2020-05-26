@@ -41,6 +41,7 @@
     "version": "standard-version",
     "reset": "git clean -dfx && git reset --hard && npm i",
     "clean": "rimraf dist",
+    "clear-cache": "bash -c \"rm -rf node_modules/.cache\"",
     "prepare-release": "run-s reset build test cov doc:html version doc:publish"
   },
   "scripts-info": {

@@ -34,6 +34,7 @@ export function race(data: Data[], options: Options = {}) {
     labelsOnBars: options.labelsOnBars !== false,
     labelsWidth: options.labelsWidth || 100,
     showControls: options.showControls || 'all',
+    showOverlays: options.showOverlays || 'all',
     inputHeight: options.height,
     inputWidth: options.width,
     minHeight: 300,
@@ -111,14 +112,15 @@ export function race(data: Data[], options: Options = {}) {
     ticker.stop();
     const controlButtons = renderer.getControlButtons();
     registerControlButtonEvents(controlButtons);
+    registerOverlayEvents();
   }
 
   function renderFrame() {
     renderer.renderFrame(dateSlice);
   }
 
-  function notifyRenderer(running: boolean) {
-    renderer.renderAsRunning(running);
+  function notifyRenderer(running: boolean, position: 'first' | 'last' | '') {
+    renderer.updateControls(running, position);
   }
 
   function registerControlButtonEvents(controlButtons: ControlButtons) {
@@ -129,6 +131,16 @@ export function race(data: Data[], options: Options = {}) {
     controlButtons.play.addEventListener('click', ticker.toggle);
     controlButtons.pause.addEventListener('click', ticker.toggle);
     controlButtons.skipForward.addEventListener('click', ticker.fastForward);
+  }
+
+  function registerOverlayEvents() {
+    const overlayPlay = element.querySelector('.overlayPlay') as HTMLElement;
+    const overlayRepeat = element.querySelector('.overlayRepeat') as HTMLElement;
+    overlayPlay.addEventListener('click', ticker.start);
+    overlayRepeat.addEventListener('click', () => {
+      ticker.rewind();
+      ticker.start();
+    });
   }
 
   function resize() {

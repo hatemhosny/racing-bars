@@ -21,6 +21,7 @@ export interface Options {
   disableClickEvents?: boolean;
   disableKeyboardEvents?: boolean;
   showControls?: 'all' | 'play' | 'none';
+  showOverlays?: 'all' | 'play' | 'repeat' | 'none';
   autorun?: boolean;
   injectStyles?: boolean;
 }
@@ -34,6 +35,7 @@ export interface RenderOptions {
   labelsOnBars: boolean;
   labelsWidth: number;
   showControls: Options['showControls'];
+  showOverlays: Options['showOverlays'];
   inputHeight?: string;
   inputWidth?: string;
   minHeight: number;
