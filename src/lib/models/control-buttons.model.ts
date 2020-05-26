@@ -1,6 +1,6 @@
 export interface ControlButtons {
   play: HTMLElement;
   pause: HTMLElement;
-  rewind: HTMLElement;
-  fastforward: HTMLElement;
+  skipBack: HTMLElement;
+  skipForward: HTMLElement;
 }

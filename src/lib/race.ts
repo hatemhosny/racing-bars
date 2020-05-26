@@ -53,7 +53,7 @@ export function race(data: Data[], options: Options = {}) {
   }
 
   if (injectStyles) {
-    styles.styleInject(selector);
+    styles.styleInject(selector, 'top');
   }
 
   // ********************
@@ -125,10 +125,10 @@ export function race(data: Data[], options: Options = {}) {
     if (!controlButtons) {
       return;
     }
-    controlButtons.rewind.addEventListener('click', ticker.rewind);
+    controlButtons.skipBack.addEventListener('click', ticker.rewind);
     controlButtons.play.addEventListener('click', ticker.toggle);
     controlButtons.pause.addEventListener('click', ticker.toggle);
-    controlButtons.fastforward.addEventListener('click', ticker.fastForward);
+    controlButtons.skipForward.addEventListener('click', ticker.fastForward);
   }
 
   function resize() {

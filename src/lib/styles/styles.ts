@@ -3,56 +3,74 @@
 // You may edit that file instead: src\lib\css\styles.css
 
 export const styles = `
-.race text {
+#selector text {
   font-size: 16px;
   font-family: Open Sans, sans-serif;
 }
-.race text.title {
+
+#selector text.title {
   font-size: 24px;
   font-weight: 500;
 }
-.race text.subTitle {
+
+#selector text.subTitle {
   font-weight: 500;
   fill: #777777;
 }
-.race text.caption {
+
+#selector text.caption {
   font-weight: 400;
   font-size: 24px;
   fill: #777777;
 }
-.race text.label {
+
+#selector text.label {
   font-weight: 600;
 }
 
-.race text.valueLabel {
+#selector text.valueLabel {
   font-weight: 300;
 }
 
-.race text.dateCounterText {
+#selector text.dateCounterText {
   font-size: 64px;
   font-weight: 700;
   opacity: 0.25;
 }
-.race .tick text {
+
+#selector .tick text {
   fill: #777777;
 }
-.race .xAxis .tick:nth-child(2) text {
+
+#selector .xAxis .tick:nth-child(2) text {
   text-anchor: start;
 }
-.race .tick line {
+
+#selector .tick line {
   shape-rendering: CrispEdges;
   stroke: #dddddd;
 }
-.race .tick line.origin {
+
+#selector .tick line.origin {
   stroke: #aaaaaa;
 }
-.race path.domain {
+
+#selector path.domain {
   display: none;
 }
-.race .controls {
+
+#selector {
+  position: relative;
+}
+
+#selector .controls {
+  /*  width and right are set dynamically in renderer.ts */
+  position: absolute;
+  top: 0;
   display: flex;
 }
-.race .controls div {
+
+#selector .controls div {
   cursor: pointer;
   font-size: 24px;
   font-weight: 700;
@@ -60,6 +78,7 @@ export const styles = `
   height: 38px;
   color: #ffffff;
   background: #777777;
+  border: 1px solid black;
   opacity: 0.5;
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
@@ -67,11 +86,13 @@ export const styles = `
   margin: 5px;
   text-align: center;
 }
-.race .controls div:hover {
+
+#selector .controls div:hover {
   background: #aaaaaa;
   color: black;
 }
-.race .controls div svg {
+
+#selector .controls div svg {
   margin: 7px auto;
 }
 `;

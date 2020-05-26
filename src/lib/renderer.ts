@@ -139,6 +139,7 @@ export function createRenderer(selector: string, renderOptions: RenderOptions) {
         .style('text-anchor', 'end')
         .html(caption);
 
+      // TODO: animate halo
       function halo(text: any, strokeWidth: number) {
         text
           .select(function () {
@@ -153,41 +154,32 @@ export function createRenderer(selector: string, renderOptions: RenderOptions) {
     }
 
     function renderControls(element: HTMLElement, showControls: Options['showControls']) {
-      element.style.position = 'relative';
+      const buttons: any = {};
+      const elementWidth = element.getBoundingClientRect().width;
 
-      const controls = addElement('div', 'controls', '', element);
-      controls.style.position = 'absolute';
-      controls.style.top = '0';
-      controls.style.right = margin.right + barPadding + 'px';
+      d3.select(selector)
+        .append('div')
+        .classed('controls', true)
+        .style('width', width)
+        .style('right', elementWidth - width + margin.right + barPadding + 'px')
+        .selectAll('div')
+        .data(Object.entries(icons))
+        .enter()
+        .append('div')
+        .html((d: string[]) => d[1])
+        .each(function (d: string[]) {
+          const name = d[0];
+          d3.select(this).classed(name, true);
+          buttons[name] = this;
+        });
+      controlButtons = buttons;
 
-      const rewindButton = addElement('div', 'rewind', icons.skipBack, controls);
-      const playButton = addElement('div', 'play', icons.play, controls);
-      const pauseButton = addElement('div', 'pause', icons.pause, controls);
-      const fastforwardButton = addElement('div', 'fastforward', icons.skipForward, controls);
-
-      controlButtons = {
-        rewind: rewindButton,
-        play: playButton,
-        pause: pauseButton,
-        fastforward: fastforwardButton,
-      };
-
-      switch (showControls) {
-        case 'play':
-          rewindButton.style.visibility = 'hidden';
-          fastforwardButton.style.visibility = 'hidden';
-          break;
-        case 'none':
-          controls.style.display = 'none';
-          break;
+      if (showControls === 'play') {
+        controlButtons.skipBack.style.visibility = 'hidden';
+        controlButtons.skipForward.style.visibility = 'hidden';
       }
-
-      function addElement(tag: string, className: string, html: string, parent: HTMLElement) {
-        const domElement = document.createElement(tag);
-        domElement.classList.add(className);
-        domElement.innerHTML = html;
-        parent.appendChild(domElement);
-        return domElement;
+      if (showControls === 'none') {
+        d3.select(selector + ' .controls').style('display', 'none');
       }
     }
   }

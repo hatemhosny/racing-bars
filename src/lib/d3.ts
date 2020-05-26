@@ -12,6 +12,7 @@ export {
   ScaleLinear,
   scaleLinear,
   select,
+  selectAll,
   Timer,
   tsv,
   xml,
