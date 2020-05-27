@@ -1,6 +1,14 @@
 import { fillGaps, getDateSlice, prepareData } from './data-utils';
 import { filterDates, formatDate, getDateString, getDates } from './dates';
-import { ControlButtons, Data, Options, RenderOptions, TickerOptions, LastValues } from './models';
+import {
+  Controls,
+  Data,
+  LastValues,
+  Options,
+  Overlays,
+  RenderOptions,
+  TickerOptions,
+} from './models';
 import { createRenderer } from './renderer';
 import { createTicker } from './ticker';
 import * as styles from './styles';
@@ -110,9 +118,9 @@ export function race(data: Data[], options: Options = {}) {
     element.innerHTML = '';
     renderer.renderInitalView(dateSlice);
     ticker.stop();
-    const controlButtons = renderer.getControlButtons();
-    registerControlButtonEvents(controlButtons);
-    registerOverlayEvents();
+    const controls = renderer.getControls();
+    registerControlButtonEvents(controls);
+    registerOverlayEvents(controls);
   }
 
   function renderFrame() {
@@ -123,21 +131,22 @@ export function race(data: Data[], options: Options = {}) {
     renderer.updateControls(running, position);
   }
 
-  function registerControlButtonEvents(controlButtons: ControlButtons) {
-    if (!controlButtons) {
+  function registerControlButtonEvents(controls: Controls) {
+    if (!controls) {
       return;
     }
-    controlButtons.skipBack.addEventListener('click', ticker.rewind);
-    controlButtons.play.addEventListener('click', ticker.toggle);
-    controlButtons.pause.addEventListener('click', ticker.toggle);
-    controlButtons.skipForward.addEventListener('click', ticker.fastForward);
+    controls.skipBack.addEventListener('click', ticker.rewind);
+    controls.play.addEventListener('click', ticker.toggle);
+    controls.pause.addEventListener('click', ticker.toggle);
+    controls.skipForward.addEventListener('click', ticker.fastForward);
   }
 
-  function registerOverlayEvents() {
-    const overlayPlay = element.querySelector('.overlayPlay') as HTMLElement;
-    const overlayRepeat = element.querySelector('.overlayRepeat') as HTMLElement;
-    overlayPlay.addEventListener('click', ticker.start);
-    overlayRepeat.addEventListener('click', () => {
+  function registerOverlayEvents(controls: Overlays) {
+    if (!controls) {
+      return;
+    }
+    controls.overlayPlay.addEventListener('click', ticker.start);
+    controls.overlayRepeat.addEventListener('click', () => {
       ticker.rewind();
       ticker.start();
     });

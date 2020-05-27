@@ -1,4 +1,5 @@
-export interface ControlButtons {
+export interface Controls {
+  container: HTMLElement;
   play: HTMLElement;
   pause: HTMLElement;
   skipBack: HTMLElement;

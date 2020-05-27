@@ -17,5 +17,6 @@ Happy linting! 💖
   "typescript.tsdk": "node_modules/typescript/lib",
   "files.associations": {
     "*.md": "mdx"
-  }
+  },
+  "jest.autoEnable": false
 }

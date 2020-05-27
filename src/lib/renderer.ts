@@ -1,9 +1,8 @@
-/* eslint-disable no-console */
 import * as d3 from './d3';
 
 import { formatDate } from './dates';
 import { icons } from './icons';
-import { ControlButtons, Data, Options, RenderOptions } from './models';
+import { Controls, Data, Options, Overlays, RenderOptions } from './models';
 import { getHeight, getWidth } from './utils';
 
 export function createRenderer(selector: string, renderOptions: RenderOptions) {
@@ -17,11 +16,9 @@ export function createRenderer(selector: string, renderOptions: RenderOptions) {
   let labelX: number | ((d: Data) => number);
   let height: number;
   let width: number;
-  let controlButtons: ControlButtons;
+  let controls: Controls;
   let showOverlays: Options['showOverlays'];
-  let overlay: HTMLElement;
-  let overlayPlay: HTMLElement;
-  let overlayRepeat: HTMLElement;
+  let overlays: Overlays;
 
   function renderInitalView(dateSlice: Data[]) {
     const {
@@ -49,8 +46,8 @@ export function createRenderer(selector: string, renderOptions: RenderOptions) {
     width = getWidth(element, minWidth, inputWidth);
 
     renderInitialFrame();
-    renderControls(element, showControls);
-    renderOverlays(element);
+    renderControls();
+    renderOverlays();
 
     function renderInitialFrame() {
       svg = d3.select(selector).append('svg').attr('width', width).attr('height', height);
@@ -161,58 +158,71 @@ export function createRenderer(selector: string, renderOptions: RenderOptions) {
       }
     }
 
-    function renderControls(element: HTMLElement, showControls: Options['showControls']) {
-      const buttons: any = {};
-      const elementWidth = element.getBoundingClientRect().width;
-
+    function renderControls() {
       const controlIcons = [
         { skipBack: icons.skipBack },
         { play: icons.play },
         { pause: icons.pause },
         { skipForward: icons.skipForward },
       ];
+
+      const elements: any = {};
+      const elementWidth = element.getBoundingClientRect().width;
+
       d3.select(selector)
         .append('div')
         .classed('controls', true)
         .style('width', width)
         .style('right', elementWidth - width + margin.right + barPadding + 'px')
+        .call(function (sel) {
+          elements.container = sel.node() as HTMLElement;
+        })
         .selectAll('div')
         .data(controlIcons)
         .enter()
         .append('div')
         .html((d) => Object.values(d)[0] as string)
+        .attr('class', (d) => Object.keys(d)[0])
         .each(function (d) {
-          const name = Object.keys(d)[0];
-          d3.select(this).classed(name, true);
-          buttons[name] = this;
+          elements[Object.keys(d)[0]] = this;
         });
-      controlButtons = buttons;
+      controls = elements;
 
       if (showControls === 'play') {
-        controlButtons.skipBack.style.visibility = 'hidden';
-        controlButtons.skipForward.style.visibility = 'hidden';
+        controls.skipBack.style.visibility = 'hidden';
+        controls.skipForward.style.visibility = 'hidden';
       }
       if (showControls === 'none') {
         d3.select(selector + ' .controls').style('display', 'none');
       }
     }
 
-    function renderOverlays(element: HTMLElement) {
-      overlay = document.createElement('div');
-      overlay.classList.add('overlay');
-      element.appendChild(overlay);
-      overlay.style.minHeight = minHeight + 'px';
-      overlay.style.minWidth = minWidth + 'px';
+    function renderOverlays() {
+      const overlayIcons = [
+        { overlayPlay: icons.overlayPlay },
+        { overlayRepeat: icons.overlayRepeat },
+      ];
 
-      overlayPlay = document.createElement('div');
-      overlayPlay.classList.add('overlayPlay');
-      overlayPlay.innerHTML = icons.overlayPlay;
-      overlay.appendChild(overlayPlay);
+      const elements: any = {};
 
-      overlayRepeat = document.createElement('div');
-      overlayRepeat.classList.add('overlayRepeat');
-      overlayRepeat.innerHTML = icons.overlayRepeat;
-      overlay.appendChild(overlayRepeat);
+      d3.select(selector)
+        .append('div')
+        .classed('overlay', true)
+        .style('minHeight', minHeight + 'px')
+        .style('minWidth', minWidth + 'px')
+        .call(function (overlay) {
+          elements.container = overlay.node() as HTMLElement;
+        })
+        .selectAll('div')
+        .data(overlayIcons)
+        .enter()
+        .append('div')
+        .html((d) => Object.values(d)[0] as string)
+        .attr('class', (d) => Object.keys(d)[0])
+        .each(function (d) {
+          elements[Object.keys(d)[0]] = this;
+        });
+      overlays = elements;
 
       updateControls(false, 'first');
     }
@@ -351,28 +361,26 @@ export function createRenderer(selector: string, renderOptions: RenderOptions) {
 
   function updateControls(running: boolean, position: 'first' | 'last' | '' = '') {
     if (running) {
-      controlButtons.play.style.display = 'none';
-      controlButtons.pause.style.display = 'unset';
+      controls.play.style.display = 'none';
+      controls.pause.style.display = 'unset';
     } else {
-      controlButtons.play.style.display = 'unset';
-      controlButtons.pause.style.display = 'none';
+      controls.play.style.display = 'unset';
+      controls.pause.style.display = 'none';
     }
 
-    const controls = document.querySelector('.controls') as HTMLElement;
-
     if (position === 'first' && (showOverlays === 'all' || showOverlays === 'play')) {
-      controls.style.visibility = 'hidden';
-      overlay.style.display = 'flex';
-      overlayPlay.style.display = 'flex';
-      overlayRepeat.style.display = 'none';
+      controls.container.style.visibility = 'hidden';
+      overlays.container.style.display = 'flex';
+      overlays.overlayPlay.style.display = 'flex';
+      overlays.overlayRepeat.style.display = 'none';
     } else if (position === 'last' && (showOverlays === 'all' || showOverlays === 'repeat')) {
-      controls.style.visibility = 'hidden';
-      overlay.style.display = 'flex';
-      overlayPlay.style.display = 'none';
-      overlayRepeat.style.display = 'flex';
+      controls.container.style.visibility = 'hidden';
+      overlays.container.style.display = 'flex';
+      overlays.overlayPlay.style.display = 'none';
+      overlays.overlayRepeat.style.display = 'flex';
     } else {
-      controls.style.visibility = 'unset';
-      overlay.style.display = 'none';
+      controls.container.style.visibility = 'unset';
+      overlays.container.style.display = 'none';
     }
   }
 
@@ -383,6 +391,6 @@ export function createRenderer(selector: string, renderOptions: RenderOptions) {
     updateControls,
     getRenderedHeight: () => height,
     getRenderedWidth: () => width,
-    getControlButtons: () => ({ ...controlButtons }),
+    getControls: () => ({ ...controls, ...overlays }),
   };
 }
