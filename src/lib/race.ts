@@ -1,76 +1,30 @@
-import { fillGaps, getDateSlice, prepareData } from './data-utils';
+import { fillGaps, prepareData } from './data-utils';
 import { filterDates, formatDate, getDateString, getDates } from './dates';
-import {
-  Controls,
-  Data,
-  LastValues,
-  Options,
-  Overlays,
-  RenderOptions,
-  TickerOptions,
-} from './models';
+import { Controls, Data, LastValues, Overlays } from './models';
 import { createRenderer } from './renderer';
 import { createTicker } from './ticker';
 import * as styles from './styles';
+import { actions, store, state } from './store';
+import { Options } from './options';
 
-export function race(data: Data[], options: Options = {}) {
-  // ********************
-  // User-defined options
-  // ********************
+export function race(data: Data[], options: Options) {
+  store.dispatch(actions.options.optionsLoaded(options));
 
-  const dataShape = options.dataShape || 'long';
-  const fillDateGaps = options.fillDateGaps;
-  // const fillDateGapsValue = options.fillDateGapsValue || "last";
-  const selector = options.selector || '#race';
-  const startDate = options.startDate ? getDateString(options.startDate) : '';
-  const endDate = options.endDate ? getDateString(options.endDate) : '';
-  const colorSeed = options.colorSeed || '';
-  const disableGroupColors = options.disableGroupColors || false;
-  const tickDuration = Number(options.tickDuration) || 500;
-  const topN = Number(options.topN) || 10;
-  const disableClickEvents = options.disableClickEvents !== false;
-  const disableKeyboardEvents = options.disableKeyboardEvents;
-  const autorun = options.autorun !== false;
-  const injectStyles = options.injectStyles !== false;
-
-  const renderOptions: RenderOptions = {
-    selector,
-    title: options.title || '18 years of Top Global Brands',
-    subTitle: options.subTitle || 'Brand value, $m',
-    caption: options.caption || 'Source: Interbrand',
-    dateCounterFormat: options.dateCounterFormat || 'YYYY',
-    labelsOnBars: options.labelsOnBars !== false,
-    labelsWidth: options.labelsWidth || 100,
-    showControls: options.showControls || 'all',
-    showOverlays: options.showOverlays || 'all',
-    inputHeight: options.height,
-    inputWidth: options.width,
-    minHeight: 300,
-    minWidth: 500,
-    tickDuration,
-    topN,
-  };
-
-  const tickerOptions: TickerOptions = {
-    loop: options.loop || false,
-    tickDuration,
-  };
-
-  const element = document.querySelector(selector) as HTMLElement;
+  const element = document.querySelector(state.options.selector) as HTMLElement;
   if (!element) {
-    throw new Error('Cannot find element with this selector: ' + selector);
+    throw new Error('Cannot find element with this selector: ' + state.options.selector);
   }
 
-  if (injectStyles) {
-    styles.styleInject(selector, 'top');
+  if (state.options.injectStyles) {
+    styles.styleInject(state.options.selector, 'top');
   }
 
   // ********************
   //  Stateful functions
   // ********************
 
-  const renderer = createRenderer(selector, renderOptions);
-  const ticker = createTicker(notifyRenderer);
+  const renderer = createRenderer();
+  const ticker = createTicker();
 
   // ********************
   //   Create the chart
@@ -78,18 +32,18 @@ export function race(data: Data[], options: Options = {}) {
 
   let lastValues: LastValues;
 
-  data = filterDates(data, startDate, endDate);
-  data = prepareData(data, dataShape, disableGroupColors, colorSeed);
+  data = filterDates(data, state.options.startDate, state.options.endDate);
+  data = prepareData(data, state.options);
 
   const dates = getDates(data);
 
-  if (fillDateGaps) {
-    data = fillGaps(data, dates, fillDateGaps);
+  if (state.options.fillDateGaps) {
+    data = fillGaps(data, dates, state.options.fillDateGaps);
   }
 
-  const tickerDate = ticker.tickerDateFactory(dates, tickerOptions, updateDate, renderFrame);
+  const tickerDate = ticker.tickerDateFactory();
 
-  let dateSlice: Data[];
+  // let dateSlice: Data[];
   initialize();
 
   renderInitalView();
@@ -97,14 +51,14 @@ export function race(data: Data[], options: Options = {}) {
 
   ticker.start();
 
-  if (!autorun) {
+  if (!state.options.autorun) {
     ticker.stop();
   }
 
-  if (!disableClickEvents) {
+  if (!state.options.disableClickEvents) {
     registerClickEvents();
   }
-  if (!disableKeyboardEvents) {
+  if (!state.options.disableKeyboardEvents) {
     registerKeyboardEvents();
   }
 
@@ -116,7 +70,7 @@ export function race(data: Data[], options: Options = {}) {
 
   function renderInitalView() {
     element.innerHTML = '';
-    renderer.renderInitalView(dateSlice);
+    renderer.renderInitalView();
     ticker.stop();
     const controls = renderer.getControls();
     registerControlButtonEvents(controls);
@@ -124,12 +78,12 @@ export function race(data: Data[], options: Options = {}) {
   }
 
   function renderFrame() {
-    renderer.renderFrame(dateSlice);
+    renderer.renderFrame();
   }
 
-  function notifyRenderer(running: boolean, position: 'first' | 'last' | '') {
-    renderer.updateControls(running, position);
-  }
+  // function notifyRenderer(running: boolean, position: 'first' | 'last' | '') {
+  //   renderer.updateControls(running, position);
+  // }
 
   function registerControlButtonEvents(controls: Controls) {
     if (!controls) {
@@ -166,15 +120,15 @@ export function race(data: Data[], options: Options = {}) {
     }
   }
 
-  function updateDate(currentDate: string) {
-    dateSlice = getDateSlice(data, tickerDate.getDate(), lastValues, topN);
-    renderFrame();
-    element.dispatchEvent(
-      new CustomEvent('dateChanged', {
-        detail: { date: formatDate(currentDate, 'YYYY-MM-DD') },
-      }),
-    );
-  }
+  // function updateDate(currentDate: string) {
+  //   dateSlice = getDateSlice(data, tickerDate.getDate(), lastValues, topN);
+  //   renderFrame();
+  //   element.dispatchEvent(
+  //     new CustomEvent('dateChanged', {
+  //       detail: { date: formatDate(currentDate, 'YYYY-MM-DD') },
+  //     }),
+  //   );
+  // }
 
   function initialize() {
     initializeLastValues();

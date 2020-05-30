@@ -1,21 +1,17 @@
 import { formatDate, getDateString } from './dates';
 import { Data, LastValues } from './models';
 import { getColor } from './utils';
+import { Options } from './options';
 
-export function prepareData(
-  data: Data[],
-  dataShape: string,
-  disableGroupColors: boolean,
-  colorSeed: string,
-) {
-  if (dataShape === 'wide') {
+export function prepareData(data: Data[], options: Options) {
+  if (options.dataShape === 'wide') {
     data = wideDataToLong(data);
   }
   return data.map((item) => {
     const d = { ...item };
     d.value = isNaN(+d.value) ? 0 : +d.value;
     d.date = getDateString(d.date);
-    d.color = getColor(d, disableGroupColors, colorSeed);
+    d.color = getColor(d, options.disableGroupColors, options.colorSeed);
     return d;
   });
 }

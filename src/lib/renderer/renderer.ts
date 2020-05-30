@@ -1,11 +1,12 @@
-import * as d3 from './d3';
+import * as d3 from '../d3';
 
-import { formatDate } from './dates';
-import { icons } from './icons';
-import { Controls, Data, Options, Overlays, RenderOptions } from './models';
-import { getHeight, getWidth } from './utils';
+import { formatDate } from '../dates';
+import { icons } from '../icons';
+import { Controls, Data, Overlays } from '../models';
+import { state } from '../store';
+import { getHeight, getWidth } from '../utils';
 
-export function createRenderer(selector: string, renderOptions: RenderOptions) {
+export function createRenderer() {
   let margin: { top: number; right: number; bottom: number; left: number };
   let svg: any;
   let x: d3.ScaleLinear<number, number>;
@@ -16,8 +17,7 @@ export function createRenderer(selector: string, renderOptions: RenderOptions) {
   let labelX: number | ((d: Data) => number);
   let height: number;
   let width: number;
-  let controls: Controls;
-  let showOverlays: Options['showOverlays'];
+  let controls: Controls; // TODO: improve this
   let overlays: Overlays;
 
   function renderInitalView(dateSlice: Data[]) {
@@ -35,9 +35,7 @@ export function createRenderer(selector: string, renderOptions: RenderOptions) {
       minHeight,
       minWidth,
       topN,
-    } = renderOptions;
-
-    showOverlays = renderOptions.showOverlays;
+    } = state.options;
 
     const currentDate = dateSlice.length > 0 ? dateSlice[0].date : '';
     const element = document.querySelector(selector) as HTMLElement;
@@ -233,7 +231,7 @@ export function createRenderer(selector: string, renderOptions: RenderOptions) {
       return;
     }
 
-    const { tickDuration, topN, dateCounterFormat } = renderOptions;
+    const { tickDuration, topN, dateCounterFormat } = state.options;
     const currentDate = dateSlice.length > 0 ? dateSlice[0].date : '';
 
     x.domain([0, d3.max(dateSlice, (d: Data) => d.value) as number]);
@@ -344,14 +342,14 @@ export function createRenderer(selector: string, renderOptions: RenderOptions) {
 
   function resize(resetFn: () => void) {
     if (
-      (!renderOptions.inputHeight && !renderOptions.inputWidth) ||
-      String(renderOptions.inputHeight).startsWith('window') ||
-      String(renderOptions.inputWidth).startsWith('window')
+      (!state.options.inputHeight && !state.options.inputWidth) ||
+      String(state.options.inputHeight).startsWith('window') ||
+      String(state.options.inputWidth).startsWith('window')
     ) {
-      const element = document.querySelector(selector) as HTMLElement;
+      const element = document.querySelector(state.options.selector) as HTMLElement;
 
-      height = getHeight(element, renderOptions.minHeight, renderOptions.inputHeight);
-      width = getWidth(element, renderOptions.minWidth, renderOptions.inputWidth);
+      height = getHeight(element, state.options.minHeight, state.options.inputHeight);
+      width = getWidth(element, state.options.minWidth, state.options.inputWidth);
 
       const currentPosition = element.style.position; // "fixed" if scrolling
       resetFn();
@@ -368,6 +366,7 @@ export function createRenderer(selector: string, renderOptions: RenderOptions) {
       controls.pause.style.display = 'none';
     }
 
+    const showOverlays = state.options.showOverlays;
     if (position === 'first' && (showOverlays === 'all' || showOverlays === 'play')) {
       controls.container.style.visibility = 'hidden';
       overlays.container.style.display = 'flex';
