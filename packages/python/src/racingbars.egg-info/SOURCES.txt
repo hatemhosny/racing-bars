@@ -1,0 +1,12 @@
+README.md
+setup.py
+src/racingbars/__init__.py
+src/racingbars/__main__.py
+src/racingbars/chart.html
+src/racingbars/procedures.json
+src/racingbars/racing-bars.umd.js
+src/racingbars/write_html.py
+src/racingbars.egg-info/PKG-INFO
+src/racingbars.egg-info/SOURCES.txt
+src/racingbars.egg-info/dependency_links.txt
+src/racingbars.egg-info/top_level.txt
