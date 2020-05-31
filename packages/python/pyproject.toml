@@ -6,11 +6,12 @@ readme = "README.md"
 homepage = ""
 authors = ["Hatem Hosny <hatemhosny@gmail.com>"]
 license = "MIT"
-include = ["js/*", "data/*]
+include = ["js/*", "data/*"]
 
 
 [tool.poetry.dependencies]
 python = "^3.7"
+pandas = "^1.0.4"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
