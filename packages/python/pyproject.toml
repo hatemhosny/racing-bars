@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "racingbars"
+version = "0.0.0"
+description = "Bar chart race, easy to use, based on d3"
+readme = "README.md"
+homepage = ""
+authors = ["Hatem Hosny <hatemhosny@gmail.com>"]
+license = "MIT"
+include = ["js/*", "data/*"]
+
+
+[tool.poetry.dependencies]
+python = "^3.7"
+pandas = "^1.0.4"
+ipython = "^7.15.0"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.2"
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"

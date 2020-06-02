@@ -1,0 +1,11 @@
+Metadata-Version: 1.2
+Name: racingbars
+Version: 0.0.0
+Summary: Bar chart race, easy to use, based on d3
+Home-page: UNKNOWN
+Author: Hatem Hosny
+Author-email: hatemhosny@gmail.com
+License: UNKNOWN
+Description: UNKNOWN
+Platform: UNKNOWN
+Requires-Python: >=3.7,<4.0

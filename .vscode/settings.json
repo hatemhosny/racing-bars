@@ -18,5 +18,6 @@ Happy linting! 💖
   "files.associations": {
     "*.md": "mdx"
   },
-  "jest.autoEnable": false
+  "jest.autoEnable": false,
+  "python.formatting.provider": "black"
 }
