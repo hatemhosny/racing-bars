@@ -4,8 +4,19 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{{title}}</title>
+    <style>
+      .container {
+        width: 95vw;
+        height: 90vh;
+      }
+      .container > div {
+        height: 100%;
+      }
+    </style>
   </head>
   <body>
-    {{racingbars}}
+    <div class="container">
+      {{racingbars}}
+    </div>
   </body>
 </html>
