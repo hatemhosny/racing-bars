@@ -10,6 +10,7 @@ coverage
 .rts2_cache*
 .docusaurus
 .cache-loader
+__pycache__
 
 # Misc
 .DS_Store
