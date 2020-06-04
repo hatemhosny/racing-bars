@@ -1,16 +1,19 @@
 import { Action, Reducer, State, Subscriber } from './models';
 import { rootReducer } from './reducer';
 
-export function createStore(reducer: Reducer = rootReducer, initialState?: State) {
-  let state: State;
+export function createStore(reducer: Reducer = rootReducer, preloadedState?: State) {
+  let state = {} as State;
 
-  if (initialState) {
-    state = initialState;
+  if (preloadedState) {
+    state = preloadedState;
   }
 
   function dispatch(action: Action) {
     state = reducer(state, action);
     notifySubscribers();
+    // eslint-disable-next-line no-console
+    console.log(state);
+    return action;
   }
 
   function getState() {

@@ -1,44 +1,44 @@
 import { TickerAction } from './ticker.models';
 
 export const actionTypes = {
-  initializeTicker: 'ticker/initializeTicker',
-  updateTickerDate: 'ticker/updateTickerDate',
-  tickerSetRunning: 'ticker/tickerSetRunning',
-  tickerSetFirst: 'ticker/tickerSetFirst',
-  tickerSetLast: 'ticker/tickerSetLast',
-  tickerInc: 'ticker/tickerInc',
-  tickerDec: 'ticker/tickerDec',
+  initialize: 'ticker/initialize',
+  updateDate: 'ticker/updateDate',
+  setRunning: 'ticker/setRunning',
+  setFirst: 'ticker/setFirst',
+  setLast: 'ticker/setLast',
+  inc: 'ticker/inc',
+  dec: 'ticker/dec',
 };
 
-export const initializeTicker = (dates: string[]): TickerAction => ({
-  type: actionTypes.initializeTicker,
+export const initialize = (dates: string[]): TickerAction => ({
+  type: actionTypes.initialize,
   payload: dates,
 });
 
-export const updateTickerDate = (currentDate: string): TickerAction => ({
-  type: actionTypes.updateTickerDate,
+export const updateDate = (currentDate: string): TickerAction => ({
+  type: actionTypes.updateDate,
   payload: currentDate,
 });
 
-export const tickerSetRunning = (running: boolean): TickerAction => ({
-  type: actionTypes.tickerSetRunning,
+export const setRunning = (running: boolean): TickerAction => ({
+  type: actionTypes.setRunning,
   payload: running,
 });
 
-export const tickerSetFirst = (): TickerAction => ({
-  type: actionTypes.tickerSetFirst,
+export const setFirst = (): TickerAction => ({
+  type: actionTypes.setFirst,
 });
 
-export const tickerSetLast = (): TickerAction => ({
-  type: actionTypes.tickerSetLast,
+export const setLast = (): TickerAction => ({
+  type: actionTypes.setLast,
 });
 
-export const tickerInc = (value = 1): TickerAction => ({
-  type: actionTypes.tickerInc,
+export const inc = (value = 1): TickerAction => ({
+  type: actionTypes.inc,
   payload: value,
 });
 
-export const tickerDec = (value = 1): TickerAction => ({
-  type: actionTypes.tickerDec,
+export const dec = (value = 1): TickerAction => ({
+  type: actionTypes.dec,
   payload: value,
 });

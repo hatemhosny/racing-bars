@@ -11,7 +11,7 @@ const initialState: TickerState = {
 
 export function tickerReducer(state = initialState, action: TickerAction): TickerState {
   switch (action.type) {
-    case actionTypes.initializeTicker: {
+    case actionTypes.initialize: {
       const dates = action.payload as string[];
       return {
         ...state,
@@ -23,7 +23,7 @@ export function tickerReducer(state = initialState, action: TickerAction): Ticke
       };
     }
 
-    case actionTypes.updateTickerDate: {
+    case actionTypes.updateDate: {
       const currentDate = action.payload as string;
       if (state.dates.indexOf(currentDate) === -1) {
         return { ...state };
@@ -36,14 +36,14 @@ export function tickerReducer(state = initialState, action: TickerAction): Ticke
       };
     }
 
-    case actionTypes.tickerSetRunning: {
+    case actionTypes.setRunning: {
       return {
         ...state,
         isRunning: action.payload as boolean,
       };
     }
 
-    case actionTypes.tickerSetFirst: {
+    case actionTypes.setFirst: {
       return {
         ...state,
         currentDate: state.dates[0],
@@ -52,7 +52,7 @@ export function tickerReducer(state = initialState, action: TickerAction): Ticke
       };
     }
 
-    case actionTypes.tickerSetLast: {
+    case actionTypes.setLast: {
       return {
         ...state,
         currentDate: state.dates[state.dates.length - 1],
@@ -61,7 +61,7 @@ export function tickerReducer(state = initialState, action: TickerAction): Ticke
       };
     }
 
-    case actionTypes.tickerInc: {
+    case actionTypes.inc: {
       const currentIndex = state.dates.indexOf(state.currentDate);
       const lastIndex = state.dates.length - 1;
       const incValue = action.payload as number;
@@ -77,7 +77,7 @@ export function tickerReducer(state = initialState, action: TickerAction): Ticke
       };
     }
 
-    case actionTypes.tickerDec: {
+    case actionTypes.dec: {
       const currentIndex = state.dates.indexOf(state.currentDate);
       const decValue = action.payload as number;
       const newDate =

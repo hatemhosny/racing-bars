@@ -1,37 +1,24 @@
 import * as d3 from '../d3';
-import { store, state } from '../store';
-import {
-  initializeTicker,
-  tickerSetRunning,
-  tickerInc,
-  tickerSetFirst,
-  tickerSetLast,
-  updateTickerDate,
-} from './ticker.actions';
+import { store, actions } from '../store';
 
 export function createTicker(dates: string[]) {
+  store.dispatch(actions.ticker.initialize(dates));
+
   let ticker: d3.Timer;
 
-  store.dispatch(initializeTicker(dates));
-
-  function renderFrame() {
-    store.dispatch(render());
-  }
-
   function start() {
-    ticker = d3.interval(showRace, state.options.tickDuration);
-    store.dispatch(tickerSetRunning(true));
+    ticker = d3.interval(showRace, store.getState().options.tickDuration);
+    store.dispatch(actions.ticker.setRunning(true));
 
     function showRace(_: number) {
-      if (state.ticker.isLastDate) {
-        renderFrame();
-        if (state.options.loop) {
+      if (store.getState().ticker.isLastDate) {
+        if (store.getState().options.loop) {
           loop();
         } else {
           stop();
         }
       } else {
-        store.dispatch(tickerInc());
+        store.dispatch(actions.ticker.inc());
       }
     }
   }
@@ -40,32 +27,28 @@ export function createTicker(dates: string[]) {
     if (ticker) {
       ticker.stop();
     }
-    store.dispatch(tickerSetRunning(false));
+    store.dispatch(actions.ticker.setRunning(false));
   }
 
   function skipBack() {
     stop();
-    store.dispatch(tickerSetFirst());
-    renderFrame();
-    store.dispatch(tickerSetRunning(true));
+    store.dispatch(actions.ticker.setFirst());
   }
 
   function loop() {
-    store.dispatch(tickerSetFirst());
-    renderFrame();
+    store.dispatch(actions.ticker.setFirst());
   }
 
   function skipForward() {
     stop();
-    store.dispatch(tickerSetLast());
-    renderFrame();
+    store.dispatch(actions.ticker.setLast());
   }
 
   function toggle() {
-    if (state.ticker.isLastDate) {
+    if (store.getState().ticker.isLastDate) {
       skipBack();
       start();
-    } else if (state.ticker.isRunning) {
+    } else if (store.getState().ticker.isRunning) {
       stop();
     } else {
       start();
@@ -73,8 +56,7 @@ export function createTicker(dates: string[]) {
   }
 
   function goToDate(date: string) {
-    store.dispatch(updateTickerDate(date));
-    renderFrame();
+    store.dispatch(actions.ticker.updateDate(date));
   }
 
   return {

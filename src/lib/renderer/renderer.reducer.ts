@@ -29,15 +29,15 @@ export function rendererReducer(
   action: RendererAction | TickerAction,
 ): RendererState {
   switch (action.type) {
-    case actions.ticker.actionTypes.tickerSetFirst:
-    case actions.ticker.actionTypes.tickerSetLast:
-    case actions.ticker.actionTypes.tickerInc:
-    case actions.ticker.actionTypes.tickerDec:
-    case actions.ticker.actionTypes.updateTickerDate: {
+    case actions.ticker.actionTypes.setFirst:
+    case actions.ticker.actionTypes.setLast:
+    case actions.ticker.actionTypes.inc:
+    case actions.ticker.actionTypes.dec:
+    case actions.ticker.actionTypes.updateDate: {
       return { ...state };
     }
 
-    case actionTypes.rendererButtonPress: {
+    case actionTypes.buttonPress: {
       const button = action.payload as Button;
 
       switch (button) {
@@ -50,9 +50,9 @@ export function rendererReducer(
       return { ...state };
     }
 
-    case actionTypes.rendererClick:
+    case actionTypes.click:
 
-    case actionTypes.rendererKeyPress:
+    case actionTypes.keyPress:
 
     default:
       return state;

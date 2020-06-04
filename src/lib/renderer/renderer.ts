@@ -2,11 +2,13 @@ import * as d3 from '../d3';
 
 import { formatDate } from '../dates';
 import { icons } from '../icons';
-import { Controls, Data, Overlays } from '../models';
-import { state } from '../store';
-import { getHeight, getWidth } from '../utils';
+import { elements } from '../elements';
+import { Data } from '../models';
+import { store } from '../store';
+import { getHeight, getWidth, hideElement, showElement } from '../utils';
+import { getDateSlice } from '../data-utils';
 
-export function createRenderer() {
+export function createRenderer(data: Data[]) {
   let margin: { top: number; right: number; bottom: number; left: number };
   let svg: any;
   let x: d3.ScaleLinear<number, number>;
@@ -17,10 +19,8 @@ export function createRenderer() {
   let labelX: number | ((d: Data) => number);
   let height: number;
   let width: number;
-  let controls: Controls; // TODO: improve this
-  let overlays: Overlays;
 
-  function renderInitalView(dateSlice: Data[]) {
+  function renderInitalView() {
     const {
       selector,
       title,
@@ -29,16 +29,16 @@ export function createRenderer() {
       dateCounterFormat,
       labelsOnBars,
       labelsWidth,
-      showControls,
       inputHeight,
       inputWidth,
       minHeight,
       minWidth,
       topN,
-    } = state.options;
+    } = store.getState().options;
 
-    const currentDate = dateSlice.length > 0 ? dateSlice[0].date : '';
+    const dateSlice = getDateSlice(data, store.getState().ticker.currentDate);
     const element = document.querySelector(selector) as HTMLElement;
+    element.innerHTML = '';
 
     height = getHeight(element, minHeight, inputHeight);
     width = getWidth(element, minWidth, inputWidth);
@@ -46,10 +46,9 @@ export function createRenderer() {
     renderInitialFrame();
     renderControls();
     renderOverlays();
+    updateControls();
 
     function renderInitialFrame() {
-      svg = d3.select(selector).append('svg').attr('width', width).attr('height', height);
-
       const labelsArea = labelsOnBars ? 0 : labelsWidth;
 
       margin = {
@@ -61,9 +60,23 @@ export function createRenderer() {
 
       barPadding = (height - (margin.bottom + margin.top)) / (topN * 5);
 
-      svg.append('text').attr('class', 'title').attr('y', 24).html(title);
+      svg = d3 //
+        .select(selector)
+        .append('svg')
+        .attr('width', width)
+        .attr('height', height);
 
-      svg.append('text').attr('class', 'subTitle').attr('y', 55).html(subTitle);
+      svg //
+        .append('text')
+        .attr('class', 'title')
+        .attr('y', 24)
+        .html(title);
+
+      svg //
+        .append('text')
+        .attr('class', 'subTitle')
+        .attr('y', 55)
+        .html(subTitle);
 
       x = d3
         .scaleLinear()
@@ -77,7 +90,6 @@ export function createRenderer() {
 
       xAxis = d3
         .axisTop(x)
-        // .scale()
         .ticks(width > 500 ? 5 : 2)
         .tickSize(-(height - margin.top - margin.bottom))
         .tickFormat((n: number | { valueOf(): number }) => d3.format(',')(n));
@@ -125,13 +137,14 @@ export function createRenderer() {
         .text((d: Data) => d3.format(',.0f')(d.lastValue as number));
 
       const strokeWidth = 10;
+
       dateCounterText = svg
         .append('text')
         .attr('class', 'dateCounterText')
         .attr('x', width - margin.right - barPadding)
         .attr('y', height - 40)
         .style('text-anchor', 'end')
-        .html(formatDate(currentDate, dateCounterFormat))
+        .html(formatDate(store.getState().ticker.currentDate, dateCounterFormat))
         .call(halo, strokeWidth);
 
       svg
@@ -164,7 +177,6 @@ export function createRenderer() {
         { skipForward: icons.skipForward },
       ];
 
-      const elements: any = {};
       const elementWidth = element.getBoundingClientRect().width;
 
       d3.select(selector)
@@ -172,27 +184,12 @@ export function createRenderer() {
         .classed('controls', true)
         .style('width', width)
         .style('right', elementWidth - width + margin.right + barPadding + 'px')
-        .call(function (sel) {
-          elements.container = sel.node() as HTMLElement;
-        })
         .selectAll('div')
         .data(controlIcons)
         .enter()
         .append('div')
         .html((d) => Object.values(d)[0] as string)
-        .attr('class', (d) => Object.keys(d)[0])
-        .each(function (d) {
-          elements[Object.keys(d)[0]] = this;
-        });
-      controls = elements;
-
-      if (showControls === 'play') {
-        controls.skipBack.style.visibility = 'hidden';
-        controls.skipForward.style.visibility = 'hidden';
-      }
-      if (showControls === 'none') {
-        d3.select(selector + ' .controls').style('display', 'none');
-      }
+        .attr('class', (d) => Object.keys(d)[0]);
     }
 
     function renderOverlays() {
@@ -201,44 +198,40 @@ export function createRenderer() {
         { overlayRepeat: icons.overlayRepeat },
       ];
 
-      const elements: any = {};
-
       d3.select(selector)
         .append('div')
         .classed('overlay', true)
         .style('minHeight', minHeight + 'px')
         .style('minWidth', minWidth + 'px')
-        .call(function (overlay) {
-          elements.container = overlay.node() as HTMLElement;
-        })
         .selectAll('div')
         .data(overlayIcons)
         .enter()
         .append('div')
         .html((d) => Object.values(d)[0] as string)
-        .attr('class', (d) => Object.keys(d)[0])
-        .each(function (d) {
-          elements[Object.keys(d)[0]] = this;
-        });
-      overlays = elements;
-
-      updateControls(false, 'first');
+        .attr('class', (d) => Object.keys(d)[0]);
     }
   }
 
-  function renderFrame(dateSlice: Data[]) {
+  function renderFrame() {
     if (!x) {
       return;
     }
 
-    const { tickDuration, topN, dateCounterFormat } = state.options;
-    const currentDate = dateSlice.length > 0 ? dateSlice[0].date : '';
+    const { tickDuration, topN, dateCounterFormat } = store.getState().options;
+    const dateSlice = getDateSlice(data, store.getState().ticker.currentDate);
 
     x.domain([0, d3.max(dateSlice, (d: Data) => d.value) as number]);
 
-    svg.select('.xAxis').transition().duration(tickDuration).ease(d3.easeLinear).call(xAxis);
+    svg //
+      .select('.xAxis')
+      .transition()
+      .duration(tickDuration)
+      .ease(d3.easeLinear)
+      .call(xAxis);
 
-    const bars = svg.selectAll('.bar').data(dateSlice, (d: Data) => d.name);
+    const bars = svg //
+      .selectAll('.bar')
+      .data(dateSlice, (d: Data) => d.name);
 
     bars
       .enter()
@@ -270,7 +263,9 @@ export function createRenderer() {
       .attr('y', () => y(topN + 1) + 5)
       .remove();
 
-    const labels = svg.selectAll('.label').data(dateSlice, (d: Data) => d.name);
+    const labels = svg //
+      .selectAll('.label')
+      .data(dateSlice, (d: Data) => d.name);
 
     labels
       .enter()
@@ -301,7 +296,9 @@ export function createRenderer() {
       .attr('y', () => y(topN + 1) + 5)
       .remove();
 
-    const valueLabels = svg.selectAll('.valueLabel').data(dateSlice, (d: Data) => d.name);
+    const valueLabels = svg //
+      .selectAll('.valueLabel')
+      .data(dateSlice, (d: Data) => d.name);
 
     valueLabels
       .enter()
@@ -337,19 +334,29 @@ export function createRenderer() {
       .attr('y', () => y(topN + 1) + 5)
       .remove();
 
-    dateCounterText.html(formatDate(currentDate, dateCounterFormat));
+    dateCounterText.html(formatDate(store.getState().ticker.currentDate, dateCounterFormat));
+
+    updateControls();
   }
 
   function resize(resetFn: () => void) {
     if (
-      (!state.options.inputHeight && !state.options.inputWidth) ||
-      String(state.options.inputHeight).startsWith('window') ||
-      String(state.options.inputWidth).startsWith('window')
+      (!store.getState().options.inputHeight && !store.getState().options.inputWidth) ||
+      String(store.getState().options.inputHeight).startsWith('window') ||
+      String(store.getState().options.inputWidth).startsWith('window')
     ) {
-      const element = document.querySelector(state.options.selector) as HTMLElement;
+      const element = document.querySelector(store.getState().options.selector) as HTMLElement;
 
-      height = getHeight(element, state.options.minHeight, state.options.inputHeight);
-      width = getWidth(element, state.options.minWidth, state.options.inputWidth);
+      height = getHeight(
+        element,
+        store.getState().options.minHeight,
+        store.getState().options.inputHeight,
+      );
+      width = getWidth(
+        element,
+        store.getState().options.minWidth,
+        store.getState().options.inputWidth,
+      );
 
       const currentPosition = element.style.position; // "fixed" if scrolling
       resetFn();
@@ -357,29 +364,46 @@ export function createRenderer() {
     }
   }
 
-  function updateControls(running: boolean, position: 'first' | 'last' | '' = '') {
-    if (running) {
-      controls.play.style.display = 'none';
-      controls.pause.style.display = 'unset';
+  function updateControls() {
+    const showControls = store.getState().options.showControls;
+    const showOverlays = store.getState().options.showOverlays;
+
+    if (showControls === 'play') {
+      hideElement(elements.skipBack);
+      hideElement(elements.skipForward);
+    } else if (showControls === 'none') {
+      hideElement(elements.controls);
     } else {
-      controls.play.style.display = 'unset';
-      controls.pause.style.display = 'none';
+      showElement(elements.controls);
     }
 
-    const showOverlays = state.options.showOverlays;
-    if (position === 'first' && (showOverlays === 'all' || showOverlays === 'play')) {
-      controls.container.style.visibility = 'hidden';
-      overlays.container.style.display = 'flex';
-      overlays.overlayPlay.style.display = 'flex';
-      overlays.overlayRepeat.style.display = 'none';
-    } else if (position === 'last' && (showOverlays === 'all' || showOverlays === 'repeat')) {
-      controls.container.style.visibility = 'hidden';
-      overlays.container.style.display = 'flex';
-      overlays.overlayPlay.style.display = 'none';
-      overlays.overlayRepeat.style.display = 'flex';
+    if (store.getState().ticker.isRunning) {
+      showElement(elements.pause);
+      hideElement(elements.play);
     } else {
-      controls.container.style.visibility = 'unset';
-      overlays.container.style.display = 'none';
+      showElement(elements.play);
+      hideElement(elements.pause);
+    }
+
+    if (
+      store.getState().ticker.isFirstDate &&
+      (showOverlays === 'all' || showOverlays === 'play')
+    ) {
+      showElement(elements.overlay);
+      hideElement(elements.controls);
+      showElement(elements.overlayPlay);
+      hideElement(elements.overlayRepeat);
+    } else if (
+      store.getState().ticker.isLastDate &&
+      (showOverlays === 'all' || showOverlays === 'repeat')
+    ) {
+      showElement(elements.overlay);
+      hideElement(elements.controls);
+      showElement(elements.overlayRepeat);
+      hideElement(elements.overlayPlay);
+    } else {
+      showElement(elements.controls);
+      hideElement(elements.overlay);
     }
   }
 
@@ -390,6 +414,5 @@ export function createRenderer() {
     updateControls,
     getRenderedHeight: () => height,
     getRenderedWidth: () => width,
-    getControls: () => ({ ...controls, ...overlays }),
   };
 }

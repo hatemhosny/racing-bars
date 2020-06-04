@@ -1,25 +1,25 @@
 import { Button, ResizeOptions, RendererAction } from './renderer.models';
 
 export const actionTypes = {
-  rendererButtonPress: 'renderer/buttonPress',
-  rendererClick: 'renderer/click',
-  rendererKeyPress: 'renderer/keyPress',
-  rendererResize: 'renderer/rendererResize',
+  buttonPress: 'renderer/buttonPress',
+  click: 'renderer/click',
+  keyPress: 'renderer/keyPress',
+  resize: 'renderer/resize',
 };
 
-export const rendererButtonPress = (button: Button): RendererAction => ({
-  type: actionTypes.rendererButtonPress,
+export const buttonPress = (button: Button): RendererAction => ({
+  type: actionTypes.buttonPress,
   payload: button,
 });
 
-export const rendererClick = (): RendererAction => ({ type: actionTypes.rendererClick });
+export const click = (): RendererAction => ({ type: actionTypes.click });
 
-export const rendererKeyPress = (keyCode: string): RendererAction => ({
-  type: actionTypes.rendererKeyPress,
+export const keyPress = (keyCode: string): RendererAction => ({
+  type: actionTypes.keyPress,
   payload: keyCode,
 });
 
-export const rendererResize = (options: ResizeOptions): RendererAction => ({
-  type: actionTypes.rendererResize,
+export const resize = (options: ResizeOptions): RendererAction => ({
+  type: actionTypes.resize,
   payload: options,
 });

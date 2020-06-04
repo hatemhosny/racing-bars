@@ -1,6 +1,7 @@
 import * as d3 from './d3';
 
 import { Data } from './models';
+import { store } from './store';
 
 export function getColor(d: Data, disableGroupColors: boolean, colorSeed: string) {
   const nameseed = d.group && !disableGroupColors ? d.group : d.name;
@@ -65,4 +66,25 @@ export function getWidth(element: HTMLElement, minWidth: number, width?: string)
     newWidth = +width;
   }
   return newWidth > minWidth ? newWidth : minWidth;
+}
+
+export function getElement(className: string) {
+  const element = document.querySelector(store.getState().options.selector) as HTMLElement;
+  return element.querySelector(className) as HTMLElement;
+}
+
+export function showElement(className: string) {
+  const selector = store.getState().options.selector;
+  const element = document.querySelector(selector + ' .' + className) as HTMLElement;
+  if (element) {
+    element.style.display = 'none';
+  }
+}
+
+export function hideElement(className: string) {
+  const selector = store.getState().options.selector;
+  const element = document.querySelector(selector + ' .' + className) as HTMLElement;
+  if (element) {
+    element.style.display = 'flex';
+  }
 }

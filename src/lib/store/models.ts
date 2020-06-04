@@ -11,9 +11,9 @@ export interface Action {
 export type Reducer = (state: any, action: Action) => any;
 
 export interface State {
-  ticker: TickerState;
-  renderer: RendererState;
   options: Options;
+  renderer: RendererState;
+  ticker: TickerState;
 }
 
 export interface Store {
