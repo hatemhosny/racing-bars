@@ -7,6 +7,7 @@ import * as styles from './styles';
 import { actions, store } from './store';
 import { Options } from './options';
 import { registerEvents } from './events';
+import { createScroller } from './scroller';
 
 export function race(data: Data[], options: Options) {
   store.dispatch(actions.options.optionsLoaded(options));
@@ -43,51 +44,6 @@ export function race(data: Data[], options: Options) {
     registerEvents(element, ticker);
   }
 
-  function createScroller() {
-    prepareDOM();
-
-    const step = document.body.clientHeight / dates.length;
-
-    subscribeToEvents();
-
-    function prepareDOM() {
-      element.style.position = 'fixed';
-      element.style.top = '0';
-
-      const scrollElement = document.createElement('div');
-      scrollElement.style.height = window.innerHeight * 10 + 'px';
-      document.body.appendChild(scrollElement);
-    }
-
-    function subscribeToEvents() {
-      window.addEventListener('scroll', goToDate);
-      // element.addEventListener("dateChanged", scrollToPosition);
-    }
-
-    // function scrollToPosition(e: CustomEvent) {
-    //   let currentDate = getDateString(e.detail.date);
-    //   let index = dates.indexOf(currentDate);
-    //   ignoreNextScrollEvent = true;
-    //   window.scroll({
-    //     top: index * step,
-    //     behavior: "smooth",
-    //   });
-    // }
-
-    function goToDate() {
-      const index = Math.ceil(window.pageYOffset / step);
-      if (index < dates.length) {
-        store.dispatch(actions.ticker.updateDate(dates[index]));
-      } else {
-        store.dispatch(actions.ticker.setLast());
-      }
-    }
-  }
-
-  // ********************
-  //      Public API
-  // ********************
-
   return {
     // TODO: validate user input
     start: () => {
@@ -119,7 +75,7 @@ export function race(data: Data[], options: Options) {
     },
     getAllDates: () => dates.map((date: string) => formatDate(date, 'YYYY-MM-DD')),
     createScroller: () => {
-      createScroller();
+      createScroller(element);
     },
   };
 }
