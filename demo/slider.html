@@ -91,9 +91,8 @@
       slider.oninput = function () {
         racer.setDate(dates[slider.value]);
       };
-      document.addEventListener('dateChanged', (e) => {
+      document.addEventListener('racingBars/dateChanged', (e) => {
         slider.value = dates.indexOf(e.detail.date);
-        console.log(document.querySelector(e.detail.src));
       });
     });
   </script>

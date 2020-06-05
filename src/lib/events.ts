@@ -66,13 +66,12 @@ export function registerEvents(element: HTMLElement, ticker: Ticker) {
 
 export function dispatchDOMEvent(element: HTMLElement, currentDate: string) {
   element.dispatchEvent(
-    new CustomEvent('dateChanged', {
+    new CustomEvent('racingBars/dateChanged', {
       bubbles: true,
       detail: {
         date: formatDate(currentDate, 'YYYY-MM-DD'),
         isFirst: store.getState().ticker.isFirstDate,
         isLast: store.getState().ticker.isLastDate,
-        src: store.getState().options.selector,
       },
     } as DOMCustomEvent),
   );
