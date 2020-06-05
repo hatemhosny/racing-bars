@@ -1,12 +1,12 @@
-import * as d3 from '../d3';
+import * as d3 from './d3';
 
-import { formatDate } from '../dates';
-import { icons } from '../icons';
-import { elements } from '../elements';
-import { Data } from '../models';
-import { store } from '../store';
-import { getHeight, getWidth, hideElement, showElement } from '../utils';
-import { getDateSlice } from '../data-utils';
+import { formatDate } from './dates';
+import { icons } from './icons';
+import { elements } from './elements';
+import { Data } from './models';
+import { store } from './store';
+import { getHeight, getWidth, hideElement, showElement, removeElement } from './utils';
+import { getDateSlice } from './data-utils';
 
 export function createRenderer(data: Data[]) {
   let margin: { top: number; right: number; bottom: number; left: number };
@@ -339,7 +339,7 @@ export function createRenderer(data: Data[]) {
     updateControls();
   }
 
-  function resize(resetFn: () => void) {
+  function resize() {
     if (
       (!store.getState().options.inputHeight && !store.getState().options.inputWidth) ||
       String(store.getState().options.inputHeight).startsWith('window') ||
@@ -359,7 +359,9 @@ export function createRenderer(data: Data[]) {
       );
 
       const currentPosition = element.style.position; // "fixed" if scrolling
-      resetFn();
+      renderInitalView();
+      renderFrame();
+      updateControls();
       element.style.position = currentPosition;
     }
   }
@@ -369,12 +371,10 @@ export function createRenderer(data: Data[]) {
     const showOverlays = store.getState().options.showOverlays;
 
     if (showControls === 'play') {
-      hideElement(elements.skipBack);
-      hideElement(elements.skipForward);
+      removeElement(elements.skipBack);
+      removeElement(elements.skipForward);
     } else if (showControls === 'none') {
-      hideElement(elements.controls);
-    } else {
-      showElement(elements.controls);
+      removeElement(elements.controls);
     }
 
     if (store.getState().ticker.isRunning) {
@@ -387,6 +387,7 @@ export function createRenderer(data: Data[]) {
 
     if (
       store.getState().ticker.isFirstDate &&
+      !store.getState().ticker.isRunning &&
       (showOverlays === 'all' || showOverlays === 'play')
     ) {
       showElement(elements.overlay);
@@ -395,12 +396,15 @@ export function createRenderer(data: Data[]) {
       hideElement(elements.overlayRepeat);
     } else if (
       store.getState().ticker.isLastDate &&
+      !store.getState().options.loop &&
       (showOverlays === 'all' || showOverlays === 'repeat')
     ) {
-      showElement(elements.overlay);
-      hideElement(elements.controls);
-      showElement(elements.overlayRepeat);
-      hideElement(elements.overlayPlay);
+      setTimeout(() => {
+        showElement(elements.overlay);
+        hideElement(elements.controls);
+        showElement(elements.overlayRepeat);
+        hideElement(elements.overlayPlay);
+      }, store.getState().options.tickDuration);
     } else {
       showElement(elements.controls);
       hideElement(elements.overlay);

@@ -8,6 +8,8 @@ import { createTicker } from './ticker';
 import * as styles from './styles';
 import { actions, store } from './store';
 import { Options } from './options';
+import { addEventHandler } from './utils';
+import { elements } from './elements';
 
 export function race(data: Data[], options: Options) {
   store.dispatch(actions.options.optionsLoaded(options));
@@ -36,64 +38,40 @@ export function race(data: Data[], options: Options) {
     ticker.stop();
   }
 
-  // if (!state.options.disableClickEvents) {
-  //   registerClickEvents();
-  // }
-  // if (!state.options.disableKeyboardEvents) {
-  //   registerKeyboardEvents();
-  // }
+  registerEvents();
 
-  // window.addEventListener('resize', resize);
+  function registerEvents() {
+    if (!store.getState().options.disableClickEvents) {
+      registerClickEvents();
+    }
+    if (!store.getState().options.disableKeyboardEvents) {
+      registerKeyboardEvents();
+    }
+    registerControlButtonEvents();
+    registerOverlayEvents();
 
-  // ********************
-  //   Helper functions
-  // ********************
+    window.addEventListener('resize', resize);
+  }
 
-  // function renderInitalView() {
+  function registerControlButtonEvents() {
+    addEventHandler(elements.skipBack, 'click', ticker.skipBack);
+    addEventHandler(elements.play, 'click', ticker.toggle);
+    addEventHandler(elements.pause, 'click', ticker.toggle);
+    addEventHandler(elements.skipForward, 'click', ticker.skipForward);
+  }
 
-  //   // const controls = renderer.getControls();
-  //   // registerControlButtonEvents(controls);
-  //   // registerOverlayEvents(controls);
-  // }
+  function registerOverlayEvents() {
+    addEventHandler(elements.overlayPlay, 'click', ticker.start);
+    addEventHandler(elements.overlayRepeat, 'click', () => {
+      ticker.skipBack();
+      ticker.start();
+    });
+  }
 
-  // function notifyRenderer(running: boolean, position: 'first' | 'last' | '') {
-  //   renderer.updateControls(running, position);
-  // }
-
-  // function registerControlButtonEvents(controls: Controls) {
-  //   if (!controls) {
-  //     return;
-  //   }
-  //   controls.skipBack.addEventListener('click', ticker.rewind);
-  //   controls.play.addEventListener('click', ticker.toggle);
-  //   controls.pause.addEventListener('click', ticker.toggle);
-  //   controls.skipForward.addEventListener('click', ticker.fastForward);
-  // }
-
-  // function registerOverlayEvents(controls: Overlays) {
-  //   if (!controls) {
-  //     return;
-  //   }
-  //   controls.overlayPlay.addEventListener('click', ticker.start);
-  //   controls.overlayRepeat.addEventListener('click', () => {
-  //     ticker.rewind();
-  //     ticker.start();
-  //   });
-  // }
-
-  // function resize() {
-  //   renderer.resize(reset);
-
-  //   function reset() {
-  //     const currentlyRunning = ticker.isRunning();
-  //     tickerDate.update();
-  //     renderInitalView();
-
-  //     if (currentlyRunning) {
-  //       ticker.start();
-  //     }
-  //   }
-  // }
+  function resize() {
+    renderer.resize();
+    registerEvents();
+  }
 
   // function updateDate(currentDate: string) {
   //   dateSlice = getDateSlice(data, tickerDate.getDate(), lastValues, topN);
@@ -146,38 +124,38 @@ export function race(data: Data[], options: Options) {
   //   }
   // }
 
-  // function registerClickEvents() {
-  //   const svg = element.querySelector('svg') as SVGSVGElement;
-  //   svg.addEventListener('click', ticker.toggle);
-  //   element.addEventListener('dblclick', ticker.fastForward);
-  // }
+  function registerClickEvents() {
+    const svg = element.querySelector('svg') as SVGSVGElement;
+    svg.addEventListener('click', ticker.toggle);
+    element.addEventListener('dblclick', ticker.skipForward);
+  }
 
-  // function registerKeyboardEvents() {
-  //   document.addEventListener('keypress', function (e) {
-  //     const keyCodes = {
-  //       spacebar: 32,
-  //       a: 97,
-  //       d: 100,
-  //       s: 115,
-  //     };
+  function registerKeyboardEvents() {
+    document.addEventListener('keypress', function (e) {
+      const keyCodes = {
+        spacebar: 32,
+        a: 97,
+        d: 100,
+        s: 115,
+      };
 
-  //     // TODO: keyCode is deprecated
-  //     switch (e.keyCode) {
-  //       case keyCodes.spacebar:
-  //         ticker.toggle();
-  //         break;
-  //       case keyCodes.a:
-  //         ticker.rewind();
-  //         break;
-  //       case keyCodes.s:
-  //         ticker.toggle();
-  //         break;
-  //       case keyCodes.d:
-  //         ticker.fastForward();
-  //         break;
-  //     }
-  //   });
-  // }
+      // TODO: keyCode is deprecated
+      switch (e.keyCode) {
+        case keyCodes.spacebar:
+          ticker.toggle();
+          break;
+        case keyCodes.a:
+          ticker.skipBack();
+          break;
+        case keyCodes.s:
+          ticker.toggle();
+          break;
+        case keyCodes.d:
+          ticker.skipForward();
+          break;
+      }
+    });
+  }
 
   // ********************
   //      Public API

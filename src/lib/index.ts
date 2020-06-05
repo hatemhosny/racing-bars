@@ -4,7 +4,7 @@ export * from './icons';
 export * from './load-data';
 export * from './models';
 export * from './race';
-export * from './renderer/renderer';
+export * from './renderer';
 export * from './styles';
 export * from './ticker';
 export * from './utils';

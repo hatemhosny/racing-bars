@@ -70,14 +70,14 @@ export function getWidth(element: HTMLElement, minWidth: number, width?: string)
 
 export function getElement(className: string) {
   const element = document.querySelector(store.getState().options.selector) as HTMLElement;
-  return element.querySelector(className) as HTMLElement;
+  return element.querySelector('.' + className) as HTMLElement;
 }
 
 export function showElement(className: string) {
   const selector = store.getState().options.selector;
   const element = document.querySelector(selector + ' .' + className) as HTMLElement;
   if (element) {
-    element.style.display = 'none';
+    element.style.display = 'flex';
   }
 }
 
@@ -85,6 +85,20 @@ export function hideElement(className: string) {
   const selector = store.getState().options.selector;
   const element = document.querySelector(selector + ' .' + className) as HTMLElement;
   if (element) {
-    element.style.display = 'flex';
+    element.style.display = 'none';
+  }
+}
+export function removeElement(className: string) {
+  const selector = store.getState().options.selector;
+  const element = document.querySelector(selector + ' .' + className) as HTMLElement;
+  if (element) {
+    element.remove();
+  }
+}
+
+export function addEventHandler(className: string, event: string, handler: () => void) {
+  const element = getElement(className);
+  if (element) {
+    element.addEventListener(event, handler);
   }
 }

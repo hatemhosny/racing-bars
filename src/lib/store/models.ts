@@ -1,5 +1,4 @@
 import { Options } from '../options';
-import { RendererState } from '../renderer';
 import { TickerState } from '../ticker';
 
 export interface Action {
@@ -12,7 +11,6 @@ export type Reducer = (state: any, action: Action) => any;
 
 export interface State {
   options: Options;
-  renderer: RendererState;
   ticker: TickerState;
 }
 
