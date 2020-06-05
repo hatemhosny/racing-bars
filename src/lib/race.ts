@@ -6,7 +6,7 @@ import { createTicker } from './ticker';
 import * as styles from './styles';
 import { actions, store } from './store';
 import { Options } from './options';
-import { registerEvents } from './events';
+import { registerEvents, DOMEventSubscriber } from './events';
 import { createScroller } from './scroller';
 
 export function race(data: Data[], options: Options) {
@@ -29,7 +29,10 @@ export function race(data: Data[], options: Options) {
 
   const renderer = createRenderer(data);
   renderer.renderInitalView();
+
   store.subscribe(renderer.renderFrame);
+  store.subscribe(DOMEventSubscriber(element));
+
   ticker.start();
 
   if (!store.getState().options.autorun) {

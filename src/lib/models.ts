@@ -15,3 +15,13 @@ export interface Renderer {
   renderFrame: () => void;
   resize: () => void;
 }
+
+export interface DOMCustomEvent {
+  bubbles: boolean;
+  detail: {
+    date: string;
+    isFirst: boolean;
+    isLast: boolean;
+    src: string;
+  };
+}

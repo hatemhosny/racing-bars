@@ -2,6 +2,8 @@ import { elements } from './elements';
 import { store } from './store';
 import { Ticker } from './ticker';
 import { addEventHandler } from './utils';
+import { formatDate } from './dates';
+import { DOMCustomEvent } from './models';
 
 export function registerEvents(element: HTMLElement, ticker: Ticker) {
   registerControlButtonEvents();
@@ -60,4 +62,29 @@ export function registerEvents(element: HTMLElement, ticker: Ticker) {
       });
     }
   }
+}
+
+export function dispatchDOMEvent(element: HTMLElement, currentDate: string) {
+  element.dispatchEvent(
+    new CustomEvent('dateChanged', {
+      bubbles: true,
+      detail: {
+        date: formatDate(currentDate, 'YYYY-MM-DD'),
+        isFirst: store.getState().ticker.isFirstDate,
+        isLast: store.getState().ticker.isLastDate,
+        src: store.getState().options.selector,
+      },
+    } as DOMCustomEvent),
+  );
+}
+
+export function DOMEventSubscriber(element: HTMLElement) {
+  let lastDate = '';
+  return function () {
+    const currentDate = store.getState().ticker.currentDate;
+    if (currentDate !== lastDate) {
+      dispatchDOMEvent(element, currentDate);
+      lastDate = currentDate;
+    }
+  };
 }

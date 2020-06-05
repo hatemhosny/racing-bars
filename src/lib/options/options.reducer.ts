@@ -1,4 +1,4 @@
-import { getDateString } from '..';
+import { getDateString } from '../dates';
 import { Options, OptionsAction } from './options.models';
 import { actionTypes } from './options.actions';
 

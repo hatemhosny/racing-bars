@@ -91,8 +91,9 @@
       slider.oninput = function () {
         racer.setDate(dates[slider.value]);
       };
-      document.querySelector('#race').addEventListener('dateChanged', (e) => {
+      document.addEventListener('dateChanged', (e) => {
         slider.value = dates.indexOf(e.detail.date);
+        console.log(document.querySelector(e.detail.src));
       });
     });
   </script>
