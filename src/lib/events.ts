@@ -1,7 +1,7 @@
 import { elements } from './elements';
-import { store } from './store';
+import { store, actions } from './store';
 import { Ticker } from './ticker';
-import { addEventHandler } from './utils';
+import { addEventHandler, hideElement } from './utils';
 import { formatDate } from './dates';
 import { DOMCustomEvent } from './models';
 
@@ -19,9 +19,14 @@ export function registerEvents(element: HTMLElement, ticker: Ticker) {
   }
 
   function registerOverlayEvents() {
-    addEventHandler(elements.overlayPlay, 'click', ticker.start);
+    addEventHandler(elements.overlayPlay, 'click', () => {
+      hideElement(elements.overlay);
+      ticker.start();
+    });
     addEventHandler(elements.overlayRepeat, 'click', () => {
-      ticker.skipBack();
+      hideElement(elements.overlay);
+      store.dispatch(actions.ticker.setRunning(true));
+      ticker.loop();
       ticker.start();
     });
   }

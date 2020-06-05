@@ -370,12 +370,20 @@ export function createRenderer(data: Data[]): Renderer {
     const showControls = store.getState().options.showControls;
     const showOverlays = store.getState().options.showOverlays;
 
-    if (showControls === 'play') {
+    if (showControls === 'none' && showOverlays === 'none') {
+      removeElement(elements.controls);
+      removeElement(elements.overlay);
+      return;
+    }
+
+    if (showControls === 'none') {
+      removeElement(elements.controls);
+    } else if (showControls === 'play') {
       removeElement(elements.skipBack);
       removeElement(elements.skipForward);
-    } else if (showControls === 'none') {
-      removeElement(elements.controls);
     }
+
+    showElement(elements.controls);
 
     if (store.getState().ticker.isRunning) {
       showElement(elements.pause);
@@ -385,30 +393,48 @@ export function createRenderer(data: Data[]): Renderer {
       hideElement(elements.pause);
     }
 
+    if (showOverlays === 'none') {
+      removeElement(elements.overlay);
+      return;
+    } else if (showOverlays === 'play') {
+      removeElement(elements.overlayRepeat);
+    } else if (showOverlays === 'repeat') {
+      removeElement(elements.overlayPlay);
+    }
+
+    if (!store.getState().ticker.isFirstDate && !store.getState().ticker.isLastDate) {
+      hideElement(elements.overlay);
+      showElement(elements.controls);
+    }
+
+    if (store.getState().ticker.isFirstDate) {
+      hideElement(elements.overlayRepeat);
+    }
+
+    if (store.getState().ticker.isLastDate) {
+      hideElement(elements.overlayPlay);
+    }
+
     if (
       store.getState().ticker.isFirstDate &&
       !store.getState().ticker.isRunning &&
-      (showOverlays === 'all' || showOverlays === 'play')
+      ['all', 'play'].includes(showOverlays)
     ) {
       showElement(elements.overlay);
-      hideElement(elements.controls);
       showElement(elements.overlayPlay);
-      hideElement(elements.overlayRepeat);
-    } else if (
+      hideElement(elements.controls);
+    }
+
+    if (
       store.getState().ticker.isLastDate &&
       !store.getState().ticker.isRunning &&
-      !store.getState().options.loop &&
-      (showOverlays === 'all' || showOverlays === 'repeat')
+      ['all', 'repeat'].includes(showOverlays)
     ) {
       setTimeout(() => {
         showElement(elements.overlay);
-        hideElement(elements.controls);
         showElement(elements.overlayRepeat);
-        hideElement(elements.overlayPlay);
+        hideElement(elements.controls);
       }, store.getState().options.tickDuration);
-    } else {
-      showElement(elements.controls);
-      hideElement(elements.overlay);
     }
   }
 
