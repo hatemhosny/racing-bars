@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8" />
+  <style>
+    html {
+      scroll-behavior: smooth;
+    }
+    #container {
+      height: 95vh;
+      width: 100%;
+      margin-top: 15px;
+    }
+    .race {
+      height: 100%;
+      width: 80vw;
+      position: fixed;
+      top: 0;
+    }
+    .story {
+      margin-left: 80vw;
+    }
+    .p1 {
+      margin-top: 300px;
+    }
+    .links a {
+      display: inline-block;
+      width: 10%;
+      text-align: center;
+      background-color: azure;
+      border: #777777 1px solid;
+      margin: 3%;
+      padding: 15px;
+      font-size: large;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="container">
+    <div id="race" class="race"></div>
+    <div class="story">
+      <p class="p1">hi there from Hatem</p>
+      <p class="p1">hi there</p>
+      <p class="p1">hi there 2012</p>
+      <p class="p1">hi there</p>
+    </div>
+  </div>
+
+  <script src="scripts/d3.min.js"></script>
+  <script src="scripts/racing-bars.umd.js"></script>
+  <script>
+    let options = {
+      title: 'A Tale of 11 Years',
+      subTitle: 'Top 10 Surgical Procedures',
+      dateCounterFormat: 'MM/YYYY',
+      caption: 'Aswan Heart Centre',
+      disableClickEvents: true,
+      disableKeyboardEvents: true,
+      showControls: 'none',
+      autorun: false,
+    };
+
+    racingBars.loadData('data/procedures.json').then((data) => {
+      let racer = racingBars.race(data, options);
+      racer.createScroller();
+    });
+  </script>
+</body>

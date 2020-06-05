@@ -9,3 +9,9 @@ export interface Data {
   color?: HSLColor;
   rank?: number;
 }
+
+export interface Renderer {
+  renderInitalView: () => void;
+  renderFrame: () => void;
+  resize: () => void;
+}

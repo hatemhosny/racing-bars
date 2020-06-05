@@ -102,3 +102,24 @@ export function addEventHandler(className: string, event: string, handler: () =>
     element.addEventListener(event, handler);
   }
 }
+
+export function debounce(func: any, wait: number, immediate = false) {
+  let timeout: any;
+  return function () {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
+    const context = this;
+    const args: any = arguments;
+    const later = function () {
+      timeout = null;
+      if (!immediate) {
+        func.apply(context, args);
+      }
+    };
+    const callNow = immediate && !timeout;
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+    if (callNow) {
+      func.apply(context, args);
+    }
+  };
+}

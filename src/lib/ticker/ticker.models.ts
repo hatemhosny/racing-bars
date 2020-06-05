@@ -11,3 +11,13 @@ export interface TickerState {
   isLastDate: boolean;
   dates: string[];
 }
+
+export interface Ticker {
+  start: () => void;
+  stop: () => void;
+  skipBack: () => void;
+  loop: () => void;
+  skipForward: () => void;
+  toggle: () => void;
+  goToDate: (date: string) => void;
+}

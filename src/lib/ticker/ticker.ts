@@ -1,7 +1,8 @@
 import * as d3 from '../d3';
 import { store, actions } from '../store';
+import { Ticker } from './ticker.models';
 
-export function createTicker(dates: string[]) {
+export function createTicker(dates: string[]): Ticker {
   store.dispatch(actions.ticker.initialize(dates));
 
   let ticker: d3.Timer;

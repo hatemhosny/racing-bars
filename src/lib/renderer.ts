@@ -3,12 +3,12 @@ import * as d3 from './d3';
 import { formatDate } from './dates';
 import { icons } from './icons';
 import { elements } from './elements';
-import { Data } from './models';
+import { Data, Renderer } from './models';
 import { store } from './store';
 import { getHeight, getWidth, hideElement, showElement, removeElement } from './utils';
 import { getDateSlice } from './data-utils';
 
-export function createRenderer(data: Data[]) {
+export function createRenderer(data: Data[]): Renderer {
   let margin: { top: number; right: number; bottom: number; left: number };
   let svg: any;
   let x: d3.ScaleLinear<number, number>;
@@ -396,6 +396,7 @@ export function createRenderer(data: Data[]) {
       hideElement(elements.overlayRepeat);
     } else if (
       store.getState().ticker.isLastDate &&
+      !store.getState().ticker.isRunning &&
       !store.getState().options.loop &&
       (showOverlays === 'all' || showOverlays === 'repeat')
     ) {
@@ -415,8 +416,5 @@ export function createRenderer(data: Data[]) {
     renderInitalView,
     renderFrame,
     resize,
-    updateControls,
-    getRenderedHeight: () => height,
-    getRenderedWidth: () => width,
   };
 }
