@@ -88,6 +88,7 @@ export function hideElement(className: string) {
     element.style.display = 'none';
   }
 }
+
 export function removeElement(className: string) {
   const selector = store.getState().options.selector;
   const element = document.querySelector(selector + ' .' + className) as HTMLElement;
@@ -101,25 +102,4 @@ export function addEventHandler(className: string, event: string, handler: () =>
   if (element) {
     element.addEventListener(event, handler);
   }
-}
-
-export function debounce(func: any, wait: number, immediate = false) {
-  let timeout: any;
-  return function () {
-    // eslint-disable-next-line @typescript-eslint/no-this-alias
-    const context = this;
-    const args: any = arguments;
-    const later = function () {
-      timeout = null;
-      if (!immediate) {
-        func.apply(context, args);
-      }
-    };
-    const callNow = immediate && !timeout;
-    clearTimeout(timeout);
-    timeout = setTimeout(later, wait);
-    if (callNow) {
-      func.apply(context, args);
-    }
-  };
 }

@@ -52,6 +52,10 @@ export function createTicker(dates: string[]): Ticker {
     } else if (store.getState().ticker.isRunning) {
       stop();
     } else {
+      if (!store.getState().ticker.isFirstDate) {
+        // to avoid lastValue flicker
+        store.dispatch(actions.ticker.inc());
+      }
       start();
     }
   }

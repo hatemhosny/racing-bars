@@ -5,7 +5,7 @@ import { icons } from './icons';
 import { elements } from './elements';
 import { Data, Renderer } from './models';
 import { store } from './store';
-import { getHeight, getWidth, hideElement, showElement, removeElement } from './utils';
+import { getHeight, getWidth, getElement, hideElement, showElement } from './utils';
 import { getDateSlice } from './data-utils';
 
 export function createRenderer(data: Data[]): Renderer {
@@ -190,6 +190,14 @@ export function createRenderer(data: Data[]): Renderer {
         .append('div')
         .html((d) => Object.values(d)[0] as string)
         .attr('class', (d) => Object.keys(d)[0]);
+
+      if (store.getState().options.showControls === 'play') {
+        hideElement(elements.skipBack);
+        hideElement(elements.skipForward);
+      }
+      if (store.getState().options.showControls === 'none') {
+        hideElement(elements.controls);
+      }
     }
 
     function renderOverlays() {
@@ -367,23 +375,7 @@ export function createRenderer(data: Data[]): Renderer {
   }
 
   function updateControls() {
-    const showControls = store.getState().options.showControls;
     const showOverlays = store.getState().options.showOverlays;
-
-    if (showControls === 'none' && showOverlays === 'none') {
-      removeElement(elements.controls);
-      removeElement(elements.overlay);
-      return;
-    }
-
-    if (showControls === 'none') {
-      removeElement(elements.controls);
-    } else if (showControls === 'play') {
-      removeElement(elements.skipBack);
-      removeElement(elements.skipForward);
-    }
-
-    showElement(elements.controls);
 
     if (store.getState().ticker.isRunning) {
       showElement(elements.pause);
@@ -393,48 +385,27 @@ export function createRenderer(data: Data[]): Renderer {
       hideElement(elements.pause);
     }
 
-    if (showOverlays === 'none') {
-      removeElement(elements.overlay);
-      return;
-    } else if (showOverlays === 'play') {
-      removeElement(elements.overlayRepeat);
-    } else if (showOverlays === 'repeat') {
-      removeElement(elements.overlayPlay);
-    }
-
-    if (!store.getState().ticker.isFirstDate && !store.getState().ticker.isLastDate) {
-      hideElement(elements.overlay);
-      showElement(elements.controls);
-    }
-
-    if (store.getState().ticker.isFirstDate) {
-      hideElement(elements.overlayRepeat);
-    }
-
-    if (store.getState().ticker.isLastDate) {
-      hideElement(elements.overlayPlay);
-    }
-
     if (
       store.getState().ticker.isFirstDate &&
-      !store.getState().ticker.isRunning &&
-      ['all', 'play'].includes(showOverlays)
+      (showOverlays === 'all' || showOverlays === 'play') &&
+      !store.getState().ticker.isRunning
     ) {
+      getElement(elements.controls).style.visibility = 'hidden';
       showElement(elements.overlay);
       showElement(elements.overlayPlay);
-      hideElement(elements.controls);
-    }
-
-    if (
+      hideElement(elements.overlayRepeat);
+    } else if (
       store.getState().ticker.isLastDate &&
-      !store.getState().ticker.isRunning &&
-      ['all', 'repeat'].includes(showOverlays)
+      (showOverlays === 'all' || showOverlays === 'repeat') &&
+      !(store.getState().options.loop && store.getState().ticker.isRunning)
     ) {
-      setTimeout(() => {
-        showElement(elements.overlay);
-        showElement(elements.overlayRepeat);
-        hideElement(elements.controls);
-      }, store.getState().options.tickDuration);
+      getElement(elements.controls).style.visibility = 'hidden';
+      showElement(elements.overlay);
+      showElement(elements.overlayRepeat);
+      hideElement(elements.overlayPlay);
+    } else {
+      getElement(elements.controls).style.visibility = 'unset';
+      getElement(elements.overlay).style.display = 'none';
     }
   }
 

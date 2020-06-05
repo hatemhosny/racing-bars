@@ -1,5 +1,5 @@
 import { elements } from './elements';
-import { store, actions } from './store';
+import { store } from './store';
 import { Ticker } from './ticker';
 import { addEventHandler, hideElement } from './utils';
 import { formatDate } from './dates';
@@ -25,7 +25,6 @@ export function registerEvents(element: HTMLElement, ticker: Ticker) {
     });
     addEventHandler(elements.overlayRepeat, 'click', () => {
       hideElement(elements.overlay);
-      store.dispatch(actions.ticker.setRunning(true));
       ticker.loop();
       ticker.start();
     });
@@ -69,7 +68,7 @@ export function registerEvents(element: HTMLElement, ticker: Ticker) {
   }
 }
 
-export function dispatchDOMEvent(element: HTMLElement, currentDate: string) {
+function dispatchDOMEvent(element: HTMLElement, currentDate: string) {
   element.dispatchEvent(
     new CustomEvent('racingBars/dateChanged', {
       bubbles: true,
