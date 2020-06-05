@@ -1,26 +1,55 @@
-import { formatDate, getDateString } from './dates';
-import { Data, LastValues } from './models';
+import { formatDate, getDateString, getDates, filterDates } from './dates';
+import { Data } from './models';
 import { getColor } from './utils';
+import { store } from './store';
+import { Options } from './options';
 
-export function prepareData(
-  data: Data[],
-  dataShape: string,
-  disableGroupColors: boolean,
-  colorSeed: string,
-) {
-  if (dataShape === 'wide') {
+export function prepareData(data: Data[]) {
+  const options = store.getState().options;
+
+  data = filterDates(data, options.startDate, options.endDate);
+
+  if (options.dataShape === 'wide') {
     data = wideDataToLong(data);
   }
-  return data.map((item) => {
+
+  if (options.fillDateGaps) {
+    data = fillGaps(data, options.fillDateGaps);
+  }
+
+  data = data.map((item) => {
     const d = { ...item };
     d.value = isNaN(+d.value) ? 0 : +d.value;
     d.date = getDateString(d.date);
-    d.color = getColor(d, disableGroupColors, colorSeed);
+    d.color = getColor(d, options.disableGroupColors, options.colorSeed);
     return d;
   });
+
+  data = calculateLastValues(data);
+
+  return data;
 }
 
-export function wideDataToLong(wide: any) {
+function calculateLastValues(data: Data[]) {
+  return data
+    .sort((a, b) => a.name.localeCompare(b.name) || a.date.localeCompare(b.date))
+    .reduce((acc: Data[], curr) => {
+      if (acc.length === 0) {
+        curr.lastValue = curr.value;
+      } else {
+        const last = acc[acc.length - 1];
+        if (curr.name === last.name) {
+          curr.lastValue = last.value;
+        } else {
+          curr.lastValue = curr.value;
+        }
+      }
+      return [...acc, curr];
+    }, [])
+    .sort((a, b) => a.date.localeCompare(b.date));
+}
+
+function wideDataToLong(wide: any) {
   const long = [] as Data[];
   wide.forEach((item: any) => {
     for (const [key, value] of Object.entries(item)) {
@@ -34,7 +63,12 @@ export function wideDataToLong(wide: any) {
   return long;
 }
 
-export function fillGaps(data: Data[], dates: string[], period: 'years' | 'months' | 'days') {
+function fillGaps(data: Data[], period: Options['fillDateGaps']) {
+  if (!period) {
+    return data;
+  }
+
+  const dates = getDates(data);
   const minDate = new Date(formatDate(dates[0], 'YYYY-MM-DD'));
   const maxDate = new Date(formatDate(dates[dates.length - 1], 'YYYY-MM-DD'));
 
@@ -83,19 +117,10 @@ export function fillGaps(data: Data[], dates: string[], period: 'years' | 'month
   return data;
 }
 
-export function getDateSlice(data: Data[], date: string, lastValues: LastValues, topN: number) {
+export function getDateSlice(data: Data[], date: string) {
   return data
     .filter((d) => d.date === date && !isNaN(d.value))
-    .map((d) => {
-      if (!lastValues[d.name]) {
-        return d;
-      }
-      const lastValue = lastValues[d.name].value;
-      lastValues[d.name].date = d.date;
-      lastValues[d.name].value = d.value;
-      return { ...d, lastValue };
-    })
     .sort((a, b) => b.value - a.value)
-    .slice(0, topN)
+    .slice(0, store.getState().options.topN)
     .map((d, i) => ({ ...d, rank: i }));
 }

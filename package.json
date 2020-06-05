@@ -42,6 +42,9 @@
     "reset": "git clean -dfx && git reset --hard && npm i",
     "clean": "rimraf dist",
     "clear-cache": "bash -c \"rm -rf node_modules/.cache\"",
+    "store": "run-p \"store:serve\" \"store:build\"",
+    "store:build": "microbundle watch demo/store/index.ts -o demo/store/index.js -f es --compress false --tsconfig tsconfig.dev.json",
+    "store:serve": "servor ./demo/store --reload",
     "prepare-release": "run-s reset build test cov doc:html version doc:publish"
   },
   "scripts-info": {

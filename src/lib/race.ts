@@ -1,281 +1,56 @@
-import { fillGaps, getDateSlice, prepareData } from './data-utils';
-import { filterDates, formatDate, getDateString, getDates } from './dates';
-import {
-  Controls,
-  Data,
-  LastValues,
-  Options,
-  Overlays,
-  RenderOptions,
-  TickerOptions,
-} from './models';
+import { prepareData } from './data-utils';
+import { getDates, getDateString, formatDate } from './dates';
+import { Data } from './models';
 import { createRenderer } from './renderer';
 import { createTicker } from './ticker';
 import * as styles from './styles';
+import { actions, store } from './store';
+import { Options } from './options';
+import { registerEvents, DOMEventSubscriber } from './events';
+import { createScroller } from './scroller';
 
-export function race(data: Data[], options: Options = {}) {
-  // ********************
-  // User-defined options
-  // ********************
+export function race(data: Data[], options: Options) {
+  store.dispatch(actions.options.optionsLoaded(options));
 
-  const dataShape = options.dataShape || 'long';
-  const fillDateGaps = options.fillDateGaps;
-  // const fillDateGapsValue = options.fillDateGapsValue || "last";
-  const selector = options.selector || '#race';
-  const startDate = options.startDate ? getDateString(options.startDate) : '';
-  const endDate = options.endDate ? getDateString(options.endDate) : '';
-  const colorSeed = options.colorSeed || '';
-  const disableGroupColors = options.disableGroupColors || false;
-  const tickDuration = Number(options.tickDuration) || 500;
-  const topN = Number(options.topN) || 10;
-  const disableClickEvents = options.disableClickEvents !== false;
-  const disableKeyboardEvents = options.disableKeyboardEvents;
-  const autorun = options.autorun !== false;
-  const injectStyles = options.injectStyles !== false;
-
-  const renderOptions: RenderOptions = {
-    selector,
-    title: options.title || '18 years of Top Global Brands',
-    subTitle: options.subTitle || 'Brand value, $m',
-    caption: options.caption || 'Source: Interbrand',
-    dateCounterFormat: options.dateCounterFormat || 'YYYY',
-    labelsOnBars: options.labelsOnBars !== false,
-    labelsWidth: options.labelsWidth || 100,
-    showControls: options.showControls || 'all',
-    showOverlays: options.showOverlays || 'all',
-    inputHeight: options.height,
-    inputWidth: options.width,
-    minHeight: 300,
-    minWidth: 500,
-    tickDuration,
-    topN,
-  };
-
-  const tickerOptions: TickerOptions = {
-    loop: options.loop || false,
-    tickDuration,
-  };
-
-  const element = document.querySelector(selector) as HTMLElement;
+  const element = document.querySelector(store.getState().options.selector) as HTMLElement;
   if (!element) {
-    throw new Error('Cannot find element with this selector: ' + selector);
+    throw new Error('Cannot find element with this selector: ' + store.getState().options.selector);
   }
 
-  if (injectStyles) {
-    styles.styleInject(selector, 'top');
+  if (store.getState().options.injectStyles) {
+    styles.styleInject(store.getState().options.selector, 'top');
   }
 
-  // ********************
-  //  Stateful functions
-  // ********************
-
-  const renderer = createRenderer(selector, renderOptions);
-  const ticker = createTicker(notifyRenderer);
-
-  // ********************
-  //   Create the chart
-  // ********************
-
-  let lastValues: LastValues;
-
-  data = filterDates(data, startDate, endDate);
-  data = prepareData(data, dataShape, disableGroupColors, colorSeed);
+  data = prepareData(data);
 
   const dates = getDates(data);
 
-  if (fillDateGaps) {
-    data = fillGaps(data, dates, fillDateGaps);
-  }
+  const ticker = createTicker(dates);
 
-  const tickerDate = ticker.tickerDateFactory(dates, tickerOptions, updateDate, renderFrame);
+  const renderer = createRenderer(data);
+  renderer.renderInitalView();
 
-  let dateSlice: Data[];
-  initialize();
-
-  renderInitalView();
-  renderFrame();
+  store.subscribe(renderer.renderFrame);
+  store.subscribe(DOMEventSubscriber(element));
 
   ticker.start();
 
-  if (!autorun) {
+  if (!store.getState().options.autorun) {
     ticker.stop();
   }
 
-  if (!disableClickEvents) {
-    registerClickEvents();
-  }
-  if (!disableKeyboardEvents) {
-    registerKeyboardEvents();
-  }
-
+  registerEvents(element, ticker);
   window.addEventListener('resize', resize);
 
-  // ********************
-  //   Helper functions
-  // ********************
-
-  function renderInitalView() {
-    element.innerHTML = '';
-    renderer.renderInitalView(dateSlice);
-    ticker.stop();
-    const controls = renderer.getControls();
-    registerControlButtonEvents(controls);
-    registerOverlayEvents(controls);
-  }
-
-  function renderFrame() {
-    renderer.renderFrame(dateSlice);
-  }
-
-  function notifyRenderer(running: boolean, position: 'first' | 'last' | '') {
-    renderer.updateControls(running, position);
-  }
-
-  function registerControlButtonEvents(controls: Controls) {
-    if (!controls) {
-      return;
-    }
-    controls.skipBack.addEventListener('click', ticker.rewind);
-    controls.play.addEventListener('click', ticker.toggle);
-    controls.pause.addEventListener('click', ticker.toggle);
-    controls.skipForward.addEventListener('click', ticker.fastForward);
-  }
-
-  function registerOverlayEvents(controls: Overlays) {
-    if (!controls) {
-      return;
-    }
-    controls.overlayPlay.addEventListener('click', ticker.start);
-    controls.overlayRepeat.addEventListener('click', () => {
-      ticker.rewind();
-      ticker.start();
-    });
-  }
-
   function resize() {
-    renderer.resize(reset);
-
-    function reset() {
-      const currentlyRunning = ticker.isRunning();
-      tickerDate.update();
-      renderInitalView();
-
-      if (currentlyRunning) {
-        ticker.start();
-      }
-    }
+    renderer.resize();
+    registerEvents(element, ticker);
   }
-
-  function updateDate(currentDate: string) {
-    dateSlice = getDateSlice(data, tickerDate.getDate(), lastValues, topN);
-    renderFrame();
-    element.dispatchEvent(
-      new CustomEvent('dateChanged', {
-        detail: { date: formatDate(currentDate, 'YYYY-MM-DD') },
-      }),
-    );
-  }
-
-  function initialize() {
-    initializeLastValues();
-    tickerDate.setFirst();
-
-    function initializeLastValues() {
-      lastValues = {};
-      data.forEach((d) => {
-        d.lastValue = d.value;
-        if (!lastValues[d.name] || d.date < lastValues[d.name].date) {
-          lastValues[d.name] = {
-            date: d.date,
-            value: d.value,
-          };
-        }
-      });
-    }
-  }
-
-  function createScroller() {
-    prepareDOM();
-
-    const step = document.body.clientHeight / dates.length;
-
-    subscribeToEvents();
-
-    function prepareDOM() {
-      element.style.position = 'fixed';
-      element.style.top = '0';
-
-      const scrollElement = document.createElement('div');
-      scrollElement.style.height = window.innerHeight * 10 + 'px';
-      document.body.appendChild(scrollElement);
-    }
-
-    function subscribeToEvents() {
-      window.addEventListener('scroll', goToDate);
-      // element.addEventListener("dateChanged", scrollToPosition);
-    }
-
-    // function scrollToPosition(e: CustomEvent) {
-    //   let currentDate = getDateString(e.detail.date);
-    //   let index = dates.indexOf(currentDate);
-    //   ignoreNextScrollEvent = true;
-    //   window.scroll({
-    //     top: index * step,
-    //     behavior: "smooth",
-    //   });
-    // }
-
-    function goToDate() {
-      const index = Math.ceil(window.pageYOffset / step);
-      if (index < dates.length) {
-        tickerDate.setDate(dates[index]);
-      } else {
-        tickerDate.setLast();
-      }
-    }
-  }
-
-  function registerClickEvents() {
-    const svg = element.querySelector('svg') as SVGSVGElement;
-    svg.addEventListener('click', ticker.toggle);
-    element.addEventListener('dblclick', ticker.fastForward);
-  }
-
-  function registerKeyboardEvents() {
-    document.addEventListener('keypress', function (e) {
-      const keyCodes = {
-        spacebar: 32,
-        a: 97,
-        d: 100,
-        s: 115,
-      };
-
-      // TODO: keyCode is deprecated
-      switch (e.keyCode) {
-        case keyCodes.spacebar:
-          ticker.toggle();
-          break;
-        case keyCodes.a:
-          ticker.rewind();
-          break;
-        case keyCodes.s:
-          ticker.toggle();
-          break;
-        case keyCodes.d:
-          ticker.fastForward();
-          break;
-      }
-    });
-  }
-
-  // ********************
-  //      Public API
-  // ********************
 
   return {
     // TODO: validate user input
     start: () => {
-      if (!ticker.isRunning()) {
+      if (!store.getState().ticker.isRunning) {
         ticker.start();
       }
     },
@@ -283,27 +58,27 @@ export function race(data: Data[], options: Options = {}) {
       ticker.stop();
     },
     rewind: () => {
-      ticker.rewind();
+      ticker.skipBack();
     },
     fastforward: () => {
-      ticker.fastForward();
+      ticker.skipForward();
     },
     loop: () => {
       ticker.loop();
     },
     inc: (value = 1) => {
-      tickerDate.inc(value);
+      store.dispatch(actions.ticker.inc(value));
     },
     dec: (value = 1) => {
-      tickerDate.dec(value);
+      store.dispatch(actions.ticker.dec(value));
     },
-    getDate: () => tickerDate.getDate(),
+    getDate: () => store.getState().ticker.currentDate,
     setDate: (inputDate: string | Date) => {
-      tickerDate.setDate(getDateString(inputDate));
+      store.dispatch(actions.ticker.updateDate(getDateString(inputDate)));
     },
     getAllDates: () => dates.map((date: string) => formatDate(date, 'YYYY-MM-DD')),
     createScroller: () => {
-      createScroller();
+      createScroller(element);
     },
   };
 }

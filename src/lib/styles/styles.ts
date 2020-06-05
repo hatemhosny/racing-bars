@@ -95,7 +95,9 @@ export const styles = `
 }
 
 #selector .controls svg {
-  margin: 7px auto;
+  margin: 5px auto;
+  width: 28px;
+  height: 28px;
 }
 
 #selector .overlay {
