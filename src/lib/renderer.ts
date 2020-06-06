@@ -1,11 +1,10 @@
 import * as d3 from './d3';
 
-import { formatDate } from './dates';
 import { icons } from './icons';
 import { elements } from './elements';
 import { Data, Renderer } from './models';
 import { store } from './store';
-import { getHeight, getWidth, getElement, hideElement, showElement } from './utils';
+import { getHeight, getWidth, getElement, hideElement, showElement, getText } from './utils';
 import { getDateSlice } from './data-utils';
 
 export function createRenderer(data: Data[]): Renderer {
@@ -15,6 +14,9 @@ export function createRenderer(data: Data[]): Renderer {
   let y: d3.ScaleLinear<number, number>;
   let xAxis: d3.Axis<number | { valueOf(): number }>;
   let barPadding: number;
+  let titleText: any;
+  let subTitleText: any;
+  let captionText: any;
   let dateCounterText: any;
   let labelX: number | ((d: Data) => number);
   let height: number;
@@ -26,7 +28,7 @@ export function createRenderer(data: Data[]): Renderer {
       title,
       subTitle,
       caption,
-      dateCounterFormat,
+      dateCounter,
       labelsOnBars,
       labelsWidth,
       inputHeight,
@@ -36,7 +38,8 @@ export function createRenderer(data: Data[]): Renderer {
       topN,
     } = store.getState().options;
 
-    const dateSlice = getDateSlice(data, store.getState().ticker.currentDate);
+    const TotalDateSlice = getDateSlice(data, store.getState().ticker.currentDate);
+    const dateSlice = TotalDateSlice.slice(0, store.getState().options.topN);
     const element = document.querySelector(selector) as HTMLElement;
     element.innerHTML = '';
 
@@ -66,17 +69,17 @@ export function createRenderer(data: Data[]): Renderer {
         .attr('width', width)
         .attr('height', height);
 
-      svg //
+      titleText = svg //
         .append('text')
         .attr('class', 'title')
         .attr('y', 24)
-        .html(title);
+        .html(getText(title, TotalDateSlice));
 
-      svg //
+      subTitleText = svg //
         .append('text')
         .attr('class', 'subTitle')
         .attr('y', 55)
-        .html(subTitle);
+        .html(getText(subTitle, TotalDateSlice));
 
       x = d3
         .scaleLinear()
@@ -144,16 +147,16 @@ export function createRenderer(data: Data[]): Renderer {
         .attr('x', width - margin.right - barPadding)
         .attr('y', height - 40)
         .style('text-anchor', 'end')
-        .html(formatDate(store.getState().ticker.currentDate, dateCounterFormat))
+        .html(getText(dateCounter, TotalDateSlice, true))
         .call(halo, strokeWidth);
 
-      svg
+      captionText = svg
         .append('text')
         .attr('class', 'caption')
         .attr('x', width - margin.right - barPadding - strokeWidth)
         .attr('y', height - margin.bottom - barPadding)
         .style('text-anchor', 'end')
-        .html(caption);
+        .html(getText(caption, TotalDateSlice));
 
       // TODO: animate halo
       function halo(text: any, strokeWidth: number) {
@@ -225,8 +228,9 @@ export function createRenderer(data: Data[]): Renderer {
       return;
     }
 
-    const { tickDuration, topN, dateCounterFormat } = store.getState().options;
-    const dateSlice = getDateSlice(data, store.getState().ticker.currentDate);
+    const { tickDuration, topN, title, subTitle, caption, dateCounter } = store.getState().options;
+    const TotalDateSlice = getDateSlice(data, store.getState().ticker.currentDate);
+    const dateSlice = TotalDateSlice.slice(0, store.getState().options.topN);
 
     x.domain([0, d3.max(dateSlice, (d: Data) => d.value) as number]);
 
@@ -342,7 +346,10 @@ export function createRenderer(data: Data[]): Renderer {
       .attr('y', () => y(topN + 1) + 5)
       .remove();
 
-    dateCounterText.html(formatDate(store.getState().ticker.currentDate, dateCounterFormat));
+    titleText.html(getText(title, TotalDateSlice));
+    subTitleText.html(getText(subTitle, TotalDateSlice));
+    captionText.html(getText(caption, TotalDateSlice));
+    dateCounterText.html(getText(dateCounter, TotalDateSlice, true));
 
     updateControls();
   }

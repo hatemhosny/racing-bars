@@ -122,6 +122,5 @@ export function getDateSlice(data: Data[], date: string) {
   return data
     .filter((d) => d.date === date && !isNaN(d.value))
     .sort((a, b) => b.value - a.value)
-    .slice(0, store.getState().options.topN)
     .map((d, i) => ({ ...d, rank: i }));
 }

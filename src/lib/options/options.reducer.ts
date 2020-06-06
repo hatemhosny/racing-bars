@@ -21,7 +21,7 @@ const initialState: Options = {
   title: '18 years of Top Global Brands',
   subTitle: 'Brand value, $m',
   caption: 'Source: Interbrand',
-  dateCounterFormat: 'YYYY',
+  dateCounter: 'MM/YYYY',
   labelsOnBars: true,
   labelsWidth: 100,
   showControls: 'all',

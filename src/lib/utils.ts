@@ -2,6 +2,8 @@ import * as d3 from './d3';
 
 import { Data } from './models';
 import { store } from './store';
+import { formatDate } from './dates';
+import { ParamFunction } from './options';
 
 export function getColor(d: Data, disableGroupColors: boolean, colorSeed: string) {
   const nameseed = d.group && !disableGroupColors ? d.group : d.name;
@@ -102,4 +104,17 @@ export function addEventHandler(className: string, event: string, handler: () =>
   if (element) {
     element.addEventListener(event, handler);
   }
+}
+
+export function getText(param: string | ParamFunction, dataSlice: Data[], isDate = false): string {
+  if (typeof param === 'function') {
+    return param(
+      formatDate(store.getState().ticker.currentDate, 'YYYY-MM-DD'),
+      dataSlice.map((d) => ({ ...d, date: formatDate(d.date, 'YYYY-MM-DD') })),
+    );
+  }
+  if (isDate) {
+    return formatDate(store.getState().ticker.currentDate, param);
+  }
+  return param;
 }

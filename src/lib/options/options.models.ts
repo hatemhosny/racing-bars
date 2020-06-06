@@ -1,4 +1,5 @@
 import { Action } from '../store';
+import { Data } from '../models';
 
 export interface OptionsAction extends Action {
   payload: Options;
@@ -11,7 +12,7 @@ export interface Options {
   selector: string;
   title: string;
   subTitle: string;
-  dateCounterFormat: string;
+  dateCounter: string | ParamFunction;
   startDate: string;
   endDate: string;
   loop: boolean;
@@ -35,3 +36,5 @@ export interface Options {
   autorun: boolean;
   injectStyles: boolean;
 }
+
+export type ParamFunction = (date: string, dateSlice: Data[]) => string;
