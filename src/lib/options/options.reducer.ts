@@ -10,7 +10,7 @@ const initialState: Options = {
   startDate: '',
   endDate: '',
   colorSeed: '',
-  disableGroupColors: false,
+  showGroups: true,
   tickDuration: 500,
   topN: 10,
   disableClickEvents: true,

@@ -20,7 +20,7 @@ export interface Options {
   labelsOnBars: boolean;
   labelsWidth: number;
   colorSeed: string;
-  disableGroupColors: boolean;
+  showGroups: boolean;
   tickDuration: number;
   topN: number;
   inputHeight: string;

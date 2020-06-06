@@ -4,7 +4,15 @@ import { icons } from './icons';
 import { elements } from './elements';
 import { Data, Renderer } from './models';
 import { store } from './store';
-import { getHeight, getWidth, getElement, hideElement, showElement, getText } from './utils';
+import {
+  getHeight,
+  getWidth,
+  getElement,
+  hideElement,
+  showElement,
+  getText,
+  getColor,
+} from './utils';
 import { getDateSlice } from './data-utils';
 
 export function createRenderer(data: Data[]): Renderer {
@@ -52,10 +60,16 @@ export function createRenderer(data: Data[]): Renderer {
     updateControls();
 
     function renderInitialFrame() {
+      const groups = Array.from(new Set(data.map((d) => d.group)))
+        .filter(Boolean)
+        .sort() as string[];
+      const showGroups = store.getState().options.showGroups && groups.length > 0;
+      const groupsArea = showGroups ? 40 : 0;
+
       const labelsArea = labelsOnBars ? 0 : labelsWidth;
 
       margin = {
-        top: 80,
+        top: 80 + groupsArea,
         right: 0,
         bottom: 5,
         left: 0 + labelsArea,
@@ -80,6 +94,37 @@ export function createRenderer(data: Data[]): Renderer {
         .attr('class', 'subTitle')
         .attr('y', 55)
         .html(getText(subTitle, TotalDateSlice));
+
+      if (showGroups) {
+        const groupX = d3
+          .scaleLinear()
+          .domain([groups.length, 0])
+          .range([width - margin.right, margin.left]);
+
+        svg
+          .selectAll('rect.group-color')
+          .data(groups)
+          .enter()
+          .append('rect')
+          .attr('class', 'group-color')
+          .attr('width', 10)
+          .attr('height', 10)
+          .attr('x', (_d: string, i: number) => groupX(i))
+          .attr('y', 75)
+          .style('fill', (d: string) =>
+            getColor({ group: d } as Data, true, store.getState().options.colorSeed).toString(),
+          );
+
+        svg
+          .selectAll('text.group')
+          .data(groups)
+          .enter()
+          .append('text')
+          .attr('class', 'group')
+          .attr('x', (_d: string, i: number) => groupX(i) + 20)
+          .attr('y', 75 + 10)
+          .html((d: string) => d);
+      }
 
       x = d3
         .scaleLinear()

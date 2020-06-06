@@ -22,7 +22,7 @@ export function prepareData(data: Data[]) {
 
   data = data.map((d) => {
     const value = isNaN(+d.value) ? 0 : +d.value;
-    const color = getColor(d, options.disableGroupColors, options.colorSeed);
+    const color = getColor(d, options.showGroups, options.colorSeed);
     return { ...d, value, color };
   });
 

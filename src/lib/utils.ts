@@ -5,8 +5,8 @@ import { store } from './store';
 import { formatDate } from './dates';
 import { ParamFunction } from './options';
 
-export function getColor(d: Data, disableGroupColors: boolean, colorSeed: string) {
-  const nameseed = d.group && !disableGroupColors ? d.group : d.name;
+export function getColor(d: Data, showGroups: boolean, colorSeed: string) {
+  const nameseed = d.group && showGroups ? d.group : d.name;
   const seed = nameseed + colorSeed;
   return d3.hsl(random(seed) * 360, 0.75, 0.75);
 }
