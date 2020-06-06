@@ -1,4 +1,4 @@
-import { formatDate, getDateString, getDates, filterDates } from './dates';
+import { formatDate, getDateString, getDates } from './dates';
 import { Data } from './models';
 import { getColor } from './utils';
 import { store } from './store';
@@ -7,7 +7,10 @@ import { Options } from './options';
 export function prepareData(data: Data[]) {
   const options = store.getState().options;
 
-  data = filterDates(data, options.startDate, options.endDate);
+  data = data
+    .map((d) => ({ ...d, date: getDateString(d.date) }))
+    .filter((d) => (options.startDate ? d.date >= options.startDate : true))
+    .filter((d) => (options.endDate ? d.date <= options.endDate : true));
 
   if (options.dataShape === 'wide') {
     data = wideDataToLong(data);
@@ -17,12 +20,10 @@ export function prepareData(data: Data[]) {
     data = fillGaps(data, options.fillDateGaps);
   }
 
-  data = data.map((item) => {
-    const d = { ...item };
-    d.value = isNaN(+d.value) ? 0 : +d.value;
-    d.date = getDateString(d.date);
-    d.color = getColor(d, options.disableGroupColors, options.colorSeed);
-    return d;
+  data = data.map((d) => {
+    const value = isNaN(+d.value) ? 0 : +d.value;
+    const color = getColor(d, options.disableGroupColors, options.colorSeed);
+    return { ...d, value, color };
   });
 
   data = calculateLastValues(data);

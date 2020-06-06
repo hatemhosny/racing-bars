@@ -1,19 +1,7 @@
 import { Data } from './models';
 import { zeroPad } from './utils';
 
-export function getDates(data: Data[]) {
-  const uniqueDates = new Set<string>();
-  data.forEach((d) => {
-    uniqueDates.add(d.date);
-  });
-  return Array.from(uniqueDates).sort();
-}
-
-export function filterDates(data: Data[], startDate: string, endDate: string) {
-  return data
-    .filter((d) => (startDate ? d.date >= startDate : true))
-    .filter((d) => (endDate ? d.date <= endDate : true));
-}
+export const getDates = (data: Data[]) => Array.from(new Set(data.map((d) => d.date))).sort();
 
 export function getDateString(inputDate: string | Date) {
   const date = new Date(inputDate);

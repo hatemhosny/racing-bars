@@ -24,6 +24,10 @@ export function race(data: Data[], options: Options) {
   data = prepareData(data);
 
   const dates = getDates(data);
+  // eslint-disable-next-line no-console
+  console.log(data);
+  // eslint-disable-next-line no-console
+  console.log(dates);
 
   const ticker = createTicker(dates);
 
