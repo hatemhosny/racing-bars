@@ -76,7 +76,7 @@ export function race(data: Data[], options: Options) {
     setDate: (inputDate: string | Date) => {
       store.dispatch(actions.ticker.updateDate(getDateString(inputDate)));
     },
-    getAllDates: () => dates.map((date: string) => formatDate(date, 'YYYY-MM-DD')),
+    getAllDates: () => dates.map((date: string) => formatDate(date)),
     createScroller: () => {
       createScroller(element);
     },

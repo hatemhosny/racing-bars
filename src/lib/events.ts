@@ -73,7 +73,7 @@ function dispatchDOMEvent(element: HTMLElement, currentDate: string) {
     new CustomEvent('racingBars/dateChanged', {
       bubbles: true,
       detail: {
-        date: formatDate(currentDate, 'YYYY-MM-DD'),
+        date: formatDate(currentDate),
         isFirst: store.getState().ticker.isFirstDate,
         isLast: store.getState().ticker.isLastDate,
       },

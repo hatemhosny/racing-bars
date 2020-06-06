@@ -37,4 +37,4 @@ export interface Options {
   injectStyles: boolean;
 }
 
-export type ParamFunction = (date: string, dateSlice: Data[]) => string;
+export type ParamFunction = (currentDate: string, dateSlice: Data[], allDates: string[]) => string;

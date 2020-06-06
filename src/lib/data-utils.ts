@@ -70,8 +70,8 @@ function fillGaps(data: Data[], period: Options['fillDateGaps']) {
   }
 
   const dates = getDates(data);
-  const minDate = new Date(formatDate(dates[0], 'YYYY-MM-DD'));
-  const maxDate = new Date(formatDate(dates[dates.length - 1], 'YYYY-MM-DD'));
+  const minDate = new Date(formatDate(dates[0]));
+  const maxDate = new Date(formatDate(dates[dates.length - 1]));
 
   const next = {
     years: (dt: Date) => {

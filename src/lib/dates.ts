@@ -20,7 +20,7 @@ export function getDateString(inputDate: string | Date) {
   return `${year}${month}${day}`;
 }
 
-export function formatDate(dateStr: string, format: string) {
+export function formatDate(dateStr: string, format = 'YYYY-MM-DD') {
   const year = dateStr.slice(0, 4);
   const month = dateStr.slice(4, 6);
   const day = dateStr.slice(6, 8);

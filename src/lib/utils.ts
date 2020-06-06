@@ -106,11 +106,12 @@ export function addEventHandler(className: string, event: string, handler: () =>
   }
 }
 
-export function getText(param: string | ParamFunction, dataSlice: Data[], isDate = false): string {
+export function getText(param: string | ParamFunction, dateSlice: Data[], isDate = false): string {
   if (typeof param === 'function') {
     return param(
-      formatDate(store.getState().ticker.currentDate, 'YYYY-MM-DD'),
-      dataSlice.map((d) => ({ ...d, date: formatDate(d.date, 'YYYY-MM-DD') })),
+      formatDate(store.getState().ticker.currentDate),
+      dateSlice.map((d) => ({ ...d, date: formatDate(d.date) })),
+      store.getState().ticker.dates.map((date) => formatDate(date)),
     );
   }
   if (isDate) {

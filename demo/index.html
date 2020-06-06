@@ -39,8 +39,8 @@
       title: 'A Tale of 11 Years',
       subTitle: 'Top 10 Surgical Procedures',
       dateCounter: 'MM/YYYY',
-      caption: (date, dataSlice) =>
-        'Total: ' + dataSlice.reduce((acc, curr) => acc + curr.value, 0),
+      caption: (date, dateSlice, allDates) =>
+        `Total: ${dateSlice.reduce((acc, curr) => acc + curr.value, 0)}`,
       // startDate: '2009-4-1',
       // endDate: '2010-12-31',
       loop: false,
