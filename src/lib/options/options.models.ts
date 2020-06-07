@@ -19,6 +19,7 @@ export interface Options {
   caption: string;
   labelsOnBars: boolean;
   labelsWidth: number;
+  showIcons: boolean;
   colorSeed: string;
   showGroups: boolean;
   tickDuration: number;

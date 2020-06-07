@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8" />
+  <style>
+    #container {
+      height: 95vh;
+      /* width: 95vw; */
+      width: 100%;
+      margin-top: 15px;
+    }
+    .race {
+      margin: auto;
+      height: 100%;
+      width: 95%;
+      /* width: 80vw;
+      position: fixed;
+      top: 0; */
+    }
+  </style>
+</head>
+
+<body>
+  <div id="container">
+    <div id="race" class="race"></div>
+  </div>
+
+  <script src="scripts/d3.min.js"></script>
+  <script src="scripts/racing-bars.umd.js"></script>
+  <script>
+    const options = {
+      selector: '#race',
+      // dataShape: "wide",
+      // fillDateGaps: "months",
+      // fillDateGapsValue: "zero",
+      title: 'A Tale of 11 Years',
+      subTitle: 'Top 10 Surgical Procedures',
+      dateCounter: 'MM/YYYY',
+      caption: (date, dateSlice, allDates) =>
+        `Total: ${dateSlice.reduce((acc, curr) => acc + curr.value, 0)}`,
+      // startDate: '2009-4-1',
+      // endDate: '2010-12-31',
+      loop: false,
+      tickDuration: 500,
+      // topN: 15,
+      // height: "window*0.85",
+      // width: 'window*0.5',
+      // disableClickEvents: true,
+      // disableKeyboardEvents: true,
+      showControls: 'all',
+      showOverlays: 'none',
+      autorun: false,
+      // colorSeed: "asdfs",
+      // labelsOnBars: false,
+      showIcons: true,
+      // labelsWidth: 250,
+      // embedStyles: false,
+    };
+    racingBars.loadData('data/fifa-scorers.csv', 'csv').then((data) => {
+      racingBars.race(data, options);
+    });
+  </script>
+</body>

@@ -22,6 +22,9 @@ export function createRenderer(data: Data[]): Renderer {
   let y: d3.ScaleLinear<number, number>;
   let xAxis: d3.Axis<number | { valueOf(): number }>;
   let barPadding: number;
+  let defs: any;
+  let iconSize: number;
+  let iconSpace: number;
   let titleText: any;
   let subTitleText: any;
   let captionText: any;
@@ -38,6 +41,7 @@ export function createRenderer(data: Data[]): Renderer {
       caption,
       dateCounter,
       labelsOnBars,
+      showIcons,
       labelsWidth,
       inputHeight,
       inputWidth,
@@ -162,7 +166,9 @@ export function createRenderer(data: Data[]): Renderer {
         .attr('height', y(1) - y(0) - barPadding)
         .style('fill', (d: Data) => d.color);
 
-      labelX = labelsOnBars ? (d: Data) => x(d.value) - 8 : margin.left - 8;
+      iconSize = showIcons ? y(1) - y(0) - barPadding * 1.5 : 0;
+      iconSpace = showIcons ? iconSize + 4 : 0;
+      labelX = labelsOnBars ? (d: Data) => x(d.value) - 8 - iconSpace : margin.left - 8;
 
       svg
         .selectAll('text.label')
@@ -174,6 +180,7 @@ export function createRenderer(data: Data[]): Renderer {
         .attr('y', (d: Data) => y(d.rank as number) + 5 + (y(1) - y(0)) / 2 + 1)
         .style('text-anchor', 'end')
         .html((d: Data) => d.name);
+
       svg
         .selectAll('text.valueLabel')
         .data(dateSlice, (d: Data) => d.name)
@@ -184,6 +191,39 @@ export function createRenderer(data: Data[]): Renderer {
         .attr('y', (d: Data) => y(d.rank as number) + 5 + (y(1) - y(0)) / 2 + 1)
         .text((d: Data) => d3.format(',.0f')(d.lastValue as number));
 
+      if (showIcons) {
+        defs = svg.append('svg:defs');
+
+        defs
+          .selectAll('svg')
+          .data(dateSlice)
+          .enter()
+          .append('svg:pattern')
+          .attr('id', (d: Data) => 'img-' + d.name.toLowerCase().split(' ').join('_'))
+          .attr('width', iconSize)
+          .attr('height', iconSize)
+          .append('svg:image')
+          .attr(
+            'xlink:href',
+            // 'img/ad.svg',
+            (d: Data) => 'img/flags/' + d.name.toLowerCase().split(' ').join('_') + '.svg.png',
+          )
+          .attr('width', iconSize)
+          .attr('height', iconSize)
+          .attr('x', 0)
+          .attr('y', 0);
+
+        svg
+          .selectAll('circle')
+          .data(dateSlice)
+          .enter()
+          .append('circle')
+          .attr('cx', (d: Data) => x(d.value) - (y(1) - y(0) - barPadding * 3) - 5)
+          .attr('cy', (d: Data) => y(d.rank as number) + (y(1) - y(0)) / 2 + 1)
+          .attr('r', iconSize / 2)
+          .style('fill', '#000')
+          .style('fill', (d: Data) => `url(#img-${d.name.toLowerCase().split(' ').join('_')})`);
+      }
       const strokeWidth = 10;
 
       dateCounterText = svg
