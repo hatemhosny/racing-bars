@@ -199,13 +199,13 @@ export function createRenderer(data: Data[]): Renderer {
           .data(dateSlice)
           .enter()
           .append('svg:pattern')
+          .attr('class', 'svgpattern')
           .attr('id', (d: Data) => 'img-' + d.name.toLowerCase().split(' ').join('_'))
           .attr('width', iconSize)
           .attr('height', iconSize)
           .append('svg:image')
           .attr(
             'xlink:href',
-            // 'img/ad.svg',
             (d: Data) => 'img/flags/' + d.name.toLowerCase().split(' ').join('_') + '.svg.png',
           )
           .attr('width', iconSize)
@@ -224,8 +224,8 @@ export function createRenderer(data: Data[]): Renderer {
           .style('fill', '#000')
           .style('fill', (d: Data) => `url(#img-${d.name.toLowerCase().split(' ').join('_')})`);
       }
-      const strokeWidth = 10;
 
+      const strokeWidth = 10;
       dateCounterText = svg
         .append('text')
         .attr('class', 'dateCounterText')
@@ -430,6 +430,66 @@ export function createRenderer(data: Data[]): Renderer {
       .attr('x', (d: Data) => x(d.value) + 5)
       .attr('y', () => y(topN + 1) + 5)
       .remove();
+
+    if (store.getState().options.showIcons) {
+      svg
+        .selectAll('.svgpattern')
+        .data(dateSlice)
+        .enter()
+        .append('svg:pattern')
+        .attr('id', (d: Data) => 'img-' + d.name.toLowerCase().split(' ').join('_'))
+        .attr('width', iconSize)
+        .attr('height', iconSize)
+        .append('svg:image')
+        .attr(
+          'xlink:href',
+          // 'img/ad.svg',
+          (d: Data) => 'img/flags/' + d.name.toLowerCase().split(' ').join('_') + '.svg.png',
+        )
+        .attr('width', iconSize)
+        .attr('height', iconSize)
+        .attr('x', 0)
+        .attr('y', 0);
+
+      const icons = svg //
+        .selectAll('circle')
+        .data(dateSlice);
+
+      icons
+        .enter()
+        .append('circle')
+        .attr('cx', (d: Data) => x(d.value) - (y(1) - y(0) - barPadding * 3) - 5)
+        .attr('cy', (d: Data) => y(d.rank as number) + (y(1) - y(0)) / 2 + 1)
+        .attr('r', iconSize / 2)
+        .style('fill', '#000')
+        .style('fill', (d: Data) => `url(#img-${d.name.toLowerCase().split(' ').join('_')})`)
+        .transition()
+        .duration(tickDuration)
+        .ease(d3.easeLinear)
+        .attr('y', (d: Data) => y(d.rank as number) + 5 + (y(1) - y(0)) / 2 + 1);
+
+      icons
+        .transition()
+        .duration(tickDuration)
+        .ease(d3.easeLinear)
+        .attr('x', (d: Data) => x(d.value) + 5)
+        .attr('y', (d: Data) => y(d.rank as number) + 5 + (y(1) - y(0)) / 2 + 1)
+        .tween('text', function (d: Data) {
+          const i = d3.interpolateRound(d.lastValue as number, d.value);
+          return function (t: number) {
+            this.textContent = d3.format(',')(i(t));
+          };
+        });
+
+      icons
+        .exit()
+        .transition()
+        .duration(tickDuration)
+        .ease(d3.easeLinear)
+        .attr('x', (d: Data) => x(d.value) + 5)
+        .attr('y', () => y(topN + 1) + 5)
+        .remove();
+    }
 
     titleText.html(getText(title, TotalDateSlice));
     subTitleText.html(getText(subTitle, TotalDateSlice));
