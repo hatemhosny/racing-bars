@@ -7,6 +7,7 @@ export interface Data {
   lastValue?: number;
   group?: string;
   color?: HSLColor;
+  icon?: string;
   rank?: number;
 }
 

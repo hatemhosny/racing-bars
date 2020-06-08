@@ -214,11 +214,7 @@ export function createRenderer(data: Data[]): Renderer {
           .attr('width', iconSize)
           .attr('height', iconSize)
           .append('svg:image')
-          .attr(
-            'xlink:href',
-            // 'img/th.svg',
-            (d: Data) => 'img/flags/' + d.name.toLowerCase().split(' ').join('_') + '.svg.png',
-          )
+          .attr('xlink:href', (d: Data) => d.icon)
           .attr('width', iconSize)
           .attr('height', iconSize)
           .attr('x', 0)
@@ -453,11 +449,7 @@ export function createRenderer(data: Data[]): Renderer {
         .attr('width', iconSize)
         .attr('height', iconSize)
         .append('svg:image')
-        .attr(
-          'xlink:href',
-          // 'img/ad.svg',
-          (d: Data) => 'img/flags/' + d.name.toLowerCase().split(' ').join('_') + '.svg.png',
-        )
+        .attr('xlink:href', (d: Data) => d.icon)
         .attr('width', iconSize)
         .attr('height', iconSize)
         .style('z-index', '99')

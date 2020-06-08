@@ -4,8 +4,12 @@ import { getColor } from './utils';
 import { store } from './store';
 import { Options } from './options';
 
-export function prepareData(data: Data[]) {
+export function prepareData(rawData: Data[] | any, transform?: (raw: any) => Data[]) {
   const options = store.getState().options;
+
+  let data = (transform && typeof transform === 'function'
+    ? transform(rawData)
+    : rawData) as Data[];
 
   data = data
     .map((d) => ({ ...d, date: getDateString(d.date) }))

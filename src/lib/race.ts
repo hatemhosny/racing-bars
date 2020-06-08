@@ -9,7 +9,7 @@ import { Options } from './options';
 import { registerEvents, DOMEventSubscriber } from './events';
 import { createScroller } from './scroller';
 
-export function race(data: Data[], options: Options) {
+export function race(data: Data[] | any, options: Options, transform?: (raw: any) => Data[]) {
   store.dispatch(actions.options.optionsLoaded(options));
 
   const element = document.querySelector(store.getState().options.selector) as HTMLElement;
@@ -21,13 +21,13 @@ export function race(data: Data[], options: Options) {
     styles.styleInject(store.getState().options.selector, 'top');
   }
 
-  data = prepareData(data);
+  const preparedData = prepareData(data, transform);
 
-  const dates = getDates(data);
+  const dates = getDates(preparedData);
 
   const ticker = createTicker(dates);
 
-  const renderer = createRenderer(data);
+  const renderer = createRenderer(preparedData);
   renderer.renderInitalView();
 
   store.subscribe(renderer.renderFrame);

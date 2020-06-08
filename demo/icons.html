@@ -36,7 +36,7 @@
       subTitle: 'Top 10 Surgical Procedures',
       dateCounter: 'MM/YYYY',
       caption: (date, dateSlice, allDates) =>
-        `Total: ${dateSlice.reduce((acc, curr) => acc + curr.value, 0)}`,
+        `Total: ${Math.round(dateSlice.reduce((acc, curr) => acc + curr.value, 0))}`,
       // startDate: '2009-4-1',
       // endDate: '2010-12-31',
       loop: false,
@@ -49,14 +49,20 @@
       showControls: 'all',
       showOverlays: 'none',
       autorun: false,
-      // colorSeed: "asdfs",
-      // labelsOnBars: false,
+      showGroups: false,
+      colorSeed: 'asdf4s',
+      labelsOnBars: false,
       showIcons: true,
       // labelsWidth: 250,
       // embedStyles: false,
     };
-    racingBars.loadData('data/fifa-scorers.csv', 'csv').then((data) => {
-      racingBars.race(data, options);
+    racingBars.loadData('data/population.csv', 'csv').then((data) => {
+      racingBars.race(data, options, (raw) =>
+        raw.map((d) => ({
+          ...d,
+          icon: `https://www.countryflags.io/${d.code.toLowerCase()}/flat/64.png`,
+        })),
+      );
     });
   </script>
 </body>
