@@ -2,14 +2,18 @@ import { Action } from '../store';
 import { Data } from '../models';
 
 export interface OptionsAction extends Action {
-  payload: Options;
+  payload: Options | RequiredOptions;
 }
 
+export interface RequiredOptions {
+  [key: string]: any;
+  selector: string;
+}
 export interface Options {
+  selector: string;
   dataShape: 'long' | 'wide';
   fillDateGaps: false | 'years' | 'months' | 'days';
   fillDateGapsValue: 'last' | 'zero';
-  selector: string;
   title: string;
   subTitle: string;
   dateCounter: string | ParamFunction;

@@ -4,10 +4,11 @@
 // export * from './events';
 // export * from './icons';
 export * from './load-data';
-// export * from './models';
+export * from './models';
+export * from './options';
 export * from './race';
 // export * from './renderer';
-// export * from './store';
+export * from './store';
 // export * from './styles';
 // export * from './ticker';
 export * from './utils';

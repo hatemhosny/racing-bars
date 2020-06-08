@@ -57,12 +57,11 @@
       // embedStyles: false,
     };
     racingBars.loadData('data/population.csv', 'csv').then((data) => {
-      racingBars.race(data, options, (raw) =>
-        raw.map((d) => ({
-          ...d,
-          icon: `https://www.countryflags.io/${d.code.toLowerCase()}/flat/64.png`,
-        })),
-      );
+      const processed = data.map((d) => ({
+        ...d,
+        icon: `https://www.countryflags.io/${d.code.toLowerCase()}/flat/64.png`,
+      }));
+      racingBars.race(processed, options);
     });
   </script>
 </body>

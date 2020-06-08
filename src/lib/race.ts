@@ -1,15 +1,15 @@
 import { prepareData } from './data-utils';
 import { getDates, getDateString, formatDate } from './dates';
-import { Data } from './models';
+import { Data, WideData } from './models';
 import { createRenderer } from './renderer';
 import { createTicker } from './ticker';
 import * as styles from './styles';
 import { actions, store } from './store';
-import { Options } from './options';
+import { Options, RequiredOptions } from './options';
 import { registerEvents, DOMEventSubscriber } from './events';
 import { createScroller } from './scroller';
 
-export function race(data: Data[] | any, options: Options, transform?: (raw: any) => Data[]) {
+export function race(data: Data[] | WideData[], options: Options | RequiredOptions) {
   store.dispatch(actions.options.optionsLoaded(options));
 
   const element = document.querySelector(store.getState().options.selector) as HTMLElement;
@@ -21,7 +21,7 @@ export function race(data: Data[] | any, options: Options, transform?: (raw: any
     styles.styleInject(store.getState().options.selector, 'top');
   }
 
-  const preparedData = prepareData(data, transform);
+  const preparedData = prepareData(data as Data[]);
 
   const dates = getDates(preparedData);
 

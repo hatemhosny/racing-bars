@@ -1,17 +1,13 @@
 import { formatDate, getDateString, getDates } from './dates';
-import { Data } from './models';
+import { Data, WideData } from './models';
 import { getColor } from './utils';
 import { store } from './store';
 import { Options } from './options';
 
-export function prepareData(rawData: Data[] | any, transform?: (raw: any) => Data[]) {
+export function prepareData(rawData: Data[]) {
   const options = store.getState().options;
 
-  let data = (transform && typeof transform === 'function'
-    ? transform(rawData)
-    : rawData) as Data[];
-
-  data = data
+  let data = rawData
     .map((d) => ({ ...d, date: getDateString(d.date) }))
     .filter((d) => (options.startDate ? d.date >= options.startDate : true))
     .filter((d) => (options.endDate ? d.date <= options.endDate : true));
@@ -54,9 +50,9 @@ function calculateLastValues(data: Data[]) {
     .sort((a, b) => a.date.localeCompare(b.date));
 }
 
-function wideDataToLong(wide: any) {
+function wideDataToLong(wide: WideData[]) {
   const long = [] as Data[];
-  wide.forEach((item: any) => {
+  wide.forEach((item: WideData) => {
     for (const [key, value] of Object.entries(item)) {
       long.push({
         date: item.date,

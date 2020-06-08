@@ -11,6 +11,11 @@ export interface Data {
   rank?: number;
 }
 
+export interface WideData {
+  [key: string]: any;
+  date: string;
+}
+
 export interface Renderer {
   renderInitalView: () => void;
   renderFrame: () => void;
