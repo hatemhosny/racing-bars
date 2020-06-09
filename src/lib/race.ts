@@ -3,7 +3,7 @@ import { getDates, getDateString, formatDate } from './dates';
 import { Data, WideData } from './models';
 import { createRenderer } from './renderer';
 import { createTicker } from './ticker';
-import * as styles from './styles';
+import { styleInject } from './styles';
 import { actions, store } from './store';
 import { Options, RequiredOptions } from './options';
 import { registerEvents, DOMEventSubscriber } from './events';
@@ -18,7 +18,7 @@ export function race(data: Data[] | WideData[], options: Options | RequiredOptio
   }
 
   if (store.getState().options.injectStyles) {
-    styles.styleInject(store.getState().options.selector, 'top');
+    styleInject(store.getState().options.selector, 'top');
   }
 
   const preparedData = prepareData(data as Data[]);

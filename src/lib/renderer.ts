@@ -22,6 +22,7 @@ export function createRenderer(data: Data[]): Renderer {
   let x: d3.ScaleLinear<number, number>;
   let y: d3.ScaleLinear<number, number>;
   let xAxis: d3.Axis<number | { valueOf(): number }>;
+  const titlePadding = 5;
   let barPadding: number;
   let labelPadding: number;
   let barHeight: number;
@@ -37,7 +38,6 @@ export function createRenderer(data: Data[]): Renderer {
   let barY: (d: Data) => number;
   let height: number;
   let width: number;
-  const strokeWidth = 10;
 
   function renderInitalView() {
     const {
@@ -115,12 +115,14 @@ export function createRenderer(data: Data[]): Renderer {
       titleText = svg //
         .append('text')
         .attr('class', 'title')
+        .attr('x', titlePadding)
         .attr('y', 24)
         .html(getText(title, TotalDateSlice));
 
       subTitleText = svg //
         .append('text')
         .attr('class', 'subTitle')
+        .attr('x', titlePadding)
         .attr('y', 55)
         .html(getText(subTitle, TotalDateSlice));
 
@@ -240,12 +242,12 @@ export function createRenderer(data: Data[]): Renderer {
         .attr('y', height - 40)
         .style('text-anchor', 'end')
         .html(getText(dateCounter, TotalDateSlice, true))
-        .call(halo, strokeWidth);
+        .call(halo);
 
       captionText = svg
         .append('text')
         .attr('class', 'caption')
-        .attr('x', width - margin.right - barPadding - strokeWidth)
+        .attr('x', width - margin.right - barPadding - 10)
         .attr('y', height - margin.bottom - barPadding)
         .style('text-anchor', 'end')
         .html(getText(caption, TotalDateSlice));
@@ -483,7 +485,7 @@ export function createRenderer(data: Data[]): Renderer {
     titleText.html(getText(title, TotalDateSlice));
     subTitleText.html(getText(subTitle, TotalDateSlice));
     captionText.html(getText(caption, TotalDateSlice));
-    dateCounterText.html(getText(dateCounter, TotalDateSlice, true)).call(halo, 10);
+    dateCounterText.html(getText(dateCounter, TotalDateSlice, true)).call(halo);
     updateControls();
   }
 
@@ -549,7 +551,7 @@ export function createRenderer(data: Data[]): Renderer {
     }
   }
 
-  function halo(text: any, strokeWidth: number) {
+  function halo(text: any) {
     svg //
       .selectAll('.halo')
       .remove();
@@ -558,12 +560,7 @@ export function createRenderer(data: Data[]): Renderer {
       .select(function () {
         return this.parentNode.insertBefore(this.cloneNode(true), this);
       })
-      .classed('halo', true)
-      .style('fill', '#ffffff')
-      .style('stroke', '#ffffff')
-      .style('stroke-width', strokeWidth)
-      .style('stroke-linejoin', 'round')
-      .style('opacity', 1);
+      .classed('halo', true);
   }
 
   return {

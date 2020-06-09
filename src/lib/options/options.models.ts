@@ -40,6 +40,7 @@ export interface Options {
   showOverlays: 'all' | 'play' | 'repeat' | 'none';
   autorun: boolean;
   injectStyles: boolean;
+  theme: string;
 }
 
 export type ParamFunction = (currentDate: string, dateSlice: Data[], allDates: string[]) => string;

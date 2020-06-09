@@ -1,0 +1,68 @@
+#selector {
+  background-color: #313639;
+}
+
+#selector text.title {
+  fill: #fafafa;
+}
+
+#selector text.subTitle {
+  fill: #cccccc;
+}
+
+#selector text.dateCounterText {
+  fill: #cccccc;
+  opacity: 1;
+}
+
+#selector text.caption {
+  fill: #cccccc;
+}
+
+#selector .halo {
+  fill: #313639;
+  stroke: #313639;
+  stroke-width: 10;
+  stroke-linejoin: round;
+  opacity: 1;
+}
+
+#selector text.label {
+  fill: #313639;
+}
+
+#selector text.valueLabel {
+  fill: #fafafa;
+}
+
+#selector .tick text {
+  fill: #cccccc;
+}
+
+#selector .tick line {
+  shape-rendering: CrispEdges;
+  stroke: #dddddd;
+}
+
+#selector .tick line.origin {
+  stroke: #aaaaaa;
+}
+
+#selector .controls div,
+#selector .overlay div {
+  color: #ffffff;
+  background: #777777;
+  border: 1px solid black;
+  opacity: 0.5;
+}
+
+#selector .controls div:hover,
+#selector .overlay div:hover {
+  background: #aaaaaa;
+  color: black;
+}
+
+#selector .overlay {
+  background-color: black;
+  opacity: 0.7;
+}

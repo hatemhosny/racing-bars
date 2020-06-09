@@ -33,6 +33,7 @@ const initialState: Options = {
   minWidth: 500,
   height: '',
   width: '',
+  theme: 'light',
 };
 
 export function optionsReducer(state = initialState, action: OptionsAction): Options {

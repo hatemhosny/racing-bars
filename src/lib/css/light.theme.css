@@ -1,0 +1,68 @@
+/* #selector {
+  background-color: #ffffff;
+}
+
+#selector text.title {
+  fill: #fafafa;
+} */
+
+#selector text.subTitle {
+  fill: #777777;
+}
+
+#selector text.dateCounterText {
+  fill: #bbbbbb;
+  opacity: 1;
+}
+
+#selector text.caption {
+  fill: #777777;
+}
+
+#selector .halo {
+  fill: #ffffff;
+  stroke: #ffffff;
+  stroke-width: 10;
+  stroke-linejoin: round;
+  opacity: 1;
+}
+
+#selector text.label {
+  fill: #000000;
+}
+
+#selector text.valueLabel {
+  fill: #000000;
+}
+
+#selector .tick text {
+  fill: #777777;
+}
+
+#selector .tick line {
+  shape-rendering: CrispEdges;
+  stroke: #dddddd;
+}
+
+#selector .tick line.origin {
+  stroke: #aaaaaa;
+}
+
+#selector .controls div,
+#selector .overlay div {
+  color: #ffffff;
+  background: #777777;
+  border: 1px solid black;
+  opacity: 0.5;
+}
+
+#selector .controls div:hover,
+#selector .overlay div:hover {
+  background: #aaaaaa;
+  color: black;
+}
+
+#selector .overlay {
+  background-color: black;
+  opacity: 0.7;
+}
