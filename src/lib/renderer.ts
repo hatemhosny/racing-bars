@@ -37,6 +37,7 @@ export function createRenderer(data: Data[]): Renderer {
   let barY: (d: Data) => number;
   let height: number;
   let width: number;
+  const strokeWidth = 10;
 
   function renderInitalView() {
     const {
@@ -232,7 +233,6 @@ export function createRenderer(data: Data[]): Renderer {
           .style('fill', (d: Data) => `url(#${getIconID(d)})`);
       }
 
-      const strokeWidth = 10;
       dateCounterText = svg
         .append('text')
         .attr('class', 'dateCounterText')
@@ -249,19 +249,6 @@ export function createRenderer(data: Data[]): Renderer {
         .attr('y', height - margin.bottom - barPadding)
         .style('text-anchor', 'end')
         .html(getText(caption, TotalDateSlice));
-
-      // TODO: animate halo
-      function halo(text: any, strokeWidth: number) {
-        text
-          .select(function () {
-            return this.parentNode.insertBefore(this.cloneNode(true), this);
-          })
-          .style('fill', '#ffffff')
-          .style('stroke', '#ffffff')
-          .style('stroke-width', strokeWidth)
-          .style('stroke-linejoin', 'round')
-          .style('opacity', 1);
-      }
     }
 
     function renderControls() {
@@ -496,8 +483,7 @@ export function createRenderer(data: Data[]): Renderer {
     titleText.html(getText(title, TotalDateSlice));
     subTitleText.html(getText(subTitle, TotalDateSlice));
     captionText.html(getText(caption, TotalDateSlice));
-    dateCounterText.html(getText(dateCounter, TotalDateSlice, true));
-
+    dateCounterText.html(getText(dateCounter, TotalDateSlice, true)).call(halo, 10);
     updateControls();
   }
 
@@ -561,6 +547,23 @@ export function createRenderer(data: Data[]): Renderer {
       getElement(elements.controls).style.visibility = 'unset';
       getElement(elements.overlay).style.display = 'none';
     }
+  }
+
+  function halo(text: any, strokeWidth: number) {
+    svg //
+      .selectAll('.halo')
+      .remove();
+
+    text
+      .select(function () {
+        return this.parentNode.insertBefore(this.cloneNode(true), this);
+      })
+      .classed('halo', true)
+      .style('fill', '#ffffff')
+      .style('stroke', '#ffffff')
+      .style('stroke-width', strokeWidth)
+      .style('stroke-linejoin', 'round')
+      .style('opacity', 1);
   }
 
   return {

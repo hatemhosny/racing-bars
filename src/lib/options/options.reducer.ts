@@ -26,7 +26,7 @@ const initialState: Options = {
   labelsWidth: 100,
   showIcons: false,
   showControls: 'all',
-  showOverlays: 'all',
+  showOverlays: 'none',
   inputHeight: '',
   inputWidth: '',
   minHeight: 300,
