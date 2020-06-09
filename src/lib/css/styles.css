@@ -10,13 +10,11 @@
 
 #selector text.subTitle {
   font-weight: 500;
-  fill: #777777;
 }
 
 #selector text.caption {
   font-weight: 400;
   font-size: 24px;
-  fill: #777777;
 }
 
 #selector text.label {
@@ -30,11 +28,6 @@
 #selector text.dateCounterText {
   font-size: 64px;
   font-weight: 700;
-  opacity: 0.25;
-}
-
-#selector .tick text {
-  fill: #777777;
 }
 
 #selector .xAxis .tick:nth-child(2) text {
@@ -43,11 +36,6 @@
 
 #selector .tick line {
   shape-rendering: CrispEdges;
-  stroke: #dddddd;
-}
-
-#selector .tick line.origin {
-  stroke: #aaaaaa;
 }
 
 #selector path.domain {
@@ -72,21 +60,11 @@
   font-weight: 700;
   width: 38px;
   height: 38px;
-  color: #ffffff;
-  background: #777777;
-  border: 1px solid black;
-  opacity: 0.5;
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
   border-radius: 5px;
   margin: 5px;
   text-align: center;
-}
-
-#selector .controls div:hover,
-#selector .overlay div:hover {
-  background: #aaaaaa;
-  color: black;
 }
 
 #selector .controls svg {
@@ -101,8 +79,6 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: black;
-  opacity: 0.7;
   display: flex;
   align-items: center;
   justify-content: center;

@@ -1,7 +1,10 @@
-import { styles } from './styles';
+import { store } from '../store';
+import { styles, themes } from './generated-styles';
 
-// slightly modifed from https://github.com/egoist/style-inject
-export function styleInject(selector: string, insertAt = 'top', css = styles) {
+// modifed from https://github.com/egoist/style-inject
+export function styleInject(selector: string, insertAt = 'top') {
+  let css = styles + (themes as any)[store.getState().options.theme];
+
   if (!css || typeof document === 'undefined') {
     return;
   }
