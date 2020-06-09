@@ -17,9 +17,10 @@
       top: 0; */
     }
     body {
-      background-color: #313639;
+      /* background-color: #313639; */
     }
   </style>
+  <link rel="stylesheet" href="css/styles.css" />
 </head>
 
 <body>
@@ -56,7 +57,7 @@
       // labelsOnBars: false,
       // labelsWidth: 250,
       // embedStyles: false,
-      theme: 'dark',
+      theme: 'none',
     };
     racingBars.loadData('data/procedures.json').then((data) => {
       racingBars.race(data, options);
