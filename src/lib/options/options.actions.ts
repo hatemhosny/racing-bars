@@ -1,4 +1,4 @@
-import { Options, OptionsAction } from './options.models';
+import { Options, OptionsAction, RequiredOptions } from './options.models';
 
 export const actionTypes = {
   optionsLoaded: 'options/loaded',
@@ -6,7 +6,7 @@ export const actionTypes = {
   optionsChanged: 'options/changed',
 };
 
-export const optionsLoaded = (options: Options): OptionsAction => ({
+export const optionsLoaded = (options: Options | RequiredOptions): OptionsAction => ({
   type: actionTypes.optionsLoaded,
   payload: options,
 });

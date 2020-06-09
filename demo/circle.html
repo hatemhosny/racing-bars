@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script src="scripts/d3.min.js"></script>
+
+    <script>
+      var config = {
+        avatar_size: 48,
+      };
+
+      var body = d3.select('body');
+
+      var svg = body.append('svg').attr('width', 500).attr('height', 500);
+
+      var defs = svg.append('svg:defs');
+
+      defs
+        .append('svg:pattern')
+        .attr('id', 'grump_avatar')
+        .attr('width', config.avatar_size)
+        .attr('height', config.avatar_size)
+        .attr('patternUnits', 'userSpaceOnUse')
+        .append('svg:image')
+        .attr('xlink:href', 'img/48.jpg')
+        .attr('width', config.avatar_size)
+        .attr('height', config.avatar_size)
+        .attr('x', 0)
+        .attr('y', 0);
+
+      var circle = svg
+        .append('circle')
+        .attr('cx', config.avatar_size / 2)
+        .attr('cy', config.avatar_size / 2)
+        .attr('r', config.avatar_size / 2)
+        .style('fill', '#fff')
+        .style('fill', 'url(#grump_avatar)');
+    </script>
+  </body>
+</html>

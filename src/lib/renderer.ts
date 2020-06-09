@@ -12,6 +12,7 @@ import {
   showElement,
   getText,
   getColor,
+  getIconID,
 } from './utils';
 import { getDateSlice } from './data-utils';
 
@@ -22,13 +23,21 @@ export function createRenderer(data: Data[]): Renderer {
   let y: d3.ScaleLinear<number, number>;
   let xAxis: d3.Axis<number | { valueOf(): number }>;
   let barPadding: number;
+  let labelPadding: number;
+  let barHeight: number;
+  let barHalfHeight: number;
+  let defs: any;
+  let iconSize: number;
+  let iconSpace: number;
   let titleText: any;
   let subTitleText: any;
   let captionText: any;
   let dateCounterText: any;
   let labelX: number | ((d: Data) => number);
+  let barY: (d: Data) => number;
   let height: number;
   let width: number;
+  const strokeWidth = 10;
 
   function renderInitalView() {
     const {
@@ -38,6 +47,7 @@ export function createRenderer(data: Data[]): Renderer {
       caption,
       dateCounter,
       labelsOnBars,
+      showIcons,
       labelsWidth,
       inputHeight,
       inputWidth,
@@ -75,7 +85,26 @@ export function createRenderer(data: Data[]): Renderer {
         left: 0 + labelsArea,
       };
 
+      x = d3
+        .scaleLinear()
+        .domain([0, d3.max(dateSlice, (d: Data) => d.value) as number])
+        .range([margin.left, width - margin.right - 65]);
+
+      y = d3
+        .scaleLinear()
+        .domain([topN, 0])
+        .range([height - margin.bottom, margin.top]);
+
       barPadding = (height - (margin.bottom + margin.top)) / (topN * 5);
+      labelPadding = 8;
+      barHeight = y(1) - y(0) - barPadding;
+      barHalfHeight = (y(1) - y(0)) / 2 + 1;
+      barY = (d: Data) => y(d.rank as number) + 5;
+      iconSize = showIcons ? barHeight * 0.9 : 0;
+      iconSpace = showIcons ? iconSize + labelPadding : 0;
+      labelX = labelsOnBars
+        ? (d: Data) => x(d.value) - labelPadding - iconSpace
+        : margin.left - labelPadding;
 
       svg = d3 //
         .select(selector)
@@ -126,20 +155,10 @@ export function createRenderer(data: Data[]): Renderer {
           .html((d: string) => d);
       }
 
-      x = d3
-        .scaleLinear()
-        .domain([0, d3.max(dateSlice, (d: Data) => d.value) as number])
-        .range([margin.left, width - margin.right - 65]);
-
-      y = d3
-        .scaleLinear()
-        .domain([topN, 0])
-        .range([height - margin.bottom, margin.top]);
-
       xAxis = d3
         .axisTop(x)
         .ticks(width > 500 ? 5 : 2)
-        .tickSize(-(height - margin.top - margin.bottom))
+        .tickSize(-(height - (margin.top + margin.bottom)))
         .tickFormat((n: number | { valueOf(): number }) => d3.format(',')(n));
 
       svg
@@ -158,11 +177,9 @@ export function createRenderer(data: Data[]): Renderer {
         .attr('class', 'bar')
         .attr('x', x(0) + 1)
         .attr('width', (d: Data) => Math.abs(x(d.value) - x(0) - 1))
-        .attr('y', (d: Data) => y(d.rank as number) + 5)
-        .attr('height', y(1) - y(0) - barPadding)
+        .attr('y', barY)
+        .attr('height', barHeight)
         .style('fill', (d: Data) => d.color);
-
-      labelX = labelsOnBars ? (d: Data) => x(d.value) - 8 : margin.left - 8;
 
       svg
         .selectAll('text.label')
@@ -171,9 +188,10 @@ export function createRenderer(data: Data[]): Renderer {
         .append('text')
         .attr('class', 'label')
         .attr('x', labelX)
-        .attr('y', (d: Data) => y(d.rank as number) + 5 + (y(1) - y(0)) / 2 + 1)
+        .attr('y', (d: Data) => barY(d) + barHalfHeight)
         .style('text-anchor', 'end')
         .html((d: Data) => d.name);
+
       svg
         .selectAll('text.valueLabel')
         .data(dateSlice, (d: Data) => d.name)
@@ -181,10 +199,39 @@ export function createRenderer(data: Data[]): Renderer {
         .append('text')
         .attr('class', 'valueLabel')
         .attr('x', (d: Data) => x(d.value) + 5)
-        .attr('y', (d: Data) => y(d.rank as number) + 5 + (y(1) - y(0)) / 2 + 1)
+        .attr('y', (d: Data) => barY(d) + barHalfHeight)
         .text((d: Data) => d3.format(',.0f')(d.lastValue as number));
 
-      const strokeWidth = 10;
+      if (showIcons) {
+        defs = svg.append('svg:defs');
+
+        defs
+          .selectAll('svg')
+          .data(dateSlice, (d: Data) => d.name)
+          .enter()
+          .append('svg:pattern')
+          .attr('class', 'svgpattern')
+          .attr('id', getIconID)
+          .attr('width', iconSize)
+          .attr('height', iconSize)
+          .append('svg:image')
+          .attr('xlink:href', (d: Data) => d.icon)
+          .attr('width', iconSize)
+          .attr('height', iconSize)
+          .attr('x', 0)
+          .attr('y', 0);
+
+        svg
+          .selectAll('circle')
+          .data(dateSlice, (d: Data) => d.name)
+          .enter()
+          .append('circle')
+          .attr('cx', (d: Data) => x(d.value) - iconSize / 2 - labelPadding)
+          .attr('cy', (d: Data) => y(d.rank as number) + barHalfHeight)
+          .attr('r', iconSize / 2)
+          .style('fill', 'transparent')
+          .style('fill', (d: Data) => `url(#${getIconID(d)})`);
+      }
 
       dateCounterText = svg
         .append('text')
@@ -202,19 +249,6 @@ export function createRenderer(data: Data[]): Renderer {
         .attr('y', height - margin.bottom - barPadding)
         .style('text-anchor', 'end')
         .html(getText(caption, TotalDateSlice));
-
-      // TODO: animate halo
-      function halo(text: any, strokeWidth: number) {
-        text
-          .select(function () {
-            return this.parentNode.insertBefore(this.cloneNode(true), this);
-          })
-          .style('fill', '#ffffff')
-          .style('stroke', '#ffffff')
-          .style('stroke-width', strokeWidth)
-          .style('stroke-linejoin', 'round')
-          .style('opacity', 1);
-      }
     }
 
     function renderControls() {
@@ -297,19 +331,19 @@ export function createRenderer(data: Data[]): Renderer {
       .attr('x', x(0) + 1)
       .attr('width', (d: Data) => Math.abs(x(d.value) - x(0) - 1))
       .attr('y', () => y(topN + 1) + 5)
-      .attr('height', y(1) - y(0) - barPadding)
+      .attr('height', barHeight)
       .style('fill', (d: Data) => d.color)
       .transition()
       .duration(tickDuration)
       .ease(d3.easeLinear)
-      .attr('y', (d: Data) => y(d.rank as number) + 5);
+      .attr('y', barY);
 
     bars
       .transition()
       .duration(tickDuration)
       .ease(d3.easeLinear)
       .attr('width', (d: Data) => Math.abs(x(d.value) - x(0) - 1))
-      .attr('y', (d: Data) => y(d.rank as number) + 5);
+      .attr('y', barY);
 
     bars
       .exit()
@@ -329,20 +363,20 @@ export function createRenderer(data: Data[]): Renderer {
       .append('text')
       .attr('class', 'label')
       .attr('x', labelX)
-      .attr('y', () => y(topN + 1) + 5 + (y(1) - y(0)) / 2)
+      .attr('y', () => y(topN + 1) + 5 + barHalfHeight)
       .style('text-anchor', 'end')
       .html((d: Data) => d.name)
       .transition()
       .duration(tickDuration)
       .ease(d3.easeLinear)
-      .attr('y', (d: Data) => y(d.rank as number) + 5 + (y(1) - y(0)) / 2 + 1);
+      .attr('y', (d: Data) => barY(d) + barHalfHeight);
 
     labels
       .transition()
       .duration(tickDuration)
       .ease(d3.easeLinear)
       .attr('x', labelX)
-      .attr('y', (d: Data) => y(d.rank as number) + 5 + (y(1) - y(0)) / 2 + 1);
+      .attr('y', (d: Data) => barY(d) + barHalfHeight);
 
     labels
       .exit()
@@ -367,14 +401,14 @@ export function createRenderer(data: Data[]): Renderer {
       .transition()
       .duration(tickDuration)
       .ease(d3.easeLinear)
-      .attr('y', (d: Data) => y(d.rank as number) + 5 + (y(1) - y(0)) / 2 + 1);
+      .attr('y', (d: Data) => barY(d) + barHalfHeight);
 
     valueLabels
       .transition()
       .duration(tickDuration)
       .ease(d3.easeLinear)
       .attr('x', (d: Data) => x(d.value) + 5)
-      .attr('y', (d: Data) => y(d.rank as number) + 5 + (y(1) - y(0)) / 2 + 1)
+      .attr('y', (d: Data) => barY(d) + barHalfHeight)
       .tween('text', function (d: Data) {
         const i = d3.interpolateRound(d.lastValue as number, d.value);
         return function (t: number) {
@@ -391,11 +425,65 @@ export function createRenderer(data: Data[]): Renderer {
       .attr('y', () => y(topN + 1) + 5)
       .remove();
 
+    if (store.getState().options.showIcons) {
+      const iconPatterns = defs.selectAll('.svgpattern').data(dateSlice, (d: Data) => d.name);
+
+      iconPatterns
+        .enter()
+        .append('svg:pattern')
+        .attr('class', 'svgpattern')
+        .attr('id', getIconID)
+        .attr('width', iconSize)
+        .attr('height', iconSize)
+        .append('svg:image')
+        .attr('xlink:href', (d: Data) => d.icon)
+        .attr('width', iconSize)
+        .attr('height', iconSize)
+        .style('z-index', '99')
+        .attr('x', 0)
+        .attr('y', 0);
+
+      iconPatterns.exit().remove();
+
+      const icons = svg //
+        .selectAll('circle')
+        .data(dateSlice, (d: Data) => d.name);
+
+      icons
+        .enter()
+        .append('circle')
+        .attr('cx', (d: Data) => x(d.value) - iconSize / 2 - labelPadding)
+        .attr('cy', () => y(topN + 1) + iconSize + barHalfHeight)
+        .attr('r', iconSize / 2)
+        .style('z-index', '99')
+        .style('fill', 'transparent')
+        .style('fill', (d: Data) => `url(#${getIconID(d)})`)
+        .transition()
+        .duration(tickDuration)
+        .ease(d3.easeLinear)
+        .attr('cy', (d: Data) => y(d.rank as number) + barHalfHeight);
+
+      icons
+        .transition()
+        .duration(tickDuration)
+        .ease(d3.easeLinear)
+        .attr('cx', (d: Data) => x(d.value) - iconSize / 2 - labelPadding)
+        .attr('cy', (d: Data) => y(d.rank as number) + barHalfHeight);
+
+      icons
+        .exit()
+        .transition()
+        .duration(tickDuration)
+        .ease(d3.easeLinear)
+        .attr('cx', (d: Data) => x(d.value) - iconSize / 2 - labelPadding)
+        .attr('cy', () => y(topN + 1) + iconSize + barHalfHeight)
+        .remove();
+    }
+
     titleText.html(getText(title, TotalDateSlice));
     subTitleText.html(getText(subTitle, TotalDateSlice));
     captionText.html(getText(caption, TotalDateSlice));
-    dateCounterText.html(getText(dateCounter, TotalDateSlice, true));
-
+    dateCounterText.html(getText(dateCounter, TotalDateSlice, true)).call(halo, 10);
     updateControls();
   }
 
@@ -459,6 +547,23 @@ export function createRenderer(data: Data[]): Renderer {
       getElement(elements.controls).style.visibility = 'unset';
       getElement(elements.overlay).style.display = 'none';
     }
+  }
+
+  function halo(text: any, strokeWidth: number) {
+    svg //
+      .selectAll('.halo')
+      .remove();
+
+    text
+      .select(function () {
+        return this.parentNode.insertBefore(this.cloneNode(true), this);
+      })
+      .classed('halo', true)
+      .style('fill', '#ffffff')
+      .style('stroke', '#ffffff')
+      .style('stroke-width', strokeWidth)
+      .style('stroke-linejoin', 'round')
+      .style('opacity', 1);
   }
 
   return {

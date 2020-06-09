@@ -11,6 +11,10 @@ export function getColor(d: Data, showGroups: boolean, colorSeed: string) {
   return d3.hsl(random(seed) * 360, 0.75, 0.75);
 }
 
+export function getIconID(d: Data) {
+  return 'icon-' + d.name.toLowerCase().split(' ').join('_');
+}
+
 export function zeroPad(n: string, w: number) {
   while (n.toString().length < w) {
     n = '0' + n;

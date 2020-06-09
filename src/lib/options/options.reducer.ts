@@ -18,14 +18,15 @@ const initialState: Options = {
   autorun: true,
   loop: false,
   injectStyles: true,
-  title: '18 years of Top Global Brands',
-  subTitle: 'Brand value, $m',
-  caption: 'Source: Interbrand',
+  title: '',
+  subTitle: '',
+  caption: '',
   dateCounter: 'MM/YYYY',
   labelsOnBars: true,
   labelsWidth: 100,
+  showIcons: false,
   showControls: 'all',
-  showOverlays: 'all',
+  showOverlays: 'none',
   inputHeight: '',
   inputWidth: '',
   minHeight: 300,
@@ -36,7 +37,6 @@ const initialState: Options = {
 
 export function optionsReducer(state = initialState, action: OptionsAction): Options {
   switch (action.type) {
-    // initial processing of input options
     case actionTypes.optionsLoaded:
       const startDate = action.payload.startDate ? getDateString(action.payload.startDate) : '';
       const endDate = action.payload.endDate ? getDateString(action.payload.endDate) : '';
@@ -51,7 +51,6 @@ export function optionsReducer(state = initialState, action: OptionsAction): Opt
         inputWidth,
       };
 
-    // change options from code e.g. change height and width on resize
     case actionTypes.changeOptions:
       return {
         ...state,

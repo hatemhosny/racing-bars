@@ -16,9 +16,6 @@
       position: fixed;
       top: 0; */
     }
-    body {
-      background-color: black;
-    }
   </style>
 </head>
 
@@ -39,12 +36,12 @@
       subTitle: 'Top 10 Surgical Procedures',
       dateCounter: 'MM/YYYY',
       caption: (date, dateSlice, allDates) =>
-        `Total: ${dateSlice.reduce((acc, curr) => acc + curr.value, 0)}`,
+        `Total: ${Math.round(dateSlice.reduce((acc, curr) => acc + curr.value, 0))}`,
       // startDate: '2009-4-1',
       // endDate: '2010-12-31',
       loop: false,
       tickDuration: 500,
-      // topN: 15,
+      // topN: 2,
       // height: "window*0.85",
       // width: 'window*0.5',
       // disableClickEvents: true,
@@ -52,13 +49,19 @@
       showControls: 'all',
       showOverlays: 'none',
       autorun: false,
-      // colorSeed: "asdfs",
-      // labelsOnBars: false,
+      showGroups: false,
+      colorSeed: 'asdf4s',
+      labelsOnBars: false,
+      showIcons: true,
       // labelsWidth: 250,
       // embedStyles: false,
     };
-    racingBars.loadData('data/procedures.json').then((data) => {
-      racingBars.race(data, options);
+    racingBars.loadData('data/population.csv', 'csv').then((data) => {
+      const processed = data.map((d) => ({
+        ...d,
+        icon: `https://www.countryflags.io/${d.code.toLowerCase()}/flat/64.png`,
+      }));
+      racingBars.race(processed, options);
     });
   </script>
 </body>

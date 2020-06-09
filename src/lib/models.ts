@@ -7,7 +7,13 @@ export interface Data {
   lastValue?: number;
   group?: string;
   color?: HSLColor;
+  icon?: string;
   rank?: number;
+}
+
+export interface WideData {
+  [key: string]: any;
+  date: string;
 }
 
 export interface Renderer {
