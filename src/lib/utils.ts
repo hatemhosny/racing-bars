@@ -7,25 +7,42 @@ import { ParamFunction } from './options';
 
 export function getColor(
   d: Data,
+  names: string[],
+  groups: string[],
   showGroups: boolean,
   colorSeed: string,
-  colorMap: { [key: string]: string },
+  colorMap: { [key: string]: string } | string[],
 ) {
   if (d.color) {
     return d.color;
   }
 
+  const useGroup = Boolean(d.group) && showGroups && groups.length > 0;
+  let values = useGroup ? groups : names;
+  if (colorSeed) {
+    values = shuffle(values, toNumber(colorSeed));
+  }
+  const currentValue = (useGroup ? d.group : d.name) as string;
+  let index = values.indexOf(currentValue);
+
   if (colorMap) {
-    if (colorMap[d.name]) {
-      return colorMap[d.name];
-    } else if (d.group && showGroups && colorMap[d.group]) {
-      return colorMap[d.group];
+    if (Array.isArray(colorMap)) {
+      while (index > colorMap.length - 1) {
+        index = index - colorMap.length;
+      }
+      return colorMap[index];
+    } else {
+      if (colorMap[currentValue]) {
+        return colorMap[currentValue];
+      }
     }
   }
 
-  const nameseed = d.group && showGroups ? d.group : d.name;
-  const seed = nameseed + colorSeed;
-  return d3.hsl(random(seed) * 360, 0.75, 0.75);
+  const negativeIfOdd = index % 2 === 0 ? 1 : -1;
+  const lumVariation = (random(currentValue) / 10) * negativeIfOdd;
+  const HueSpacing = 360 / (values.length + 1);
+  const hue = (values.indexOf(currentValue) + 1) * HueSpacing;
+  return d3.hsl(hue, 0.75, 0.75 + lumVariation);
 }
 
 export function getIconID(d: Data) {
@@ -39,17 +56,18 @@ export function zeroPad(n: string, w: number) {
   return n;
 }
 
-export function random(seedStr: string) {
-  function toNumbers(s: string) {
-    let nums = '';
-    for (let i = 0; i < s.length; i++) {
-      nums += zeroPad(String(s.charCodeAt(i)), 3);
-    }
-    return nums;
+function toNumber(s: string | number) {
+  s = String(s);
+  let nums = '';
+  for (let i = 0; i < s.length; i++) {
+    nums += zeroPad(String(s.charCodeAt(i)), 3);
   }
+  return +nums;
+}
 
-  const seed = toNumbers(seedStr);
-  const x = Math.sin(+seed) * 10000;
+export function random(InputSeed: string | number) {
+  const seed = toNumber(InputSeed);
+  const x = Math.sin(seed) * 10000;
   return x - Math.floor(x);
 }
 
@@ -59,6 +77,23 @@ export function randomString(prefix: string, n: number) {
     .map(() => Math.random().toString(36).substr(2))
     .join('');
   return prefix + rnd.slice(-n);
+}
+
+export function shuffle(arr: any[], seed: number) {
+  const array = [...arr];
+  let m = array.length;
+  let t;
+  let i;
+
+  while (m) {
+    i = Math.floor(random(seed) * m--);
+    t = array[m];
+    array[m] = array[i];
+    array[i] = t;
+    ++seed;
+  }
+
+  return array;
 }
 
 export function generateId(prefix = 'racingbars', n = 8) {

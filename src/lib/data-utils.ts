@@ -20,8 +20,9 @@ export function prepareData(rawData: Data[]) {
   }
 
   data = data.map((d) => {
+    const name = d.name ? d.name : '';
     const value = isNaN(+d.value) ? 0 : +d.value;
-    return { ...d, value };
+    return { ...d, name, value };
   });
 
   data = calculateLastValues(data);

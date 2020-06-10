@@ -27,6 +27,23 @@
   <script src="scripts/d3.min.js"></script>
   <script src="scripts/racing-bars.umd.js"></script>
   <script>
+    const colorMap = {
+      India: 'red',
+      'United States': 'blue',
+      // Asia: 'yellow',
+    };
+    const colorScale = [
+      '#636EFA',
+      '#EF553B',
+      '#00CC96',
+      '#AB63FA',
+      '#FFA15A',
+      '#19D3F3',
+      '#FF6692',
+      '#B6E880',
+      '#FF97FF',
+      '#FECB52',
+    ];
     const options = {
       selector: '#race',
       // dataShape: "wide",
@@ -36,7 +53,7 @@
       subTitle: 'Top 10 Surgical Procedures',
       dateCounter: 'MM/YYYY',
       caption: (date, dateSlice, allDates) =>
-        `Total: ${dateSlice.reduce((acc, curr) => acc + curr.value, 0)}`,
+        `Total: ${Math.round(dateSlice.reduce((acc, curr) => acc + curr.value, 0))}`,
       // startDate: '2009-4-1',
       // endDate: '2010-12-31',
       loop: false,
@@ -49,23 +66,19 @@
       showControls: 'all',
       showOverlays: 'none',
       autorun: false,
-      // colorSeed: "asdfs",
+      // colorSeed: 42,
       // labelsOnBars: false,
       // labelsWidth: 250,
       // embedStyles: false,
       // theme: 'dark',
-      // showGroups: false,
-      colorMap: {
-        India: 'red',
-        'United States': 'blue',
-        Asia: 'yellow',
-      },
+      showGroups: false,
+      colorMap: colorScale,
     };
 
     racingBars.loadData('data/population.csv', 'csv').then((data) => {
-      data = data.map((d) => {
-        return d.name === 'Indonesia' ? { ...d, color: 'teal' } : d;
-      });
+      // data = data.map((d) => {
+      //   return d.name === 'Indonesia' ? { ...d, color: 'teal' } : d;
+      // });
       racingBars.race(data, options);
     });
   </script>

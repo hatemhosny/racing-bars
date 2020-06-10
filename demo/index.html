@@ -46,7 +46,7 @@
       // width: 'window*0.5',
       // disableClickEvents: true,
       // disableKeyboardEvents: true,
-      showGroups: true,
+      showGroups: false,
       showControls: 'all',
       showOverlays: 'none',
       autorun: false,
@@ -56,7 +56,8 @@
       // embedStyles: false,
       // theme: 'dark',
     };
-    racingBars.loadData('data/population.csv', 'csv').then((data) => {
+    // racingBars.loadData('data/population.csv', 'csv').then((data) => {
+    racingBars.loadData('data/procedures.json').then((data) => {
       racingBars.race(data, options);
     });
   </script>

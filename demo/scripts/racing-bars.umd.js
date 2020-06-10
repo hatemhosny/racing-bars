@@ -402,22 +402,40 @@
 
   var store = createStore(rootReducer);
 
-  function getColor(d, showGroups, colorSeed, colorMap) {
+  function getColor(d, names, groups, showGroups, colorSeed, colorMap) {
     if (d.color) {
       return d.color;
     }
 
+    var useGroup = Boolean(d.group) && showGroups && groups.length > 0;
+    var values = useGroup ? groups : names;
+
+    if (colorSeed) {
+      values = shuffle(values, toNumber(colorSeed));
+    }
+
+    var currentValue = useGroup ? d.group : d.name;
+    var index = values.indexOf(currentValue);
+
     if (colorMap) {
-      if (colorMap[d.name]) {
-        return colorMap[d.name];
-      } else if (d.group && showGroups && colorMap[d.group]) {
-        return colorMap[d.group];
+      if (Array.isArray(colorMap)) {
+        while (index > colorMap.length - 1) {
+          index = index - colorMap.length;
+        }
+
+        return colorMap[index];
+      } else {
+        if (colorMap[currentValue]) {
+          return colorMap[currentValue];
+        }
       }
     }
 
-    var nameseed = d.group && showGroups ? d.group : d.name;
-    var seed = nameseed + colorSeed;
-    return d3$1.hsl(random(seed) * 360, 0.75, 0.75);
+    var negativeIfOdd = index % 2 === 0 ? 1 : -1;
+    var lumVariation = random(currentValue) / 10 * negativeIfOdd;
+    var HueSpacing = 360 / (values.length + 1);
+    var hue = (values.indexOf(currentValue) + 1) * HueSpacing;
+    return d3$1.hsl(hue, 0.75, 0.75 + lumVariation);
   }
   function getIconID(d) {
     return 'icon-' + d.name.toLowerCase().split(' ').join('_');
@@ -429,19 +447,21 @@
 
     return n;
   }
-  function random(seedStr) {
-    function toNumbers(s) {
-      var nums = '';
 
-      for (var i = 0; i < s.length; i++) {
-        nums += zeroPad(String(s.charCodeAt(i)), 3);
-      }
+  function toNumber(s) {
+    s = String(s);
+    var nums = '';
 
-      return nums;
+    for (var i = 0; i < s.length; i++) {
+      nums += zeroPad(String(s.charCodeAt(i)), 3);
     }
 
-    var seed = toNumbers(seedStr);
-    var x = Math.sin(+seed) * 10000;
+    return +nums;
+  }
+
+  function random(InputSeed) {
+    var seed = toNumber(InputSeed);
+    var x = Math.sin(seed) * 10000;
     return x - Math.floor(x);
   }
   function randomString(prefix, n) {
@@ -449,6 +469,22 @@
       return Math.random().toString(36).substr(2);
     }).join('');
     return prefix + rnd.slice(-n);
+  }
+  function shuffle(arr, seed) {
+    var array = [].concat(arr);
+    var m = array.length;
+    var t;
+    var i;
+
+    while (m) {
+      i = Math.floor(random(seed) * m--);
+      t = array[m];
+      array[m] = array[i];
+      array[i] = t;
+      ++seed;
+    }
+
+    return array;
   }
   function generateId(prefix, n) {
     if (prefix === void 0) {
@@ -676,8 +712,10 @@
     }
 
     data = data.map(function (d) {
+      var name = d.name ? d.name : '';
       var value = isNaN(+d.value) ? 0 : +d.value;
       return _extends(_extends({}, d), {}, {
+        name: name,
         value: value
       });
     });
@@ -828,6 +866,13 @@
     var barY;
     var height;
     var width;
+    var names = Array.from(new Set(data.map(function (d) {
+      return d.name;
+    }))).sort();
+    var groups = Array.from(new Set(data.map(function (d) {
+      return d.group;
+    }))).filter(Boolean).sort();
+    var showGroups = store.getState().options.showGroups;
 
     function renderInitalView() {
       var _store$getState$optio = store.getState().options,
@@ -858,10 +903,6 @@
       updateControls();
 
       function renderInitialFrame() {
-        var groups = Array.from(new Set(data.map(function (d) {
-          return d.group;
-        }))).filter(Boolean).sort();
-        var showGroups = store.getState().options.showGroups && groups.length > 0;
         var groupsArea = showGroups ? 40 : 0;
         var labelsArea = labelsOnBars ? 0 : labelsWidth;
         margin = {
@@ -899,7 +940,7 @@
           }).attr('y', 75).style('fill', function (d) {
             return getColor({
               group: d
-            }, true, colorSeed, colorMap);
+            }, names, groups, showGroups, colorSeed, colorMap);
           });
           svg.selectAll('text.group').data(groups).enter().append('text').attr('class', 'group').attr('x', function (_d, i) {
             return groupX(i) + 20;
@@ -919,7 +960,7 @@
         }).enter().append('rect').attr('class', 'bar').attr('x', x(0) + 1).attr('width', function (d) {
           return Math.abs(x(d.value) - x(0) - 1);
         }).attr('y', barY).attr('height', barHeight).style('fill', function (d) {
-          return getColor(d, showGroups, colorSeed, colorMap);
+          return getColor(d, names, groups, showGroups, colorSeed, colorMap);
         });
         svg.selectAll('text.label').data(dateSlice, function (d) {
           return d.name;
@@ -1032,7 +1073,7 @@
       }).attr('y', function () {
         return y(topN + 1) + 5;
       }).attr('height', barHeight).style('fill', function (d) {
-        return getColor(d, showGroups, colorSeed, colorMap);
+        return getColor(d, names, groups, showGroups, colorSeed, colorMap);
       }).transition().duration(tickDuration).ease(d3$1.easeLinear).attr('y', barY);
       bars.transition().duration(tickDuration).ease(d3$1.easeLinear).attr('width', function (d) {
         return Math.abs(x(d.value) - x(0) - 1);
