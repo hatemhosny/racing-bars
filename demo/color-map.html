@@ -46,7 +46,6 @@
       // width: 'window*0.5',
       // disableClickEvents: true,
       // disableKeyboardEvents: true,
-      showGroups: true,
       showControls: 'all',
       showOverlays: 'none',
       autorun: false,
@@ -55,8 +54,18 @@
       // labelsWidth: 250,
       // embedStyles: false,
       // theme: 'dark',
+      // showGroups: false,
+      colorMap: {
+        India: 'red',
+        'United States': 'blue',
+        Asia: 'yellow',
+      },
     };
+
     racingBars.loadData('data/population.csv', 'csv').then((data) => {
+      data = data.map((d) => {
+        return d.name === 'Indonesia' ? { ...d, color: 'teal' } : d;
+      });
       racingBars.race(data, options);
     });
   </script>
