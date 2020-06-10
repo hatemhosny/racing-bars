@@ -25,6 +25,7 @@ export function createRenderer(data: Data[]): Renderer {
   const titlePadding = 5;
   let barPadding: number;
   let labelPadding: number;
+  let barWidth: (d: Data) => number;
   let barHeight: number;
   let barHalfHeight: number;
   let defs: any;
@@ -38,6 +39,7 @@ export function createRenderer(data: Data[]): Renderer {
   let barY: (d: Data) => number;
   let height: number;
   let width: number;
+  let maxValue: number;
 
   const names = Array.from(new Set(data.map((d) => d.name))).sort() as string[];
   const groups = Array.from(new Set(data.map((d) => d.group)))
@@ -62,6 +64,7 @@ export function createRenderer(data: Data[]): Renderer {
       topN,
       colorSeed,
       colorMap,
+      fixedMax,
     } = store.getState().options;
 
     const TotalDateSlice = getDateSlice(data, store.getState().ticker.currentDate);
@@ -89,9 +92,13 @@ export function createRenderer(data: Data[]): Renderer {
         left: 0 + labelsArea,
       };
 
+      maxValue = fixedMax
+        ? data.map((d) => d.value).reduce((max, val) => (max > val ? max : val), 0)
+        : (d3.max(dateSlice, (d: Data) => d.value) as number);
+
       x = d3
         .scaleLinear()
-        .domain([0, d3.max(dateSlice, (d: Data) => d.value) as number])
+        .domain([0, maxValue])
         .range([margin.left, width - margin.right - 65]);
 
       y = d3
@@ -101,6 +108,7 @@ export function createRenderer(data: Data[]): Renderer {
 
       barPadding = (height - (margin.bottom + margin.top)) / (topN * 5);
       labelPadding = 8;
+      barWidth = (d: Data) => Math.abs(x(d.value) - x(0) - 1);
       barHeight = y(1) - y(0) - barPadding;
       barHalfHeight = (y(1) - y(0)) / 2 + 1;
       barY = (d: Data) => y(d.rank as number) + 5;
@@ -182,7 +190,7 @@ export function createRenderer(data: Data[]): Renderer {
         .append('rect')
         .attr('class', 'bar')
         .attr('x', x(0) + 1)
-        .attr('width', (d: Data) => Math.abs(x(d.value) - x(0) - 1))
+        .attr('width', barWidth)
         .attr('y', barY)
         .attr('height', barHeight)
         .style('fill', (d: Data) => getColor(d, names, groups, showGroups, colorSeed, colorMap));
@@ -323,18 +331,21 @@ export function createRenderer(data: Data[]): Renderer {
       showGroups,
       colorSeed,
       colorMap,
+      fixedMax,
     } = store.getState().options;
     const TotalDateSlice = getDateSlice(data, store.getState().ticker.currentDate);
     const dateSlice = TotalDateSlice.slice(0, store.getState().options.topN);
 
-    x.domain([0, d3.max(dateSlice, (d: Data) => d.value) as number]);
+    if (!fixedMax) {
+      x.domain([0, d3.max(dateSlice, (d: Data) => d.value) as number]);
 
-    svg //
-      .select('.xAxis')
-      .transition()
-      .duration(tickDuration)
-      .ease(d3.easeLinear)
-      .call(xAxis);
+      svg //
+        .select('.xAxis')
+        .transition()
+        .duration(tickDuration)
+        .ease(d3.easeLinear)
+        .call(xAxis);
+    }
 
     const bars = svg //
       .selectAll('.bar')
@@ -345,7 +356,7 @@ export function createRenderer(data: Data[]): Renderer {
       .append('rect')
       .attr('class', (d: Data) => `bar ${d.name.replace(/\s/g, '_')}`)
       .attr('x', x(0) + 1)
-      .attr('width', (d: Data) => Math.abs(x(d.value) - x(0) - 1))
+      .attr('width', barWidth)
       .attr('y', () => y(topN + 1) + 5)
       .attr('height', barHeight)
       .style('fill', (d: Data) => getColor(d, names, groups, showGroups, colorSeed, colorMap))

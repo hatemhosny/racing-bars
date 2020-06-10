@@ -661,7 +661,8 @@
     height: '',
     width: '',
     theme: 'light',
-    colorMap: {}
+    colorMap: {},
+    fixedMax: false
   };
   function optionsReducer(state, action) {
     if (state === void 0) {
@@ -853,6 +854,7 @@
     var titlePadding = 5;
     var barPadding;
     var labelPadding;
+    var barWidth;
     var barHeight;
     var barHalfHeight;
     var defs;
@@ -866,6 +868,7 @@
     var barY;
     var height;
     var width;
+    var maxValue;
     var names = Array.from(new Set(data.map(function (d) {
       return d.name;
     }))).sort();
@@ -890,7 +893,8 @@
           minWidth = _store$getState$optio.minWidth,
           topN = _store$getState$optio.topN,
           colorSeed = _store$getState$optio.colorSeed,
-          colorMap = _store$getState$optio.colorMap;
+          colorMap = _store$getState$optio.colorMap,
+          fixedMax = _store$getState$optio.fixedMax;
       var TotalDateSlice = getDateSlice(data, store.getState().ticker.currentDate);
       var dateSlice = TotalDateSlice.slice(0, store.getState().options.topN);
       var element = document.querySelector(selector);
@@ -911,12 +915,22 @@
           bottom: 5,
           left: 0 + labelsArea
         };
-        x = d3$1.scaleLinear().domain([0, d3$1.max(dateSlice, function (d) {
+        maxValue = fixedMax ? data.map(function (d) {
           return d.value;
-        })]).range([margin.left, width - margin.right - 65]);
+        }).reduce(function (max, val) {
+          return max > val ? max : val;
+        }, 0) : d3$1.max(dateSlice, function (d) {
+          return d.value;
+        });
+        x = d3$1.scaleLinear().domain([0, maxValue]).range([margin.left, width - margin.right - 65]);
         y = d3$1.scaleLinear().domain([topN, 0]).range([height - margin.bottom, margin.top]);
         barPadding = (height - (margin.bottom + margin.top)) / (topN * 5);
         labelPadding = 8;
+
+        barWidth = function barWidth(d) {
+          return Math.abs(x(d.value) - x(0) - 1);
+        };
+
         barHeight = y(1) - y(0) - barPadding;
         barHalfHeight = (y(1) - y(0)) / 2 + 1;
 
@@ -957,9 +971,7 @@
         });
         svg.selectAll('rect.bar').data(dateSlice, function (d) {
           return d.name;
-        }).enter().append('rect').attr('class', 'bar').attr('x', x(0) + 1).attr('width', function (d) {
-          return Math.abs(x(d.value) - x(0) - 1);
-        }).attr('y', barY).attr('height', barHeight).style('fill', function (d) {
+        }).enter().append('rect').attr('class', 'bar').attr('x', x(0) + 1).attr('width', barWidth).attr('y', barY).attr('height', barHeight).style('fill', function (d) {
           return getColor(d, names, groups, showGroups, colorSeed, colorMap);
         });
         svg.selectAll('text.label').data(dateSlice, function (d) {
@@ -1056,21 +1068,24 @@
           dateCounter = _store$getState$optio2.dateCounter,
           showGroups = _store$getState$optio2.showGroups,
           colorSeed = _store$getState$optio2.colorSeed,
-          colorMap = _store$getState$optio2.colorMap;
+          colorMap = _store$getState$optio2.colorMap,
+          fixedMax = _store$getState$optio2.fixedMax;
       var TotalDateSlice = getDateSlice(data, store.getState().ticker.currentDate);
       var dateSlice = TotalDateSlice.slice(0, store.getState().options.topN);
-      x.domain([0, d3$1.max(dateSlice, function (d) {
-        return d.value;
-      })]);
-      svg.select('.xAxis').transition().duration(tickDuration).ease(d3$1.easeLinear).call(xAxis);
+
+      if (!fixedMax) {
+        x.domain([0, d3$1.max(dateSlice, function (d) {
+          return d.value;
+        })]);
+        svg.select('.xAxis').transition().duration(tickDuration).ease(d3$1.easeLinear).call(xAxis);
+      }
+
       var bars = svg.selectAll('.bar').data(dateSlice, function (d) {
         return d.name;
       });
       bars.enter().append('rect').attr('class', function (d) {
         return "bar " + d.name.replace(/\s/g, '_');
-      }).attr('x', x(0) + 1).attr('width', function (d) {
-        return Math.abs(x(d.value) - x(0) - 1);
-      }).attr('y', function () {
+      }).attr('x', x(0) + 1).attr('width', barWidth).attr('y', function () {
         return y(topN + 1) + 5;
       }).attr('height', barHeight).style('fill', function (d) {
         return getColor(d, names, groups, showGroups, colorSeed, colorMap);
