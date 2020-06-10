@@ -39,6 +39,12 @@ export function createRenderer(data: Data[]): Renderer {
   let height: number;
   let width: number;
 
+  const names = Array.from(new Set(data.map((d) => d.name))).sort() as string[];
+  const groups = Array.from(new Set(data.map((d) => d.group)))
+    .filter(Boolean)
+    .sort() as string[];
+  const showGroups = store.getState().options.showGroups;
+
   function renderInitalView() {
     const {
       selector,
@@ -54,6 +60,8 @@ export function createRenderer(data: Data[]): Renderer {
       minHeight,
       minWidth,
       topN,
+      colorSeed,
+      colorMap,
     } = store.getState().options;
 
     const TotalDateSlice = getDateSlice(data, store.getState().ticker.currentDate);
@@ -70,10 +78,6 @@ export function createRenderer(data: Data[]): Renderer {
     updateControls();
 
     function renderInitialFrame() {
-      const groups = Array.from(new Set(data.map((d) => d.group)))
-        .filter(Boolean)
-        .sort() as string[];
-      const showGroups = store.getState().options.showGroups && groups.length > 0;
       const groupsArea = showGroups ? 40 : 0;
 
       const labelsArea = labelsOnBars ? 0 : labelsWidth;
@@ -143,7 +147,7 @@ export function createRenderer(data: Data[]): Renderer {
           .attr('x', (_d: string, i: number) => groupX(i))
           .attr('y', 75)
           .style('fill', (d: string) =>
-            getColor({ group: d } as Data, true, store.getState().options.colorSeed).toString(),
+            getColor({ group: d } as Data, names, groups, showGroups, colorSeed, colorMap),
           );
 
         svg
@@ -181,7 +185,7 @@ export function createRenderer(data: Data[]): Renderer {
         .attr('width', (d: Data) => Math.abs(x(d.value) - x(0) - 1))
         .attr('y', barY)
         .attr('height', barHeight)
-        .style('fill', (d: Data) => d.color);
+        .style('fill', (d: Data) => getColor(d, names, groups, showGroups, colorSeed, colorMap));
 
       svg
         .selectAll('text.label')
@@ -309,7 +313,17 @@ export function createRenderer(data: Data[]): Renderer {
       return;
     }
 
-    const { tickDuration, topN, title, subTitle, caption, dateCounter } = store.getState().options;
+    const {
+      tickDuration,
+      topN,
+      title,
+      subTitle,
+      caption,
+      dateCounter,
+      showGroups,
+      colorSeed,
+      colorMap,
+    } = store.getState().options;
     const TotalDateSlice = getDateSlice(data, store.getState().ticker.currentDate);
     const dateSlice = TotalDateSlice.slice(0, store.getState().options.topN);
 
@@ -334,7 +348,7 @@ export function createRenderer(data: Data[]): Renderer {
       .attr('width', (d: Data) => Math.abs(x(d.value) - x(0) - 1))
       .attr('y', () => y(topN + 1) + 5)
       .attr('height', barHeight)
-      .style('fill', (d: Data) => d.color)
+      .style('fill', (d: Data) => getColor(d, names, groups, showGroups, colorSeed, colorMap))
       .transition()
       .duration(tickDuration)
       .ease(d3.easeLinear)

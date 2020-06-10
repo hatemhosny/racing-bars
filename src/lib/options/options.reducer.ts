@@ -34,6 +34,7 @@ const initialState: Options = {
   height: '',
   width: '',
   theme: 'light',
+  colorMap: {},
 };
 
 export function optionsReducer(state = initialState, action: OptionsAction): Options {

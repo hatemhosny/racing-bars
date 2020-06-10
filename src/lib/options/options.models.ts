@@ -41,6 +41,7 @@ export interface Options {
   autorun: boolean;
   injectStyles: boolean;
   theme: string;
+  colorMap: { [key: string]: string };
 }
 
 export type ParamFunction = (currentDate: string, dateSlice: Data[], allDates: string[]) => string;

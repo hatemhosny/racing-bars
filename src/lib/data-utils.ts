@@ -1,6 +1,5 @@
 import { formatDate, getDateString, getDates } from './dates';
 import { Data, WideData } from './models';
-import { getColor } from './utils';
 import { store } from './store';
 import { Options } from './options';
 
@@ -21,9 +20,9 @@ export function prepareData(rawData: Data[]) {
   }
 
   data = data.map((d) => {
+    const name = d.name ? d.name : '';
     const value = isNaN(+d.value) ? 0 : +d.value;
-    const color = getColor(d, options.showGroups, options.colorSeed);
-    return { ...d, value, color };
+    return { ...d, name, value };
   });
 
   data = calculateLastValues(data);
