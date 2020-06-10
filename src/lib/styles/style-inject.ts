@@ -10,7 +10,7 @@ export function styleInject(selector: string, insertAt = 'top') {
   }
 
   // replace with selector
-  css = css.split('#selector').join(selector);
+  css = css.split('__selector__').join(selector);
 
   const head = document.head || document.getElementsByTagName('head')[0];
   const style = document.createElement('style') as HTMLStyleElement | any;

@@ -1,60 +1,60 @@
-#selector text {
+__selector__ text {
   font-size: 16px;
   font-family: Open Sans, sans-serif;
 }
 
-#selector text.title {
+__selector__ text.title {
   font-size: 24px;
   font-weight: 500;
 }
 
-#selector text.subTitle {
+__selector__ text.subTitle {
   font-weight: 500;
 }
 
-#selector text.caption {
+__selector__ text.caption {
   font-weight: 400;
   font-size: 24px;
 }
 
-#selector text.label {
+__selector__ text.label {
   font-weight: 600;
 }
 
-#selector text.valueLabel {
+__selector__ text.valueLabel {
   font-weight: 300;
 }
 
-#selector text.dateCounterText {
+__selector__ text.dateCounterText {
   font-size: 64px;
   font-weight: 700;
 }
 
-#selector .xAxis .tick:nth-child(2) text {
+__selector__ .xAxis .tick:nth-child(2) text {
   text-anchor: start;
 }
 
-#selector .tick line {
+__selector__ .tick line {
   shape-rendering: CrispEdges;
 }
 
-#selector path.domain {
+__selector__ path.domain {
   display: none;
 }
 
-#selector {
+__selector__ {
   position: relative;
 }
 
-#selector .controls {
+__selector__ .controls {
   /*  width and right are set dynamically in renderer.ts */
   position: absolute;
   top: 0;
   display: flex;
 }
 
-#selector .controls div,
-#selector .overlay div {
+__selector__ .controls div,
+__selector__ .overlay div {
   cursor: pointer;
   font-size: 24px;
   font-weight: 700;
@@ -67,13 +67,13 @@
   text-align: center;
 }
 
-#selector .controls svg {
+__selector__ .controls svg {
   margin: 5px auto;
   width: 28px;
   height: 28px;
 }
 
-#selector .overlay {
+__selector__ .overlay {
   position: absolute;
   top: 0;
   left: 0;
@@ -83,7 +83,7 @@
   align-items: center;
   justify-content: center;
 }
-#selector .overlay div {
+__selector__ .overlay div {
   position: relative;
   display: flex;
   align-items: center;
@@ -94,7 +94,7 @@
   -webkit-border-radius: 100px;
   border-radius: 100px;
 }
-#selector .overlay svg {
+__selector__ .overlay svg {
   height: 50%;
   width: 50%;
 }
