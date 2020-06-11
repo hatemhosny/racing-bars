@@ -2,8 +2,9 @@ import * as d3 from './d3';
 
 import { icons } from './icons';
 import { elements } from './elements';
-import { Data, Renderer } from './models';
-import { store } from './store';
+import { Renderer } from './models';
+import { Data } from './data';
+import { store, actions } from './store';
 import {
   getHeight,
   getWidth,
@@ -41,10 +42,7 @@ export function createRenderer(data: Data[]): Renderer {
   let width: number;
   let maxValue: number;
 
-  const names = Array.from(new Set(data.map((d) => d.name))).sort() as string[];
-  const groups = Array.from(new Set(data.map((d) => d.group)))
-    .filter(Boolean)
-    .sort() as string[];
+  const groups = store.getState().data.groups;
   const showGroups = store.getState().options.showGroups;
 
   function renderInitalView() {
@@ -62,8 +60,6 @@ export function createRenderer(data: Data[]): Renderer {
       minHeight,
       minWidth,
       topN,
-      colorSeed,
-      colorMap,
       fixedScale,
     } = store.getState().options;
 
@@ -82,7 +78,7 @@ export function createRenderer(data: Data[]): Renderer {
 
     function renderInitialFrame() {
       const labelsArea = labelsOnBars ? 0 : labelsWidth;
-      let groupsArea = showGroups ? 40 : 0;
+      const groupsArea = showGroups ? 40 : 0;
 
       margin = {
         top: 80 + groupsArea,
@@ -119,7 +115,13 @@ export function createRenderer(data: Data[]): Renderer {
           .enter()
           .append('g')
           .attr('class', 'legend-wrapper')
-          .style('cursor', 'pointer');
+          .style('cursor', 'pointer')
+          .style('opacity', (d: string) =>
+            store.getState().data.groupFilter.includes(d) ? 0.3 : 1,
+          )
+          .on('click', (d: string) => {
+            store.dispatch(actions.data.toggleFilter(d));
+          });
 
         legends
           .append('rect')
@@ -127,9 +129,7 @@ export function createRenderer(data: Data[]): Renderer {
           .attr('width', 10)
           .attr('height', 10)
           .attr('y', 75)
-          .style('fill', (d: string) =>
-            getColor({ group: d } as Data, names, groups, showGroups, colorSeed, colorMap),
-          );
+          .style('fill', (d: string) => getColor({ group: d } as Data));
 
         legends
           .append('text')
@@ -205,7 +205,7 @@ export function createRenderer(data: Data[]): Renderer {
         .attr('width', barWidth)
         .attr('y', barY)
         .attr('height', barHeight)
-        .style('fill', (d: Data) => getColor(d, names, groups, showGroups, colorSeed, colorMap));
+        .style('fill', (d: Data) => getColor(d));
 
       svg
         .selectAll('text.label')
@@ -340,13 +340,16 @@ export function createRenderer(data: Data[]): Renderer {
       subTitle,
       caption,
       dateCounter,
-      showGroups,
-      colorSeed,
-      colorMap,
       fixedScale,
     } = store.getState().options;
-    const TotalDateSlice = getDateSlice(data, store.getState().ticker.currentDate);
-    const dateSlice = TotalDateSlice.slice(0, store.getState().options.topN);
+    const CompleteDateSlice = getDateSlice(data, store.getState().ticker.currentDate);
+    const dateSlice = CompleteDateSlice.slice(0, store.getState().options.topN);
+
+    if (showGroups) {
+      svg
+        .selectAll('.legend-wrapper')
+        .style('opacity', (d: string) => (store.getState().data.groupFilter.includes(d) ? 0.3 : 1));
+    }
 
     if (!fixedScale) {
       x.domain([0, d3.max(dateSlice, (d: Data) => d.value) as number]);
@@ -371,7 +374,7 @@ export function createRenderer(data: Data[]): Renderer {
       .attr('width', barWidth)
       .attr('y', () => y(topN + 1) + 5)
       .attr('height', barHeight)
-      .style('fill', (d: Data) => getColor(d, names, groups, showGroups, colorSeed, colorMap))
+      .style('fill', (d: Data) => getColor(d))
       .transition()
       .duration(tickDuration)
       .ease(d3.easeLinear)
@@ -519,10 +522,10 @@ export function createRenderer(data: Data[]): Renderer {
         .remove();
     }
 
-    titleText.html(getText(title, TotalDateSlice));
-    subTitleText.html(getText(subTitle, TotalDateSlice));
-    captionText.html(getText(caption, TotalDateSlice));
-    dateCounterText.html(getText(dateCounter, TotalDateSlice, true)).call(halo);
+    titleText.html(getText(title, CompleteDateSlice));
+    subTitleText.html(getText(subTitle, CompleteDateSlice));
+    captionText.html(getText(caption, CompleteDateSlice));
+    dateCounterText.html(getText(dateCounter, CompleteDateSlice, true)).call(halo);
     updateControls();
   }
 

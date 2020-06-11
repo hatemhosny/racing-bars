@@ -1,5 +1,6 @@
 import { Options } from '../options';
 import { TickerState } from '../ticker';
+import { DataState } from '../data';
 
 export interface Action {
   type: string;
@@ -10,6 +11,7 @@ export interface Action {
 export type Reducer = (state: any, action: Action) => any;
 
 export interface State {
+  data: DataState;
   options: Options;
   ticker: TickerState;
 }

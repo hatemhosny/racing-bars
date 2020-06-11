@@ -1,5 +1,5 @@
 import { Action } from '../store';
-import { Data } from '../models';
+import { Data } from '../data';
 
 export interface OptionsAction extends Action {
   payload: Options | RequiredOptions;

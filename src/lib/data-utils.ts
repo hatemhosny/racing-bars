@@ -1,6 +1,6 @@
 import { formatDate, getDateString, getDates } from './dates';
-import { Data, WideData } from './models';
-import { store } from './store';
+import { Data, WideData } from './data';
+import { store, actions } from './store';
 import { Options } from './options';
 
 export function prepareData(rawData: Data[]) {
@@ -27,7 +27,20 @@ export function prepareData(rawData: Data[]) {
 
   data = calculateLastValues(data);
 
+  loadDataCollectionsToState(data);
+
   return data;
+}
+
+function loadDataCollectionsToState(data: Data[]) {
+  const names = Array.from(new Set(data.map((d) => d.name))).sort() as string[];
+  const groups = Array.from(new Set(data.map((d) => d.group)))
+    .filter(Boolean)
+    .sort() as string[];
+  const dates = getDates(data);
+  const formattedDates = dates.map((date: string) => formatDate(date));
+
+  store.dispatch(actions.data.dataLoaded({ names, groups, dates, formattedDates }));
 }
 
 function calculateLastValues(data: Data[]) {
@@ -120,6 +133,7 @@ function fillGaps(data: Data[], period: Options['fillDateGaps']) {
 export function getDateSlice(data: Data[], date: string) {
   return data
     .filter((d) => d.date === date && !isNaN(d.value))
+    .filter((d) => (!!d.group ? !store.getState().data.groupFilter.includes(d.group) : true))
     .sort((a, b) => b.value - a.value)
     .map((d, i) => ({ ...d, rank: i }));
 }

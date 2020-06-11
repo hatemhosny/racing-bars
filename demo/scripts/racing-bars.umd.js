@@ -98,6 +98,120 @@
   }
 
   var actionTypes$1 = {
+    dataLoaded: 'data/loaded',
+    addFilter: 'data/addFilter',
+    removeFilter: 'data/removeFilter',
+    toggleFilter: 'data/toggleFilter',
+    resetFilters: 'data/resetFilters'
+  };
+  var dataLoaded = function dataLoaded(dataCollections) {
+    return {
+      type: actionTypes$1.dataLoaded,
+      payload: dataCollections
+    };
+  };
+  var addFilter = function addFilter(group) {
+    return {
+      type: actionTypes$1.addFilter,
+      payload: group
+    };
+  };
+  var removeFilter = function removeFilter(group) {
+    return {
+      type: actionTypes$1.removeFilter,
+      payload: group
+    };
+  };
+  var toggleFilter = function toggleFilter(group) {
+    return {
+      type: actionTypes$1.toggleFilter,
+      payload: group
+    };
+  };
+  var resetFilters = function resetFilters() {
+    return {
+      type: actionTypes$1.resetFilters
+    };
+  };
+
+  var initialState = {
+    names: [],
+    groups: [],
+    dates: [],
+    formattedDates: [],
+    groupFilter: []
+  };
+  function dataReducer(state, action) {
+    if (state === void 0) {
+      state = initialState;
+    }
+
+    switch (action.type) {
+      case actionTypes$1.dataLoaded:
+        {
+          var collections = action.payload;
+          return _extends(_extends({}, state), {}, {
+            names: [].concat(collections.names),
+            groups: [].concat(collections.groups),
+            dates: [].concat(collections.dates),
+            formattedDates: [].concat(collections.formattedDates)
+          });
+        }
+
+      case actionTypes$1.addFilter:
+        return _extends(_extends({}, state), {}, {
+          groupFilter: addFilter$1(state.groupFilter, action.payload)
+        });
+
+      case actionTypes$1.removeFilter:
+        return _extends(_extends({}, state), {}, {
+          groupFilter: removeFilter$1(state.groupFilter, action.payload)
+        });
+
+      case actionTypes$1.toggleFilter:
+        return _extends(_extends({}, state), {}, {
+          groupFilter: toggleFilter$1(state.groupFilter, action.payload)
+        });
+
+      default:
+        return state;
+    }
+  }
+
+  function addFilter$1(filters, group) {
+    var arr = [].concat(filters);
+
+    if (!arr.includes(group)) {
+      arr.push(group);
+    }
+
+    return arr;
+  }
+
+  function removeFilter$1(filters, group) {
+    return filters.filter(function (item) {
+      return item !== group;
+    });
+  }
+
+  function toggleFilter$1(filters, group) {
+    return filters.includes(group) ? removeFilter$1(filters, group) : addFilter$1(filters, group);
+  }
+
+
+
+  var data = {
+    __proto__: null,
+    actionTypes: actionTypes$1,
+    dataLoaded: dataLoaded,
+    addFilter: addFilter,
+    removeFilter: removeFilter,
+    toggleFilter: toggleFilter,
+    resetFilters: resetFilters,
+    dataReducer: dataReducer
+  };
+
+  var actionTypes$2 = {
     initialize: 'ticker/initialize',
     updateDate: 'ticker/updateDate',
     setRunning: 'ticker/setRunning',
@@ -108,30 +222,30 @@
   };
   var initialize = function initialize(dates) {
     return {
-      type: actionTypes$1.initialize,
+      type: actionTypes$2.initialize,
       payload: dates
     };
   };
   var updateDate = function updateDate(currentDate) {
     return {
-      type: actionTypes$1.updateDate,
+      type: actionTypes$2.updateDate,
       payload: currentDate
     };
   };
   var setRunning = function setRunning(running) {
     return {
-      type: actionTypes$1.setRunning,
+      type: actionTypes$2.setRunning,
       payload: running
     };
   };
   var setFirst = function setFirst() {
     return {
-      type: actionTypes$1.setFirst
+      type: actionTypes$2.setFirst
     };
   };
   var setLast = function setLast() {
     return {
-      type: actionTypes$1.setLast
+      type: actionTypes$2.setLast
     };
   };
   var inc = function inc(value) {
@@ -140,7 +254,7 @@
     }
 
     return {
-      type: actionTypes$1.inc,
+      type: actionTypes$2.inc,
       payload: value
     };
   };
@@ -150,12 +264,12 @@
     }
 
     return {
-      type: actionTypes$1.dec,
+      type: actionTypes$2.dec,
       payload: value
     };
   };
 
-  var initialState = {
+  var initialState$1 = {
     isRunning: false,
     currentDate: '',
     isFirstDate: true,
@@ -164,11 +278,11 @@
   };
   function tickerReducer(state, action) {
     if (state === void 0) {
-      state = initialState;
+      state = initialState$1;
     }
 
     switch (action.type) {
-      case actionTypes$1.initialize:
+      case actionTypes$2.initialize:
         {
           var dates = action.payload;
           return _extends(_extends({}, state), {}, {
@@ -180,7 +294,7 @@
           });
         }
 
-      case actionTypes$1.updateDate:
+      case actionTypes$2.updateDate:
         {
           var currentDate = action.payload;
 
@@ -195,14 +309,14 @@
           });
         }
 
-      case actionTypes$1.setRunning:
+      case actionTypes$2.setRunning:
         {
           return _extends(_extends({}, state), {}, {
             isRunning: action.payload
           });
         }
 
-      case actionTypes$1.setFirst:
+      case actionTypes$2.setFirst:
         {
           return _extends(_extends({}, state), {}, {
             currentDate: state.dates[0],
@@ -211,7 +325,7 @@
           });
         }
 
-      case actionTypes$1.setLast:
+      case actionTypes$2.setLast:
         {
           return _extends(_extends({}, state), {}, {
             currentDate: state.dates[state.dates.length - 1],
@@ -220,7 +334,7 @@
           });
         }
 
-      case actionTypes$1.inc:
+      case actionTypes$2.inc:
         {
           var currentIndex = state.dates.indexOf(state.currentDate);
           var lastIndex = state.dates.length - 1;
@@ -233,7 +347,7 @@
           });
         }
 
-      case actionTypes$1.dec:
+      case actionTypes$2.dec:
         {
           var _currentIndex = state.dates.indexOf(state.currentDate);
 
@@ -253,8 +367,8 @@
     }
   }
 
-  function createTicker(dates) {
-    store.dispatch(actions.ticker.initialize(dates));
+  function createTicker() {
+    store.dispatch(actions.ticker.initialize(store.getState().data.dates));
     var ticker;
 
     function start() {
@@ -330,7 +444,7 @@
 
   var ticker = {
     __proto__: null,
-    actionTypes: actionTypes$1,
+    actionTypes: actionTypes$2,
     initialize: initialize,
     updateDate: updateDate,
     setRunning: setRunning,
@@ -343,12 +457,14 @@
   };
 
   var actions = {
+    data: data,
     options: options,
     ticker: ticker
   };
 
   function rootReducer(state, action) {
     return {
+      data: dataReducer(state.data, action),
       options: optionsReducer(state.options, action),
       ticker: tickerReducer(state.ticker, action)
     };
@@ -402,7 +518,15 @@
 
   var store = createStore(rootReducer);
 
-  function getColor(d, names, groups, showGroups, colorSeed, colorMap) {
+  function getColor(d) {
+    var _store$getState$data = store.getState().data,
+        names = _store$getState$data.names,
+        groups = _store$getState$data.groups;
+    var _store$getState$optio = store.getState().options,
+        showGroups = _store$getState$optio.showGroups,
+        colorSeed = _store$getState$optio.colorSeed,
+        colorMap = _store$getState$optio.colorMap;
+
     if (d.color) {
       return d.color;
     }
@@ -629,7 +753,7 @@
     return format.replace('MMM', monthNames[month]).replace('DDD', weekDays[weekDayIndex]).replace('YYYY', year).replace('MM', month).replace('DD', day);
   }
 
-  var initialState$1 = {
+  var initialState$2 = {
     selector: '#race',
     dataShape: 'long',
     fillDateGaps: false,
@@ -666,7 +790,7 @@
   };
   function optionsReducer(state, action) {
     if (state === void 0) {
-      state = initialState$1;
+      state = initialState$2;
     }
 
     switch (action.type) {
@@ -721,7 +845,27 @@
       });
     });
     data = calculateLastValues(data);
+    loadDataCollectionsToState(data);
     return data;
+  }
+
+  function loadDataCollectionsToState(data) {
+    var names = Array.from(new Set(data.map(function (d) {
+      return d.name;
+    }))).sort();
+    var groups = Array.from(new Set(data.map(function (d) {
+      return d.group;
+    }))).filter(Boolean).sort();
+    var dates = getDates(data);
+    var formattedDates = dates.map(function (date) {
+      return formatDate(date);
+    });
+    store.dispatch(actions.data.dataLoaded({
+      names: names,
+      groups: groups,
+      dates: dates,
+      formattedDates: formattedDates
+    }));
   }
 
   function calculateLastValues(data) {
@@ -816,6 +960,8 @@
   function getDateSlice(data, date) {
     return data.filter(function (d) {
       return d.date === date && !isNaN(d.value);
+    }).filter(function (d) {
+      return !!d.group ? !store.getState().data.groupFilter.includes(d.group) : true;
     }).sort(function (a, b) {
       return b.value - a.value;
     }).map(function (d, i) {
@@ -869,12 +1015,7 @@
     var height;
     var width;
     var maxValue;
-    var names = Array.from(new Set(data.map(function (d) {
-      return d.name;
-    }))).sort();
-    var groups = Array.from(new Set(data.map(function (d) {
-      return d.group;
-    }))).filter(Boolean).sort();
+    var groups = store.getState().data.groups;
     var showGroups = store.getState().options.showGroups;
 
     function renderInitalView() {
@@ -892,8 +1033,6 @@
           minHeight = _store$getState$optio.minHeight,
           minWidth = _store$getState$optio.minWidth,
           topN = _store$getState$optio.topN,
-          colorSeed = _store$getState$optio.colorSeed,
-          colorMap = _store$getState$optio.colorMap,
           fixedScale = _store$getState$optio.fixedScale;
       var TotalDateSlice = getDateSlice(data, store.getState().ticker.currentDate);
       var dateSlice = TotalDateSlice.slice(0, store.getState().options.topN);
@@ -921,11 +1060,15 @@
 
         if (showGroups) {
           var legendsWrapper = svg.append('g');
-          var legends = legendsWrapper.selectAll('.legend-wrapper').data(groups).enter().append('g').attr('class', 'legend-wrapper').style('cursor', 'pointer');
+          var legends = legendsWrapper.selectAll('.legend-wrapper').data(groups).enter().append('g').attr('class', 'legend-wrapper').style('cursor', 'pointer').style('opacity', function (d) {
+            return store.getState().data.groupFilter.includes(d) ? 0.3 : 1;
+          }).on('click', function (d) {
+            store.dispatch(actions.data.toggleFilter(d));
+          });
           legends.append('rect').attr('class', 'legend-color').attr('width', 10).attr('height', 10).attr('y', 75).style('fill', function (d) {
             return getColor({
               group: d
-            }, names, groups, showGroups, colorSeed, colorMap);
+            });
           });
           legends.append('text').attr('class', 'legend-text').attr('x', 20).attr('y', 75 + 10).html(function (d) {
             return d;
@@ -985,7 +1128,7 @@
         svg.selectAll('rect.bar').data(dateSlice, function (d) {
           return d.name;
         }).enter().append('rect').attr('class', 'bar').attr('x', x(0) + 1).attr('width', barWidth).attr('y', barY).attr('height', barHeight).style('fill', function (d) {
-          return getColor(d, names, groups, showGroups, colorSeed, colorMap);
+          return getColor(d);
         });
         svg.selectAll('text.label').data(dateSlice, function (d) {
           return d.name;
@@ -1079,12 +1222,15 @@
           subTitle = _store$getState$optio2.subTitle,
           caption = _store$getState$optio2.caption,
           dateCounter = _store$getState$optio2.dateCounter,
-          showGroups = _store$getState$optio2.showGroups,
-          colorSeed = _store$getState$optio2.colorSeed,
-          colorMap = _store$getState$optio2.colorMap,
           fixedScale = _store$getState$optio2.fixedScale;
-      var TotalDateSlice = getDateSlice(data, store.getState().ticker.currentDate);
-      var dateSlice = TotalDateSlice.slice(0, store.getState().options.topN);
+      var CompleteDateSlice = getDateSlice(data, store.getState().ticker.currentDate);
+      var dateSlice = CompleteDateSlice.slice(0, store.getState().options.topN);
+
+      if (showGroups) {
+        svg.selectAll('.legend-wrapper').style('opacity', function (d) {
+          return store.getState().data.groupFilter.includes(d) ? 0.3 : 1;
+        });
+      }
 
       if (!fixedScale) {
         x.domain([0, d3$1.max(dateSlice, function (d) {
@@ -1101,7 +1247,7 @@
       }).attr('x', x(0) + 1).attr('width', barWidth).attr('y', function () {
         return y(topN + 1) + 5;
       }).attr('height', barHeight).style('fill', function (d) {
-        return getColor(d, names, groups, showGroups, colorSeed, colorMap);
+        return getColor(d);
       }).transition().duration(tickDuration).ease(d3$1.easeLinear).attr('y', barY);
       bars.transition().duration(tickDuration).ease(d3$1.easeLinear).attr('width', function (d) {
         return Math.abs(x(d.value) - x(0) - 1);
@@ -1191,10 +1337,10 @@
         }).remove();
       }
 
-      titleText.html(getText(title, TotalDateSlice));
-      subTitleText.html(getText(subTitle, TotalDateSlice));
-      captionText.html(getText(caption, TotalDateSlice));
-      dateCounterText.html(getText(dateCounter, TotalDateSlice, true)).call(halo);
+      titleText.html(getText(title, CompleteDateSlice));
+      subTitleText.html(getText(subTitle, CompleteDateSlice));
+      captionText.html(getText(caption, CompleteDateSlice));
+      dateCounterText.html(getText(dateCounter, CompleteDateSlice, true)).call(halo);
       updateControls();
     }
 
@@ -1421,8 +1567,7 @@
     }
 
     var preparedData = prepareData(data);
-    var dates = getDates(preparedData);
-    var ticker = createTicker(dates);
+    var ticker = createTicker();
     var renderer = createRenderer(preparedData);
     renderer.renderInitalView();
     store.subscribe(renderer.renderFrame);
@@ -1480,9 +1625,7 @@
         store.dispatch(actions.ticker.updateDate(getDateString(inputDate)));
       },
       getAllDates: function getAllDates() {
-        return dates.map(function (date) {
-          return formatDate(date);
-        });
+        return [].concat(store.getState().data.formattedDates);
       },
       createScroller: function createScroller$1() {
         createScroller(element);

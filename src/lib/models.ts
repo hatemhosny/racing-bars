@@ -1,21 +1,3 @@
-import { HSLColor } from 'd3';
-
-export interface Data {
-  date: string;
-  name: string;
-  value: number;
-  lastValue?: number;
-  group?: string;
-  color?: HSLColor;
-  icon?: string;
-  rank?: number;
-}
-
-export interface WideData {
-  [key: string]: any;
-  date: string;
-}
-
 export interface Renderer {
   renderInitalView: () => void;
   renderFrame: () => void;

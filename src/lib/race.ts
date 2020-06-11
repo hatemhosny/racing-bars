@@ -1,6 +1,6 @@
 import { prepareData } from './data-utils';
-import { getDates, getDateString, formatDate } from './dates';
-import { Data, WideData } from './models';
+import { getDateString } from './dates';
+import { Data, WideData } from './data';
 import { createRenderer } from './renderer';
 import { createTicker } from './ticker';
 import { styleInject } from './styles';
@@ -23,9 +23,7 @@ export function race(data: Data[] | WideData[], options: Options | RequiredOptio
 
   const preparedData = prepareData(data as Data[]);
 
-  const dates = getDates(preparedData);
-
-  const ticker = createTicker(dates);
+  const ticker = createTicker();
 
   const renderer = createRenderer(preparedData);
   renderer.renderInitalView();
@@ -76,7 +74,7 @@ export function race(data: Data[] | WideData[], options: Options | RequiredOptio
     setDate: (inputDate: string | Date) => {
       store.dispatch(actions.ticker.updateDate(getDateString(inputDate)));
     },
-    getAllDates: () => dates.map((date: string) => formatDate(date)),
+    getAllDates: () => [...store.getState().data.formattedDates],
     createScroller: () => {
       createScroller(element);
     },

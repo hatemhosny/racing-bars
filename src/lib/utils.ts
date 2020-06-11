@@ -1,18 +1,14 @@
 import * as d3 from './d3';
 
-import { Data } from './models';
+import { Data } from './data';
 import { store } from './store';
 import { formatDate } from './dates';
 import { ParamFunction } from './options';
 
-export function getColor(
-  d: Data,
-  names: string[],
-  groups: string[],
-  showGroups: boolean,
-  colorSeed: string,
-  colorMap: { [key: string]: string } | string[],
-) {
+export function getColor(d: Data) {
+  const { names, groups } = store.getState().data;
+  const { showGroups, colorSeed, colorMap } = store.getState().options;
+
   if (d.color) {
     return d.color;
   }
