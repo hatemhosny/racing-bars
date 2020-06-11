@@ -46,19 +46,19 @@
       // width: 'window*0.5',
       // disableClickEvents: true,
       // disableKeyboardEvents: true,
-      showGroups: false,
+      // showGroups: false,
       showControls: 'all',
       showOverlays: 'none',
       autorun: false,
       // colorSeed: "asdfs",
-      labelsOnBars: false,
-      labelsWidth: 250,
+      // labelsOnBars: false,
+      // labelsWidth: 250,
       // embedStyles: false,
       // theme: 'dark',
       fixedScale: true,
     };
-    // racingBars.loadData('data/population.csv', 'csv').then((data) => {
-    racingBars.loadData('data/procedures.json').then((data) => {
+    racingBars.loadData('data/population.csv', 'csv').then((data) => {
+      // racingBars.loadData('data/procedures.json').then((data) => {
       racingBars.race(data, options);
     });
   </script>

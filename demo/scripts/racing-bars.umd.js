@@ -907,14 +907,47 @@
       updateControls();
 
       function renderInitialFrame() {
-        var groupsArea = showGroups ? 40 : 0;
         var labelsArea = labelsOnBars ? 0 : labelsWidth;
+        var groupsArea = showGroups ? 40 : 0;
         margin = {
           top: 80 + groupsArea,
           right: 0,
           bottom: 5,
           left: 0 + labelsArea
         };
+        svg = d3$1.select(selector).append('svg').attr('width', width).attr('height', height);
+        titleText = svg.append('text').attr('class', 'title').attr('x', titlePadding).attr('y', 24).html(getText(title, TotalDateSlice));
+        subTitleText = svg.append('text').attr('class', 'subTitle').attr('x', titlePadding).attr('y', 55).html(getText(subTitle, TotalDateSlice));
+
+        if (showGroups) {
+          var legendsWrapper = svg.append('g');
+          var legends = legendsWrapper.selectAll('.legend-wrapper').data(groups).enter().append('g').attr('class', 'legend-wrapper').style('cursor', 'pointer');
+          legends.append('rect').attr('class', 'legend-color').attr('width', 10).attr('height', 10).attr('y', 75).style('fill', function (d) {
+            return getColor({
+              group: d
+            }, names, groups, showGroups, colorSeed, colorMap);
+          });
+          legends.append('text').attr('class', 'legend-text').attr('x', 20).attr('y', 75 + 10).html(function (d) {
+            return d;
+          });
+          var legendX = margin.left;
+          var legendY = 0;
+          legends.each(function () {
+            var wrapper = d3$1.select(this);
+            var text = wrapper.select('text');
+            var bbox = text.node().getBBox();
+
+            if (legendX + bbox.width > width) {
+              legendX = margin.left;
+              legendY += 30;
+            }
+
+            wrapper.attr('transform', 'translate(' + legendX + ', ' + legendY + ')');
+            legendX += bbox.width + 40;
+          });
+          margin.top += legendY;
+        }
+
         maxValue = fixedScale ? data.map(function (d) {
           return d.value;
         }).reduce(function (max, val) {
@@ -943,26 +976,6 @@
         labelX = labelsOnBars ? function (d) {
           return x(d.value) - labelPadding - iconSpace;
         } : margin.left - labelPadding;
-        svg = d3$1.select(selector).append('svg').attr('width', width).attr('height', height);
-        titleText = svg.append('text').attr('class', 'title').attr('x', titlePadding).attr('y', 24).html(getText(title, TotalDateSlice));
-        subTitleText = svg.append('text').attr('class', 'subTitle').attr('x', titlePadding).attr('y', 55).html(getText(subTitle, TotalDateSlice));
-
-        if (showGroups) {
-          var groupX = d3$1.scaleLinear().domain([groups.length, 0]).range([width - margin.right, margin.left]);
-          svg.selectAll('rect.group-color').data(groups).enter().append('rect').attr('class', 'group-color').attr('width', 10).attr('height', 10).attr('x', function (_d, i) {
-            return groupX(i);
-          }).attr('y', 75).style('fill', function (d) {
-            return getColor({
-              group: d
-            }, names, groups, showGroups, colorSeed, colorMap);
-          });
-          svg.selectAll('text.group').data(groups).enter().append('text').attr('class', 'group').attr('x', function (_d, i) {
-            return groupX(i) + 20;
-          }).attr('y', 75 + 10).html(function (d) {
-            return d;
-          });
-        }
-
         xAxis = d3$1.axisTop(x).ticks(width > 500 ? 5 : 2).tickSize(-(height - (margin.top + margin.bottom))).tickFormat(function (n) {
           return d3$1.format(',')(n);
         });

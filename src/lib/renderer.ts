@@ -81,9 +81,8 @@ export function createRenderer(data: Data[]): Renderer {
     updateControls();
 
     function renderInitialFrame() {
-      const groupsArea = showGroups ? 40 : 0;
-
       const labelsArea = labelsOnBars ? 0 : labelsWidth;
+      let groupsArea = showGroups ? 40 : 0;
 
       margin = {
         top: 80 + groupsArea,
@@ -91,6 +90,70 @@ export function createRenderer(data: Data[]): Renderer {
         bottom: 5,
         left: 0 + labelsArea,
       };
+
+      svg = d3 //
+        .select(selector)
+        .append('svg')
+        .attr('width', width)
+        .attr('height', height);
+
+      titleText = svg //
+        .append('text')
+        .attr('class', 'title')
+        .attr('x', titlePadding)
+        .attr('y', 24)
+        .html(getText(title, TotalDateSlice));
+
+      subTitleText = svg //
+        .append('text')
+        .attr('class', 'subTitle')
+        .attr('x', titlePadding)
+        .attr('y', 55)
+        .html(getText(subTitle, TotalDateSlice));
+
+      if (showGroups) {
+        const legendsWrapper = svg.append('g');
+        const legends = legendsWrapper
+          .selectAll('.legend-wrapper')
+          .data(groups)
+          .enter()
+          .append('g')
+          .attr('class', 'legend-wrapper')
+          .style('cursor', 'pointer');
+
+        legends
+          .append('rect')
+          .attr('class', 'legend-color')
+          .attr('width', 10)
+          .attr('height', 10)
+          .attr('y', 75)
+          .style('fill', (d: string) =>
+            getColor({ group: d } as Data, names, groups, showGroups, colorSeed, colorMap),
+          );
+
+        legends
+          .append('text')
+          .attr('class', 'legend-text')
+          .attr('x', 20)
+          .attr('y', 75 + 10)
+          .html((d: string) => d);
+
+        let legendX = margin.left;
+        let legendY = 0;
+        legends.each(function () {
+          const wrapper = d3.select(this);
+          const text = wrapper.select('text') as any;
+          const bbox = text.node().getBBox();
+          if (legendX + bbox.width > width) {
+            legendX = margin.left;
+            legendY += 30;
+          }
+          wrapper.attr('transform', 'translate(' + legendX + ', ' + legendY + ')');
+          legendX += bbox.width + 40;
+        });
+
+        margin.top += legendY;
+      }
 
       maxValue = fixedScale
         ? data.map((d) => d.value).reduce((max, val) => (max > val ? max : val), 0)
@@ -117,57 +180,6 @@ export function createRenderer(data: Data[]): Renderer {
       labelX = labelsOnBars
         ? (d: Data) => x(d.value) - labelPadding - iconSpace
         : margin.left - labelPadding;
-
-      svg = d3 //
-        .select(selector)
-        .append('svg')
-        .attr('width', width)
-        .attr('height', height);
-
-      titleText = svg //
-        .append('text')
-        .attr('class', 'title')
-        .attr('x', titlePadding)
-        .attr('y', 24)
-        .html(getText(title, TotalDateSlice));
-
-      subTitleText = svg //
-        .append('text')
-        .attr('class', 'subTitle')
-        .attr('x', titlePadding)
-        .attr('y', 55)
-        .html(getText(subTitle, TotalDateSlice));
-
-      if (showGroups) {
-        const groupX = d3
-          .scaleLinear()
-          .domain([groups.length, 0])
-          .range([width - margin.right, margin.left]);
-
-        svg
-          .selectAll('rect.group-color')
-          .data(groups)
-          .enter()
-          .append('rect')
-          .attr('class', 'group-color')
-          .attr('width', 10)
-          .attr('height', 10)
-          .attr('x', (_d: string, i: number) => groupX(i))
-          .attr('y', 75)
-          .style('fill', (d: string) =>
-            getColor({ group: d } as Data, names, groups, showGroups, colorSeed, colorMap),
-          );
-
-        svg
-          .selectAll('text.group')
-          .data(groups)
-          .enter()
-          .append('text')
-          .attr('class', 'group')
-          .attr('x', (_d: string, i: number) => groupX(i) + 20)
-          .attr('y', 75 + 10)
-          .html((d: string) => d);
-      }
 
       xAxis = d3
         .axisTop(x)
