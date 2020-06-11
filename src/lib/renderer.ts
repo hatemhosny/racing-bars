@@ -64,7 +64,7 @@ export function createRenderer(data: Data[]): Renderer {
       topN,
       colorSeed,
       colorMap,
-      fixedMax,
+      fixedScale,
     } = store.getState().options;
 
     const TotalDateSlice = getDateSlice(data, store.getState().ticker.currentDate);
@@ -92,7 +92,7 @@ export function createRenderer(data: Data[]): Renderer {
         left: 0 + labelsArea,
       };
 
-      maxValue = fixedMax
+      maxValue = fixedScale
         ? data.map((d) => d.value).reduce((max, val) => (max > val ? max : val), 0)
         : (d3.max(dateSlice, (d: Data) => d.value) as number);
 
@@ -331,12 +331,12 @@ export function createRenderer(data: Data[]): Renderer {
       showGroups,
       colorSeed,
       colorMap,
-      fixedMax,
+      fixedScale,
     } = store.getState().options;
     const TotalDateSlice = getDateSlice(data, store.getState().ticker.currentDate);
     const dateSlice = TotalDateSlice.slice(0, store.getState().options.topN);
 
-    if (!fixedMax) {
+    if (!fixedScale) {
       x.domain([0, d3.max(dateSlice, (d: Data) => d.value) as number]);
 
       svg //

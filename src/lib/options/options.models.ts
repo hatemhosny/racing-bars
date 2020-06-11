@@ -42,7 +42,7 @@ export interface Options {
   injectStyles: boolean;
   theme: string;
   colorMap: { [key: string]: string };
-  fixedMax: boolean;
+  fixedScale: boolean;
 }
 
 export type ParamFunction = (currentDate: string, dateSlice: Data[], allDates: string[]) => string;

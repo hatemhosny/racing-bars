@@ -662,7 +662,7 @@
     width: '',
     theme: 'light',
     colorMap: {},
-    fixedMax: false
+    fixedScale: false
   };
   function optionsReducer(state, action) {
     if (state === void 0) {
@@ -894,7 +894,7 @@
           topN = _store$getState$optio.topN,
           colorSeed = _store$getState$optio.colorSeed,
           colorMap = _store$getState$optio.colorMap,
-          fixedMax = _store$getState$optio.fixedMax;
+          fixedScale = _store$getState$optio.fixedScale;
       var TotalDateSlice = getDateSlice(data, store.getState().ticker.currentDate);
       var dateSlice = TotalDateSlice.slice(0, store.getState().options.topN);
       var element = document.querySelector(selector);
@@ -915,7 +915,7 @@
           bottom: 5,
           left: 0 + labelsArea
         };
-        maxValue = fixedMax ? data.map(function (d) {
+        maxValue = fixedScale ? data.map(function (d) {
           return d.value;
         }).reduce(function (max, val) {
           return max > val ? max : val;
@@ -1069,11 +1069,11 @@
           showGroups = _store$getState$optio2.showGroups,
           colorSeed = _store$getState$optio2.colorSeed,
           colorMap = _store$getState$optio2.colorMap,
-          fixedMax = _store$getState$optio2.fixedMax;
+          fixedScale = _store$getState$optio2.fixedScale;
       var TotalDateSlice = getDateSlice(data, store.getState().ticker.currentDate);
       var dateSlice = TotalDateSlice.slice(0, store.getState().options.topN);
 
-      if (!fixedMax) {
+      if (!fixedScale) {
         x.domain([0, d3$1.max(dateSlice, function (d) {
           return d.value;
         })]);
