@@ -171,3 +171,7 @@ export function getText(param: string | ParamFunction, dateSlice: Data[], isDate
   }
   return param;
 }
+
+export function safeName(name: string) {
+  return name.replace(/\s/g, '_');
+}

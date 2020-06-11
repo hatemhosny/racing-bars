@@ -36,6 +36,8 @@ const initialState: Options = {
   theme: 'light',
   colorMap: {},
   fixedScale: false,
+  highlightBars: false,
+  selectBars: false,
 };
 
 export function optionsReducer(state = initialState, action: OptionsAction): Options {

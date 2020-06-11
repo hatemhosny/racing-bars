@@ -43,6 +43,8 @@ export interface Options {
   theme: string;
   colorMap: { [key: string]: string };
   fixedScale: boolean;
+  highlightBars: boolean;
+  selectBars: boolean;
 }
 
 export type ParamFunction = (currentDate: string, dateSlice: Data[], allDates: string[]) => string;

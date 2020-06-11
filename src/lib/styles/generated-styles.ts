@@ -136,6 +136,10 @@ __selector__ .halo {
   opacity: 1;
 }
 
+__selector__ text.legend-text {
+  fill: #fafafa;
+}
+
 __selector__ text.label {
   fill: #313639;
 }
@@ -175,6 +179,14 @@ __selector__ .overlay {
   background-color: black;
   opacity: 0.7;
 }
+
+__selector__ .highlight {
+  fill: rgb(255, 39, 39) !important;
+}
+
+__selector__ .selected {
+  fill: rgb(209, 32, 32) !important;
+}
 `,
 "light": `
 /* __selector__ {
@@ -204,6 +216,10 @@ __selector__ .halo {
   stroke-width: 10;
   stroke-linejoin: round;
   opacity: 1;
+}
+
+__selector__ text.legend-text {
+  fill: #000000;
 }
 
 __selector__ text.label {
@@ -244,6 +260,14 @@ __selector__ .overlay div:hover {
 __selector__ .overlay {
   background-color: black;
   opacity: 0.7;
+}
+
+__selector__ .highlight {
+  fill: rgb(255, 39, 39) !important;
+}
+
+__selector__ .selected {
+  fill: rgb(185, 21, 21) !important;
 }
 `,
 };

@@ -14,6 +14,7 @@ import {
   getText,
   getColor,
   getIconID,
+  safeName,
 } from './utils';
 import { getDateSlice } from './data-utils';
 
@@ -43,7 +44,7 @@ export function createRenderer(data: Data[]): Renderer {
   let maxValue: number;
 
   const groups = store.getState().data.groups;
-  const showGroups = store.getState().options.showGroups;
+  const { showGroups, highlightBars, selectBars } = store.getState().options;
 
   function renderInitalView() {
     const {
@@ -200,12 +201,15 @@ export function createRenderer(data: Data[]): Renderer {
         .data(dateSlice, (d: Data) => d.name)
         .enter()
         .append('rect')
-        .attr('class', 'bar')
+        .attr('class', (d: Data) => 'bar ' + safeName(d.name))
         .attr('x', x(0) + 1)
         .attr('width', barWidth)
         .attr('y', barY)
         .attr('height', barHeight)
-        .style('fill', (d: Data) => getColor(d));
+        .style('fill', (d: Data) => getColor(d))
+        .on('click', selectFn)
+        .on('mouseover', highlightFn)
+        .on('mouseout', highlightFn);
 
       svg
         .selectAll('text.label')
@@ -216,7 +220,10 @@ export function createRenderer(data: Data[]): Renderer {
         .attr('x', labelX)
         .attr('y', (d: Data) => barY(d) + barHalfHeight)
         .style('text-anchor', 'end')
-        .html((d: Data) => d.name);
+        .html((d: Data) => d.name)
+        .on('click', selectFn)
+        .on('mouseover', highlightFn)
+        .on('mouseout', highlightFn);
 
       svg
         .selectAll('text.valueLabel')
@@ -369,12 +376,15 @@ export function createRenderer(data: Data[]): Renderer {
     bars
       .enter()
       .append('rect')
-      .attr('class', (d: Data) => `bar ${d.name.replace(/\s/g, '_')}`)
+      .attr('class', (d: Data) => 'bar ' + safeName(d.name))
       .attr('x', x(0) + 1)
       .attr('width', barWidth)
       .attr('y', () => y(topN + 1) + 5)
       .attr('height', barHeight)
       .style('fill', (d: Data) => getColor(d))
+      .on('click', selectFn)
+      .on('mouseover', highlightFn)
+      .on('mouseout', highlightFn)
       .transition()
       .duration(tickDuration)
       .ease(d3.easeLinear)
@@ -408,6 +418,9 @@ export function createRenderer(data: Data[]): Renderer {
       .attr('y', () => y(topN + 1) + 5 + barHalfHeight)
       .style('text-anchor', 'end')
       .html((d: Data) => d.name)
+      .on('click', selectFn)
+      .on('mouseover', highlightFn)
+      .on('mouseout', highlightFn)
       .transition()
       .duration(tickDuration)
       .ease(d3.easeLinear)
@@ -601,6 +614,24 @@ export function createRenderer(data: Data[]): Renderer {
         return this.parentNode.insertBefore(this.cloneNode(true), this);
       })
       .classed('halo', true);
+  }
+
+  function highlightFn(d: any) {
+    if (highlightBars) {
+      d3.select('rect.' + safeName(d.name)) //
+        .classed('highlight', function () {
+          return !d3.select(this).classed('highlight');
+        });
+    }
+  }
+
+  function selectFn(d: any) {
+    if (selectBars) {
+      d3.select('rect.' + safeName(d.name)) //
+        .classed('selected', function () {
+          return !d3.select(this).classed('selected');
+        });
+    }
   }
 
   return {

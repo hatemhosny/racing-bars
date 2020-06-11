@@ -3,15 +3,6 @@
   typeof define === 'function' && define.amd ? define(['exports', 'd3'], factory) :
   (global = global || self, factory(global.racingBars = {}, global.d3));
 }(this, (function (exports, d3$1) {
-  var options = {
-    __proto__: null,
-    get actionTypes () { return actionTypes; },
-    get optionsLoaded () { return optionsLoaded; },
-    get changeOptions () { return changeOptions; },
-    get optionsChanged () { return optionsChanged; },
-    get optionsReducer () { return optionsReducer; }
-  };
-
 
 
   var d3 = {
@@ -55,30 +46,6 @@
     }
   }
 
-  var actionTypes = {
-    optionsLoaded: 'options/loaded',
-    changeOptions: 'options/change',
-    optionsChanged: 'options/changed'
-  };
-  var optionsLoaded = function optionsLoaded(options) {
-    return {
-      type: actionTypes.optionsLoaded,
-      payload: options
-    };
-  };
-  var changeOptions = function changeOptions(options) {
-    return {
-      type: actionTypes.changeOptions,
-      payload: options
-    };
-  };
-  var optionsChanged = function optionsChanged(options) {
-    return {
-      type: actionTypes.optionsChanged,
-      payload: options
-    };
-  };
-
   function _extends() {
     _extends = Object.assign || function (target) {
       for (var i = 1; i < arguments.length; i++) {
@@ -97,7 +64,7 @@
     return _extends.apply(this, arguments);
   }
 
-  var actionTypes$1 = {
+  var actionTypes = {
     dataLoaded: 'data/loaded',
     addFilter: 'data/addFilter',
     removeFilter: 'data/removeFilter',
@@ -106,31 +73,31 @@
   };
   var dataLoaded = function dataLoaded(dataCollections) {
     return {
-      type: actionTypes$1.dataLoaded,
+      type: actionTypes.dataLoaded,
       payload: dataCollections
     };
   };
   var addFilter = function addFilter(group) {
     return {
-      type: actionTypes$1.addFilter,
+      type: actionTypes.addFilter,
       payload: group
     };
   };
   var removeFilter = function removeFilter(group) {
     return {
-      type: actionTypes$1.removeFilter,
+      type: actionTypes.removeFilter,
       payload: group
     };
   };
   var toggleFilter = function toggleFilter(group) {
     return {
-      type: actionTypes$1.toggleFilter,
+      type: actionTypes.toggleFilter,
       payload: group
     };
   };
   var resetFilters = function resetFilters() {
     return {
-      type: actionTypes$1.resetFilters
+      type: actionTypes.resetFilters
     };
   };
 
@@ -147,7 +114,7 @@
     }
 
     switch (action.type) {
-      case actionTypes$1.dataLoaded:
+      case actionTypes.dataLoaded:
         {
           var collections = action.payload;
           return _extends(_extends({}, state), {}, {
@@ -158,17 +125,17 @@
           });
         }
 
-      case actionTypes$1.addFilter:
+      case actionTypes.addFilter:
         return _extends(_extends({}, state), {}, {
           groupFilter: addFilter$1(state.groupFilter, action.payload)
         });
 
-      case actionTypes$1.removeFilter:
+      case actionTypes.removeFilter:
         return _extends(_extends({}, state), {}, {
           groupFilter: removeFilter$1(state.groupFilter, action.payload)
         });
 
-      case actionTypes$1.toggleFilter:
+      case actionTypes.toggleFilter:
         return _extends(_extends({}, state), {}, {
           groupFilter: toggleFilter$1(state.groupFilter, action.payload)
         });
@@ -202,13 +169,111 @@
 
   var data = {
     __proto__: null,
-    actionTypes: actionTypes$1,
+    actionTypes: actionTypes,
     dataLoaded: dataLoaded,
     addFilter: addFilter,
     removeFilter: removeFilter,
     toggleFilter: toggleFilter,
     resetFilters: resetFilters,
     dataReducer: dataReducer
+  };
+
+  var actionTypes$1 = {
+    optionsLoaded: 'options/loaded',
+    changeOptions: 'options/change',
+    optionsChanged: 'options/changed'
+  };
+  var optionsLoaded = function optionsLoaded(options) {
+    return {
+      type: actionTypes$1.optionsLoaded,
+      payload: options
+    };
+  };
+  var changeOptions = function changeOptions(options) {
+    return {
+      type: actionTypes$1.changeOptions,
+      payload: options
+    };
+  };
+  var optionsChanged = function optionsChanged(options) {
+    return {
+      type: actionTypes$1.optionsChanged,
+      payload: options
+    };
+  };
+
+  var initialState$1 = {
+    selector: '#race',
+    dataShape: 'long',
+    fillDateGaps: false,
+    fillDateGapsValue: 'last',
+    startDate: '',
+    endDate: '',
+    colorSeed: '',
+    showGroups: true,
+    tickDuration: 500,
+    topN: 10,
+    disableClickEvents: true,
+    disableKeyboardEvents: false,
+    autorun: true,
+    loop: false,
+    injectStyles: true,
+    title: '',
+    subTitle: '',
+    caption: '',
+    dateCounter: 'MM/YYYY',
+    labelsOnBars: true,
+    labelsWidth: 100,
+    showIcons: false,
+    showControls: 'all',
+    showOverlays: 'none',
+    inputHeight: '',
+    inputWidth: '',
+    minHeight: 300,
+    minWidth: 500,
+    height: '',
+    width: '',
+    theme: 'light',
+    colorMap: {},
+    fixedScale: false,
+    highlightBars: false,
+    selectBars: false
+  };
+  function optionsReducer(state, action) {
+    if (state === void 0) {
+      state = initialState$1;
+    }
+
+    switch (action.type) {
+      case actionTypes$1.optionsLoaded:
+        var startDate = action.payload.startDate ? getDateString(action.payload.startDate) : '';
+        var endDate = action.payload.endDate ? getDateString(action.payload.endDate) : '';
+        var inputHeight = action.payload.height;
+        var inputWidth = action.payload.width;
+        return _extends(_extends(_extends({}, state), action.payload), {}, {
+          startDate: startDate,
+          endDate: endDate,
+          inputHeight: inputHeight,
+          inputWidth: inputWidth
+        });
+
+      case actionTypes$1.changeOptions:
+        return _extends(_extends({}, state), action.payload);
+
+      default:
+        return state;
+    }
+  }
+
+
+
+  var options = {
+    __proto__: null,
+    actionTypes: actionTypes$1,
+    optionsLoaded: optionsLoaded,
+    changeOptions: changeOptions,
+    optionsChanged: optionsChanged,
+    optionsReducer: optionsReducer
   };
 
   var actionTypes$2 = {
@@ -269,7 +334,7 @@
     };
   };
 
-  var initialState$1 = {
+  var initialState$2 = {
     isRunning: false,
     currentDate: '',
     isFirstDate: true,
@@ -278,7 +343,7 @@
   };
   function tickerReducer(state, action) {
     if (state === void 0) {
-      state = initialState$1;
+      state = initialState$2;
     }
 
     switch (action.type) {
@@ -697,6 +762,9 @@
 
     return param;
   }
+  function safeName(name) {
+    return name.replace(/\s/g, '_');
+  }
 
   var getDates = function getDates(data) {
     return Array.from(new Set(data.map(function (d) {
@@ -752,69 +820,6 @@
     };
     return format.replace('MMM', monthNames[month]).replace('DDD', weekDays[weekDayIndex]).replace('YYYY', year).replace('MM', month).replace('DD', day);
   }
-
-  var initialState$2 = {
-    selector: '#race',
-    dataShape: 'long',
-    fillDateGaps: false,
-    fillDateGapsValue: 'last',
-    startDate: '',
-    endDate: '',
-    colorSeed: '',
-    showGroups: true,
-    tickDuration: 500,
-    topN: 10,
-    disableClickEvents: true,
-    disableKeyboardEvents: false,
-    autorun: true,
-    loop: false,
-    injectStyles: true,
-    title: '',
-    subTitle: '',
-    caption: '',
-    dateCounter: 'MM/YYYY',
-    labelsOnBars: true,
-    labelsWidth: 100,
-    showIcons: false,
-    showControls: 'all',
-    showOverlays: 'none',
-    inputHeight: '',
-    inputWidth: '',
-    minHeight: 300,
-    minWidth: 500,
-    height: '',
-    width: '',
-    theme: 'light',
-    colorMap: {},
-    fixedScale: false
-  };
-  function optionsReducer(state, action) {
-    if (state === void 0) {
-      state = initialState$2;
-    }
-
-    switch (action.type) {
-      case actionTypes.optionsLoaded:
-        var startDate = action.payload.startDate ? getDateString(action.payload.startDate) : '';
-        var endDate = action.payload.endDate ? getDateString(action.payload.endDate) : '';
-        var inputHeight = action.payload.height;
-        var inputWidth = action.payload.width;
-        return _extends(_extends(_extends({}, state), action.payload), {}, {
-          startDate: startDate,
-          endDate: endDate,
-          inputHeight: inputHeight,
-          inputWidth: inputWidth
-        });
-
-      case actionTypes.changeOptions:
-        return _extends(_extends({}, state), action.payload);
-
-      default:
-        return state;
-    }
-  }
-
-
 
   function prepareData(rawData) {
     var options = store.getState().options;
@@ -1016,24 +1021,27 @@
     var width;
     var maxValue;
     var groups = store.getState().data.groups;
-    var showGroups = store.getState().options.showGroups;
+    var _store$getState$optio = store.getState().options,
+        showGroups = _store$getState$optio.showGroups,
+        highlightBars = _store$getState$optio.highlightBars,
+        selectBars = _store$getState$optio.selectBars;
 
     function renderInitalView() {
-      var _store$getState$optio = store.getState().options,
-          selector = _store$getState$optio.selector,
-          title = _store$getState$optio.title,
-          subTitle = _store$getState$optio.subTitle,
-          caption = _store$getState$optio.caption,
-          dateCounter = _store$getState$optio.dateCounter,
-          labelsOnBars = _store$getState$optio.labelsOnBars,
-          showIcons = _store$getState$optio.showIcons,
-          labelsWidth = _store$getState$optio.labelsWidth,
-          inputHeight = _store$getState$optio.inputHeight,
-          inputWidth = _store$getState$optio.inputWidth,
-          minHeight = _store$getState$optio.minHeight,
-          minWidth = _store$getState$optio.minWidth,
-          topN = _store$getState$optio.topN,
-          fixedScale = _store$getState$optio.fixedScale;
+      var _store$getState$optio2 = store.getState().options,
+          selector = _store$getState$optio2.selector,
+          title = _store$getState$optio2.title,
+          subTitle = _store$getState$optio2.subTitle,
+          caption = _store$getState$optio2.caption,
+          dateCounter = _store$getState$optio2.dateCounter,
+          labelsOnBars = _store$getState$optio2.labelsOnBars,
+          showIcons = _store$getState$optio2.showIcons,
+          labelsWidth = _store$getState$optio2.labelsWidth,
+          inputHeight = _store$getState$optio2.inputHeight,
+          inputWidth = _store$getState$optio2.inputWidth,
+          minHeight = _store$getState$optio2.minHeight,
+          minWidth = _store$getState$optio2.minWidth,
+          topN = _store$getState$optio2.topN,
+          fixedScale = _store$getState$optio2.fixedScale;
       var TotalDateSlice = getDateSlice(data, store.getState().ticker.currentDate);
       var dateSlice = TotalDateSlice.slice(0, store.getState().options.topN);
       var element = document.querySelector(selector);
@@ -1127,16 +1135,18 @@
         });
         svg.selectAll('rect.bar').data(dateSlice, function (d) {
           return d.name;
-        }).enter().append('rect').attr('class', 'bar').attr('x', x(0) + 1).attr('width', barWidth).attr('y', barY).attr('height', barHeight).style('fill', function (d) {
+        }).enter().append('rect').attr('class', function (d) {
+          return 'bar ' + safeName(d.name);
+        }).attr('x', x(0) + 1).attr('width', barWidth).attr('y', barY).attr('height', barHeight).style('fill', function (d) {
           return getColor(d);
-        });
+        }).on('click', selectFn).on('mouseover', highlightFn).on('mouseout', highlightFn);
         svg.selectAll('text.label').data(dateSlice, function (d) {
           return d.name;
         }).enter().append('text').attr('class', 'label').attr('x', labelX).attr('y', function (d) {
           return barY(d) + barHalfHeight;
         }).style('text-anchor', 'end').html(function (d) {
           return d.name;
-        });
+        }).on('click', selectFn).on('mouseover', highlightFn).on('mouseout', highlightFn);
         svg.selectAll('text.valueLabel').data(dateSlice, function (d) {
           return d.name;
         }).enter().append('text').attr('class', 'valueLabel').attr('x', function (d) {
@@ -1215,14 +1225,14 @@
         return;
       }
 
-      var _store$getState$optio2 = store.getState().options,
-          tickDuration = _store$getState$optio2.tickDuration,
-          topN = _store$getState$optio2.topN,
-          title = _store$getState$optio2.title,
-          subTitle = _store$getState$optio2.subTitle,
-          caption = _store$getState$optio2.caption,
-          dateCounter = _store$getState$optio2.dateCounter,
-          fixedScale = _store$getState$optio2.fixedScale;
+      var _store$getState$optio3 = store.getState().options,
+          tickDuration = _store$getState$optio3.tickDuration,
+          topN = _store$getState$optio3.topN,
+          title = _store$getState$optio3.title,
+          subTitle = _store$getState$optio3.subTitle,
+          caption = _store$getState$optio3.caption,
+          dateCounter = _store$getState$optio3.dateCounter,
+          fixedScale = _store$getState$optio3.fixedScale;
       var CompleteDateSlice = getDateSlice(data, store.getState().ticker.currentDate);
       var dateSlice = CompleteDateSlice.slice(0, store.getState().options.topN);
 
@@ -1243,12 +1253,12 @@
         return d.name;
       });
       bars.enter().append('rect').attr('class', function (d) {
-        return "bar " + d.name.replace(/\s/g, '_');
+        return 'bar ' + safeName(d.name);
       }).attr('x', x(0) + 1).attr('width', barWidth).attr('y', function () {
         return y(topN + 1) + 5;
       }).attr('height', barHeight).style('fill', function (d) {
         return getColor(d);
-      }).transition().duration(tickDuration).ease(d3$1.easeLinear).attr('y', barY);
+      }).on('click', selectFn).on('mouseover', highlightFn).on('mouseout', highlightFn).transition().duration(tickDuration).ease(d3$1.easeLinear).attr('y', barY);
       bars.transition().duration(tickDuration).ease(d3$1.easeLinear).attr('width', function (d) {
         return Math.abs(x(d.value) - x(0) - 1);
       }).attr('y', barY);
@@ -1264,7 +1274,7 @@
         return y(topN + 1) + 5 + barHalfHeight;
       }).style('text-anchor', 'end').html(function (d) {
         return d.name;
-      }).transition().duration(tickDuration).ease(d3$1.easeLinear).attr('y', function (d) {
+      }).on('click', selectFn).on('mouseover', highlightFn).on('mouseout', highlightFn).transition().duration(tickDuration).ease(d3$1.easeLinear).attr('y', function (d) {
         return barY(d) + barHalfHeight;
       });
       labels.transition().duration(tickDuration).ease(d3$1.easeLinear).attr('x', labelX).attr('y', function (d) {
@@ -1391,6 +1401,22 @@
       }).classed('halo', true);
     }
 
+    function highlightFn(d) {
+      if (highlightBars) {
+        d3$1.select('rect.' + safeName(d.name)).classed('highlight', function () {
+          return !d3$1.select(this).classed('highlight');
+        });
+      }
+    }
+
+    function selectFn(d) {
+      if (selectBars) {
+        d3$1.select('rect.' + safeName(d.name)).classed('selected', function () {
+          return !d3$1.select(this).classed('selected');
+        });
+      }
+    }
+
     return {
       renderInitalView: renderInitalView,
       renderFrame: renderFrame,
@@ -1400,8 +1426,8 @@
 
   var styles = "\n__selector__ text {\n  font-size: 16px;\n  font-family: Open Sans, sans-serif;\n}\n\n__selector__ text.title {\n  font-size: 24px;\n  font-weight: 500;\n}\n\n__selector__ text.subTitle {\n  font-weight: 500;\n}\n\n__selector__ text.caption {\n  font-weight: 400;\n  font-size: 24px;\n}\n\n__selector__ text.label {\n  font-weight: 600;\n}\n\n__selector__ text.valueLabel {\n  font-weight: 300;\n}\n\n__selector__ text.dateCounterText {\n  font-size: 64px;\n  font-weight: 700;\n}\n\n__selector__ .xAxis .tick:nth-child(2) text {\n  text-anchor: start;\n}\n\n__selector__ .tick line {\n  shape-rendering: CrispEdges;\n}\n\n__selector__ path.domain {\n  display: none;\n}\n\n__selector__ {\n  position: relative;\n}\n\n__selector__ .controls {\n  /*  width and right are set dynamically in renderer.ts */\n  position: absolute;\n  top: 0;\n  display: flex;\n}\n\n__selector__ .controls div,\n__selector__ .overlay div {\n  cursor: pointer;\n  font-size: 24px;\n  font-weight: 700;\n  width: 38px;\n  height: 38px;\n  -moz-border-radius: 5px;\n  -webkit-border-radius: 5px;\n  border-radius: 5px;\n  margin: 5px;\n  text-align: center;\n}\n\n__selector__ .controls svg {\n  margin: 5px auto;\n  width: 28px;\n  height: 28px;\n}\n\n__selector__ .overlay {\n  position: absolute;\n  top: 0;\n  left: 0;\n  width: 100%;\n  height: 100%;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n__selector__ .overlay div {\n  position: relative;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  width: 200px;\n  height: 200px;\n  -moz-border-radius: 100px;\n  -webkit-border-radius: 100px;\n  border-radius: 100px;\n}\n__selector__ .overlay svg {\n  height: 50%;\n  width: 50%;\n}\n";
   var themes = {
-    "dark": "\n__selector__ {\n  background-color: #313639;\n}\n\n__selector__ text.title {\n  fill: #fafafa;\n}\n\n__selector__ text.subTitle {\n  fill: #cccccc;\n}\n\n__selector__ text.dateCounterText {\n  fill: #cccccc;\n  opacity: 1;\n}\n\n__selector__ text.caption {\n  fill: #cccccc;\n}\n\n__selector__ .halo {\n  fill: #313639;\n  stroke: #313639;\n  stroke-width: 10;\n  stroke-linejoin: round;\n  opacity: 1;\n}\n\n__selector__ text.label {\n  fill: #313639;\n}\n\n__selector__ text.valueLabel {\n  fill: #fafafa;\n}\n\n__selector__ .tick text {\n  fill: #cccccc;\n}\n\n__selector__ .tick line {\n  shape-rendering: CrispEdges;\n  stroke: #dddddd;\n}\n\n__selector__ .tick line.origin {\n  stroke: #aaaaaa;\n}\n\n__selector__ .controls div,\n__selector__ .overlay div {\n  color: #ffffff;\n  background: #777777;\n  border: 1px solid black;\n  opacity: 0.5;\n}\n\n__selector__ .controls div:hover,\n__selector__ .overlay div:hover {\n  background: #aaaaaa;\n  color: black;\n}\n\n__selector__ .overlay {\n  background-color: black;\n  opacity: 0.7;\n}\n",
-    "light": "\n/* __selector__ {\n  background-color: #ffffff;\n}\n\n__selector__ text.title {\n  fill: #fafafa;\n} */\n\n__selector__ text.subTitle {\n  fill: #777777;\n}\n\n__selector__ text.dateCounterText {\n  fill: #bbbbbb;\n  opacity: 1;\n}\n\n__selector__ text.caption {\n  fill: #777777;\n}\n\n__selector__ .halo {\n  fill: #ffffff;\n  stroke: #ffffff;\n  stroke-width: 10;\n  stroke-linejoin: round;\n  opacity: 1;\n}\n\n__selector__ text.label {\n  fill: #000000;\n}\n\n__selector__ text.valueLabel {\n  fill: #000000;\n}\n\n__selector__ .tick text {\n  fill: #777777;\n}\n\n__selector__ .tick line {\n  shape-rendering: CrispEdges;\n  stroke: #dddddd;\n}\n\n__selector__ .tick line.origin {\n  stroke: #aaaaaa;\n}\n\n__selector__ .controls div,\n__selector__ .overlay div {\n  color: #ffffff;\n  background: #777777;\n  border: 1px solid black;\n  opacity: 0.5;\n}\n\n__selector__ .controls div:hover,\n__selector__ .overlay div:hover {\n  background: #aaaaaa;\n  color: black;\n}\n\n__selector__ .overlay {\n  background-color: black;\n  opacity: 0.7;\n}\n"
+    "dark": "\n__selector__ {\n  background-color: #313639;\n}\n\n__selector__ text.title {\n  fill: #fafafa;\n}\n\n__selector__ text.subTitle {\n  fill: #cccccc;\n}\n\n__selector__ text.dateCounterText {\n  fill: #cccccc;\n  opacity: 1;\n}\n\n__selector__ text.caption {\n  fill: #cccccc;\n}\n\n__selector__ .halo {\n  fill: #313639;\n  stroke: #313639;\n  stroke-width: 10;\n  stroke-linejoin: round;\n  opacity: 1;\n}\n\n__selector__ text.legend-text {\n  fill: #fafafa;\n}\n\n__selector__ text.label {\n  fill: #313639;\n}\n\n__selector__ text.valueLabel {\n  fill: #fafafa;\n}\n\n__selector__ .tick text {\n  fill: #cccccc;\n}\n\n__selector__ .tick line {\n  shape-rendering: CrispEdges;\n  stroke: #dddddd;\n}\n\n__selector__ .tick line.origin {\n  stroke: #aaaaaa;\n}\n\n__selector__ .controls div,\n__selector__ .overlay div {\n  color: #ffffff;\n  background: #777777;\n  border: 1px solid black;\n  opacity: 0.5;\n}\n\n__selector__ .controls div:hover,\n__selector__ .overlay div:hover {\n  background: #aaaaaa;\n  color: black;\n}\n\n__selector__ .overlay {\n  background-color: black;\n  opacity: 0.7;\n}\n\n__selector__ .highlight {\n  fill: rgb(255, 39, 39) !important;\n}\n\n__selector__ .selected {\n  fill: rgb(209, 32, 32) !important;\n}\n",
+    "light": "\n/* __selector__ {\n  background-color: #ffffff;\n}\n\n__selector__ text.title {\n  fill: #fafafa;\n} */\n\n__selector__ text.subTitle {\n  fill: #777777;\n}\n\n__selector__ text.dateCounterText {\n  fill: #bbbbbb;\n  opacity: 1;\n}\n\n__selector__ text.caption {\n  fill: #777777;\n}\n\n__selector__ .halo {\n  fill: #ffffff;\n  stroke: #ffffff;\n  stroke-width: 10;\n  stroke-linejoin: round;\n  opacity: 1;\n}\n\n__selector__ text.legend-text {\n  fill: #000000;\n}\n\n__selector__ text.label {\n  fill: #000000;\n}\n\n__selector__ text.valueLabel {\n  fill: #000000;\n}\n\n__selector__ .tick text {\n  fill: #777777;\n}\n\n__selector__ .tick line {\n  shape-rendering: CrispEdges;\n  stroke: #dddddd;\n}\n\n__selector__ .tick line.origin {\n  stroke: #aaaaaa;\n}\n\n__selector__ .controls div,\n__selector__ .overlay div {\n  color: #ffffff;\n  background: #777777;\n  border: 1px solid black;\n  opacity: 0.5;\n}\n\n__selector__ .controls div:hover,\n__selector__ .overlay div:hover {\n  background: #aaaaaa;\n  color: black;\n}\n\n__selector__ .overlay {\n  background-color: black;\n  opacity: 0.7;\n}\n\n__selector__ .highlight {\n  fill: rgb(255, 39, 39) !important;\n}\n\n__selector__ .selected {\n  fill: rgb(185, 21, 21) !important;\n}\n"
   };
 
   function styleInject(selector, insertAt) {
