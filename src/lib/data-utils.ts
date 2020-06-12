@@ -131,9 +131,13 @@ function fillGaps(data: Data[], period: Options['fillDateGaps']) {
 }
 
 export function getDateSlice(data: Data[], date: string) {
-  return data
+  const slice = data
     .filter((d) => d.date === date && !isNaN(d.value))
     .filter((d) => (!!d.group ? !store.getState().data.groupFilter.includes(d.group) : true))
     .sort((a, b) => b.value - a.value)
     .map((d, i) => ({ ...d, rank: i }));
+
+  const emptyData = [{ name: '', value: 0, lastValue: 0, date, rank: 1 }];
+
+  return slice.length > 0 ? slice : emptyData;
 }

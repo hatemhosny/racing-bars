@@ -21,7 +21,13 @@ __selector__ text.caption {
   font-weight: 400;
   font-size: 24px;
 }
-
+__selector__ text.legend-text {
+  user-select: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
 __selector__ text.label {
   font-weight: 600;
 }
@@ -186,6 +192,8 @@ __selector__ .highlight {
 
 __selector__ .selected {
   fill: rgb(209, 32, 32) !important;
+  stroke: #777777 !important;
+  stroke-width: 1 !important;
 }
 `,
 "light": `
@@ -267,7 +275,9 @@ __selector__ .highlight {
 }
 
 __selector__ .selected {
-  fill: rgb(185, 21, 21) !important;
+  fill: rgb(209, 37, 37) !important;
+  stroke: #777777 !important;
+  stroke-width: 1 !important;
 }
 `,
 };

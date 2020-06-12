@@ -7,6 +7,7 @@ export interface DataAction extends Action {
 
 export interface DataState extends DataCollections {
   groupFilter: string[];
+  selected: string[];
 }
 
 export interface DataCollections {

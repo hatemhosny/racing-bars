@@ -16,7 +16,13 @@ __selector__ text.caption {
   font-weight: 400;
   font-size: 24px;
 }
-
+__selector__ text.legend-text {
+  user-select: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
 __selector__ text.label {
   font-weight: 600;
 }

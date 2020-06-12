@@ -15,6 +15,8 @@ import {
   getColor,
   getIconID,
   safeName,
+  toggleClass,
+  getClicks,
 } from './utils';
 import { getDateSlice } from './data-utils';
 
@@ -66,6 +68,10 @@ export function createRenderer(data: Data[]): Renderer {
 
     const TotalDateSlice = getDateSlice(data, store.getState().ticker.currentDate);
     const dateSlice = TotalDateSlice.slice(0, store.getState().options.topN);
+    if (dateSlice.length === 0) {
+      return;
+    }
+
     const element = document.querySelector(selector) as HTMLElement;
     element.innerHTML = '';
 
@@ -120,9 +126,7 @@ export function createRenderer(data: Data[]): Renderer {
           .style('opacity', (d: string) =>
             store.getState().data.groupFilter.includes(d) ? 0.3 : 1,
           )
-          .on('click', (d: string) => {
-            store.dispatch(actions.data.toggleFilter(d));
-          });
+          .on('click', legendClick);
 
         legends
           .append('rect')
@@ -202,6 +206,7 @@ export function createRenderer(data: Data[]): Renderer {
         .enter()
         .append('rect')
         .attr('class', (d: Data) => 'bar ' + safeName(d.name))
+        .classed('selected', (d: Data) => store.getState().data.selected.includes(d.name))
         .attr('x', x(0) + 1)
         .attr('width', barWidth)
         .attr('y', barY)
@@ -377,6 +382,7 @@ export function createRenderer(data: Data[]): Renderer {
       .enter()
       .append('rect')
       .attr('class', (d: Data) => 'bar ' + safeName(d.name))
+      .classed('selected', (d: Data) => store.getState().data.selected.includes(d.name))
       .attr('x', x(0) + 1)
       .attr('width', barWidth)
       .attr('y', () => y(topN + 1) + 5)
@@ -616,21 +622,29 @@ export function createRenderer(data: Data[]): Renderer {
       .classed('halo', true);
   }
 
+  function legendClick(d: string) {
+    getClicks(d3.event, function (event: any) {
+      const clicks = event.detail;
+      if (clicks === 3) {
+        store.dispatch(actions.data.resetFilters());
+      } else if (clicks === 2) {
+        store.dispatch(actions.data.allExceptFilter(d));
+      } else {
+        store.dispatch(actions.data.toggleFilter(d));
+      }
+    });
+  }
+
   function highlightFn(d: any) {
     if (highlightBars) {
-      d3.select('rect.' + safeName(d.name)) //
-        .classed('highlight', function () {
-          return !d3.select(this).classed('highlight');
-        });
+      toggleClass('rect.' + safeName(d.name), 'highlight');
     }
   }
 
-  function selectFn(d: any) {
+  function selectFn(d: Data) {
     if (selectBars) {
-      d3.select('rect.' + safeName(d.name)) //
-        .classed('selected', function () {
-          return !d3.select(this).classed('selected');
-        });
+      toggleClass('rect.' + safeName(d.name), 'selected');
+      store.dispatch(actions.data.toggleSelection(d.name));
     }
   }
 

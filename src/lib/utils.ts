@@ -173,5 +173,37 @@ export function getText(param: string | ParamFunction, dateSlice: Data[], isDate
 }
 
 export function safeName(name: string) {
-  return name.replace(/\s/g, '_');
+  // replace non-alphanumeric with underscore
+  return name.replace(/[\W]+/g, '_');
 }
+
+export function toggleClass(selector: string, className: string) {
+  d3.select(selector) //
+    .classed(className, function () {
+      return !d3.select(this).classed(className);
+    });
+}
+
+function debounce(func: any, wait: number, immediate = false) {
+  let timeout: any;
+  return function (_clicks: any, _Fn: (clicks: number) => void) {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
+    const context = this;
+    const args = arguments;
+    const later = function () {
+      timeout = null;
+      if (!immediate) {
+        func.apply(context, args);
+      }
+    };
+    const callNow = immediate && !timeout;
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+    if (callNow) {
+      func.apply(context, args);
+    }
+  };
+}
+export const getClicks = debounce(function (event: any, Fn: (event: any) => void) {
+  Fn(event);
+}, 250);

@@ -3,6 +3,7 @@ export {
   axisTop,
   csv,
   easeLinear,
+  event,
   format,
   hsl,
   interpolateRound,

@@ -77,4 +77,6 @@ __selector__ .highlight {
 
 __selector__ .selected {
   fill: rgb(209, 32, 32) !important;
+  stroke: #777777 !important;
+  stroke-width: 1 !important;
 }

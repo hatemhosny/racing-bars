@@ -7,6 +7,7 @@ const initialState: DataState = {
   dates: [],
   formattedDates: [],
   groupFilter: [],
+  selected: [],
 };
 
 export function dataReducer(state = initialState, action: DataAction): DataState {
@@ -25,19 +26,55 @@ export function dataReducer(state = initialState, action: DataAction): DataState
     case actionTypes.addFilter:
       return {
         ...state,
-        groupFilter: addFilter(state.groupFilter, action.payload as string),
+        groupFilter: addToArray(state.groupFilter, action.payload as string),
       };
 
     case actionTypes.removeFilter:
       return {
         ...state,
-        groupFilter: removeFilter(state.groupFilter, action.payload as string),
+        groupFilter: removeFromArray(state.groupFilter, action.payload as string),
       };
 
     case actionTypes.toggleFilter:
       return {
         ...state,
-        groupFilter: toggleFilter(state.groupFilter, action.payload as string),
+        groupFilter: toggleItem(state.groupFilter, action.payload as string),
+      };
+
+    case actionTypes.resetFilters:
+      return {
+        ...state,
+        groupFilter: [],
+      };
+
+    case actionTypes.allExceptFilter:
+      return {
+        ...state,
+        groupFilter: removeFromArray(state.groups, action.payload as string),
+      };
+
+    case actionTypes.addSelection:
+      return {
+        ...state,
+        selected: addToArray(state.selected, action.payload as string),
+      };
+
+    case actionTypes.removeSelection:
+      return {
+        ...state,
+        selected: removeFromArray(state.selected, action.payload as string),
+      };
+
+    case actionTypes.toggleSelection:
+      return {
+        ...state,
+        selected: toggleItem(state.selected, action.payload as string),
+      };
+
+    case actionTypes.resetSelections:
+      return {
+        ...state,
+        selected: [],
       };
 
     default:
@@ -45,18 +82,18 @@ export function dataReducer(state = initialState, action: DataAction): DataState
   }
 }
 
-function addFilter(filters: string[], group: string) {
-  const arr = [...filters];
-  if (!arr.includes(group)) {
-    arr.push(group);
+function addToArray(array: string[], item: string) {
+  const arr = [...array];
+  if (!arr.includes(item)) {
+    arr.push(item);
   }
   return arr;
 }
 
-function removeFilter(filters: string[], group: string) {
-  return filters.filter((item) => item !== group);
+function removeFromArray(array: string[], item: string) {
+  return array.filter((x) => x !== item);
 }
 
-function toggleFilter(filters: string[], group: string) {
-  return filters.includes(group) ? removeFilter(filters, group) : addFilter(filters, group);
+function toggleItem(array: string[], item: string) {
+  return array.includes(item) ? removeFromArray(array, item) : addToArray(array, item);
 }
