@@ -1,4 +1,4 @@
-import { formatDate, getDateString, getDates } from './dates';
+import { getDateString, getDates } from './dates';
 import { Data, WideData } from './data';
 import { actions, Store } from './store';
 import { Options } from './options';
@@ -38,9 +38,9 @@ function storeDataCollections(data: Data[], store: Store) {
     .filter(Boolean)
     .sort() as string[];
   const dates = getDates(data);
-  const formattedDates = dates.map((date: string) => formatDate(date));
 
-  store.dispatch(actions.data.dataLoaded({ names, groups, dates, formattedDates }));
+  store.dispatch(actions.data.dataLoaded({ names, groups }));
+  store.dispatch(actions.ticker.initialize(dates));
 }
 
 function calculateLastValues(data: Data[]) {
@@ -81,9 +81,9 @@ function fillGaps(data: Data[], period: Options['fillDateGaps']) {
     return data;
   }
 
-  const dates = getDates(data);
-  const minDate = new Date(formatDate(dates[0]));
-  const maxDate = new Date(formatDate(dates[dates.length - 1]));
+  const dates = getDates(data).map((date) => new Date(date));
+  const minDate = new Date(dates[0]);
+  const maxDate = new Date(dates[dates.length - 1]);
 
   const next = {
     years: (dt: Date) => {

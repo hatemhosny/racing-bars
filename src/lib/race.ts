@@ -77,7 +77,7 @@ export function race(data: Data[] | WideData[], options: Options | RequiredOptio
     setDate: (inputDate: string | Date) => {
       store.dispatch(actions.ticker.updateDate(getDateString(inputDate)));
     },
-    getAllDates: () => [...store.getState().data.formattedDates],
+    getAllDates: () => [...store.getState().ticker.dates],
     createScroller: () => {
       createScroller(root, store);
     },

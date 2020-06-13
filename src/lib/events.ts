@@ -2,7 +2,6 @@ import { elements } from './elements';
 import { Store } from './store';
 import { Ticker } from './ticker';
 import { addEventHandler, hideElement } from './utils';
-import { formatDate } from './dates';
 import { DOMCustomEvent } from './models';
 
 export function registerEvents(store: Store, ticker: Ticker) {
@@ -76,7 +75,7 @@ function dispatchDOMEvent(store: Store) {
     new CustomEvent('racingBars/dateChanged', {
       bubbles: true,
       detail: {
-        date: formatDate(store.getState().ticker.currentDate),
+        date: store.getState().ticker.currentDate,
         isFirst: store.getState().ticker.isFirstDate,
         isLast: store.getState().ticker.isLastDate,
       },
