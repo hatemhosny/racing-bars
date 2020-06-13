@@ -13,8 +13,6 @@ export interface DataState extends DataCollections {
 export interface DataCollections {
   names: string[];
   groups: string[];
-  dates: string[];
-  formattedDates: string[];
 }
 
 export interface Data {

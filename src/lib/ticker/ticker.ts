@@ -3,8 +3,6 @@ import { actions, Store } from '../store';
 import { Ticker } from './ticker.models';
 
 export function createTicker(store: Store): Ticker {
-  store.dispatch(actions.ticker.initialize(store.getState().data.dates));
-
   let ticker: d3.Timer;
 
   function start() {

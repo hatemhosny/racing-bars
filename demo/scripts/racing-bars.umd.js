@@ -226,13 +226,7 @@
     }
 
     if (typeof param === 'function') {
-      return param(formatDate(currentDate), dateSlice.map(function (d) {
-        return _extends(_extends({}, d), {}, {
-          date: formatDate(d.date)
-        });
-      }), dates.map(function (date) {
-        return formatDate(date);
-      }));
+      return param(currentDate, dateSlice, dates);
     }
 
     if (isDate) {
@@ -294,12 +288,10 @@
       throw new Error("\"" + inputDate + "\" is not a valid date");
     }
 
-    var year = date.getFullYear();
-    var month = (1 + date.getMonth()).toString();
-    month = zeroPad(month, 2);
-    var day = date.getDate().toString();
-    day = zeroPad(day, 2);
-    return "" + year + month + day;
+    var year = date.getFullYear().toString();
+    var month = zeroPad((1 + date.getMonth()).toString(), 2);
+    var day = zeroPad(date.getDate().toString(), 2);
+    return year + "-" + month + "-" + day;
   }
   function formatDate(dateStr, format) {
     if (format === void 0) {
@@ -307,9 +299,9 @@
     }
 
     var year = dateStr.slice(0, 4);
-    var month = dateStr.slice(4, 6);
-    var day = dateStr.slice(6, 8);
-    var date = new Date(year + "-" + month + "-" + day);
+    var month = dateStr.slice(5, 7);
+    var day = dateStr.slice(7, 9);
+    var date = new Date(dateStr);
     var weekDayIndex = String(date.getDay());
     var monthNames = {
       '01': 'Jan',
@@ -411,8 +403,6 @@
   var initialState = {
     names: [],
     groups: [],
-    dates: [],
-    formattedDates: [],
     groupFilter: [],
     selected: []
   };
@@ -427,9 +417,7 @@
           var collections = action.payload;
           return _extends(_extends({}, state), {}, {
             names: [].concat(collections.names),
-            groups: [].concat(collections.groups),
-            dates: [].concat(collections.dates),
-            formattedDates: [].concat(collections.formattedDates)
+            groups: [].concat(collections.groups)
           });
         }
 
@@ -776,7 +764,6 @@
   }
 
   function createTicker(store) {
-    store.dispatch(actions.ticker.initialize(store.getState().data.dates));
     var ticker;
 
     function start() {
@@ -965,15 +952,11 @@
       return d.group;
     }))).filter(Boolean).sort();
     var dates = getDates(data);
-    var formattedDates = dates.map(function (date) {
-      return formatDate(date);
-    });
     store.dispatch(actions.data.dataLoaded({
       names: names,
-      groups: groups,
-      dates: dates,
-      formattedDates: formattedDates
+      groups: groups
     }));
+    store.dispatch(actions.ticker.initialize(dates));
   }
 
   function calculateLastValues(data) {
@@ -1021,9 +1004,11 @@
       return data;
     }
 
-    var dates = getDates(data);
-    var minDate = new Date(formatDate(dates[0]));
-    var maxDate = new Date(formatDate(dates[dates.length - 1]));
+    var dates = getDates(data).map(function (date) {
+      return new Date(date);
+    });
+    var minDate = new Date(dates[0]);
+    var maxDate = new Date(dates[dates.length - 1]);
     var next = {
       years: function years(dt) {
         dt.setFullYear(dt.getFullYear() + 1);
@@ -1665,7 +1650,7 @@
     element.dispatchEvent(new CustomEvent('racingBars/dateChanged', {
       bubbles: true,
       detail: {
-        date: formatDate(store.getState().ticker.currentDate),
+        date: store.getState().ticker.currentDate,
         isFirst: store.getState().ticker.isFirstDate,
         isLast: store.getState().ticker.isLastDate
       }
@@ -1790,7 +1775,7 @@
         store.dispatch(actions.ticker.updateDate(getDateString(inputDate)));
       },
       getAllDates: function getAllDates() {
-        return [].concat(store.getState().data.formattedDates);
+        return [].concat(store.getState().ticker.dates);
       },
       createScroller: function createScroller$1() {
         createScroller(root, store);

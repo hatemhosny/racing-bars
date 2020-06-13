@@ -9,22 +9,18 @@ export function getDateString(inputDate: string | Date) {
     throw new Error(`"${inputDate}" is not a valid date`);
   }
 
-  const year = date.getFullYear();
+  const year = date.getFullYear().toString();
+  const month = zeroPad((1 + date.getMonth()).toString(), 2);
+  const day = zeroPad(date.getDate().toString(), 2);
 
-  let month = (1 + date.getMonth()).toString();
-  month = zeroPad(month, 2);
-
-  let day = date.getDate().toString();
-  day = zeroPad(day, 2);
-
-  return `${year}${month}${day}`;
+  return `${year}-${month}-${day}`;
 }
 
 export function formatDate(dateStr: string, format = 'YYYY-MM-DD') {
   const year = dateStr.slice(0, 4);
-  const month = dateStr.slice(4, 6);
-  const day = dateStr.slice(6, 8);
-  const date = new Date(`${year}-${month}-${day}`);
+  const month = dateStr.slice(5, 7);
+  const day = dateStr.slice(7, 9);
+  const date = new Date(dateStr);
   const weekDayIndex = String(date.getDay());
   const monthNames: { [key: string]: string } = {
     '01': 'Jan',

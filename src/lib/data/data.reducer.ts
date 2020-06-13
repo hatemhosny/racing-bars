@@ -4,8 +4,6 @@ import { DataState, DataAction, DataCollections } from './data.models';
 const initialState: DataState = {
   names: [],
   groups: [],
-  dates: [],
-  formattedDates: [],
   groupFilter: [],
   selected: [],
 };
@@ -18,8 +16,6 @@ export function dataReducer(state = initialState, action: DataAction): DataState
         ...state,
         names: [...collections.names],
         groups: [...collections.groups],
-        dates: [...collections.dates],
-        formattedDates: [...collections.formattedDates],
       };
     }
 

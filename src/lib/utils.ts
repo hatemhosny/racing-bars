@@ -167,11 +167,7 @@ export function getText(
   isDate = false,
 ): string {
   if (typeof param === 'function') {
-    return param(
-      formatDate(currentDate),
-      dateSlice.map((d) => ({ ...d, date: formatDate(d.date) })),
-      dates.map((date) => formatDate(date)),
-    );
+    return param(currentDate, dateSlice, dates);
   }
   if (isDate) {
     return formatDate(currentDate, param);
