@@ -1,30 +1,32 @@
 import { elements } from './elements';
-import { store } from './store';
+import { Store } from './store';
 import { Ticker } from './ticker';
 import { addEventHandler, hideElement } from './utils';
 import { formatDate } from './dates';
 import { DOMCustomEvent } from './models';
 
-export function registerEvents(element: HTMLElement, ticker: Ticker) {
+export function registerEvents(store: Store, ticker: Ticker) {
+  const root = document.querySelector(store.getState().options.selector) as HTMLElement;
+
   registerControlButtonEvents();
   registerOverlayEvents();
   registerClickEvents();
   registerKeyboardEvents();
 
   function registerControlButtonEvents() {
-    addEventHandler(elements.skipBack, 'click', ticker.skipBack);
-    addEventHandler(elements.play, 'click', ticker.toggle);
-    addEventHandler(elements.pause, 'click', ticker.toggle);
-    addEventHandler(elements.skipForward, 'click', ticker.skipForward);
+    addEventHandler(root, elements.skipBack, 'click', ticker.skipBack);
+    addEventHandler(root, elements.play, 'click', ticker.toggle);
+    addEventHandler(root, elements.pause, 'click', ticker.toggle);
+    addEventHandler(root, elements.skipForward, 'click', ticker.skipForward);
   }
 
   function registerOverlayEvents() {
-    addEventHandler(elements.overlayPlay, 'click', () => {
-      hideElement(elements.overlay);
+    addEventHandler(root, elements.overlayPlay, 'click', () => {
+      hideElement(root, elements.overlay);
       ticker.start();
     });
-    addEventHandler(elements.overlayRepeat, 'click', () => {
-      hideElement(elements.overlay);
+    addEventHandler(root, elements.overlayRepeat, 'click', () => {
+      hideElement(root, elements.overlay);
       ticker.loop();
       ticker.start();
     });
@@ -32,9 +34,9 @@ export function registerEvents(element: HTMLElement, ticker: Ticker) {
 
   function registerClickEvents() {
     if (!store.getState().options.disableClickEvents) {
-      const svg = element.querySelector('svg') as SVGSVGElement;
+      const svg = root.querySelector('svg') as SVGSVGElement;
       svg.addEventListener('click', ticker.toggle);
-      element.addEventListener('dblclick', ticker.skipForward);
+      root.addEventListener('dblclick', ticker.skipForward);
     }
   }
 
@@ -68,12 +70,13 @@ export function registerEvents(element: HTMLElement, ticker: Ticker) {
   }
 }
 
-function dispatchDOMEvent(element: HTMLElement, currentDate: string) {
+function dispatchDOMEvent(store: Store) {
+  const element = document.querySelector(store.getState().options.selector) as HTMLElement;
   element.dispatchEvent(
     new CustomEvent('racingBars/dateChanged', {
       bubbles: true,
       detail: {
-        date: formatDate(currentDate),
+        date: formatDate(store.getState().ticker.currentDate),
         isFirst: store.getState().ticker.isFirstDate,
         isLast: store.getState().ticker.isLastDate,
       },
@@ -81,12 +84,12 @@ function dispatchDOMEvent(element: HTMLElement, currentDate: string) {
   );
 }
 
-export function DOMEventSubscriber(element: HTMLElement) {
+export function DOMEventSubscriber(store: Store) {
   let lastDate = '';
   return function () {
     const currentDate = store.getState().ticker.currentDate;
     if (currentDate !== lastDate) {
-      dispatchDOMEvent(element, currentDate);
+      dispatchDOMEvent(store);
       lastDate = currentDate;
     }
   };

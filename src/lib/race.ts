@@ -4,45 +4,48 @@ import { Data, WideData } from './data';
 import { createRenderer } from './renderer';
 import { createTicker } from './ticker';
 import { styleInject } from './styles';
-import { actions, store } from './store';
+import { actions, createStore, rootReducer } from './store';
 import { Options, RequiredOptions } from './options';
 import { registerEvents, DOMEventSubscriber } from './events';
 import { createScroller } from './scroller';
 
 export function race(data: Data[] | WideData[], options: Options | RequiredOptions) {
+  const store = createStore(rootReducer);
+
   store.dispatch(actions.options.optionsLoaded(options));
+  const { selector, injectStyles, theme, autorun } = store.getState().options;
 
-  const element = document.querySelector(store.getState().options.selector) as HTMLElement;
-  if (!element) {
-    throw new Error('Cannot find element with this selector: ' + store.getState().options.selector);
+  const root = document.querySelector(selector) as HTMLElement;
+  if (!root) {
+    throw new Error('Cannot find element with this selector: ' + selector);
   }
 
-  if (store.getState().options.injectStyles) {
-    styleInject(store.getState().options.selector, 'top');
+  if (injectStyles) {
+    styleInject(selector, theme, 'top');
   }
 
-  const preparedData = prepareData(data as Data[]);
+  const preparedData = prepareData(data as Data[], store);
 
-  const ticker = createTicker();
+  const ticker = createTicker(store);
 
-  const renderer = createRenderer(preparedData);
+  const renderer = createRenderer(preparedData, store);
   renderer.renderInitalView();
 
   store.subscribe(renderer.renderFrame);
-  store.subscribe(DOMEventSubscriber(element));
+  store.subscribe(DOMEventSubscriber(store));
 
   ticker.start();
 
-  if (!store.getState().options.autorun) {
+  if (!autorun) {
     ticker.stop();
   }
 
-  registerEvents(element, ticker);
+  registerEvents(store, ticker);
   window.addEventListener('resize', resize);
 
   function resize() {
     renderer.resize();
-    registerEvents(element, ticker);
+    registerEvents(store, ticker);
   }
 
   return {
@@ -76,7 +79,7 @@ export function race(data: Data[] | WideData[], options: Options | RequiredOptio
     },
     getAllDates: () => [...store.getState().data.formattedDates],
     createScroller: () => {
-      createScroller(element);
+      createScroller(root, store);
     },
   };
 }

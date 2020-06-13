@@ -1,9 +1,9 @@
 import { formatDate, getDateString, getDates } from './dates';
 import { Data, WideData } from './data';
-import { store, actions } from './store';
+import { actions, Store } from './store';
 import { Options } from './options';
 
-export function prepareData(rawData: Data[]) {
+export function prepareData(rawData: Data[], store: Store) {
   const options = store.getState().options;
 
   let data = rawData
@@ -27,12 +27,12 @@ export function prepareData(rawData: Data[]) {
 
   data = calculateLastValues(data);
 
-  loadDataCollectionsToState(data);
+  storeDataCollections(data, store);
 
   return data;
 }
 
-function loadDataCollectionsToState(data: Data[]) {
+function storeDataCollections(data: Data[], store: Store) {
   const names = Array.from(new Set(data.map((d) => d.name))).sort() as string[];
   const groups = Array.from(new Set(data.map((d) => d.group)))
     .filter(Boolean)
@@ -130,10 +130,10 @@ function fillGaps(data: Data[], period: Options['fillDateGaps']) {
   return data;
 }
 
-export function getDateSlice(data: Data[], date: string) {
+export function getDateSlice(data: Data[], date: string, groupFilter: string[]) {
   const slice = data
     .filter((d) => d.date === date && !isNaN(d.value))
-    .filter((d) => (!!d.group ? !store.getState().data.groupFilter.includes(d.group) : true))
+    .filter((d) => (!!d.group ? !groupFilter.includes(d.group) : true))
     .sort((a, b) => b.value - a.value)
     .map((d, i) => ({ ...d, rank: i }));
 

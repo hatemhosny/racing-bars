@@ -4,7 +4,7 @@ import { icons } from './icons';
 import { elements } from './elements';
 import { Renderer } from './models';
 import { Data } from './data';
-import { store, actions } from './store';
+import { actions, Store } from './store';
 import {
   getHeight,
   getWidth,
@@ -20,7 +20,7 @@ import {
 } from './utils';
 import { getDateSlice } from './data-utils';
 
-export function createRenderer(data: Data[]): Renderer {
+export function createRenderer(data: Data[], store: Store): Renderer {
   let margin: { top: number; right: number; bottom: number; left: number };
   let svg: any;
   let x: d3.ScaleLinear<number, number>;
@@ -46,11 +46,12 @@ export function createRenderer(data: Data[]): Renderer {
   let maxValue: number;
 
   const groups = store.getState().data.groups;
-  const { showGroups, highlightBars, selectBars } = store.getState().options;
+  const dates = store.getState().ticker.dates;
+  const { selector, showGroups, highlightBars, selectBars } = store.getState().options;
+  const root = document.querySelector(selector) as HTMLElement;
 
   function renderInitalView() {
     const {
-      selector,
       title,
       subTitle,
       caption,
@@ -66,17 +67,16 @@ export function createRenderer(data: Data[]): Renderer {
       fixedScale,
     } = store.getState().options;
 
-    const TotalDateSlice = getDateSlice(data, store.getState().ticker.currentDate);
+    const currentDate = store.getState().ticker.currentDate;
+    const TotalDateSlice = getDateSlice(data, currentDate, store.getState().data.groupFilter);
     const dateSlice = TotalDateSlice.slice(0, store.getState().options.topN);
     if (dateSlice.length === 0) {
       return;
     }
 
-    const element = document.querySelector(selector) as HTMLElement;
-    element.innerHTML = '';
-
-    height = getHeight(element, minHeight, inputHeight);
-    width = getWidth(element, minWidth, inputWidth);
+    root.innerHTML = '';
+    height = getHeight(root, minHeight, inputHeight);
+    width = getWidth(root, minWidth, inputWidth);
 
     renderInitialFrame();
     renderControls();
@@ -95,7 +95,7 @@ export function createRenderer(data: Data[]): Renderer {
       };
 
       svg = d3 //
-        .select(selector)
+        .select(root)
         .append('svg')
         .attr('width', width)
         .attr('height', height);
@@ -105,14 +105,14 @@ export function createRenderer(data: Data[]): Renderer {
         .attr('class', 'title')
         .attr('x', titlePadding)
         .attr('y', 24)
-        .html(getText(title, TotalDateSlice));
+        .html(getText(title, TotalDateSlice, dates, currentDate));
 
       subTitleText = svg //
         .append('text')
         .attr('class', 'subTitle')
         .attr('x', titlePadding)
         .attr('y', 55)
-        .html(getText(subTitle, TotalDateSlice));
+        .html(getText(subTitle, TotalDateSlice, dates, currentDate));
 
       if (showGroups) {
         const legendsWrapper = svg.append('g');
@@ -134,7 +134,7 @@ export function createRenderer(data: Data[]): Renderer {
           .attr('width', 10)
           .attr('height', 10)
           .attr('y', 75)
-          .style('fill', (d: string) => getColor({ group: d } as Data));
+          .style('fill', (d: string) => getColor({ group: d } as Data, store));
 
         legends
           .append('text')
@@ -211,7 +211,7 @@ export function createRenderer(data: Data[]): Renderer {
         .attr('width', barWidth)
         .attr('y', barY)
         .attr('height', barHeight)
-        .style('fill', (d: Data) => getColor(d))
+        .style('fill', (d: Data) => getColor(d, store))
         .on('click', selectFn)
         .on('mouseover', highlightFn)
         .on('mouseout', highlightFn);
@@ -277,7 +277,7 @@ export function createRenderer(data: Data[]): Renderer {
         .attr('x', width - margin.right - barPadding)
         .attr('y', height - 40)
         .style('text-anchor', 'end')
-        .html(getText(dateCounter, TotalDateSlice, true))
+        .html(getText(dateCounter, TotalDateSlice, dates, currentDate, true))
         .call(halo);
 
       captionText = svg
@@ -286,7 +286,7 @@ export function createRenderer(data: Data[]): Renderer {
         .attr('x', width - margin.right - barPadding - 10)
         .attr('y', height - margin.bottom - barPadding)
         .style('text-anchor', 'end')
-        .html(getText(caption, TotalDateSlice));
+        .html(getText(caption, TotalDateSlice, dates, currentDate));
     }
 
     function renderControls() {
@@ -297,9 +297,9 @@ export function createRenderer(data: Data[]): Renderer {
         { skipForward: icons.skipForward },
       ];
 
-      const elementWidth = element.getBoundingClientRect().width;
+      const elementWidth = root.getBoundingClientRect().width;
 
-      d3.select(selector)
+      d3.select(root)
         .append('div')
         .classed('controls', true)
         .style('width', width)
@@ -312,11 +312,11 @@ export function createRenderer(data: Data[]): Renderer {
         .attr('class', (d) => Object.keys(d)[0]);
 
       if (store.getState().options.showControls === 'play') {
-        hideElement(elements.skipBack);
-        hideElement(elements.skipForward);
+        hideElement(root, elements.skipBack);
+        hideElement(root, elements.skipForward);
       }
       if (store.getState().options.showControls === 'none') {
-        hideElement(elements.controls);
+        hideElement(root, elements.controls);
       }
     }
 
@@ -326,7 +326,7 @@ export function createRenderer(data: Data[]): Renderer {
         { overlayRepeat: icons.overlayRepeat },
       ];
 
-      d3.select(selector)
+      d3.select(root)
         .append('div')
         .classed('overlay', true)
         .style('minHeight', minHeight + 'px')
@@ -354,7 +354,8 @@ export function createRenderer(data: Data[]): Renderer {
       dateCounter,
       fixedScale,
     } = store.getState().options;
-    const CompleteDateSlice = getDateSlice(data, store.getState().ticker.currentDate);
+    const currentDate = store.getState().ticker.currentDate;
+    const CompleteDateSlice = getDateSlice(data, currentDate, store.getState().data.groupFilter);
     const dateSlice = CompleteDateSlice.slice(0, store.getState().options.topN);
 
     if (showGroups) {
@@ -387,7 +388,7 @@ export function createRenderer(data: Data[]): Renderer {
       .attr('width', barWidth)
       .attr('y', () => y(topN + 1) + 5)
       .attr('height', barHeight)
-      .style('fill', (d: Data) => getColor(d))
+      .style('fill', (d: Data) => getColor(d, store))
       .on('click', selectFn)
       .on('mouseover', highlightFn)
       .on('mouseout', highlightFn)
@@ -541,10 +542,12 @@ export function createRenderer(data: Data[]): Renderer {
         .remove();
     }
 
-    titleText.html(getText(title, CompleteDateSlice));
-    subTitleText.html(getText(subTitle, CompleteDateSlice));
-    captionText.html(getText(caption, CompleteDateSlice));
-    dateCounterText.html(getText(dateCounter, CompleteDateSlice, true)).call(halo);
+    titleText.html(getText(title, CompleteDateSlice, dates, currentDate));
+    subTitleText.html(getText(subTitle, CompleteDateSlice, dates, currentDate));
+    captionText.html(getText(caption, CompleteDateSlice, dates, currentDate));
+    dateCounterText
+      .html(getText(dateCounter, CompleteDateSlice, dates, currentDate, true))
+      .call(halo);
     updateControls();
   }
 
@@ -554,24 +557,22 @@ export function createRenderer(data: Data[]): Renderer {
       String(store.getState().options.inputHeight).startsWith('window') ||
       String(store.getState().options.inputWidth).startsWith('window')
     ) {
-      const element = document.querySelector(store.getState().options.selector) as HTMLElement;
-
       height = getHeight(
-        element,
+        root,
         store.getState().options.minHeight,
         store.getState().options.inputHeight,
       );
       width = getWidth(
-        element,
+        root,
         store.getState().options.minWidth,
         store.getState().options.inputWidth,
       );
 
-      const currentPosition = element.style.position; // "fixed" if scrolling
+      const currentPosition = root.style.position; // "fixed" if scrolling
       renderInitalView();
       renderFrame();
       updateControls();
-      element.style.position = currentPosition;
+      root.style.position = currentPosition;
     }
   }
 
@@ -579,11 +580,11 @@ export function createRenderer(data: Data[]): Renderer {
     const showOverlays = store.getState().options.showOverlays;
 
     if (store.getState().ticker.isRunning) {
-      showElement(elements.pause);
-      hideElement(elements.play);
+      showElement(root, elements.pause);
+      hideElement(root, elements.play);
     } else {
-      showElement(elements.play);
-      hideElement(elements.pause);
+      showElement(root, elements.play);
+      hideElement(root, elements.pause);
     }
 
     if (
@@ -591,22 +592,22 @@ export function createRenderer(data: Data[]): Renderer {
       (showOverlays === 'all' || showOverlays === 'play') &&
       !store.getState().ticker.isRunning
     ) {
-      getElement(elements.controls).style.visibility = 'hidden';
-      showElement(elements.overlay);
-      showElement(elements.overlayPlay);
-      hideElement(elements.overlayRepeat);
+      getElement(root, elements.controls).style.visibility = 'hidden';
+      showElement(root, elements.overlay);
+      showElement(root, elements.overlayPlay);
+      hideElement(root, elements.overlayRepeat);
     } else if (
       store.getState().ticker.isLastDate &&
       (showOverlays === 'all' || showOverlays === 'repeat') &&
       !(store.getState().options.loop && store.getState().ticker.isRunning)
     ) {
-      getElement(elements.controls).style.visibility = 'hidden';
-      showElement(elements.overlay);
-      showElement(elements.overlayRepeat);
-      hideElement(elements.overlayPlay);
+      getElement(root, elements.controls).style.visibility = 'hidden';
+      showElement(root, elements.overlay);
+      showElement(root, elements.overlayRepeat);
+      hideElement(root, elements.overlayPlay);
     } else {
-      getElement(elements.controls).style.visibility = 'unset';
-      getElement(elements.overlay).style.display = 'none';
+      getElement(root, elements.controls).style.visibility = 'unset';
+      getElement(root, elements.overlay).style.display = 'none';
     }
   }
 
@@ -637,13 +638,13 @@ export function createRenderer(data: Data[]): Renderer {
 
   function highlightFn(d: any) {
     if (highlightBars) {
-      toggleClass('rect.' + safeName(d.name), 'highlight');
+      toggleClass(root, 'rect.' + safeName(d.name), 'highlight');
     }
   }
 
   function selectFn(d: Data) {
     if (selectBars) {
-      toggleClass('rect.' + safeName(d.name), 'selected');
+      toggleClass(root, 'rect.' + safeName(d.name), 'selected');
       store.dispatch(actions.data.toggleSelection(d.name));
     }
   }
