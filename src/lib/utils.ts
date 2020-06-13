@@ -1,11 +1,11 @@
 import * as d3 from './d3';
 
 import { Data } from './data';
-import { store } from './store';
+import { Store } from './store';
 import { formatDate } from './dates';
 import { ParamFunction } from './options';
 
-export function getColor(d: Data) {
+export function getColor(d: Data, store: Store) {
   const { names, groups } = store.getState().data;
   const { showGroups, colorSeed, colorMap } = store.getState().options;
 
@@ -42,7 +42,7 @@ export function getColor(d: Data) {
 }
 
 export function getIconID(d: Data) {
-  return 'icon-' + d.name.toLowerCase().split(' ').join('_');
+  return 'icon-' + safeName(d.name);
 }
 
 export function zeroPad(n: string, w: number) {
@@ -122,52 +122,59 @@ export function getWidth(element: HTMLElement, minWidth: number, width?: string)
   return newWidth > minWidth ? newWidth : minWidth;
 }
 
-export function getElement(className: string) {
-  const element = document.querySelector(store.getState().options.selector) as HTMLElement;
-  return element.querySelector('.' + className) as HTMLElement;
+export function getElement(root: HTMLElement, className: string) {
+  return root.querySelector('.' + className) as HTMLElement;
 }
 
-export function showElement(className: string) {
-  const selector = store.getState().options.selector;
-  const element = document.querySelector(selector + ' .' + className) as HTMLElement;
+export function showElement(root: HTMLElement, className: string) {
+  const element = getElement(root, className);
   if (element) {
     element.style.display = 'flex';
   }
 }
 
-export function hideElement(className: string) {
-  const selector = store.getState().options.selector;
-  const element = document.querySelector(selector + ' .' + className) as HTMLElement;
+export function hideElement(root: HTMLElement, className: string) {
+  const element = getElement(root, className);
   if (element) {
     element.style.display = 'none';
   }
 }
 
-export function removeElement(className: string) {
-  const selector = store.getState().options.selector;
-  const element = document.querySelector(selector + ' .' + className) as HTMLElement;
+export function removeElement(root: HTMLElement, className: string) {
+  const element = getElement(root, className);
   if (element) {
     element.remove();
   }
 }
 
-export function addEventHandler(className: string, event: string, handler: () => void) {
-  const element = getElement(className);
+export function addEventHandler(
+  root: HTMLElement,
+  className: string,
+  event: string,
+  handler: () => void,
+) {
+  const element = getElement(root, className);
   if (element) {
     element.addEventListener(event, handler);
   }
 }
 
-export function getText(param: string | ParamFunction, dateSlice: Data[], isDate = false): string {
+export function getText(
+  param: string | ParamFunction,
+  dateSlice: Data[],
+  dates: string[],
+  currentDate: string,
+  isDate = false,
+): string {
   if (typeof param === 'function') {
     return param(
-      formatDate(store.getState().ticker.currentDate),
+      formatDate(currentDate),
       dateSlice.map((d) => ({ ...d, date: formatDate(d.date) })),
-      store.getState().ticker.dates.map((date) => formatDate(date)),
+      dates.map((date) => formatDate(date)),
     );
   }
   if (isDate) {
-    return formatDate(store.getState().ticker.currentDate, param);
+    return formatDate(currentDate, param);
   }
   return param;
 }
@@ -177,8 +184,9 @@ export function safeName(name: string) {
   return name.replace(/[\W]+/g, '_');
 }
 
-export function toggleClass(selector: string, className: string) {
-  d3.select(selector) //
+export function toggleClass(root: HTMLElement, selector: string, className: string) {
+  d3.select(root)
+    .select(selector)
     .classed(className, function () {
       return !d3.select(this).classed(className);
     });

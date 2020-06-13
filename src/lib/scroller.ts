@@ -1,6 +1,6 @@
-import { store, actions } from './store';
+import { actions, Store } from './store';
 
-export function createScroller(element: HTMLElement) {
+export function createScroller(element: HTMLElement, store: Store) {
   const dates = store.getState().ticker.dates;
   prepareDOM();
 

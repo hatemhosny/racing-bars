@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8" />
+  <style>
+    .container {
+      height: 400px;
+      /* width: 95vw; */
+      width: 70%;
+      margin-top: 15px;
+    }
+    .race {
+      margin: auto;
+      height: 100%;
+      width: 95%;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div id="race1" class="race"></div>
+  </div>
+
+  <div class="container">
+    <div id="race2" class="race"></div>
+  </div>
+
+  <div class="container">
+    <div id="race3" class="race"></div>
+  </div>
+
+  <script src="scripts/d3.min.js"></script>
+  <script src="scripts/racing-bars.umd.js"></script>
+  <script>
+    const options = {
+      selector: '#race',
+      title: 'A Tale of 11 Years',
+      subTitle: 'Top 10 Surgical Procedures',
+      dateCounter: 'MM/YYYY',
+      caption: (date, dateSlice, allDates) =>
+        `Total: ${dateSlice.reduce((acc, curr) => acc + curr.value, 0)}`,
+      // startDate: '2009-4-1',
+      // endDate: '2010-12-31',
+      loop: false,
+      tickDuration: 500,
+      // topN: 15,
+      // height: "window*0.85",
+      // width: 'window*0.5',
+      // disableClickEvents: true,
+      // disableKeyboardEvents: true,
+      // showGroups: false,
+      showControls: 'all',
+      showOverlays: 'none',
+      showGroups: false,
+      autorun: false,
+      // colorSeed: "asdfs",
+      labelsOnBars: false,
+      labelsWidth: 250,
+      // embedStyles: false,
+      // theme: 'dark',
+      // fixedScale: true,
+      highlightBars: true,
+      selectBars: true,
+    };
+    racingBars.loadData('data/population.csv', 'csv').then((data) => {
+      racingBars.race(data, { ...options, selector: '#race1' });
+    });
+    racingBars.loadData('data/population.csv', 'csv').then((data) => {
+      racingBars.race(data, { ...options, selector: '#race2', theme: 'dark', labelsOnBars: true });
+    });
+    racingBars.loadData('data/population.csv', 'csv').then((data) => {
+      racingBars.race(data, { ...options, selector: '#race3', startDate: '2010-12-31' });
+    });
+  </script>
+</body>

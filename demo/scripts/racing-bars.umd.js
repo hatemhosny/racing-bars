@@ -65,6 +65,278 @@
     return _extends.apply(this, arguments);
   }
 
+  function getColor(d, store) {
+    var _store$getState$data = store.getState().data,
+        names = _store$getState$data.names,
+        groups = _store$getState$data.groups;
+    var _store$getState$optio = store.getState().options,
+        showGroups = _store$getState$optio.showGroups,
+        colorSeed = _store$getState$optio.colorSeed,
+        colorMap = _store$getState$optio.colorMap;
+
+    if (d.color) {
+      return d.color;
+    }
+
+    var useGroup = Boolean(d.group) && showGroups && groups.length > 0;
+    var values = useGroup ? groups : names;
+
+    if (colorSeed) {
+      values = shuffle(values, toNumber(colorSeed));
+    }
+
+    var currentValue = useGroup ? d.group : d.name;
+    var index = values.indexOf(currentValue);
+
+    if (colorMap) {
+      if (Array.isArray(colorMap)) {
+        while (index > colorMap.length - 1) {
+          index = index - colorMap.length;
+        }
+
+        return colorMap[index];
+      } else {
+        if (colorMap[currentValue]) {
+          return colorMap[currentValue];
+        }
+      }
+    }
+
+    var negativeIfOdd = index % 2 === 0 ? 1 : -1;
+    var lumVariation = random(currentValue) / 10 * negativeIfOdd;
+    var HueSpacing = 360 / (values.length + 1);
+    var hue = (values.indexOf(currentValue) + 1) * HueSpacing;
+    return d3$1.hsl(hue, 0.75, 0.75 + lumVariation);
+  }
+  function getIconID(d) {
+    return 'icon-' + safeName(d.name);
+  }
+  function zeroPad(n, w) {
+    while (n.toString().length < w) {
+      n = '0' + n;
+    }
+
+    return n;
+  }
+
+  function toNumber(s) {
+    s = String(s);
+    var nums = '';
+
+    for (var i = 0; i < s.length; i++) {
+      nums += zeroPad(String(s.charCodeAt(i)), 3);
+    }
+
+    return +nums;
+  }
+
+  function random(InputSeed) {
+    var seed = toNumber(InputSeed);
+    var x = Math.sin(seed) * 10000;
+    return x - Math.floor(x);
+  }
+  function randomString(prefix, n) {
+    var rnd = Array(3).fill(null).map(function () {
+      return Math.random().toString(36).substr(2);
+    }).join('');
+    return prefix + rnd.slice(-n);
+  }
+  function shuffle(arr, seed) {
+    var array = [].concat(arr);
+    var m = array.length;
+    var t;
+    var i;
+
+    while (m) {
+      i = Math.floor(random(seed) * m--);
+      t = array[m];
+      array[m] = array[i];
+      array[i] = t;
+      ++seed;
+    }
+
+    return array;
+  }
+  function generateId(prefix, n) {
+    if (prefix === void 0) {
+      prefix = 'racingbars';
+    }
+
+    if (n === void 0) {
+      n = 8;
+    }
+
+    return randomString(prefix, n);
+  }
+  function getHeight(element, minHeight, height) {
+    var newHeight;
+
+    if (!height) {
+      newHeight = element.getBoundingClientRect().height;
+    } else if (String(height).startsWith('window')) {
+      var scale = +height.split('*')[1] || 1;
+      newHeight = window.innerHeight * scale;
+    } else {
+      newHeight = +height;
+    }
+
+    return newHeight > minHeight ? newHeight : minHeight;
+  }
+  function getWidth(element, minWidth, width) {
+    var newWidth;
+
+    if (!width) {
+      newWidth = element.getBoundingClientRect().width;
+    } else if (String(width).startsWith('window')) {
+      var scale = +width.split('*')[1] || 1;
+      newWidth = window.innerWidth * scale;
+    } else {
+      newWidth = +width;
+    }
+
+    return newWidth > minWidth ? newWidth : minWidth;
+  }
+  function getElement(root, className) {
+    return root.querySelector('.' + className);
+  }
+  function showElement(root, className) {
+    var element = getElement(root, className);
+
+    if (element) {
+      element.style.display = 'flex';
+    }
+  }
+  function hideElement(root, className) {
+    var element = getElement(root, className);
+
+    if (element) {
+      element.style.display = 'none';
+    }
+  }
+  function addEventHandler(root, className, event, handler) {
+    var element = getElement(root, className);
+
+    if (element) {
+      element.addEventListener(event, handler);
+    }
+  }
+  function getText(param, dateSlice, dates, currentDate, isDate) {
+    if (isDate === void 0) {
+      isDate = false;
+    }
+
+    if (typeof param === 'function') {
+      return param(formatDate(currentDate), dateSlice.map(function (d) {
+        return _extends(_extends({}, d), {}, {
+          date: formatDate(d.date)
+        });
+      }), dates.map(function (date) {
+        return formatDate(date);
+      }));
+    }
+
+    if (isDate) {
+      return formatDate(currentDate, param);
+    }
+
+    return param;
+  }
+  function safeName(name) {
+    return name.replace(/[\W]+/g, '_');
+  }
+  function toggleClass(root, selector, className) {
+    d3$1.select(root).select(selector).classed(className, function () {
+      return !d3$1.select(this).classed(className);
+    });
+  }
+
+  function debounce(func, wait, immediate) {
+    if (immediate === void 0) {
+      immediate = false;
+    }
+
+    var timeout;
+    return function (_clicks, _Fn) {
+      var context = this;
+      var args = arguments;
+
+      var later = function later() {
+        timeout = null;
+
+        if (!immediate) {
+          func.apply(context, args);
+        }
+      };
+
+      var callNow = immediate && !timeout;
+      clearTimeout(timeout);
+      timeout = setTimeout(later, wait);
+
+      if (callNow) {
+        func.apply(context, args);
+      }
+    };
+  }
+
+  var getClicks = debounce(function (event, Fn) {
+    Fn(event);
+  }, 250);
+
+  var getDates = function getDates(data) {
+    return Array.from(new Set(data.map(function (d) {
+      return d.date;
+    }))).sort();
+  };
+  function getDateString(inputDate) {
+    var date = new Date(inputDate);
+
+    if (isNaN(+date)) {
+      throw new Error("\"" + inputDate + "\" is not a valid date");
+    }
+
+    var year = date.getFullYear();
+    var month = (1 + date.getMonth()).toString();
+    month = zeroPad(month, 2);
+    var day = date.getDate().toString();
+    day = zeroPad(day, 2);
+    return "" + year + month + day;
+  }
+  function formatDate(dateStr, format) {
+    if (format === void 0) {
+      format = 'YYYY-MM-DD';
+    }
+
+    var year = dateStr.slice(0, 4);
+    var month = dateStr.slice(4, 6);
+    var day = dateStr.slice(6, 8);
+    var date = new Date(year + "-" + month + "-" + day);
+    var weekDayIndex = String(date.getDay());
+    var monthNames = {
+      '01': 'Jan',
+      '02': 'Feb',
+      '03': 'Mar',
+      '04': 'Apr',
+      '05': 'May',
+      '06': 'Jun',
+      '07': 'Jul',
+      '08': 'Aug',
+      '09': 'Sep',
+      '10': 'Oct',
+      '11': 'Nov',
+      '12': 'Dec'
+    };
+    var weekDays = {
+      '0': 'Sun',
+      '1': 'Mon',
+      '2': 'Tue',
+      '3': 'Wed',
+      '4': 'Thu',
+      '5': 'Fri',
+      '6': 'Sat'
+    };
+    return format.replace('MMM', monthNames[month]).replace('DDD', weekDays[weekDayIndex]).replace('YYYY', year).replace('MM', month).replace('DD', day);
+  }
+
   var actionTypes = {
     dataLoaded: 'data/loaded',
     addFilter: 'data/addFilter',
@@ -503,7 +775,7 @@
     }
   }
 
-  function createTicker() {
+  function createTicker(store) {
     store.dispatch(actions.ticker.initialize(store.getState().data.dates));
     var ticker;
 
@@ -652,284 +924,7 @@
     };
   }
 
-  var store = createStore(rootReducer);
-
-  function getColor(d) {
-    var _store$getState$data = store.getState().data,
-        names = _store$getState$data.names,
-        groups = _store$getState$data.groups;
-    var _store$getState$optio = store.getState().options,
-        showGroups = _store$getState$optio.showGroups,
-        colorSeed = _store$getState$optio.colorSeed,
-        colorMap = _store$getState$optio.colorMap;
-
-    if (d.color) {
-      return d.color;
-    }
-
-    var useGroup = Boolean(d.group) && showGroups && groups.length > 0;
-    var values = useGroup ? groups : names;
-
-    if (colorSeed) {
-      values = shuffle(values, toNumber(colorSeed));
-    }
-
-    var currentValue = useGroup ? d.group : d.name;
-    var index = values.indexOf(currentValue);
-
-    if (colorMap) {
-      if (Array.isArray(colorMap)) {
-        while (index > colorMap.length - 1) {
-          index = index - colorMap.length;
-        }
-
-        return colorMap[index];
-      } else {
-        if (colorMap[currentValue]) {
-          return colorMap[currentValue];
-        }
-      }
-    }
-
-    var negativeIfOdd = index % 2 === 0 ? 1 : -1;
-    var lumVariation = random(currentValue) / 10 * negativeIfOdd;
-    var HueSpacing = 360 / (values.length + 1);
-    var hue = (values.indexOf(currentValue) + 1) * HueSpacing;
-    return d3$1.hsl(hue, 0.75, 0.75 + lumVariation);
-  }
-  function getIconID(d) {
-    return 'icon-' + d.name.toLowerCase().split(' ').join('_');
-  }
-  function zeroPad(n, w) {
-    while (n.toString().length < w) {
-      n = '0' + n;
-    }
-
-    return n;
-  }
-
-  function toNumber(s) {
-    s = String(s);
-    var nums = '';
-
-    for (var i = 0; i < s.length; i++) {
-      nums += zeroPad(String(s.charCodeAt(i)), 3);
-    }
-
-    return +nums;
-  }
-
-  function random(InputSeed) {
-    var seed = toNumber(InputSeed);
-    var x = Math.sin(seed) * 10000;
-    return x - Math.floor(x);
-  }
-  function randomString(prefix, n) {
-    var rnd = Array(3).fill(null).map(function () {
-      return Math.random().toString(36).substr(2);
-    }).join('');
-    return prefix + rnd.slice(-n);
-  }
-  function shuffle(arr, seed) {
-    var array = [].concat(arr);
-    var m = array.length;
-    var t;
-    var i;
-
-    while (m) {
-      i = Math.floor(random(seed) * m--);
-      t = array[m];
-      array[m] = array[i];
-      array[i] = t;
-      ++seed;
-    }
-
-    return array;
-  }
-  function generateId(prefix, n) {
-    if (prefix === void 0) {
-      prefix = 'racingbars';
-    }
-
-    if (n === void 0) {
-      n = 8;
-    }
-
-    return randomString(prefix, n);
-  }
-  function getHeight(element, minHeight, height) {
-    var newHeight;
-
-    if (!height) {
-      newHeight = element.getBoundingClientRect().height;
-    } else if (String(height).startsWith('window')) {
-      var scale = +height.split('*')[1] || 1;
-      newHeight = window.innerHeight * scale;
-    } else {
-      newHeight = +height;
-    }
-
-    return newHeight > minHeight ? newHeight : minHeight;
-  }
-  function getWidth(element, minWidth, width) {
-    var newWidth;
-
-    if (!width) {
-      newWidth = element.getBoundingClientRect().width;
-    } else if (String(width).startsWith('window')) {
-      var scale = +width.split('*')[1] || 1;
-      newWidth = window.innerWidth * scale;
-    } else {
-      newWidth = +width;
-    }
-
-    return newWidth > minWidth ? newWidth : minWidth;
-  }
-  function getElement(className) {
-    var element = document.querySelector(store.getState().options.selector);
-    return element.querySelector('.' + className);
-  }
-  function showElement(className) {
-    var selector = store.getState().options.selector;
-    var element = document.querySelector(selector + ' .' + className);
-
-    if (element) {
-      element.style.display = 'flex';
-    }
-  }
-  function hideElement(className) {
-    var selector = store.getState().options.selector;
-    var element = document.querySelector(selector + ' .' + className);
-
-    if (element) {
-      element.style.display = 'none';
-    }
-  }
-  function addEventHandler(className, event, handler) {
-    var element = getElement(className);
-
-    if (element) {
-      element.addEventListener(event, handler);
-    }
-  }
-  function getText(param, dateSlice, isDate) {
-    if (isDate === void 0) {
-      isDate = false;
-    }
-
-    if (typeof param === 'function') {
-      return param(formatDate(store.getState().ticker.currentDate), dateSlice.map(function (d) {
-        return _extends(_extends({}, d), {}, {
-          date: formatDate(d.date)
-        });
-      }), store.getState().ticker.dates.map(function (date) {
-        return formatDate(date);
-      }));
-    }
-
-    if (isDate) {
-      return formatDate(store.getState().ticker.currentDate, param);
-    }
-
-    return param;
-  }
-  function safeName(name) {
-    return name.replace(/[\W]+/g, '_');
-  }
-  function toggleClass(selector, className) {
-    d3$1.select(selector).classed(className, function () {
-      return !d3$1.select(this).classed(className);
-    });
-  }
-
-  function debounce(func, wait, immediate) {
-    if (immediate === void 0) {
-      immediate = false;
-    }
-
-    var timeout;
-    return function (_clicks, _Fn) {
-      var context = this;
-      var args = arguments;
-
-      var later = function later() {
-        timeout = null;
-
-        if (!immediate) {
-          func.apply(context, args);
-        }
-      };
-
-      var callNow = immediate && !timeout;
-      clearTimeout(timeout);
-      timeout = setTimeout(later, wait);
-
-      if (callNow) {
-        func.apply(context, args);
-      }
-    };
-  }
-
-  var getClicks = debounce(function (event, Fn) {
-    Fn(event);
-  }, 250);
-
-  var getDates = function getDates(data) {
-    return Array.from(new Set(data.map(function (d) {
-      return d.date;
-    }))).sort();
-  };
-  function getDateString(inputDate) {
-    var date = new Date(inputDate);
-
-    if (isNaN(+date)) {
-      throw new Error("\"" + inputDate + "\" is not a valid date");
-    }
-
-    var year = date.getFullYear();
-    var month = (1 + date.getMonth()).toString();
-    month = zeroPad(month, 2);
-    var day = date.getDate().toString();
-    day = zeroPad(day, 2);
-    return "" + year + month + day;
-  }
-  function formatDate(dateStr, format) {
-    if (format === void 0) {
-      format = 'YYYY-MM-DD';
-    }
-
-    var year = dateStr.slice(0, 4);
-    var month = dateStr.slice(4, 6);
-    var day = dateStr.slice(6, 8);
-    var date = new Date(year + "-" + month + "-" + day);
-    var weekDayIndex = String(date.getDay());
-    var monthNames = {
-      '01': 'Jan',
-      '02': 'Feb',
-      '03': 'Mar',
-      '04': 'Apr',
-      '05': 'May',
-      '06': 'Jun',
-      '07': 'Jul',
-      '08': 'Aug',
-      '09': 'Sep',
-      '10': 'Oct',
-      '11': 'Nov',
-      '12': 'Dec'
-    };
-    var weekDays = {
-      '0': 'Sun',
-      '1': 'Mon',
-      '2': 'Tue',
-      '3': 'Wed',
-      '4': 'Thu',
-      '5': 'Fri',
-      '6': 'Sat'
-    };
-    return format.replace('MMM', monthNames[month]).replace('DDD', weekDays[weekDayIndex]).replace('YYYY', year).replace('MM', month).replace('DD', day);
-  }
-
-  function prepareData(rawData) {
+  function prepareData(rawData, store) {
     var options = store.getState().options;
     var data = rawData.map(function (d) {
       return _extends(_extends({}, d), {}, {
@@ -958,11 +953,11 @@
       });
     });
     data = calculateLastValues(data);
-    loadDataCollectionsToState(data);
+    storeDataCollections(data, store);
     return data;
   }
 
-  function loadDataCollectionsToState(data) {
+  function storeDataCollections(data, store) {
     var names = Array.from(new Set(data.map(function (d) {
       return d.name;
     }))).sort();
@@ -1070,11 +1065,11 @@
     return data;
   }
 
-  function getDateSlice(data, date) {
+  function getDateSlice(data, date, groupFilter) {
     var slice = data.filter(function (d) {
       return d.date === date && !isNaN(d.value);
     }).filter(function (d) {
-      return !!d.group ? !store.getState().data.groupFilter.includes(d.group) : true;
+      return !!d.group ? !groupFilter.includes(d.group) : true;
     }).sort(function (a, b) {
       return b.value - a.value;
     }).map(function (d, i) {
@@ -1112,7 +1107,7 @@
     overlayRepeat: 'overlayRepeat'
   };
 
-  function createRenderer(data) {
+  function createRenderer(data, store) {
     var margin;
     var svg;
     var x;
@@ -1137,14 +1132,16 @@
     var width;
     var maxValue;
     var groups = store.getState().data.groups;
+    var dates = store.getState().ticker.dates;
     var _store$getState$optio = store.getState().options,
+        selector = _store$getState$optio.selector,
         showGroups = _store$getState$optio.showGroups,
         highlightBars = _store$getState$optio.highlightBars,
         selectBars = _store$getState$optio.selectBars;
+    var root = document.querySelector(selector);
 
     function renderInitalView() {
       var _store$getState$optio2 = store.getState().options,
-          selector = _store$getState$optio2.selector,
           title = _store$getState$optio2.title,
           subTitle = _store$getState$optio2.subTitle,
           caption = _store$getState$optio2.caption,
@@ -1158,17 +1155,17 @@
           minWidth = _store$getState$optio2.minWidth,
           topN = _store$getState$optio2.topN,
           fixedScale = _store$getState$optio2.fixedScale;
-      var TotalDateSlice = getDateSlice(data, store.getState().ticker.currentDate);
+      var currentDate = store.getState().ticker.currentDate;
+      var TotalDateSlice = getDateSlice(data, currentDate, store.getState().data.groupFilter);
       var dateSlice = TotalDateSlice.slice(0, store.getState().options.topN);
 
       if (dateSlice.length === 0) {
         return;
       }
 
-      var element = document.querySelector(selector);
-      element.innerHTML = '';
-      height = getHeight(element, minHeight, inputHeight);
-      width = getWidth(element, minWidth, inputWidth);
+      root.innerHTML = '';
+      height = getHeight(root, minHeight, inputHeight);
+      width = getWidth(root, minWidth, inputWidth);
       renderInitialFrame();
       renderControls();
       renderOverlays();
@@ -1183,9 +1180,9 @@
           bottom: 5,
           left: 0 + labelsArea
         };
-        svg = d3$1.select(selector).append('svg').attr('width', width).attr('height', height);
-        titleText = svg.append('text').attr('class', 'title').attr('x', titlePadding).attr('y', 24).html(getText(title, TotalDateSlice));
-        subTitleText = svg.append('text').attr('class', 'subTitle').attr('x', titlePadding).attr('y', 55).html(getText(subTitle, TotalDateSlice));
+        svg = d3$1.select(root).append('svg').attr('width', width).attr('height', height);
+        titleText = svg.append('text').attr('class', 'title').attr('x', titlePadding).attr('y', 24).html(getText(title, TotalDateSlice, dates, currentDate));
+        subTitleText = svg.append('text').attr('class', 'subTitle').attr('x', titlePadding).attr('y', 55).html(getText(subTitle, TotalDateSlice, dates, currentDate));
 
         if (showGroups) {
           var legendsWrapper = svg.append('g');
@@ -1195,7 +1192,7 @@
           legends.append('rect').attr('class', 'legend-color').attr('width', 10).attr('height', 10).attr('y', 75).style('fill', function (d) {
             return getColor({
               group: d
-            });
+            }, store);
           });
           legends.append('text').attr('class', 'legend-text').attr('x', 20).attr('y', 75 + 10).html(function (d) {
             return d;
@@ -1259,7 +1256,7 @@
         }).classed('selected', function (d) {
           return store.getState().data.selected.includes(d.name);
         }).attr('x', x(0) + 1).attr('width', barWidth).attr('y', barY).attr('height', barHeight).style('fill', function (d) {
-          return getColor(d);
+          return getColor(d, store);
         }).on('click', selectFn).on('mouseover', highlightFn).on('mouseout', highlightFn);
         svg.selectAll('text.label').data(dateSlice, function (d) {
           return d.name;
@@ -1296,8 +1293,8 @@
           });
         }
 
-        dateCounterText = svg.append('text').attr('class', 'dateCounterText').attr('x', width - margin.right - barPadding).attr('y', height - 40).style('text-anchor', 'end').html(getText(dateCounter, TotalDateSlice, true)).call(halo);
-        captionText = svg.append('text').attr('class', 'caption').attr('x', width - margin.right - barPadding - 10).attr('y', height - margin.bottom - barPadding).style('text-anchor', 'end').html(getText(caption, TotalDateSlice));
+        dateCounterText = svg.append('text').attr('class', 'dateCounterText').attr('x', width - margin.right - barPadding).attr('y', height - 40).style('text-anchor', 'end').html(getText(dateCounter, TotalDateSlice, dates, currentDate, true)).call(halo);
+        captionText = svg.append('text').attr('class', 'caption').attr('x', width - margin.right - barPadding - 10).attr('y', height - margin.bottom - barPadding).style('text-anchor', 'end').html(getText(caption, TotalDateSlice, dates, currentDate));
       }
 
       function renderControls() {
@@ -1310,20 +1307,20 @@
         }, {
           skipForward: icons.skipForward
         }];
-        var elementWidth = element.getBoundingClientRect().width;
-        d3$1.select(selector).append('div').classed('controls', true).style('width', width).style('right', elementWidth - width + margin.right + barPadding + 'px').selectAll('div').data(controlIcons).enter().append('div').html(function (d) {
+        var elementWidth = root.getBoundingClientRect().width;
+        d3$1.select(root).append('div').classed('controls', true).style('width', width).style('right', elementWidth - width + margin.right + barPadding + 'px').selectAll('div').data(controlIcons).enter().append('div').html(function (d) {
           return Object.values(d)[0];
         }).attr('class', function (d) {
           return Object.keys(d)[0];
         });
 
         if (store.getState().options.showControls === 'play') {
-          hideElement(elements.skipBack);
-          hideElement(elements.skipForward);
+          hideElement(root, elements.skipBack);
+          hideElement(root, elements.skipForward);
         }
 
         if (store.getState().options.showControls === 'none') {
-          hideElement(elements.controls);
+          hideElement(root, elements.controls);
         }
       }
 
@@ -1333,7 +1330,7 @@
         }, {
           overlayRepeat: icons.overlayRepeat
         }];
-        d3$1.select(selector).append('div').classed('overlay', true).style('minHeight', minHeight + 'px').style('minWidth', minWidth + 'px').selectAll('div').data(overlayIcons).enter().append('div').html(function (d) {
+        d3$1.select(root).append('div').classed('overlay', true).style('minHeight', minHeight + 'px').style('minWidth', minWidth + 'px').selectAll('div').data(overlayIcons).enter().append('div').html(function (d) {
           return Object.values(d)[0];
         }).attr('class', function (d) {
           return Object.keys(d)[0];
@@ -1354,7 +1351,8 @@
           caption = _store$getState$optio3.caption,
           dateCounter = _store$getState$optio3.dateCounter,
           fixedScale = _store$getState$optio3.fixedScale;
-      var CompleteDateSlice = getDateSlice(data, store.getState().ticker.currentDate);
+      var currentDate = store.getState().ticker.currentDate;
+      var CompleteDateSlice = getDateSlice(data, currentDate, store.getState().data.groupFilter);
       var dateSlice = CompleteDateSlice.slice(0, store.getState().options.topN);
 
       if (showGroups) {
@@ -1380,7 +1378,7 @@
       }).attr('x', x(0) + 1).attr('width', barWidth).attr('y', function () {
         return y(topN + 1) + 5;
       }).attr('height', barHeight).style('fill', function (d) {
-        return getColor(d);
+        return getColor(d, store);
       }).on('click', selectFn).on('mouseover', highlightFn).on('mouseout', highlightFn).transition().duration(tickDuration).ease(d3$1.easeLinear).attr('y', barY);
       bars.transition().duration(tickDuration).ease(d3$1.easeLinear).attr('width', function (d) {
         return Math.abs(x(d.value) - x(0) - 1);
@@ -1470,23 +1468,22 @@
         }).remove();
       }
 
-      titleText.html(getText(title, CompleteDateSlice));
-      subTitleText.html(getText(subTitle, CompleteDateSlice));
-      captionText.html(getText(caption, CompleteDateSlice));
-      dateCounterText.html(getText(dateCounter, CompleteDateSlice, true)).call(halo);
+      titleText.html(getText(title, CompleteDateSlice, dates, currentDate));
+      subTitleText.html(getText(subTitle, CompleteDateSlice, dates, currentDate));
+      captionText.html(getText(caption, CompleteDateSlice, dates, currentDate));
+      dateCounterText.html(getText(dateCounter, CompleteDateSlice, dates, currentDate, true)).call(halo);
       updateControls();
     }
 
     function resize() {
       if (!store.getState().options.inputHeight && !store.getState().options.inputWidth || String(store.getState().options.inputHeight).startsWith('window') || String(store.getState().options.inputWidth).startsWith('window')) {
-        var element = document.querySelector(store.getState().options.selector);
-        height = getHeight(element, store.getState().options.minHeight, store.getState().options.inputHeight);
-        width = getWidth(element, store.getState().options.minWidth, store.getState().options.inputWidth);
-        var currentPosition = element.style.position;
+        height = getHeight(root, store.getState().options.minHeight, store.getState().options.inputHeight);
+        width = getWidth(root, store.getState().options.minWidth, store.getState().options.inputWidth);
+        var currentPosition = root.style.position;
         renderInitalView();
         renderFrame();
         updateControls();
-        element.style.position = currentPosition;
+        root.style.position = currentPosition;
       }
     }
 
@@ -1494,26 +1491,26 @@
       var showOverlays = store.getState().options.showOverlays;
 
       if (store.getState().ticker.isRunning) {
-        showElement(elements.pause);
-        hideElement(elements.play);
+        showElement(root, elements.pause);
+        hideElement(root, elements.play);
       } else {
-        showElement(elements.play);
-        hideElement(elements.pause);
+        showElement(root, elements.play);
+        hideElement(root, elements.pause);
       }
 
       if (store.getState().ticker.isFirstDate && (showOverlays === 'all' || showOverlays === 'play') && !store.getState().ticker.isRunning) {
-        getElement(elements.controls).style.visibility = 'hidden';
-        showElement(elements.overlay);
-        showElement(elements.overlayPlay);
-        hideElement(elements.overlayRepeat);
+        getElement(root, elements.controls).style.visibility = 'hidden';
+        showElement(root, elements.overlay);
+        showElement(root, elements.overlayPlay);
+        hideElement(root, elements.overlayRepeat);
       } else if (store.getState().ticker.isLastDate && (showOverlays === 'all' || showOverlays === 'repeat') && !(store.getState().options.loop && store.getState().ticker.isRunning)) {
-        getElement(elements.controls).style.visibility = 'hidden';
-        showElement(elements.overlay);
-        showElement(elements.overlayRepeat);
-        hideElement(elements.overlayPlay);
+        getElement(root, elements.controls).style.visibility = 'hidden';
+        showElement(root, elements.overlay);
+        showElement(root, elements.overlayRepeat);
+        hideElement(root, elements.overlayPlay);
       } else {
-        getElement(elements.controls).style.visibility = 'unset';
-        getElement(elements.overlay).style.display = 'none';
+        getElement(root, elements.controls).style.visibility = 'unset';
+        getElement(root, elements.overlay).style.display = 'none';
       }
     }
 
@@ -1540,13 +1537,13 @@
 
     function highlightFn(d) {
       if (highlightBars) {
-        toggleClass('rect.' + safeName(d.name), 'highlight');
+        toggleClass(root, 'rect.' + safeName(d.name), 'highlight');
       }
     }
 
     function selectFn(d) {
       if (selectBars) {
-        toggleClass('rect.' + safeName(d.name), 'selected');
+        toggleClass(root, 'rect.' + safeName(d.name), 'selected');
         store.dispatch(actions.data.toggleSelection(d.name));
       }
     }
@@ -1564,12 +1561,12 @@
     "light": "\n/* __selector__ {\n  background-color: #ffffff;\n}\n\n__selector__ text.title {\n  fill: #fafafa;\n} */\n\n__selector__ text.subTitle {\n  fill: #777777;\n}\n\n__selector__ text.dateCounterText {\n  fill: #bbbbbb;\n  opacity: 1;\n}\n\n__selector__ text.caption {\n  fill: #777777;\n}\n\n__selector__ .halo {\n  fill: #ffffff;\n  stroke: #ffffff;\n  stroke-width: 10;\n  stroke-linejoin: round;\n  opacity: 1;\n}\n\n__selector__ text.legend-text {\n  fill: #000000;\n}\n\n__selector__ text.label {\n  fill: #000000;\n}\n\n__selector__ text.valueLabel {\n  fill: #000000;\n}\n\n__selector__ .tick text {\n  fill: #777777;\n}\n\n__selector__ .tick line {\n  shape-rendering: CrispEdges;\n  stroke: #dddddd;\n}\n\n__selector__ .tick line.origin {\n  stroke: #aaaaaa;\n}\n\n__selector__ .controls div,\n__selector__ .overlay div {\n  color: #ffffff;\n  background: #777777;\n  border: 1px solid black;\n  opacity: 0.5;\n}\n\n__selector__ .controls div:hover,\n__selector__ .overlay div:hover {\n  background: #aaaaaa;\n  color: black;\n}\n\n__selector__ .overlay {\n  background-color: black;\n  opacity: 0.7;\n}\n\n__selector__ .highlight {\n  fill: rgb(255, 39, 39) !important;\n}\n\n__selector__ .selected {\n  fill: rgb(209, 37, 37) !important;\n  stroke: #777777 !important;\n  stroke-width: 1 !important;\n}\n"
   };
 
-  function styleInject(selector, insertAt) {
+  function styleInject(selector, theme, insertAt) {
     if (insertAt === void 0) {
       insertAt = 'top';
     }
 
-    var css = styles + themes[store.getState().options.theme];
+    var css = styles + themes[theme];
 
     if (!css || typeof document === 'undefined') {
       return;
@@ -1597,26 +1594,27 @@
     }
   }
 
-  function registerEvents(element, ticker) {
+  function registerEvents(store, ticker) {
+    var root = document.querySelector(store.getState().options.selector);
     registerControlButtonEvents();
     registerOverlayEvents();
     registerClickEvents();
     registerKeyboardEvents();
 
     function registerControlButtonEvents() {
-      addEventHandler(elements.skipBack, 'click', ticker.skipBack);
-      addEventHandler(elements.play, 'click', ticker.toggle);
-      addEventHandler(elements.pause, 'click', ticker.toggle);
-      addEventHandler(elements.skipForward, 'click', ticker.skipForward);
+      addEventHandler(root, elements.skipBack, 'click', ticker.skipBack);
+      addEventHandler(root, elements.play, 'click', ticker.toggle);
+      addEventHandler(root, elements.pause, 'click', ticker.toggle);
+      addEventHandler(root, elements.skipForward, 'click', ticker.skipForward);
     }
 
     function registerOverlayEvents() {
-      addEventHandler(elements.overlayPlay, 'click', function () {
-        hideElement(elements.overlay);
+      addEventHandler(root, elements.overlayPlay, 'click', function () {
+        hideElement(root, elements.overlay);
         ticker.start();
       });
-      addEventHandler(elements.overlayRepeat, 'click', function () {
-        hideElement(elements.overlay);
+      addEventHandler(root, elements.overlayRepeat, 'click', function () {
+        hideElement(root, elements.overlay);
         ticker.loop();
         ticker.start();
       });
@@ -1624,9 +1622,9 @@
 
     function registerClickEvents() {
       if (!store.getState().options.disableClickEvents) {
-        var svg = element.querySelector('svg');
+        var svg = root.querySelector('svg');
         svg.addEventListener('click', ticker.toggle);
-        element.addEventListener('dblclick', ticker.skipForward);
+        root.addEventListener('dblclick', ticker.skipForward);
       }
     }
 
@@ -1662,30 +1660,31 @@
     }
   }
 
-  function dispatchDOMEvent(element, currentDate) {
+  function dispatchDOMEvent(store) {
+    var element = document.querySelector(store.getState().options.selector);
     element.dispatchEvent(new CustomEvent('racingBars/dateChanged', {
       bubbles: true,
       detail: {
-        date: formatDate(currentDate),
+        date: formatDate(store.getState().ticker.currentDate),
         isFirst: store.getState().ticker.isFirstDate,
         isLast: store.getState().ticker.isLastDate
       }
     }));
   }
 
-  function DOMEventSubscriber(element) {
+  function DOMEventSubscriber(store) {
     var lastDate = '';
     return function () {
       var currentDate = store.getState().ticker.currentDate;
 
       if (currentDate !== lastDate) {
-        dispatchDOMEvent(element, currentDate);
+        dispatchDOMEvent(store);
         lastDate = currentDate;
       }
     };
   }
 
-  function createScroller(element) {
+  function createScroller(element, store) {
     var dates = store.getState().ticker.dates;
     prepareDOM();
     var step = document.body.clientHeight / dates.length;
@@ -1715,35 +1714,41 @@
   }
 
   function race(data, options) {
+    var store = createStore(rootReducer);
     store.dispatch(actions.options.optionsLoaded(options));
-    var element = document.querySelector(store.getState().options.selector);
+    var _store$getState$optio = store.getState().options,
+        selector = _store$getState$optio.selector,
+        injectStyles = _store$getState$optio.injectStyles,
+        theme = _store$getState$optio.theme,
+        autorun = _store$getState$optio.autorun;
+    var root = document.querySelector(selector);
 
-    if (!element) {
-      throw new Error('Cannot find element with this selector: ' + store.getState().options.selector);
+    if (!root) {
+      throw new Error('Cannot find element with this selector: ' + selector);
     }
 
-    if (store.getState().options.injectStyles) {
-      styleInject(store.getState().options.selector, 'top');
+    if (injectStyles) {
+      styleInject(selector, theme, 'top');
     }
 
-    var preparedData = prepareData(data);
-    var ticker = createTicker();
-    var renderer = createRenderer(preparedData);
+    var preparedData = prepareData(data, store);
+    var ticker = createTicker(store);
+    var renderer = createRenderer(preparedData, store);
     renderer.renderInitalView();
     store.subscribe(renderer.renderFrame);
-    store.subscribe(DOMEventSubscriber(element));
+    store.subscribe(DOMEventSubscriber(store));
     ticker.start();
 
-    if (!store.getState().options.autorun) {
+    if (!autorun) {
       ticker.stop();
     }
 
-    registerEvents(element, ticker);
+    registerEvents(store, ticker);
     window.addEventListener('resize', resize);
 
     function resize() {
       renderer.resize();
-      registerEvents(element, ticker);
+      registerEvents(store, ticker);
     }
 
     return {
@@ -1788,7 +1793,7 @@
         return [].concat(store.getState().data.formattedDates);
       },
       createScroller: function createScroller$1() {
-        createScroller(element);
+        createScroller(root, store);
       }
     };
   }
