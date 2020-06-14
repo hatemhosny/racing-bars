@@ -13,6 +13,7 @@
     event: d3$1.event,
     format: d3$1.format,
     hsl: d3$1.hsl,
+    interpolate: d3$1.interpolate,
     interpolateRound: d3$1.interpolateRound,
     interval: d3$1.interval,
     json: d3$1.json,
@@ -20,6 +21,9 @@
     scaleLinear: d3$1.scaleLinear,
     select: d3$1.select,
     selectAll: d3$1.selectAll,
+    timeYears: d3$1.timeYears,
+    timeMonths: d3$1.timeMonths,
+    timeDays: d3$1.timeDays,
     tsv: d3$1.tsv,
     xml: d3$1.xml
   };
@@ -63,6 +67,21 @@
     };
 
     return _extends.apply(this, arguments);
+  }
+
+  function _objectWithoutPropertiesLoose(source, excluded) {
+    if (source == null) return {};
+    var target = {};
+    var sourceKeys = Object.keys(source);
+    var key, i;
+
+    for (i = 0; i < sourceKeys.length; i++) {
+      key = sourceKeys[i];
+      if (excluded.indexOf(key) >= 0) continue;
+      target[key] = source[key];
+    }
+
+    return target;
   }
 
   function getColor(d, store) {
@@ -537,7 +556,7 @@
     selector: '#race',
     dataShape: 'long',
     fillDateGaps: false,
-    fillDateGapsValue: 'last',
+    fillDateGapsValue: 'interpolate',
     startDate: '',
     endDate: '',
     colorSeed: '',
@@ -927,10 +946,6 @@
       data = wideDataToLong(data);
     }
 
-    if (options.fillDateGaps) {
-      data = fillGaps(data, options.fillDateGaps);
-    }
-
     data = data.map(function (d) {
       var name = d.name ? d.name : '';
       var value = isNaN(+d.value) ? 0 : +d.value;
@@ -938,7 +953,14 @@
         name: name,
         value: value
       });
+    }).sort(function (a, b) {
+      return a.date.localeCompare(b.date) || a.name.localeCompare(b.name);
     });
+
+    if (options.fillDateGaps) {
+      data = fillGaps(data, options.fillDateGaps, options.fillDateGapsValue);
+    }
+
     data = calculateLastValues(data);
     storeDataCollections(data, store);
     return data;
@@ -976,78 +998,114 @@
       }
 
       return [].concat(acc, [curr]);
-    }, []).sort(function (a, b) {
-      return a.date.localeCompare(b.date);
-    });
+    }, []);
   }
 
-  function wideDataToLong(wide) {
+  function wideDataToLong(wide, nested) {
+    if (nested === void 0) {
+      nested = false;
+    }
+
     var _long = [];
-    wide.forEach(function (item) {
-      for (var _i = 0, _Object$entries = Object.entries(item); _i < _Object$entries.length; _i++) {
+    wide.forEach(function (row) {
+      for (var _i = 0, _Object$entries = Object.entries(row); _i < _Object$entries.length; _i++) {
         var _Object$entries$_i = _Object$entries[_i],
             key = _Object$entries$_i[0],
             value = _Object$entries$_i[1];
 
-        _long.push({
-          date: item.date,
-          name: key,
-          value: Number(value)
-        });
+        if (key === 'date') {
+          continue;
+        }
+
+        var item = {
+          date: row.date,
+          name: key
+        };
+
+        if (nested) {
+          item = _extends(_extends({}, item), value);
+        } else {
+          item = _extends(_extends({}, item), {}, {
+            value: value
+          });
+        }
+
+        _long.push(item);
       }
     });
     return _long;
   }
 
-  function fillGaps(data, period) {
-    if (!period) {
-      return data;
-    }
+  function longDataToWide(_long2) {
+    var wide = [];
 
-    var dates = getDates(data).map(function (date) {
-      return new Date(date);
-    });
-    var minDate = new Date(dates[0]);
-    var maxDate = new Date(dates[dates.length - 1]);
-    var next = {
-      years: function years(dt) {
-        dt.setFullYear(dt.getFullYear() + 1);
-      },
-      months: function months(dt) {
-        dt.setMonth(dt.getMonth() + 1);
-      },
-      days: function days(dt) {
-        dt.setDate(dt.getDate() + 1);
-      }
-    };
-
-    if (!next[period]) {
-      return data;
-    }
-
-    var dateRange = [];
-
-    for (var date = minDate; date < maxDate; next[period](date)) {
-      dateRange.push(getDateString(date));
-    }
-
-    dateRange.forEach(function (date, index) {
-      if (data.filter(function (d) {
-        return d.date === date;
-      }).length > 0) {
-        return;
-      }
-
-      var missing = data.filter(function (d) {
-        return d.date === dateRange[index - 1];
-      }).map(function (d) {
-        return _extends(_extends({}, d), {}, {
-          date: date
-        });
+    _long2.forEach(function (item) {
+      var dateRow = wide.filter(function (r) {
+        return r.date === item.date;
       });
-      data.push.apply(data, missing);
+      var row = dateRow.length > 0 ? dateRow[0] : {};
+
+      var details = _objectWithoutPropertiesLoose(item, ["date"]);
+
+      row[item.name] = details;
+
+      if (dateRow.length === 0) {
+        row.date = item.date;
+        wide.push(row);
+      }
     });
-    return data;
+
+    return wide;
+  }
+
+  function fillGaps(data, period, fillValue) {
+    var intervalRange = period === 'years' ? d3$1.timeYears : period === 'months' ? d3$1.timeMonths : period === 'days' ? d3$1.timeDays : null;
+
+    if (!intervalRange) {
+      return data;
+    }
+
+    var wideData = longDataToWide(data).map(function (d) {
+      return _extends(_extends({}, d), {}, {
+        date: new Date(d.date)
+      });
+    });
+    var allData = wideData.reduce(function (acc, row, i) {
+      var lastDate = acc[acc.length - 1].date;
+      var range = intervalRange(lastDate, row.date);
+      var rangeStep = 1 / range.length;
+
+      if (i < wideData.length) {
+        var iData = d3$1.interpolate(wideData[i - 1], wideData[i]);
+        var newData = [];
+        range.forEach(function (_, j) {
+          var values = fillValue === 'last' ? iData(0) : iData((j + 1) * rangeStep);
+          var newRow = {
+            date: range[j]
+          };
+
+          for (var _i2 = 0, _Object$entries2 = Object.entries(values); _i2 < _Object$entries2.length; _i2++) {
+            var _Object$entries2$_i = _Object$entries2[_i2],
+                key = _Object$entries2$_i[0],
+                value = _Object$entries2$_i[1];
+
+            if (key !== 'date') {
+              newRow[key] = _extends({}, value);
+            }
+          }
+
+          newData.push(getDateString(row.date) === getDateString(newRow.date) ? row : newRow);
+        });
+        return [].concat(acc, newData);
+      } else {
+        return [].concat(acc);
+      }
+    }, [wideData[0]]).map(function (d) {
+      return _extends(_extends({}, d), {}, {
+        date: getDateString(d.date)
+      });
+    });
+    return wideDataToLong(allData, true);
   }
 
   function getDateSlice(data, date, groupFilter) {
