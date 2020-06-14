@@ -67,13 +67,17 @@ function calculateLastValues(data: Data[]) {
 
 function wideDataToLong(wide: WideData[]) {
   const long = [] as Data[];
-  wide.forEach((item) => {
-    for (const [key, value] of Object.entries(item)) {
-      long.push({
-        date: item.date,
+  wide.forEach((row) => {
+    for (const [key, value] of Object.entries(row)) {
+      if (key === 'date') {
+        continue;
+      }
+      const item = {
+        ...value,
+        date: row.date,
         name: key,
-        value: Math.round(Number(value)),
-      });
+      };
+      long.push(item);
     }
   });
   return long;
@@ -84,7 +88,8 @@ function longDataToWide(long: Data[]) {
   long.forEach((item) => {
     const dateRow = wide.filter((r) => r.date === item.date);
     const row = dateRow.length > 0 ? dateRow[0] : {};
-    row[item.name] = item.value;
+    const { date, ...details } = item;
+    row[item.name] = details;
     if (dateRow.length === 0) {
       row.date = item.date;
       wide.push(row);
@@ -100,11 +105,11 @@ function fillGaps(
 ) {
   const intervalRange =
     period === 'years'
-      ? d3.timeYear.every(1)?.range
+      ? d3.timeYears
       : period === 'months'
-      ? d3.timeMonth.every(1)?.range
+      ? d3.timeMonths
       : period === 'days'
-      ? d3.timeDay.every(1)?.range
+      ? d3.timeDays
       : null;
 
   if (!intervalRange) {
@@ -123,7 +128,12 @@ function fillGaps(
         const newData: any[] = [];
         range.forEach((_, j) => {
           const values = fillValue === 'last' ? iData(0) : iData((j + 1) * rangeStep);
-          const newRow = { ...values, date: range[j] };
+          const newRow: any = { date: range[j] };
+          for (const [key, value] of Object.entries(values)) {
+            if (key !== 'date') {
+              newRow[key] = { ...(value as any) };
+            }
+          }
           newData.push(getDateString(row.date) === getDateString(newRow.date) ? row : newRow);
         });
         return [...acc, ...newData];
@@ -136,10 +146,6 @@ function fillGaps(
 
   const allData = missingData.map((d) => ({ ...d, date: getDateString(d.date) }));
 
-  // eslint-disable-next-line no-console
-  console.log(wideData);
-  // eslint-disable-next-line no-console
-  console.log(allData);
   return wideDataToLong(allData);
 }
 

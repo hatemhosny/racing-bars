@@ -21,9 +21,9 @@
     scaleLinear: d3$1.scaleLinear,
     select: d3$1.select,
     selectAll: d3$1.selectAll,
-    timeYear: d3$1.timeYear,
-    timeMonth: d3$1.timeMonth,
-    timeDay: d3$1.timeDay,
+    timeYears: d3$1.timeYears,
+    timeMonths: d3$1.timeMonths,
+    timeDays: d3$1.timeDays,
     tsv: d3$1.tsv,
     xml: d3$1.xml
   };
@@ -67,6 +67,21 @@
     };
 
     return _extends.apply(this, arguments);
+  }
+
+  function _objectWithoutPropertiesLoose(source, excluded) {
+    if (source == null) return {};
+    var target = {};
+    var sourceKeys = Object.keys(source);
+    var key, i;
+
+    for (i = 0; i < sourceKeys.length; i++) {
+      key = sourceKeys[i];
+      if (excluded.indexOf(key) >= 0) continue;
+      target[key] = source[key];
+    }
+
+    return target;
   }
 
   function getColor(d, store) {
@@ -988,17 +1003,22 @@
 
   function wideDataToLong(wide) {
     var _long = [];
-    wide.forEach(function (item) {
-      for (var _i = 0, _Object$entries = Object.entries(item); _i < _Object$entries.length; _i++) {
+    wide.forEach(function (row) {
+      for (var _i = 0, _Object$entries = Object.entries(row); _i < _Object$entries.length; _i++) {
         var _Object$entries$_i = _Object$entries[_i],
             key = _Object$entries$_i[0],
             value = _Object$entries$_i[1];
 
-        _long.push({
-          date: item.date,
-          name: key,
-          value: Math.round(Number(value))
+        if (key === 'date') {
+          continue;
+        }
+
+        var item = _extends(_extends({}, value), {}, {
+          date: row.date,
+          name: key
         });
+
+        _long.push(item);
       }
     });
     return _long;
@@ -1012,7 +1032,10 @@
         return r.date === item.date;
       });
       var row = dateRow.length > 0 ? dateRow[0] : {};
-      row[item.name] = item.value;
+
+      var details = _objectWithoutPropertiesLoose(item, ["date"]);
+
+      row[item.name] = details;
 
       if (dateRow.length === 0) {
         row.date = item.date;
@@ -1024,9 +1047,7 @@
   }
 
   function fillGaps(data, period, fillValue) {
-    var _d3$timeYear$every, _d3$timeMonth$every, _d3$timeDay$every;
-
-    var intervalRange = period === 'years' ? (_d3$timeYear$every = d3$1.timeYear.every(1)) == null ? void 0 : _d3$timeYear$every.range : period === 'months' ? (_d3$timeMonth$every = d3$1.timeMonth.every(1)) == null ? void 0 : _d3$timeMonth$every.range : period === 'days' ? (_d3$timeDay$every = d3$1.timeDay.every(1)) == null ? void 0 : _d3$timeDay$every.range : null;
+    var intervalRange = period === 'years' ? d3$1.timeYears : period === 'months' ? d3$1.timeMonths : period === 'days' ? d3$1.timeDays : null;
 
     if (!intervalRange) {
       return data;
@@ -1047,10 +1068,19 @@
         var newData = [];
         range.forEach(function (_, j) {
           var values = fillValue === 'last' ? iData(0) : iData((j + 1) * rangeStep);
-
-          var newRow = _extends(_extends({}, values), {}, {
+          var newRow = {
             date: range[j]
-          });
+          };
+
+          for (var _i2 = 0, _Object$entries2 = Object.entries(values); _i2 < _Object$entries2.length; _i2++) {
+            var _Object$entries2$_i = _Object$entries2[_i2],
+                key = _Object$entries2$_i[0],
+                value = _Object$entries2$_i[1];
+
+            if (key !== 'date') {
+              newRow[key] = _extends({}, value);
+            }
+          }
 
           newData.push(getDateString(row.date) === getDateString(newRow.date) ? row : newRow);
         });
@@ -1064,8 +1094,6 @@
         date: getDateString(d.date)
       });
     });
-    console.log(wideData);
-    console.log(allData);
     return wideDataToLong(allData);
   }
 

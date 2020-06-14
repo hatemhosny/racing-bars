@@ -29,16 +29,18 @@
   <script>
     const options = {
       selector: '#race',
-      // dataShape: "wide",
+      // dataShape: 'wide',
       fillDateGaps: 'months',
-      fillDateGapsValue: 'zero',
+      // fillDateGapsValue: 'last',
       title: 'A Tale of 11 Years',
       subTitle: 'Top 10 Surgical Procedures',
       dateCounter: 'MM/YYYY',
+      // caption: 'Aswan Heart Centre',
       caption: (date, dateSlice, allDates) =>
         `Total: ${Math.round(dateSlice.reduce((acc, curr) => acc + curr.value, 0))}`,
+      // `Max: ${Math.round(Math.max(...dateSlice.map((d) => d.value)))}`,
       // startDate: '2009-4-1',
-      endDate: '1965-12-31',
+      // endDate: '1965-12-31',
       loop: false,
       tickDuration: 500,
       // topN: 15,
@@ -46,10 +48,11 @@
       // width: 'window*0.5',
       // disableClickEvents: true,
       // disableKeyboardEvents: true,
-      // showGroups: false,
+      showGroups: false,
       showControls: 'all',
       showOverlays: 'none',
-      showGroups: false,
+      // showGroups: false,
+      // showIcons: true,
       autorun: false,
       // colorSeed: "asdfs",
       labelsOnBars: false,
@@ -60,9 +63,13 @@
       highlightBars: true,
       selectBars: true,
     };
-    racingBars.loadData('data/population.csv', 'csv').then((data) => {
-      // racingBars.loadData('data/procedures.json').then((data) => {
-      data = data.map((d) => ({ ...d, value: Number(d.value) * 1000 }));
+    // racingBars.loadData('data/population.csv', 'csv').then((data) => {
+    racingBars.loadData('data/procedures.json').then((data) => {
+      // data = data.map((d) => ({
+      //   ...d,
+      //   // value: Number(d.value) * 1000,
+      //   // icon: `https://www.countryflags.io/${d.code.toLowerCase()}/flat/64.png`,
+      // }));
       racingBars.race(data, options);
     });
   </script>
