@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style></style>
+  </head>
+  <body>
+    <script src="scripts/d3.min.js"></script>
+
+    <div id="container">
+      <div id="race" class="race"></div>
+    </div>
+    <button>change</button>
+
+    <script>
+      d3.csv('data/population.csv').then((data) => {
+        const period = 'days';
+        console.log(data);
+        data = data.map((d) => ({ ...d, date: new Date(d.date) }));
+
+        const dates = getDates(data);
+
+        const interval =
+          period === 'years'
+            ? d3.timeYear
+            : period === 'months'
+            ? d3.timeMonth
+            : period === 'days'
+            ? d3.timeDay
+            : null;
+
+        if (!interval || dates.length === 0) {
+          return;
+        }
+
+        const range = interval.range(dates[0], dates[dates.length - 1]);
+
+        // console.log(formatDate(data[0].date));
+        console.log(range.map(formatDate));
+        // console.log(formatDate(data[1].date));
+
+        // console.log(data);
+      });
+    </script>
+  </body>
+</html>

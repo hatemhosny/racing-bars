@@ -13,6 +13,7 @@
     event: d3$1.event,
     format: d3$1.format,
     hsl: d3$1.hsl,
+    interpolate: d3$1.interpolate,
     interpolateRound: d3$1.interpolateRound,
     interval: d3$1.interval,
     json: d3$1.json,
@@ -20,6 +21,9 @@
     scaleLinear: d3$1.scaleLinear,
     select: d3$1.select,
     selectAll: d3$1.selectAll,
+    timeYear: d3$1.timeYear,
+    timeMonth: d3$1.timeMonth,
+    timeDay: d3$1.timeDay,
     tsv: d3$1.tsv,
     xml: d3$1.xml
   };
@@ -537,7 +541,7 @@
     selector: '#race',
     dataShape: 'long',
     fillDateGaps: false,
-    fillDateGapsValue: 'last',
+    fillDateGapsValue: 'interpolate',
     startDate: '',
     endDate: '',
     colorSeed: '',
@@ -927,10 +931,6 @@
       data = wideDataToLong(data);
     }
 
-    if (options.fillDateGaps) {
-      data = fillGaps(data, options.fillDateGaps);
-    }
-
     data = data.map(function (d) {
       var name = d.name ? d.name : '';
       var value = isNaN(+d.value) ? 0 : +d.value;
@@ -938,7 +938,14 @@
         name: name,
         value: value
       });
+    }).sort(function (a, b) {
+      return a.date.localeCompare(b.date) || a.name.localeCompare(b.name);
     });
+
+    if (options.fillDateGaps) {
+      data = fillGaps(data, options.fillDateGaps, options.fillDateGapsValue);
+    }
+
     data = calculateLastValues(data);
     storeDataCollections(data, store);
     return data;
@@ -976,9 +983,7 @@
       }
 
       return [].concat(acc, [curr]);
-    }, []).sort(function (a, b) {
-      return a.date.localeCompare(b.date);
-    });
+    }, []);
   }
 
   function wideDataToLong(wide) {
@@ -992,62 +997,76 @@
         _long.push({
           date: item.date,
           name: key,
-          value: Number(value)
+          value: Math.round(Number(value))
         });
       }
     });
     return _long;
   }
 
-  function fillGaps(data, period) {
-    if (!period) {
-      return data;
-    }
+  function longDataToWide(_long2) {
+    var wide = [];
 
-    var dates = getDates(data).map(function (date) {
-      return new Date(date);
-    });
-    var minDate = new Date(dates[0]);
-    var maxDate = new Date(dates[dates.length - 1]);
-    var next = {
-      years: function years(dt) {
-        dt.setFullYear(dt.getFullYear() + 1);
-      },
-      months: function months(dt) {
-        dt.setMonth(dt.getMonth() + 1);
-      },
-      days: function days(dt) {
-        dt.setDate(dt.getDate() + 1);
-      }
-    };
-
-    if (!next[period]) {
-      return data;
-    }
-
-    var dateRange = [];
-
-    for (var date = minDate; date < maxDate; next[period](date)) {
-      dateRange.push(getDateString(date));
-    }
-
-    dateRange.forEach(function (date, index) {
-      if (data.filter(function (d) {
-        return d.date === date;
-      }).length > 0) {
-        return;
-      }
-
-      var missing = data.filter(function (d) {
-        return d.date === dateRange[index - 1];
-      }).map(function (d) {
-        return _extends(_extends({}, d), {}, {
-          date: date
-        });
+    _long2.forEach(function (item) {
+      var dateRow = wide.filter(function (r) {
+        return r.date === item.date;
       });
-      data.push.apply(data, missing);
+      var row = dateRow.length > 0 ? dateRow[0] : {};
+      row[item.name] = item.value;
+
+      if (dateRow.length === 0) {
+        row.date = item.date;
+        wide.push(row);
+      }
     });
-    return data;
+
+    return wide;
+  }
+
+  function fillGaps(data, period, fillValue) {
+    var _d3$timeYear$every, _d3$timeMonth$every, _d3$timeDay$every;
+
+    var intervalRange = period === 'years' ? (_d3$timeYear$every = d3$1.timeYear.every(1)) == null ? void 0 : _d3$timeYear$every.range : period === 'months' ? (_d3$timeMonth$every = d3$1.timeMonth.every(1)) == null ? void 0 : _d3$timeMonth$every.range : period === 'days' ? (_d3$timeDay$every = d3$1.timeDay.every(1)) == null ? void 0 : _d3$timeDay$every.range : null;
+
+    if (!intervalRange) {
+      return data;
+    }
+
+    var wideData = longDataToWide(data).map(function (d) {
+      return _extends(_extends({}, d), {}, {
+        date: new Date(d.date)
+      });
+    });
+    var missingData = wideData.reduce(function (acc, row, i) {
+      var lastDate = acc[acc.length - 1].date;
+      var range = intervalRange(lastDate, row.date);
+      var rangeStep = 1 / range.length;
+
+      if (i < wideData.length) {
+        var iData = d3$1.interpolate(wideData[i - 1], wideData[i]);
+        var newData = [];
+        range.forEach(function (_, j) {
+          var values = fillValue === 'last' ? iData(0) : iData((j + 1) * rangeStep);
+
+          var newRow = _extends(_extends({}, values), {}, {
+            date: range[j]
+          });
+
+          newData.push(getDateString(row.date) === getDateString(newRow.date) ? row : newRow);
+        });
+        return [].concat(acc, newData);
+      } else {
+        return [].concat(acc);
+      }
+    }, [wideData[0]]);
+    var allData = missingData.map(function (d) {
+      return _extends(_extends({}, d), {}, {
+        date: getDateString(d.date)
+      });
+    });
+    console.log(wideData);
+    console.log(allData);
+    return wideDataToLong(allData);
   }
 
   function getDateSlice(data, date, groupFilter) {

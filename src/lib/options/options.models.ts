@@ -13,7 +13,7 @@ export interface Options {
   selector: string;
   dataShape: 'long' | 'wide';
   fillDateGaps: false | 'years' | 'months' | 'days';
-  fillDateGapsValue: 'last' | 'zero';
+  fillDateGapsValue: 'last' | 'interpolate';
   title: string;
   subTitle: string;
   dateCounter: string | ParamFunction;

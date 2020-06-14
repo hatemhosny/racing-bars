@@ -30,15 +30,15 @@
     const options = {
       selector: '#race',
       // dataShape: "wide",
-      // fillDateGaps: 'months',
-      // fillDateGapsValue: "zero",
+      fillDateGaps: 'months',
+      fillDateGapsValue: 'zero',
       title: 'A Tale of 11 Years',
       subTitle: 'Top 10 Surgical Procedures',
       dateCounter: 'MM/YYYY',
       caption: (date, dateSlice, allDates) =>
         `Total: ${Math.round(dateSlice.reduce((acc, curr) => acc + curr.value, 0))}`,
       // startDate: '2009-4-1',
-      // endDate: '2010-12-31',
+      endDate: '1965-12-31',
       loop: false,
       tickDuration: 500,
       // topN: 15,
@@ -53,7 +53,7 @@
       autorun: false,
       // colorSeed: "asdfs",
       labelsOnBars: false,
-      labelsWidth: 250,
+      // labelsWidth: 250,
       // embedStyles: false,
       // theme: 'dark',
       // fixedScale: true,
@@ -62,6 +62,7 @@
     };
     racingBars.loadData('data/population.csv', 'csv').then((data) => {
       // racingBars.loadData('data/procedures.json').then((data) => {
+      data = data.map((d) => ({ ...d, value: Number(d.value) * 1000 }));
       racingBars.race(data, options);
     });
   </script>

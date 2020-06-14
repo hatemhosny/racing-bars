@@ -6,6 +6,7 @@ export {
   event,
   format,
   hsl,
+  interpolate,
   interpolateRound,
   interval,
   json,
@@ -15,6 +16,9 @@ export {
   select,
   selectAll,
   Timer,
+  timeYear,
+  timeMonth,
+  timeDay,
   tsv,
   xml,
 } from 'd3';
