@@ -65,18 +65,29 @@ function calculateLastValues(data: Data[]) {
     }, []);
 }
 
-function wideDataToLong(wide: WideData[]) {
+function wideDataToLong(wide: WideData[], nested = false) {
   const long = [] as Data[];
   wide.forEach((row) => {
     for (const [key, value] of Object.entries(row)) {
       if (key === 'date') {
         continue;
       }
-      const item = {
-        ...value,
+
+      let item: any = {
         date: row.date,
         name: key,
       };
+      if (nested) {
+        item = {
+          ...item,
+          ...value,
+        };
+      } else {
+        item = {
+          ...item,
+          value,
+        };
+      }
       long.push(item);
     }
   });
@@ -118,35 +129,35 @@ function fillGaps(
 
   const wideData = longDataToWide(data).map((d) => ({ ...d, date: new Date(d.date) }));
 
-  const missingData = wideData.reduce(
-    (acc: any[], row, i) => {
-      const lastDate = acc[acc.length - 1].date;
-      const range = intervalRange(lastDate, row.date);
-      const rangeStep = 1 / range.length;
-      if (i < wideData.length) {
-        const iData = d3.interpolate(wideData[i - 1], wideData[i]);
-        const newData: any[] = [];
-        range.forEach((_, j) => {
-          const values = fillValue === 'last' ? iData(0) : iData((j + 1) * rangeStep);
-          const newRow: any = { date: range[j] };
-          for (const [key, value] of Object.entries(values)) {
-            if (key !== 'date') {
-              newRow[key] = { ...(value as any) };
+  const allData = wideData
+    .reduce(
+      (acc: any[], row, i) => {
+        const lastDate = acc[acc.length - 1].date;
+        const range = intervalRange(lastDate, row.date);
+        const rangeStep = 1 / range.length;
+        if (i < wideData.length) {
+          const iData = d3.interpolate(wideData[i - 1], wideData[i]);
+          const newData: any[] = [];
+          range.forEach((_, j) => {
+            const values = fillValue === 'last' ? iData(0) : iData((j + 1) * rangeStep);
+            const newRow: any = { date: range[j] };
+            for (const [key, value] of Object.entries(values)) {
+              if (key !== 'date') {
+                newRow[key] = { ...(value as any) };
+              }
             }
-          }
-          newData.push(getDateString(row.date) === getDateString(newRow.date) ? row : newRow);
-        });
-        return [...acc, ...newData];
-      } else {
-        return [...acc];
-      }
-    },
-    [wideData[0]],
-  );
+            newData.push(getDateString(row.date) === getDateString(newRow.date) ? row : newRow);
+          });
+          return [...acc, ...newData];
+        } else {
+          return [...acc];
+        }
+      },
+      [wideData[0]],
+    )
+    .map((d) => ({ ...d, date: getDateString(d.date) }));
 
-  const allData = missingData.map((d) => ({ ...d, date: getDateString(d.date) }));
-
-  return wideDataToLong(allData);
+  return wideDataToLong(allData, true);
 }
 
 export function getDateSlice(data: Data[], date: string, groupFilter: string[]) {

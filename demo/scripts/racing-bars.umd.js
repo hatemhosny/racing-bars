@@ -1001,7 +1001,11 @@
     }, []);
   }
 
-  function wideDataToLong(wide) {
+  function wideDataToLong(wide, nested) {
+    if (nested === void 0) {
+      nested = false;
+    }
+
     var _long = [];
     wide.forEach(function (row) {
       for (var _i = 0, _Object$entries = Object.entries(row); _i < _Object$entries.length; _i++) {
@@ -1013,10 +1017,18 @@
           continue;
         }
 
-        var item = _extends(_extends({}, value), {}, {
+        var item = {
           date: row.date,
           name: key
-        });
+        };
+
+        if (nested) {
+          item = _extends(_extends({}, item), value);
+        } else {
+          item = _extends(_extends({}, item), {}, {
+            value: value
+          });
+        }
 
         _long.push(item);
       }
@@ -1058,7 +1070,7 @@
         date: new Date(d.date)
       });
     });
-    var missingData = wideData.reduce(function (acc, row, i) {
+    var allData = wideData.reduce(function (acc, row, i) {
       var lastDate = acc[acc.length - 1].date;
       var range = intervalRange(lastDate, row.date);
       var rangeStep = 1 / range.length;
@@ -1088,13 +1100,12 @@
       } else {
         return [].concat(acc);
       }
-    }, [wideData[0]]);
-    var allData = missingData.map(function (d) {
+    }, [wideData[0]]).map(function (d) {
       return _extends(_extends({}, d), {}, {
         date: getDateString(d.date)
       });
     });
-    return wideDataToLong(allData);
+    return wideDataToLong(allData, true);
   }
 
   function getDateSlice(data, date, groupFilter) {
