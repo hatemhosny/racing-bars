@@ -35,16 +35,18 @@ export function createTicker(store: Store): Ticker {
   }
 
   function loop() {
-    const loopDelay = store.getState().options.loopDelay;
-    if (loopDelay > 0) {
-      ticker.stop();
-      setTimeout(() => {
-        store.dispatch(actions.ticker.setFirst());
-        start();
-      }, loopDelay);
-    } else {
-      store.dispatch(actions.ticker.setFirst());
-    }
+    // const loopDelay = store.getState().options.loopDelay;
+    // if (loopDelay > 0) {
+    //   ticker.stop();
+    //   setTimeout(() => {
+    //     if (store.getState().ticker.isRunning) {
+    //       store.dispatch(actions.ticker.setFirst());
+    //       start();
+    //     }
+    //   }, loopDelay);
+    // } else {
+    store.dispatch(actions.ticker.setFirst());
+    // }
   }
 
   function skipForward() {

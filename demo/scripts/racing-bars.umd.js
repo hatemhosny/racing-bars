@@ -567,7 +567,6 @@
     disableKeyboardEvents: false,
     autorun: true,
     loop: false,
-    loopDelay: 0,
     injectStyles: true,
     title: '',
     subTitle: '',
@@ -817,17 +816,7 @@
     }
 
     function loop() {
-      var loopDelay = store.getState().options.loopDelay;
-
-      if (loopDelay > 0) {
-        ticker.stop();
-        setTimeout(function () {
-          store.dispatch(actions.ticker.setFirst());
-          start();
-        }, loopDelay);
-      } else {
-        store.dispatch(actions.ticker.setFirst());
-      }
+      store.dispatch(actions.ticker.setFirst());
     }
 
     function skipForward() {
