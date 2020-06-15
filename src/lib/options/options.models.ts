@@ -2,13 +2,9 @@ import { Action } from '../store';
 import { Data } from '../data';
 
 export interface OptionsAction extends Action {
-  payload: Options | RequiredOptions;
+  payload: Partial<Options>;
 }
 
-export interface RequiredOptions {
-  [key: string]: any;
-  selector: string;
-}
 export interface Options {
   selector: string;
   dataShape: 'long' | 'wide';

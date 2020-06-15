@@ -545,12 +545,6 @@
       payload: options
     };
   };
-  var optionsChanged = function optionsChanged(options) {
-    return {
-      type: actionTypes$1.optionsChanged,
-      payload: options
-    };
-  };
 
   var initialState$1 = {
     selector: '#race',
@@ -564,7 +558,7 @@
     tickDuration: 500,
     topN: 10,
     disableClickEvents: true,
-    disableKeyboardEvents: false,
+    disableKeyboardEvents: true,
     autorun: true,
     loop: false,
     injectStyles: true,
@@ -573,7 +567,7 @@
     caption: '',
     dateCounter: 'MM/YYYY',
     labelsOnBars: true,
-    labelsWidth: 100,
+    labelsWidth: 150,
     showIcons: false,
     showControls: 'all',
     showOverlays: 'none',
@@ -586,8 +580,8 @@
     theme: 'light',
     colorMap: {},
     fixedScale: false,
-    highlightBars: false,
-    selectBars: false
+    highlightBars: true,
+    selectBars: true
   };
   function optionsReducer(state, action) {
     if (state === void 0) {
@@ -598,8 +592,8 @@
       case actionTypes$1.optionsLoaded:
         var startDate = action.payload.startDate ? getDateString(action.payload.startDate) : '';
         var endDate = action.payload.endDate ? getDateString(action.payload.endDate) : '';
-        var inputHeight = action.payload.height;
-        var inputWidth = action.payload.width;
+        var inputHeight = action.payload.height || state.inputHeight;
+        var inputWidth = action.payload.width || state.inputWidth;
         return _extends(_extends(_extends({}, state), action.payload), {}, {
           startDate: startDate,
           endDate: endDate,
@@ -622,7 +616,6 @@
     actionTypes: actionTypes$1,
     optionsLoaded: optionsLoaded,
     changeOptions: changeOptions,
-    optionsChanged: optionsChanged,
     optionsReducer: optionsReducer
   };
 
@@ -1336,8 +1329,11 @@
           });
         }
 
-        dateCounterText = svg.append('text').attr('class', 'dateCounterText').attr('x', width - margin.right - barPadding).attr('y', height - 40).style('text-anchor', 'end').html(getText(dateCounter, TotalDateSlice, dates, currentDate, true)).call(halo);
-        captionText = svg.append('text').attr('class', 'caption').attr('x', width - margin.right - barPadding - 10).attr('y', height - margin.bottom - barPadding).style('text-anchor', 'end').html(getText(caption, TotalDateSlice, dates, currentDate));
+        var endY = height - margin.bottom;
+        var endX = width - margin.right - barPadding;
+        var dateCounterTextY = caption ? endY - 25 : endY;
+        dateCounterText = svg.append('text').attr('class', 'dateCounterText').attr('x', endX).attr('y', dateCounterTextY).style('text-anchor', 'end').html(getText(dateCounter, TotalDateSlice, dates, currentDate, true)).call(halo);
+        captionText = svg.append('text').attr('class', 'caption').attr('x', endX - 10).attr('y', endY).style('text-anchor', 'end').html(getText(caption, TotalDateSlice, dates, currentDate));
       }
 
       function renderControls() {
@@ -1757,6 +1753,10 @@
   }
 
   function race(data, options) {
+    if (options === void 0) {
+      options = {};
+    }
+
     var store = createStore(rootReducer);
     store.dispatch(actions.options.optionsLoaded(options));
     var _store$getState$optio = store.getState().options,
@@ -1764,10 +1764,15 @@
         injectStyles = _store$getState$optio.injectStyles,
         theme = _store$getState$optio.theme,
         autorun = _store$getState$optio.autorun;
+
+    if (!options.selector) {
+      console.log("No selector was provided. Using default: '" + selector + "'");
+    }
+
     var root = document.querySelector(selector);
 
     if (!root) {
-      throw new Error('Cannot find element with this selector: ' + selector);
+      throw new Error("Cannot find element with the selector: '" + selector + "'");
     }
 
     if (injectStyles) {

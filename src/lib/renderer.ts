@@ -271,11 +271,14 @@ export function createRenderer(data: Data[], store: Store): Renderer {
           .style('fill', (d: Data) => `url(#${getIconID(d)})`);
       }
 
+      const endY = height - margin.bottom;
+      const endX = width - margin.right - barPadding;
+      const dateCounterTextY = caption ? endY - 25 : endY;
       dateCounterText = svg
         .append('text')
         .attr('class', 'dateCounterText')
-        .attr('x', width - margin.right - barPadding)
-        .attr('y', height - 40)
+        .attr('x', endX)
+        .attr('y', dateCounterTextY)
         .style('text-anchor', 'end')
         .html(getText(dateCounter, TotalDateSlice, dates, currentDate, true))
         .call(halo);
@@ -283,8 +286,8 @@ export function createRenderer(data: Data[], store: Store): Renderer {
       captionText = svg
         .append('text')
         .attr('class', 'caption')
-        .attr('x', width - margin.right - barPadding - 10)
-        .attr('y', height - margin.bottom - barPadding)
+        .attr('x', endX - 10)
+        .attr('y', endY)
         .style('text-anchor', 'end')
         .html(getText(caption, TotalDateSlice, dates, currentDate));
     }

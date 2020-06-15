@@ -208,6 +208,7 @@ function debounce(func: any, wait: number, immediate = false) {
     }
   };
 }
+
 export const getClicks = debounce(function (event: any, Fn: (event: any) => void) {
   Fn(event);
 }, 250);

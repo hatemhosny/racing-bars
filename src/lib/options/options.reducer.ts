@@ -14,7 +14,7 @@ const initialState: Options = {
   tickDuration: 500,
   topN: 10,
   disableClickEvents: true,
-  disableKeyboardEvents: false,
+  disableKeyboardEvents: true,
   autorun: true,
   loop: false,
   // loopDelay: 0,
@@ -24,7 +24,7 @@ const initialState: Options = {
   caption: '',
   dateCounter: 'MM/YYYY',
   labelsOnBars: true,
-  labelsWidth: 100,
+  labelsWidth: 150,
   showIcons: false,
   showControls: 'all',
   showOverlays: 'none',
@@ -37,8 +37,8 @@ const initialState: Options = {
   theme: 'light',
   colorMap: {},
   fixedScale: false,
-  highlightBars: false,
-  selectBars: false,
+  highlightBars: true,
+  selectBars: true,
 };
 
 export function optionsReducer(state = initialState, action: OptionsAction): Options {
@@ -46,8 +46,8 @@ export function optionsReducer(state = initialState, action: OptionsAction): Opt
     case actionTypes.optionsLoaded:
       const startDate = action.payload.startDate ? getDateString(action.payload.startDate) : '';
       const endDate = action.payload.endDate ? getDateString(action.payload.endDate) : '';
-      const inputHeight = action.payload.height;
-      const inputWidth = action.payload.width;
+      const inputHeight = action.payload.height || state.inputHeight;
+      const inputWidth = action.payload.width || state.inputWidth;
       return {
         ...state,
         ...action.payload,

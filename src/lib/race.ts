@@ -6,20 +6,25 @@ import { createRenderer } from './renderer';
 import { createTicker } from './ticker';
 import { styleInject } from './styles';
 import { actions, createStore, rootReducer } from './store';
-import { Options, RequiredOptions } from './options';
+import { Options } from './options';
 import { registerEvents, DOMEventSubscriber } from './events';
 import { createScroller } from './scroller';
 import { safeName } from './utils';
 
-export function race(data: Data[] | WideData[], options: Options | RequiredOptions) {
+export function race(data: Data[] | WideData[], options: Partial<Options> = {}) {
   const store = createStore(rootReducer);
 
   store.dispatch(actions.options.optionsLoaded(options));
   const { selector, injectStyles, theme, autorun } = store.getState().options;
 
+  if (!options.selector) {
+    // eslint-disable-next-line no-console
+    console.log(`No selector was provided. Using default: '${selector}'`);
+  }
+
   const root = document.querySelector(selector) as HTMLElement;
   if (!root) {
-    throw new Error('Cannot find element with this selector: ' + selector);
+    throw new Error(`Cannot find element with the selector: '${selector}'`);
   }
 
   if (injectStyles) {
