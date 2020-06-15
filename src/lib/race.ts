@@ -1,3 +1,4 @@
+import * as d3 from './d3';
 import { prepareData } from './data-utils';
 import { getDateString } from './dates';
 import { Data, WideData } from './data';
@@ -8,6 +9,7 @@ import { actions, createStore, rootReducer } from './store';
 import { Options, RequiredOptions } from './options';
 import { registerEvents, DOMEventSubscriber } from './events';
 import { createScroller } from './scroller';
+import { safeName } from './utils';
 
 export function race(data: Data[] | WideData[], options: Options | RequiredOptions) {
   const store = createStore(rootReducer);
@@ -80,6 +82,38 @@ export function race(data: Data[] | WideData[], options: Options | RequiredOptio
     getAllDates: () => [...store.getState().ticker.dates],
     createScroller: () => {
       createScroller(root, store);
+    },
+    selections: {
+      select: (name: string) => {
+        d3.select(root)
+          .select('rect.' + safeName(name))
+          .classed('selected', true);
+        store.dispatch(actions.data.addSelection(name));
+      },
+      unselect: (name: string) => {
+        d3.select(root)
+          .select('rect.' + safeName(name))
+          .classed('selected', false);
+        store.dispatch(actions.data.removeSelection(name));
+      },
+      unselectAll: () => {
+        d3.select(root).selectAll('rect').classed('selected', false);
+        store.dispatch(actions.data.resetSelections());
+      },
+    },
+    groups: {
+      hide: (group: string) => {
+        store.dispatch(actions.data.addFilter(group));
+      },
+      show: (group: string) => {
+        store.dispatch(actions.data.removeFilter(group));
+      },
+      showOnly: (group: string) => {
+        store.dispatch(actions.data.allExceptFilter(group));
+      },
+      showAll: () => {
+        store.dispatch(actions.data.resetFilters());
+      },
     },
   };
 }

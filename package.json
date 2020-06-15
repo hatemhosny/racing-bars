@@ -14,7 +14,7 @@
   "scripts": {
     "describe": "npm-scripts-info",
     "start": "run-p dev serve",
-    "serve": "servor demo index.html --reload --browse",
+    "serve": "servor demo index.html --reload",
     "dev": "run-p ts:watch styles:watch",
     "ts:watch": "microbundle watch src/index.ts -o demo/scripts -f umd --compress false --tsconfig tsconfig.dev.json",
     "build": "run-s clean build:*",

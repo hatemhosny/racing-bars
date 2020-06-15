@@ -1837,6 +1837,34 @@
       },
       createScroller: function createScroller$1() {
         createScroller(root, store);
+      },
+      selections: {
+        select: function select(name) {
+          d3$1.select(root).select('rect.' + safeName(name)).classed('selected', true);
+          store.dispatch(actions.data.addSelection(name));
+        },
+        unselect: function unselect(name) {
+          d3$1.select(root).select('rect.' + safeName(name)).classed('selected', false);
+          store.dispatch(actions.data.removeSelection(name));
+        },
+        unselectAll: function unselectAll() {
+          d3$1.select(root).selectAll('rect').classed('selected', false);
+          store.dispatch(actions.data.resetSelections());
+        }
+      },
+      groups: {
+        hide: function hide(group) {
+          store.dispatch(actions.data.addFilter(group));
+        },
+        show: function show(group) {
+          store.dispatch(actions.data.removeFilter(group));
+        },
+        showOnly: function showOnly(group) {
+          store.dispatch(actions.data.allExceptFilter(group));
+        },
+        showAll: function showAll() {
+          store.dispatch(actions.data.resetFilters());
+        }
       }
     };
   }
