@@ -14,8 +14,8 @@ export function registerEvents(store: Store, ticker: Ticker) {
 
   function registerControlButtonEvents() {
     addEventHandler(root, elements.skipBack, 'click', ticker.skipBack);
-    addEventHandler(root, elements.play, 'click', ticker.toggle);
-    addEventHandler(root, elements.pause, 'click', ticker.toggle);
+    addEventHandler(root, elements.play, 'click', ticker.start);
+    addEventHandler(root, elements.pause, 'click', ticker.stop);
     addEventHandler(root, elements.skipForward, 'click', ticker.skipForward);
   }
 

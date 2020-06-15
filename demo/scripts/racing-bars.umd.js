@@ -567,6 +567,7 @@
     disableKeyboardEvents: false,
     autorun: true,
     loop: false,
+    loopDelay: 0,
     injectStyles: true,
     title: '',
     subTitle: '',
@@ -816,7 +817,17 @@
     }
 
     function loop() {
-      store.dispatch(actions.ticker.setFirst());
+      var loopDelay = store.getState().options.loopDelay;
+
+      if (loopDelay > 0) {
+        ticker.stop();
+        setTimeout(function () {
+          store.dispatch(actions.ticker.setFirst());
+          start();
+        }, loopDelay);
+      } else {
+        store.dispatch(actions.ticker.setFirst());
+      }
     }
 
     function skipForward() {
@@ -1646,8 +1657,8 @@
 
     function registerControlButtonEvents() {
       addEventHandler(root, elements.skipBack, 'click', ticker.skipBack);
-      addEventHandler(root, elements.play, 'click', ticker.toggle);
-      addEventHandler(root, elements.pause, 'click', ticker.toggle);
+      addEventHandler(root, elements.play, 'click', ticker.start);
+      addEventHandler(root, elements.pause, 'click', ticker.stop);
       addEventHandler(root, elements.skipForward, 'click', ticker.skipForward);
     }
 

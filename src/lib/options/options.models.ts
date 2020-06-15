@@ -20,6 +20,7 @@ export interface Options {
   startDate: string;
   endDate: string;
   loop: boolean;
+  loopDelay: number;
   caption: string;
   labelsOnBars: boolean;
   labelsWidth: number;

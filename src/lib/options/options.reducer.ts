@@ -17,6 +17,7 @@ const initialState: Options = {
   disableKeyboardEvents: false,
   autorun: true,
   loop: false,
+  loopDelay: 0,
   injectStyles: true,
   title: '',
   subTitle: '',
