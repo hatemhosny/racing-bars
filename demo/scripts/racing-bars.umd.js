@@ -21,9 +21,9 @@
     scaleLinear: d3$1.scaleLinear,
     select: d3$1.select,
     selectAll: d3$1.selectAll,
-    timeYears: d3$1.timeYears,
-    timeMonths: d3$1.timeMonths,
-    timeDays: d3$1.timeDays,
+    timeYear: d3$1.timeYear,
+    timeMonth: d3$1.timeMonth,
+    timeDay: d3$1.timeDay,
     tsv: d3$1.tsv,
     xml: d3$1.xml
   };
@@ -319,7 +319,7 @@
 
     var year = dateStr.slice(0, 4);
     var month = dateStr.slice(5, 7);
-    var day = dateStr.slice(7, 9);
+    var day = dateStr.slice(8, 10);
     var date = new Date(dateStr);
     var weekDayIndex = String(date.getDay());
     var monthNames = {
@@ -1059,7 +1059,7 @@
   }
 
   function fillGaps(data, period, fillValue) {
-    var intervalRange = period === 'years' ? d3$1.timeYears : period === 'months' ? d3$1.timeMonths : period === 'days' ? d3$1.timeDays : null;
+    var intervalRange = period === 'years' ? d3$1.timeYear.range : period === 'months' ? d3$1.timeMonth.range : period === 'days' ? d3$1.timeDay.range : null;
 
     if (!intervalRange) {
       return data;

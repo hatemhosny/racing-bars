@@ -116,11 +116,11 @@ function fillGaps(
 ) {
   const intervalRange =
     period === 'years'
-      ? d3.timeYears
+      ? d3.timeYear.range
       : period === 'months'
-      ? d3.timeMonths
+      ? d3.timeMonth.range
       : period === 'days'
-      ? d3.timeDays
+      ? d3.timeDay.range
       : null;
 
   if (!intervalRange) {

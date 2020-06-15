@@ -19,7 +19,7 @@ export function getDateString(inputDate: string | Date) {
 export function formatDate(dateStr: string, format = 'YYYY-MM-DD') {
   const year = dateStr.slice(0, 4);
   const month = dateStr.slice(5, 7);
-  const day = dateStr.slice(7, 9);
+  const day = dateStr.slice(8, 10);
   const date = new Date(dateStr);
   const weekDayIndex = String(date.getDay());
   const monthNames: { [key: string]: string } = {

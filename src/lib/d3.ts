@@ -16,9 +16,9 @@ export {
   select,
   selectAll,
   Timer,
-  timeYears,
-  timeMonths,
-  timeDays,
+  timeYear,
+  timeMonth,
+  timeDay,
   tsv,
   xml,
 } from 'd3';
