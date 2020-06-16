@@ -66,8 +66,8 @@
   "devDependencies": {
     "@bitjson/npm-scripts-info": "1.0.0",
     "@bitjson/typedoc": "0.15.0-0",
-    "@docusaurus/core": "^2.0.0-alpha.55",
-    "@docusaurus/preset-classic": "^2.0.0-alpha.55",
+    "@docusaurus/core": "^2.0.0-alpha.56",
+    "@docusaurus/preset-classic": "^2.0.0-alpha.56",
     "@istanbuljs/nyc-config-typescript": "1.0.1",
     "@types/d3": "5.7.2",
     "@types/jest": "25.2.3",
