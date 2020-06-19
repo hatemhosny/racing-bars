@@ -2,11 +2,11 @@ import { loadData } from '../dist/racing-bars.esm';
 
 export function getData(props, elementId) {
   const selector = '#' + elementId;
-  let { data, dataUrl, ...attr } = props;
+  let { data, dataUrl, dataType, ...attr } = props;
   const options = { selector, ...attr };
   let dataPromise;
   if (dataUrl && !data) {
-    dataPromise = loadData(dataUrl);
+    dataPromise = loadData(dataUrl, dataType);
   } else if (isPromise(data)) {
     dataPromise = data;
   } else {

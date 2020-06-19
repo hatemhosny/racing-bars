@@ -17,14 +17,9 @@ export function race(data: Data[] | WideData[], options: Partial<Options> = {}) 
   store.dispatch(actions.options.optionsLoaded(options));
   const { selector, injectStyles, theme, autorun } = store.getState().options;
 
-  if (!options.selector) {
-    // eslint-disable-next-line no-console
-    console.log(`No selector was provided. Using default: '${selector}'`);
-  }
-
   const root = document.querySelector(selector) as HTMLElement;
   if (!root) {
-    throw new Error(`Cannot find element with the selector: '${selector}'`);
+    return;
   }
 
   if (injectStyles) {

@@ -22,7 +22,7 @@ module.exports = {
           label: 'Docs',
           position: 'left',
         },
-        { to: 'blog', label: 'Blog', position: 'left' },
+        { to: 'gallery', activeBasePath: 'gallery', label: 'Gallery', position: 'left' },
         {
           href: 'https://github.com/facebook/docusaurus',
           label: 'GitHub',
@@ -67,8 +67,8 @@ module.exports = {
           title: 'More',
           items: [
             {
-              label: 'Blog',
-              to: 'blog',
+              label: 'Gallery',
+              to: 'gallery',
             },
             {
               label: 'GitHub',
@@ -93,6 +93,7 @@ module.exports = {
         },
         blog: {
           showReadingTime: true,
+
           // Please change this to your repo.
           editUrl: 'https://github.com/facebook/docusaurus/edit/master/website/blog/',
         },
@@ -102,5 +103,17 @@ module.exports = {
       },
     ],
   ],
+  plugins: [
+    [
+      '@hatemhosny/docusaurus-plugin-gallery',
+      {
+        routeBasePath: 'gallery',
+        path: './gallery',
+        showReadingTime: false,
+        editUrl: 'https://github.com/facebook/docusaurus/edit/master/website/blog/',
+      },
+    ],
+  ],
+
   scripts: ['/scripts/load-data.js'],
 };

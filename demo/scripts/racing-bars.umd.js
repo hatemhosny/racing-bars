@@ -1772,7 +1772,8 @@
     var root = document.querySelector(selector);
 
     if (!root) {
-      throw new Error("Cannot find element with the selector: '" + selector + "'");
+      console.log("Cannot find element with the selector: '" + selector + "'");
+      return;
     }
 
     if (injectStyles) {

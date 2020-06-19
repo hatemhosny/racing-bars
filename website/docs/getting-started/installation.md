@@ -1,4 +1,3 @@
 ---
-id: installation
 title: Installation
 ---

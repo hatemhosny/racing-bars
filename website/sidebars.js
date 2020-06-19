@@ -1,14 +1,22 @@
 module.exports = {
-  docsSidebar: {
-    'Racing Bars': ['overview', 'features', 'doc2'],
-    'Getting Started': [
-      'getting-started/installation',
-      'getting-started/usage',
-      'getting-started/configuration',
-    ],
-    Data: ['data/shape', 'data/loading'],
-    Options: ['options/options'],
-    API: ['api/api'],
+  docsSidebar: [
+    {
+      type: 'category',
+      label: 'Racing Bars',
+      items: ['overview', 'features'],
+    },
+    {
+      type: 'category',
+      label: 'Getting Started',
+      items: [
+        'getting-started/installation',
+        'getting-started/usage',
+        'getting-started/configuration',
+      ],
+    },
+    'data',
+    'options',
+    'api',
     // Guides: [
     //   'guides/chart-size',
     //   'guides/colors',
@@ -20,5 +28,5 @@ module.exports = {
     //   'gallery/fillDateGaps',
     // ],
     // Gallery: ['gallery/events', 'gallery/slider', 'gallery/scrolly-telling'],
-  },
+  ],
 };

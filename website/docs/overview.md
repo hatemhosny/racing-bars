@@ -1,5 +1,4 @@
 ---
-id: overview
 title: Overview
 ---
 
@@ -10,13 +9,15 @@ It is based on [D3.js](https://d3js.org) and written in [typescript](https://www
 This code:
 
 ```javascript
-racingBars.loadData('./population.json').then((data) => {
+racingBars.loadData('/data/population.json').then((data) => {
   racingBars.race(data);
 });
 ```
 
 outputs this:
 
-import { RacingBarsComponent as RacingBars, racingBars } from '../../dist/react/racing-bars.esm.js';
+import { RacingBarsComponent } from '../racing-bars.js';
 
-<RacingBars data={globalThis.procedures} />
+<div className="gallery">
+  <RacingBarsComponent data={globalThis.data.population} />
+</div>

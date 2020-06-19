@@ -1,4 +1,3 @@
 ---
-id: configuration
 title: Configuration
 ---
