@@ -3,8 +3,13 @@ title: Overview
 ---
 
 Racing Bars is an [open-source](https://github.com/hatemhosny/racing-bars), light-weight (25kb gzipped),
-easy-to-use, and [feature-rich](./features) javascript library for racing bar charts.
-It is based on [D3.js](https://d3js.org) and written in [typescript](https://www.typescriptlang.org).
+easy-to-use, and [feature-rich](./features.md) javascript library for racing bar charts.
+It is based on [D3.js](https://d3js.org).
+Available for vanilla [javascript](./getting-started/installation.md),
+[typescript](./packages/typescript.md),
+[react](./packages/react.md),
+[vue](./packages/vue.md)
+and [python](./packages/python.md).
 
 This code:
 
@@ -14,7 +19,7 @@ racingBars.loadData('/data/population.json').then((data) => {
 });
 ```
 
-outputs this:
+produces this chart:
 
 import { RacingBarsComponent } from '../racing-bars.js';
 

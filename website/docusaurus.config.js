@@ -1,8 +1,8 @@
 const path = require('path');
 
 module.exports = {
-  title: 'My Site',
-  tagline: 'The tagline of my site',
+  title: 'Racing Bars',
+  tagline: 'Racing bar charts made easy 🎉',
   url: 'https://your-docusaurus-test-site.com',
   baseUrl: '/',
   favicon: 'img/favicon.ico',
@@ -10,7 +10,7 @@ module.exports = {
   projectName: 'docusaurus', // Usually your repo name.
   themeConfig: {
     navbar: {
-      title: 'My Site',
+      title: 'Racing Bars',
       logo: {
         alt: 'My Site Logo',
         src: 'img/logo.svg',
