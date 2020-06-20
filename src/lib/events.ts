@@ -71,6 +71,9 @@ export function registerEvents(store: Store, ticker: Ticker) {
 
 function dispatchDOMEvent(store: Store) {
   const element = document.querySelector(store.getState().options.selector) as HTMLElement;
+  if (!element) {
+    return;
+  }
   element.dispatchEvent(
     new CustomEvent('racingBars/dateChanged', {
       bubbles: true,

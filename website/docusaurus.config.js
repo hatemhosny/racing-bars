@@ -1,8 +1,8 @@
 const path = require('path');
 
 module.exports = {
-  title: 'My Site',
-  tagline: 'The tagline of my site',
+  title: 'Racing Bars',
+  tagline: 'Racing bar charts made easy 🎉',
   url: 'https://your-docusaurus-test-site.com',
   baseUrl: '/',
   favicon: 'img/favicon.ico',
@@ -10,7 +10,7 @@ module.exports = {
   projectName: 'docusaurus', // Usually your repo name.
   themeConfig: {
     navbar: {
-      title: 'My Site',
+      title: 'Racing Bars',
       logo: {
         alt: 'My Site Logo',
         src: 'img/logo.svg',
@@ -22,7 +22,7 @@ module.exports = {
           label: 'Docs',
           position: 'left',
         },
-        { to: 'blog', label: 'Blog', position: 'left' },
+        { to: 'gallery', activeBasePath: 'gallery', label: 'Gallery', position: 'left' },
         {
           href: 'https://github.com/facebook/docusaurus',
           label: 'GitHub',
@@ -67,8 +67,8 @@ module.exports = {
           title: 'More',
           items: [
             {
-              label: 'Blog',
-              to: 'blog',
+              label: 'Gallery',
+              to: 'gallery',
             },
             {
               label: 'GitHub',
@@ -86,13 +86,14 @@ module.exports = {
       {
         docs: {
           // It is recommended to set document id as docs home page (`docs/` path).
-          homePageId: 'doc1',
+          homePageId: 'overview',
           sidebarPath: require.resolve('./sidebars.js'),
           // Please change this to your repo.
           editUrl: 'https://github.com/facebook/docusaurus/edit/master/website/',
         },
         blog: {
           showReadingTime: true,
+
           // Please change this to your repo.
           editUrl: 'https://github.com/facebook/docusaurus/edit/master/website/blog/',
         },
@@ -102,5 +103,17 @@ module.exports = {
       },
     ],
   ],
+  plugins: [
+    [
+      '@hatemhosny/docusaurus-plugin-gallery',
+      {
+        routeBasePath: 'gallery',
+        path: './gallery',
+        showReadingTime: false,
+        editUrl: 'https://github.com/facebook/docusaurus/edit/master/website/blog/',
+      },
+    ],
+  ],
+
   scripts: ['/scripts/load-data.js'],
 };

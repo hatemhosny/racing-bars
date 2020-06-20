@@ -1,6 +1,45 @@
 module.exports = {
-  someSidebar: {
-    Docusaurus: ['doc1', 'doc2', 'doc3'],
-    Features: ['mdx'],
-  },
+  docsSidebar: [
+    'overview',
+    'features',
+    {
+      type: 'category',
+      label: 'Getting Started',
+      items: ['getting-started/installation', 'getting-started/usage'],
+    },
+    {
+      type: 'category',
+      label: 'Documentation',
+      items: [
+        'documentation/data',
+        'documentation/options',
+        'documentation/api',
+        'documentation/events',
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Packages',
+      items: ['packages/react', 'packages/vue', 'packages/typescript', 'packages/python'],
+    },
+    {
+      type: 'category',
+      label: 'Guides',
+      items: [
+        'guides/chart-size',
+        'guides/colors',
+        'guides/themes',
+        'guides/highlight-select',
+        'guides/labels',
+        'guides/icons',
+        'guides/groups',
+        'guides/dynamic-values',
+        'guides/chart-controls',
+        'guides/fillDateGaps',
+        'guides/multiple-charts',
+      ],
+    },
+    'license',
+    // Gallery: ['gallery/events', 'gallery/slider', 'gallery/scrolly-telling'],
+  ],
 };

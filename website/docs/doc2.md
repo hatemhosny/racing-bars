@@ -1,5 +1,4 @@
 ---
-id: doc2
 title: Bar Chart Race
 ---
 
