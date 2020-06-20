@@ -323,3 +323,26 @@ Example for long data with optional fields:
   }
 ]
 ```
+
+## How do I choose?
+
+CSV files have smaller file size but require extra client-side processing than JSON files.
+
+Also "wide" data has smaller size than "long" data, but also require extra client-side processing.
+
+:::tip
+"Wide" CSV data has the smallest file size but the most processing,
+while "long" JSON data has largest file size but least processing.
+:::
+
+So you decide, based on how large is your data, network constraints and processing power of the browsers of your users.
+
+:::caution
+"Wide" CSV data does not allow you to use optional fields (`group`, `icon`)
+:::
+
+## Filling gaps in data
+
+Dates that are missing from data will be skipped.
+If you need to fill date gaps, you may use the options [`fillDateGaps`](./options.md) and [`fillDateGapValue`](./options.md).
+please check the [guide](../guides/fillDateGaps.md) about filling date gaps and data interpolation.

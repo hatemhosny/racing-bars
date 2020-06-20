@@ -18,8 +18,9 @@ dateCounter: (currentDate, dateSlice, allDates) =>
 
 <div className="gallery">
   <RacingBarsComponent
-    dataUrl="/data/population.csv"
+    dataUrl="/data/population-wide.csv"
     dataType="csv"
+    dataShape="wide"
     dateCounter={options.dateCounter}
   />
 </div>

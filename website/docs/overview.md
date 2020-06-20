@@ -24,5 +24,9 @@ produces this chart:
 import { RacingBarsComponent } from '../racing-bars.js';
 
 <div className="gallery">
-  <RacingBarsComponent data={globalThis.data.population} />
+  <RacingBarsComponent
+    dataUrl="/data/population-wide.csv"
+    dataType="csv"
+    dataShape="wide"
+  />
 </div>

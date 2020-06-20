@@ -114,6 +114,4 @@ module.exports = {
       },
     ],
   ],
-
-  scripts: ['/scripts/load-data.js'],
 };

@@ -123,6 +123,7 @@ export function getWidth(element: HTMLElement, minWidth: number, width?: string)
 }
 
 export function getElement(root: HTMLElement, className: string) {
+  // TODO: fix Cannot read property 'querySelector' of null
   return root.querySelector('.' + className) as HTMLElement;
 }
 
