@@ -39,7 +39,7 @@ module.exports = {
         'guides/multiple-charts',
       ],
     },
+    'credits',
     'license',
-    // Gallery: ['gallery/events', 'gallery/slider', 'gallery/scrolly-telling'],
   ],
 };

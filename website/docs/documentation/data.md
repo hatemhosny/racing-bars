@@ -4,11 +4,11 @@ title: Data
 
 ## Data Shape
 
-Both <a href="https://en.wikipedia.org/wiki/Wide_and_narrow_data" target="_blank">"long" and "wide"</a> data shapes are supported.
+Both <a href="https://en.wikipedia.org/wiki/Wide_and_narrow_data" target="_blank" class="external">"long" and "wide"</a> data shapes are supported.
 
 ## Long Data
 
-Also known as <a href="https://vita.had.co.nz/papers/tidy-data.pdf" target="_blank">tidy data</a>.
+Also known as <a href="https://vita.had.co.nz/papers/tidy-data.pdf" target="_blank" class="external">tidy data (pdf)</a>.
 
 Each data item has the following fields:
 
@@ -202,7 +202,7 @@ date,Canada,Egypt,Greece,Panama,Singapore
 
 ### Usage
 
-For wide data to be processed, the `options` object should have the field `dataShape` set to `wide`
+For wide data to be processed, the [`options`](./options.md) object should have the field [`dataShape`](./options.md#datashape) set to `wide`
 
 - Plain data object
 
@@ -328,17 +328,17 @@ Example for long data with optional fields:
 
 CSV files have smaller file size but require extra client-side processing than JSON files.
 
-Also "wide" data has smaller size than "long" data, but also require extra client-side processing.
+Also "wide" data has smaller size than "long" data, but also requires extra client-side processing.
 
 :::tip
-"Wide" CSV data has the smallest file size but the most processing,
-while "long" JSON data has largest file size but least processing.
+"Wide" CSV data has the smallest file size but requires the most processing,
+while "long" JSON data has largest file size but requires least processing.
 :::
 
 So you decide, based on how large is your data, network constraints and processing power of the browsers of your users.
 
 :::caution
-"Wide" CSV data does not allow you to use optional fields (`group`, `icon`)
+"Wide" CSV data does not allow the use of optional fields (`group`, `icon`)
 :::
 
 ## Filling gaps in data

@@ -150,6 +150,10 @@ __selector__ text.label {
   fill: #313639;
 }
 
+__selector__ text.label.outside-bars {
+  fill: #fafafa;
+}
+
 __selector__ text.valueLabel {
   fill: #fafafa;
 }
@@ -231,6 +235,10 @@ __selector__ text.legend-text {
 }
 
 __selector__ text.label {
+  fill: #000000;
+}
+
+__selector__ text.label.outside-bars {
   fill: #000000;
 }
 

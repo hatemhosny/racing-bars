@@ -1,26 +1,25 @@
 ---
-title: Date Counter
+title: Caption (data function)
 ---
 
 import { RacingBarsComponent } from '../racing-bars.js';
 
-This example shows the use of [data functions](#).
-The `dateCounter` uses a function to show '[count] of [total]'
+This example shows the use of [data function](../docs/documentation/options#data-function) in caption.
 
 <!--truncate-->
 
 ### Chart
 
 export const options = {
-dateCounter: (currentDate, dateSlice, allDates) =>
-`${allDates.indexOf(currentDate) + 1} of ${allDates.length}`,
+caption: (currentDate, dateSlice, allDates) =>
+`Total: ${Math.round(dateSlice.reduce((acc, curr) => acc + curr.value, 0))}`,
 };
 
 <div className="gallery">
   <RacingBarsComponent
     dataUrl="/data/population.csv"
     dataType="csv"
-    dateCounter={options.dateCounter}
+    caption={options.caption}
   />
 </div>
 
@@ -31,9 +30,10 @@ dateCounter: (currentDate, dateSlice, allDates) =>
 <script>
   const options = {
     selector: '#race',
-    dateCounter: (currentDate, dateSlice, allDates) =>
-      `${allDates.indexOf(currentDate) + 1} of ${allDates.length}`,
+    caption: (currentDate, dateSlice, allDates) =>
+      `Total: ${Math.round(dateSlice.reduce((acc, curr) => acc + curr.value, 0))}`,
   };
+
   racingBars.loadData('/data/population.csv', 'csv').then((data) => {
     racingBars.race(data, options);
   });

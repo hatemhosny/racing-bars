@@ -8,7 +8,13 @@ import { Options } from './options';
 export function prepareData(rawData: Data[], store: Store) {
   const options = store.getState().options;
 
-  let data = rawData
+  let data = rawData;
+
+  if (options.dataTransform && typeof options.dataTransform === 'function') {
+    data = options.dataTransform(data) as Data[];
+  }
+
+  data = data
     .map((d) => ({ ...d, date: getDateString(d.date) }))
     .filter((d) => (options.startDate ? d.date >= options.startDate : true))
     .filter((d) => (options.endDate ? d.date <= options.endDate : true));

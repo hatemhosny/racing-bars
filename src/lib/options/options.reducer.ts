@@ -5,6 +5,7 @@ import { actionTypes } from './options.actions';
 const initialState: Options = {
   selector: '#race',
   dataShape: 'long',
+  dataTransform: null,
   fillDateGaps: false,
   fillDateGapsValue: 'interpolate',
   startDate: '',

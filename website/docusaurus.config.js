@@ -2,7 +2,7 @@ const path = require('path');
 
 module.exports = {
   title: 'Racing Bars',
-  tagline: 'Racing bar charts made easy 🎉',
+  tagline: 'Bar chart race made easy 🎉',
   url: 'https://your-docusaurus-test-site.com',
   baseUrl: '/',
   favicon: 'img/favicon.ico',
@@ -24,7 +24,13 @@ module.exports = {
         },
         { to: 'gallery', activeBasePath: 'gallery', label: 'Gallery', position: 'left' },
         {
-          href: 'https://github.com/facebook/docusaurus',
+          to: 'docs/sample-datasets',
+          activeBasePath: 'docs/sample-datasets',
+          label: 'Sample Datasets',
+          position: 'left',
+        },
+        {
+          href: 'https://github.com/hatemhosny/racing-bars',
           label: 'GitHub',
           position: 'right',
         },
@@ -72,12 +78,12 @@ module.exports = {
             },
             {
               label: 'GitHub',
-              href: 'https://github.com/facebook/docusaurus',
+              href: 'https://github.com/hatemhosny/racing-bars',
             },
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} My Project, Inc. Built with Docusaurus.`,
+      copyright: `Copyright © ${new Date().getFullYear()} Hatem Hosny.`,
     },
   },
   presets: [

@@ -45,3 +45,16 @@ summary {
 time {
   display: none;
 }
+
+@font-face {
+  font-family: 'FontAwesomeSolid';
+  src: url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/webfonts/fa-solid-900.ttf')
+    format('truetype');
+}
+
+a.external::after {
+  content: ' \f35d';
+  font-family: 'FontAwesomeSolid';
+  color: var(--ifm-link-color);
+  font-size: small;
+}

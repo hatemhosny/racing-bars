@@ -1,26 +1,21 @@
 ---
-title: Date Counter
+title: Title and Sub-Title
 ---
 
 import { RacingBarsComponent } from '../racing-bars.js';
 
-This example shows the use of [data functions](#).
-The `dateCounter` uses a function to show '[count] of [total]'
+A demo for using string in `title` and `subTitle`.
 
 <!--truncate-->
 
 ### Chart
 
-export const options = {
-dateCounter: (currentDate, dateSlice, allDates) =>
-`${allDates.indexOf(currentDate) + 1} of ${allDates.length}`,
-};
-
 <div className="gallery">
   <RacingBarsComponent
     dataUrl="/data/population.csv"
     dataType="csv"
-    dateCounter={options.dateCounter}
+    title="World Population"
+    subTitle="in millions"
   />
 </div>
 
@@ -31,8 +26,8 @@ dateCounter: (currentDate, dateSlice, allDates) =>
 <script>
   const options = {
     selector: '#race',
-    dateCounter: (currentDate, dateSlice, allDates) =>
-      `${allDates.indexOf(currentDate) + 1} of ${allDates.length}`,
+    title: 'World Population',
+    subTitle: 'in millions',
   };
   racingBars.loadData('/data/population.csv', 'csv').then((data) => {
     racingBars.race(data, options);

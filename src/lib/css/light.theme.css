@@ -35,6 +35,10 @@ __selector__ text.label {
   fill: #000000;
 }
 
+__selector__ text.label.outside-bars {
+  fill: #000000;
+}
+
 __selector__ text.valueLabel {
   fill: #000000;
 }

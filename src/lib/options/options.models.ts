@@ -1,5 +1,5 @@
 import { Action } from '../store';
-import { Data } from '../data';
+import { Data, WideData } from '../data';
 
 export interface OptionsAction extends Action {
   payload: Partial<Options>;
@@ -8,6 +8,7 @@ export interface OptionsAction extends Action {
 export interface Options {
   selector: string;
   dataShape: 'long' | 'wide';
+  dataTransform: null | ((data: Data[] | WideData[]) => Data[] | WideData[]);
   fillDateGaps: false | 'years' | 'months' | 'days';
   fillDateGapsValue: 'last' | 'interpolate';
   title: string;

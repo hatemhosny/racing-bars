@@ -2,7 +2,8 @@
 title: Usage
 ---
 
-The main method that creates the bar chart race is [`race`](../documentation/api.md#racedata-options). It is used as follows:
+Whether you use UMD or ES modules ([see installation](./installation.md)), you get access to `racingBars` object.
+This object has the method [`race`](../documentation/api.md#racedata-options), which creates the bar chart race. It is used as follows:
 
 ```js
 racingBars.race(data, options);
@@ -13,13 +14,13 @@ where:
 - [`data`](../documentation/data.md) is the data object, and
 - [`options`](../documentation/options.md) is an optional configuration object.
 
-For convenience, the `racingBar` object also exposes the method [`loadData`](./loadData.md) to allow fetching data from URL.
+For convenience, the `racingBar` object also exposes the method [`loadData`](../documentation/api.md) to allow fetching data from URL.
 It supports the following data formats, by specifying the second optional parameter:
 
-- `json` (default)
-- `csv`
-- `tsv`
-- `xml`
+- `'json'` (default)
+- `'csv'`
+- `'tsv'`
+- `'xml'`
 
 The `loadData` method returns a promise with the fetched data converted to a javascript object.
 

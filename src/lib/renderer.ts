@@ -222,6 +222,7 @@ export function createRenderer(data: Data[], store: Store): Renderer {
         .enter()
         .append('text')
         .attr('class', 'label')
+        .classed('outside-bars', !labelsOnBars)
         .attr('x', labelX)
         .attr('y', (d: Data) => barY(d) + barHalfHeight)
         .style('text-anchor', 'end')
@@ -273,7 +274,7 @@ export function createRenderer(data: Data[], store: Store): Renderer {
 
       const endY = height - margin.bottom;
       const endX = width - margin.right - barPadding;
-      const dateCounterTextY = caption ? endY - 25 : endY;
+      const dateCounterTextY = caption ? endY - 30 : endY - 5;
       dateCounterText = svg
         .append('text')
         .attr('class', 'dateCounterText')
@@ -287,7 +288,7 @@ export function createRenderer(data: Data[], store: Store): Renderer {
         .append('text')
         .attr('class', 'caption')
         .attr('x', endX - 10)
-        .attr('y', endY)
+        .attr('y', endY - 5)
         .style('text-anchor', 'end')
         .html(getText(caption, TotalDateSlice, dates, currentDate));
     }
@@ -356,6 +357,7 @@ export function createRenderer(data: Data[], store: Store): Renderer {
       caption,
       dateCounter,
       fixedScale,
+      labelsOnBars,
     } = store.getState().options;
     const currentDate = store.getState().ticker.currentDate;
     const CompleteDateSlice = getDateSlice(data, currentDate, store.getState().data.groupFilter);
@@ -424,6 +426,7 @@ export function createRenderer(data: Data[], store: Store): Renderer {
       .enter()
       .append('text')
       .attr('class', 'label')
+      .classed('outside-bars', !labelsOnBars)
       .attr('x', labelX)
       .attr('y', () => y(topN + 1) + 5 + barHalfHeight)
       .style('text-anchor', 'end')
