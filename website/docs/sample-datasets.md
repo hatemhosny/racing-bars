@@ -3,8 +3,10 @@ title: Sample Datasets
 ---
 
 These are sample datasets provided in different shapes and formats.
-You may use them to experiment using the library.
+You may use them to experiment using the library and help you get started.
 Please check the [section on data](./documentation/data.md) for usage guidance.
+
+Note that these datasets are already included in the [Python package](./packages/python.md) if you are using it.
 
 ### Population
 

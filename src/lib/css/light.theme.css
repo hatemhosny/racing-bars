@@ -76,11 +76,11 @@ __selector__ .overlay {
 }
 
 __selector__ .highlight {
-  fill: rgb(255, 39, 39) !important;
+  fill: #ff2727 !important;
 }
 
 __selector__ .selected {
-  fill: rgb(209, 37, 37) !important;
+  fill: #d12020 !important;
   stroke: #777777 !important;
   stroke-width: 1 !important;
 }

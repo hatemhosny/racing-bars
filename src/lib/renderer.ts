@@ -63,13 +63,14 @@ export function createRenderer(data: Data[], store: Store): Renderer {
       inputWidth,
       minHeight,
       minWidth,
-      topN,
       fixedScale,
+      fixedOrder,
     } = store.getState().options;
 
+    const topN = fixedOrder.length > 0 ? fixedOrder.length : store.getState().options.topN;
     const currentDate = store.getState().ticker.currentDate;
-    const TotalDateSlice = getDateSlice(data, currentDate, store.getState().data.groupFilter);
-    const dateSlice = TotalDateSlice.slice(0, store.getState().options.topN);
+    const CompleteDateSlice = getDateSlice(data, currentDate, store.getState().data.groupFilter);
+    const dateSlice = CompleteDateSlice.slice(0, topN);
     if (dateSlice.length === 0) {
       return;
     }
@@ -105,14 +106,14 @@ export function createRenderer(data: Data[], store: Store): Renderer {
         .attr('class', 'title')
         .attr('x', titlePadding)
         .attr('y', 24)
-        .html(getText(title, TotalDateSlice, dates, currentDate));
+        .html(getText(title, currentDate, CompleteDateSlice, dates));
 
       subTitleText = svg //
         .append('text')
         .attr('class', 'subTitle')
         .attr('x', titlePadding)
         .attr('y', 55)
-        .html(getText(subTitle, TotalDateSlice, dates, currentDate));
+        .html(getText(subTitle, currentDate, CompleteDateSlice, dates));
 
       if (showGroups) {
         const legendsWrapper = svg.append('g');
@@ -281,7 +282,7 @@ export function createRenderer(data: Data[], store: Store): Renderer {
         .attr('x', endX)
         .attr('y', dateCounterTextY)
         .style('text-anchor', 'end')
-        .html(getText(dateCounter, TotalDateSlice, dates, currentDate, true))
+        .html(getText(dateCounter, currentDate, CompleteDateSlice, dates, true))
         .call(halo);
 
       captionText = svg
@@ -290,7 +291,7 @@ export function createRenderer(data: Data[], store: Store): Renderer {
         .attr('x', endX - 10)
         .attr('y', endY - 5)
         .style('text-anchor', 'end')
-        .html(getText(caption, TotalDateSlice, dates, currentDate));
+        .html(getText(caption, currentDate, CompleteDateSlice, dates));
     }
 
     function renderControls() {
@@ -351,17 +352,19 @@ export function createRenderer(data: Data[], store: Store): Renderer {
 
     const {
       tickDuration,
-      topN,
       title,
       subTitle,
       caption,
       dateCounter,
       fixedScale,
+      fixedOrder,
       labelsOnBars,
     } = store.getState().options;
+
+    const topN = fixedOrder.length > 0 ? fixedOrder.length : store.getState().options.topN;
     const currentDate = store.getState().ticker.currentDate;
     const CompleteDateSlice = getDateSlice(data, currentDate, store.getState().data.groupFilter);
-    const dateSlice = CompleteDateSlice.slice(0, store.getState().options.topN);
+    const dateSlice = CompleteDateSlice.slice(0, topN);
 
     if (showGroups) {
       svg
@@ -548,11 +551,11 @@ export function createRenderer(data: Data[], store: Store): Renderer {
         .remove();
     }
 
-    titleText.html(getText(title, CompleteDateSlice, dates, currentDate));
-    subTitleText.html(getText(subTitle, CompleteDateSlice, dates, currentDate));
-    captionText.html(getText(caption, CompleteDateSlice, dates, currentDate));
+    titleText.html(getText(title, currentDate, CompleteDateSlice, dates));
+    subTitleText.html(getText(subTitle, currentDate, CompleteDateSlice, dates));
+    captionText.html(getText(caption, currentDate, CompleteDateSlice, dates));
     dateCounterText
-      .html(getText(dateCounter, CompleteDateSlice, dates, currentDate, true))
+      .html(getText(dateCounter, currentDate, CompleteDateSlice, dates, true))
       .call(halo);
     updateControls();
   }

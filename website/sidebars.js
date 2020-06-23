@@ -27,8 +27,8 @@ module.exports = {
       label: 'Guides',
       items: [
         'guides/chart-size',
-        'guides/colors',
-        'guides/themes',
+        'guides/bar-colors',
+        'guides/styles-themes',
         'guides/highlight-select',
         'guides/labels',
         'guides/icons',

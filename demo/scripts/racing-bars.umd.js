@@ -239,7 +239,7 @@
       element.addEventListener(event, handler);
     }
   }
-  function getText(param, dateSlice, dates, currentDate, isDate) {
+  function getText(param, currentDate, dateSlice, dates, isDate) {
     if (isDate === void 0) {
       isDate = false;
     }
@@ -549,6 +549,7 @@
   var initialState$1 = {
     selector: '#race',
     dataShape: 'long',
+    dataTransform: null,
     fillDateGaps: false,
     fillDateGapsValue: 'interpolate',
     startDate: '',
@@ -580,6 +581,7 @@
     theme: 'light',
     colorMap: {},
     fixedScale: false,
+    fixedOrder: [],
     highlightBars: true,
     selectBars: true
   };
@@ -594,11 +596,28 @@
         var endDate = action.payload.endDate ? getDateString(action.payload.endDate) : '';
         var inputHeight = action.payload.height || state.inputHeight;
         var inputWidth = action.payload.width || state.inputWidth;
+        var fixedOrder = Array.isArray(action.payload.fixedOrder) ? action.payload.fixedOrder : state.fixedOrder;
+        var topN = state.topN;
+
+        if (Number(action.payload.topN)) {
+          topN = Number(action.payload.topN);
+        }
+
+        if (fixedOrder.length > 0 && topN > fixedOrder.length) {
+          topN = fixedOrder.length;
+        }
+
+        var tickDuration = Number(action.payload.tickDuration) || state.tickDuration;
+        var labelsWidth = Number(action.payload.labelsWidth) || state.labelsWidth;
         return _extends(_extends(_extends({}, state), action.payload), {}, {
           startDate: startDate,
           endDate: endDate,
           inputHeight: inputHeight,
-          inputWidth: inputWidth
+          inputWidth: inputWidth,
+          fixedOrder: fixedOrder,
+          topN: topN,
+          tickDuration: tickDuration,
+          labelsWidth: labelsWidth
         });
 
       case actionTypes$1.changeOptions:
@@ -925,7 +944,13 @@
 
   function prepareData(rawData, store) {
     var options = store.getState().options;
-    var data = rawData.map(function (d) {
+    var data = rawData;
+
+    if (options.dataTransform && typeof options.dataTransform === 'function') {
+      data = options.dataTransform(data);
+    }
+
+    data = data.map(function (d) {
       return _extends(_extends({}, d), {}, {
         date: getDateString(d.date)
       });
@@ -937,6 +962,16 @@
 
     if (options.dataShape === 'wide') {
       data = wideDataToLong(data);
+    }
+
+    if (options.fixedOrder.length > 0) {
+      data = data.filter(function (d) {
+        return options.fixedOrder.includes(d.name);
+      }).map(function (d) {
+        return _extends(_extends({}, d), {}, {
+          rank: options.fixedOrder.indexOf(d.name)
+        });
+      });
     }
 
     data = data.map(function (d) {
@@ -1109,8 +1144,10 @@
     }).sort(function (a, b) {
       return b.value - a.value;
     }).map(function (d, i) {
+      var _d$rank;
+
       return _extends(_extends({}, d), {}, {
-        rank: i
+        rank: (_d$rank = d.rank) != null ? _d$rank : i
       });
     });
     var emptyData = [{
@@ -1189,11 +1226,12 @@
           inputWidth = _store$getState$optio2.inputWidth,
           minHeight = _store$getState$optio2.minHeight,
           minWidth = _store$getState$optio2.minWidth,
-          topN = _store$getState$optio2.topN,
-          fixedScale = _store$getState$optio2.fixedScale;
+          fixedScale = _store$getState$optio2.fixedScale,
+          fixedOrder = _store$getState$optio2.fixedOrder;
+      var topN = fixedOrder.length > 0 ? fixedOrder.length : store.getState().options.topN;
       var currentDate = store.getState().ticker.currentDate;
-      var TotalDateSlice = getDateSlice(data, currentDate, store.getState().data.groupFilter);
-      var dateSlice = TotalDateSlice.slice(0, store.getState().options.topN);
+      var CompleteDateSlice = getDateSlice(data, currentDate, store.getState().data.groupFilter);
+      var dateSlice = CompleteDateSlice.slice(0, topN);
 
       if (dateSlice.length === 0) {
         return;
@@ -1217,8 +1255,8 @@
           left: 0 + labelsArea
         };
         svg = d3$1.select(root).append('svg').attr('width', width).attr('height', height);
-        titleText = svg.append('text').attr('class', 'title').attr('x', titlePadding).attr('y', 24).html(getText(title, TotalDateSlice, dates, currentDate));
-        subTitleText = svg.append('text').attr('class', 'subTitle').attr('x', titlePadding).attr('y', 55).html(getText(subTitle, TotalDateSlice, dates, currentDate));
+        titleText = svg.append('text').attr('class', 'title').attr('x', titlePadding).attr('y', 24).html(getText(title, currentDate, CompleteDateSlice, dates));
+        subTitleText = svg.append('text').attr('class', 'subTitle').attr('x', titlePadding).attr('y', 55).html(getText(subTitle, currentDate, CompleteDateSlice, dates));
 
         if (showGroups) {
           var legendsWrapper = svg.append('g');
@@ -1296,7 +1334,7 @@
         }).on('click', selectFn).on('mouseover', highlightFn).on('mouseout', highlightFn);
         svg.selectAll('text.label').data(dateSlice, function (d) {
           return d.name;
-        }).enter().append('text').attr('class', 'label').attr('x', labelX).attr('y', function (d) {
+        }).enter().append('text').attr('class', 'label').classed('outside-bars', !labelsOnBars).attr('x', labelX).attr('y', function (d) {
           return barY(d) + barHalfHeight;
         }).style('text-anchor', 'end').html(function (d) {
           return d.name;
@@ -1331,9 +1369,9 @@
 
         var endY = height - margin.bottom;
         var endX = width - margin.right - barPadding;
-        var dateCounterTextY = caption ? endY - 25 : endY;
-        dateCounterText = svg.append('text').attr('class', 'dateCounterText').attr('x', endX).attr('y', dateCounterTextY).style('text-anchor', 'end').html(getText(dateCounter, TotalDateSlice, dates, currentDate, true)).call(halo);
-        captionText = svg.append('text').attr('class', 'caption').attr('x', endX - 10).attr('y', endY).style('text-anchor', 'end').html(getText(caption, TotalDateSlice, dates, currentDate));
+        var dateCounterTextY = caption ? endY - 30 : endY - 5;
+        dateCounterText = svg.append('text').attr('class', 'dateCounterText').attr('x', endX).attr('y', dateCounterTextY).style('text-anchor', 'end').html(getText(dateCounter, currentDate, CompleteDateSlice, dates, true)).call(halo);
+        captionText = svg.append('text').attr('class', 'caption').attr('x', endX - 10).attr('y', endY - 5).style('text-anchor', 'end').html(getText(caption, currentDate, CompleteDateSlice, dates));
       }
 
       function renderControls() {
@@ -1384,15 +1422,17 @@
 
       var _store$getState$optio3 = store.getState().options,
           tickDuration = _store$getState$optio3.tickDuration,
-          topN = _store$getState$optio3.topN,
           title = _store$getState$optio3.title,
           subTitle = _store$getState$optio3.subTitle,
           caption = _store$getState$optio3.caption,
           dateCounter = _store$getState$optio3.dateCounter,
-          fixedScale = _store$getState$optio3.fixedScale;
+          fixedScale = _store$getState$optio3.fixedScale,
+          fixedOrder = _store$getState$optio3.fixedOrder,
+          labelsOnBars = _store$getState$optio3.labelsOnBars;
+      var topN = fixedOrder.length > 0 ? fixedOrder.length : store.getState().options.topN;
       var currentDate = store.getState().ticker.currentDate;
       var CompleteDateSlice = getDateSlice(data, currentDate, store.getState().data.groupFilter);
-      var dateSlice = CompleteDateSlice.slice(0, store.getState().options.topN);
+      var dateSlice = CompleteDateSlice.slice(0, topN);
 
       if (showGroups) {
         svg.selectAll('.legend-wrapper').style('opacity', function (d) {
@@ -1430,7 +1470,7 @@
       var labels = svg.selectAll('.label').data(dateSlice, function (d) {
         return d.name;
       });
-      labels.enter().append('text').attr('class', 'label').attr('x', labelX).attr('y', function () {
+      labels.enter().append('text').attr('class', 'label').classed('outside-bars', !labelsOnBars).attr('x', labelX).attr('y', function () {
         return y(topN + 1) + 5 + barHalfHeight;
       }).style('text-anchor', 'end').html(function (d) {
         return d.name;
@@ -1507,10 +1547,10 @@
         }).remove();
       }
 
-      titleText.html(getText(title, CompleteDateSlice, dates, currentDate));
-      subTitleText.html(getText(subTitle, CompleteDateSlice, dates, currentDate));
-      captionText.html(getText(caption, CompleteDateSlice, dates, currentDate));
-      dateCounterText.html(getText(dateCounter, CompleteDateSlice, dates, currentDate, true)).call(halo);
+      titleText.html(getText(title, currentDate, CompleteDateSlice, dates));
+      subTitleText.html(getText(subTitle, currentDate, CompleteDateSlice, dates));
+      captionText.html(getText(caption, currentDate, CompleteDateSlice, dates));
+      dateCounterText.html(getText(dateCounter, currentDate, CompleteDateSlice, dates, true)).call(halo);
       updateControls();
     }
 
@@ -1596,8 +1636,8 @@
 
   var styles = "\n__selector__ text {\n  font-size: 16px;\n  font-family: Open Sans, sans-serif;\n}\n\n__selector__ text.title {\n  font-size: 24px;\n  font-weight: 500;\n}\n\n__selector__ text.subTitle {\n  font-weight: 500;\n}\n\n__selector__ text.caption {\n  font-weight: 400;\n  font-size: 24px;\n}\n__selector__ text.legend-text {\n  user-select: none;\n  -webkit-user-select: none;\n  -khtml-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n}\n__selector__ text.label {\n  font-weight: 600;\n}\n\n__selector__ text.valueLabel {\n  font-weight: 300;\n}\n\n__selector__ text.dateCounterText {\n  font-size: 64px;\n  font-weight: 700;\n}\n\n__selector__ .xAxis .tick:nth-child(2) text {\n  text-anchor: start;\n}\n\n__selector__ .tick line {\n  shape-rendering: CrispEdges;\n}\n\n__selector__ path.domain {\n  display: none;\n}\n\n__selector__ {\n  position: relative;\n}\n\n__selector__ .controls {\n  /*  width and right are set dynamically in renderer.ts */\n  position: absolute;\n  top: 0;\n  display: flex;\n}\n\n__selector__ .controls div,\n__selector__ .overlay div {\n  cursor: pointer;\n  font-size: 24px;\n  font-weight: 700;\n  width: 38px;\n  height: 38px;\n  -moz-border-radius: 5px;\n  -webkit-border-radius: 5px;\n  border-radius: 5px;\n  margin: 5px;\n  text-align: center;\n}\n\n__selector__ .controls svg {\n  margin: 5px auto;\n  width: 28px;\n  height: 28px;\n}\n\n__selector__ .overlay {\n  position: absolute;\n  top: 0;\n  left: 0;\n  width: 100%;\n  height: 100%;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n__selector__ .overlay div {\n  position: relative;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  width: 200px;\n  height: 200px;\n  -moz-border-radius: 100px;\n  -webkit-border-radius: 100px;\n  border-radius: 100px;\n}\n__selector__ .overlay svg {\n  height: 50%;\n  width: 50%;\n}\n";
   var themes = {
-    "dark": "\n__selector__ {\n  background-color: #313639;\n}\n\n__selector__ text.title {\n  fill: #fafafa;\n}\n\n__selector__ text.subTitle {\n  fill: #cccccc;\n}\n\n__selector__ text.dateCounterText {\n  fill: #cccccc;\n  opacity: 1;\n}\n\n__selector__ text.caption {\n  fill: #cccccc;\n}\n\n__selector__ .halo {\n  fill: #313639;\n  stroke: #313639;\n  stroke-width: 10;\n  stroke-linejoin: round;\n  opacity: 1;\n}\n\n__selector__ text.legend-text {\n  fill: #fafafa;\n}\n\n__selector__ text.label {\n  fill: #313639;\n}\n\n__selector__ text.valueLabel {\n  fill: #fafafa;\n}\n\n__selector__ .tick text {\n  fill: #cccccc;\n}\n\n__selector__ .tick line {\n  shape-rendering: CrispEdges;\n  stroke: #dddddd;\n}\n\n__selector__ .tick line.origin {\n  stroke: #aaaaaa;\n}\n\n__selector__ .controls div,\n__selector__ .overlay div {\n  color: #ffffff;\n  background: #777777;\n  border: 1px solid black;\n  opacity: 0.5;\n}\n\n__selector__ .controls div:hover,\n__selector__ .overlay div:hover {\n  background: #aaaaaa;\n  color: black;\n}\n\n__selector__ .overlay {\n  background-color: black;\n  opacity: 0.7;\n}\n\n__selector__ .highlight {\n  fill: rgb(255, 39, 39) !important;\n}\n\n__selector__ .selected {\n  fill: rgb(209, 32, 32) !important;\n  stroke: #777777 !important;\n  stroke-width: 1 !important;\n}\n",
-    "light": "\n/* __selector__ {\n  background-color: #ffffff;\n}\n\n__selector__ text.title {\n  fill: #fafafa;\n} */\n\n__selector__ text.subTitle {\n  fill: #777777;\n}\n\n__selector__ text.dateCounterText {\n  fill: #bbbbbb;\n  opacity: 1;\n}\n\n__selector__ text.caption {\n  fill: #777777;\n}\n\n__selector__ .halo {\n  fill: #ffffff;\n  stroke: #ffffff;\n  stroke-width: 10;\n  stroke-linejoin: round;\n  opacity: 1;\n}\n\n__selector__ text.legend-text {\n  fill: #000000;\n}\n\n__selector__ text.label {\n  fill: #000000;\n}\n\n__selector__ text.valueLabel {\n  fill: #000000;\n}\n\n__selector__ .tick text {\n  fill: #777777;\n}\n\n__selector__ .tick line {\n  shape-rendering: CrispEdges;\n  stroke: #dddddd;\n}\n\n__selector__ .tick line.origin {\n  stroke: #aaaaaa;\n}\n\n__selector__ .controls div,\n__selector__ .overlay div {\n  color: #ffffff;\n  background: #777777;\n  border: 1px solid black;\n  opacity: 0.5;\n}\n\n__selector__ .controls div:hover,\n__selector__ .overlay div:hover {\n  background: #aaaaaa;\n  color: black;\n}\n\n__selector__ .overlay {\n  background-color: black;\n  opacity: 0.7;\n}\n\n__selector__ .highlight {\n  fill: rgb(255, 39, 39) !important;\n}\n\n__selector__ .selected {\n  fill: rgb(209, 37, 37) !important;\n  stroke: #777777 !important;\n  stroke-width: 1 !important;\n}\n"
+    "dark": "\n__selector__ {\n  background-color: #313639;\n}\n\n__selector__ text.title {\n  fill: #fafafa;\n}\n\n__selector__ text.subTitle {\n  fill: #cccccc;\n}\n\n__selector__ text.dateCounterText {\n  fill: #cccccc;\n  opacity: 1;\n}\n\n__selector__ text.caption {\n  fill: #cccccc;\n}\n\n__selector__ .halo {\n  fill: #313639;\n  stroke: #313639;\n  stroke-width: 10;\n  stroke-linejoin: round;\n  opacity: 1;\n}\n\n__selector__ text.legend-text {\n  fill: #fafafa;\n}\n\n__selector__ text.label {\n  fill: #313639;\n}\n\n__selector__ text.label.outside-bars {\n  fill: #fafafa;\n}\n\n__selector__ text.valueLabel {\n  fill: #fafafa;\n}\n\n__selector__ .tick text {\n  fill: #cccccc;\n}\n\n__selector__ .tick line {\n  shape-rendering: CrispEdges;\n  stroke: #dddddd;\n}\n\n__selector__ .tick line.origin {\n  stroke: #aaaaaa;\n}\n\n__selector__ .controls div,\n__selector__ .overlay div {\n  color: #ffffff;\n  background: #777777;\n  border: 1px solid black;\n  opacity: 0.5;\n}\n\n__selector__ .controls div:hover,\n__selector__ .overlay div:hover {\n  background: #aaaaaa;\n  color: black;\n}\n\n__selector__ .overlay {\n  background-color: black;\n  opacity: 0.7;\n}\n\n__selector__ .highlight {\n  fill: #ff2727 !important;\n}\n\n__selector__ .selected {\n  fill: #d12020 !important;\n  stroke: #777777 !important;\n  stroke-width: 1 !important;\n}\n",
+    "light": "\n/* __selector__ {\n  background-color: #ffffff;\n}\n\n__selector__ text.title {\n  fill: #fafafa;\n} */\n\n__selector__ text.subTitle {\n  fill: #777777;\n}\n\n__selector__ text.dateCounterText {\n  fill: #bbbbbb;\n  opacity: 1;\n}\n\n__selector__ text.caption {\n  fill: #777777;\n}\n\n__selector__ .halo {\n  fill: #ffffff;\n  stroke: #ffffff;\n  stroke-width: 10;\n  stroke-linejoin: round;\n  opacity: 1;\n}\n\n__selector__ text.legend-text {\n  fill: #000000;\n}\n\n__selector__ text.label {\n  fill: #000000;\n}\n\n__selector__ text.label.outside-bars {\n  fill: #000000;\n}\n\n__selector__ text.valueLabel {\n  fill: #000000;\n}\n\n__selector__ .tick text {\n  fill: #777777;\n}\n\n__selector__ .tick line {\n  shape-rendering: CrispEdges;\n  stroke: #dddddd;\n}\n\n__selector__ .tick line.origin {\n  stroke: #aaaaaa;\n}\n\n__selector__ .controls div,\n__selector__ .overlay div {\n  color: #ffffff;\n  background: #777777;\n  border: 1px solid black;\n  opacity: 0.5;\n}\n\n__selector__ .controls div:hover,\n__selector__ .overlay div:hover {\n  background: #aaaaaa;\n  color: black;\n}\n\n__selector__ .overlay {\n  background-color: black;\n  opacity: 0.7;\n}\n\n__selector__ .highlight {\n  fill: #ff2727 !important;\n}\n\n__selector__ .selected {\n  fill: #d12020 !important;\n  stroke: #777777 !important;\n  stroke-width: 1 !important;\n}\n"
   };
 
   function styleInject(selector, theme, insertAt) {
@@ -1701,6 +1741,11 @@
 
   function dispatchDOMEvent(store) {
     var element = document.querySelector(store.getState().options.selector);
+
+    if (!element) {
+      return;
+    }
+
     element.dispatchEvent(new CustomEvent('racingBars/dateChanged', {
       bubbles: true,
       detail: {
@@ -1764,15 +1809,9 @@
         injectStyles = _store$getState$optio.injectStyles,
         theme = _store$getState$optio.theme,
         autorun = _store$getState$optio.autorun;
-
-    if (!options.selector) {
-      console.log("No selector was provided. Using default: '" + selector + "'");
-    }
-
     var root = document.querySelector(selector);
 
     if (!root) {
-      console.log("Cannot find element with the selector: '" + selector + "'");
       return;
     }
 

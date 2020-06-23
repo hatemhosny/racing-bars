@@ -23,6 +23,12 @@ export function prepareData(rawData: Data[], store: Store) {
     data = wideDataToLong(data);
   }
 
+  if (options.fixedOrder.length > 0) {
+    data = data
+      .filter((d) => options.fixedOrder.includes(d.name))
+      .map((d) => ({ ...d, rank: options.fixedOrder.indexOf(d.name) }));
+  }
+
   data = data
     .map((d) => {
       const name = d.name ? d.name : '';
@@ -171,7 +177,7 @@ export function getDateSlice(data: Data[], date: string, groupFilter: string[]) 
     .filter((d) => d.date === date && !isNaN(d.value))
     .filter((d) => (!!d.group ? !groupFilter.includes(d.group) : true))
     .sort((a, b) => b.value - a.value)
-    .map((d, i) => ({ ...d, rank: i }));
+    .map((d, i) => ({ ...d, rank: d.rank ?? i }));
 
   const emptyData = [{ name: '', value: 0, lastValue: 0, date, rank: 1 }];
 

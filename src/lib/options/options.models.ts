@@ -40,6 +40,7 @@ export interface Options {
   theme: string;
   colorMap: { [key: string]: string };
   fixedScale: boolean;
+  fixedOrder: string[];
   highlightBars: boolean;
   selectBars: boolean;
 }

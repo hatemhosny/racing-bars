@@ -162,9 +162,9 @@ export function addEventHandler(
 
 export function getText(
   param: string | ParamFunction,
+  currentDate: string,
   dateSlice: Data[],
   dates: string[],
-  currentDate: string,
   isDate = false,
 ): string {
   if (typeof param === 'function') {

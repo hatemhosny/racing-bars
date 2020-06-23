@@ -33,7 +33,7 @@ If provided, displays below the date counter on the right lower corner of the ch
 
 [view in gallery](/gallery/caption-string)
 
-```javascript
+```js
 const options = {
   caption: 'Source: World Bank',
 };
@@ -43,7 +43,7 @@ This uses a [data function](#data-function) to display the total of data values 
 
 [view in gallery](/gallery/caption-data-function)
 
-```javascript
+```js
 const options = {
   caption: (currentDate, dateSlice, allDates) =>
     `Total: ${Math.round(dateSlice.reduce((acc, curr) => acc + curr.value, 0))}`,
@@ -60,13 +60,63 @@ See ["Data" section](./data.md) for more details and examples.
 - Default: "long"
 - Examples:
 
-This uses "wide" data shape
+This example uses "wide" data shape
 
-```javascript
+```js
 const options = {
   dataShape: 'wide',
 };
 ```
+
+### dataTransform
+
+A function can be passed to transform data before being used.
+This function accepts the loaded data (typically an array of data items).
+It may perform various data transformation operations (e.g map, filter, reshape, ..etc).
+It then returns an array of data items that will be used by the [`race`](../documentation/api.md#racedata-options) method.
+
+- Type: function `(data: Data[] | any) => Data[] | WideData[]`
+- Default: null
+- Examples:
+
+This example transforms the data array. Each data item has the following fields: "date", "name", "code", "group", "value".
+The function adds a new field "icon", based on the "code" field.
+The "icon" field is used to [show icons](../guides/icons.md) on the bars.
+
+[view in gallery](/gallery/data-transform)
+
+```js {9}
+const transformFn = (data) =>
+  data.map((d) => ({
+    ...d,
+    icon: `https://www.countryflags.io/${d.code.toLowerCase()}/flat/64.png`,
+  }));
+
+const options = {
+  selector: '#race',
+  dataTransform: transformFn,
+};
+
+racingBars.loadData('/data/population.json').then((data) => {
+  racingBars.race(data, options);
+});
+```
+
+Note that the transformation could have been done after loading the data with [`loadData`](../documentation/api.md#loaddataurl-type) method and before calling the [`race`](../documentation/api.md#racedata-options) method, as follows:
+
+```js
+racingBars.loadData('/data/population.json').then((data) => {
+  const dataWithIcons = data.map((d) => ({
+    ...d,
+    icon: `https://www.countryflags.io/${d.code.toLowerCase()}/flat/64.png`,
+  }));
+
+  racingBars.race(dataWithIcons, options);
+});
+```
+
+But the `dataTransform` option was added to facilitate the use in the provided [React](../packages/react.md), [Vue](../packages/vue.md) and [Python](../packages/python.md) packages where the component may load the data from url.
+So it would be a lot more convenient to be able to also pass a transformation function that would run before creating the chart.
 
 ### dateCounter
 
@@ -83,7 +133,7 @@ This displays formatted date
 
 [view in gallery](/gallery/date-counter-format)
 
-```javascript
+```js
 const options = {
   dateCounter: 'MMM DD, YYYY 🌍',
 };
@@ -93,7 +143,7 @@ This uses [data function](#data-function) to display the `dateCounter` as '[coun
 
 [view in gallery](/gallery/date-counter)
 
-```javascript
+```js
 const options = {
   dateCounter: (currentDate, dateSlice, allDates) =>
     `${dates.indexOf(currentDate) + 1} of ${dates.length}`,
@@ -112,9 +162,100 @@ If it cannot be parsed as date, an error will be thrown.
 
 [view in gallery](/gallery/start-end-dates)
 
-```javascript
+```js
 const options = {
   endDate: '1999-12-31',
+};
+```
+
+### fixedOrder
+
+This accepts an array of strings.
+If provided, the chart will only show the names specified in this array and in the same order.
+The values will no longer affect the order.
+
+Note that if `fixedOrder` is specified, [`topN`](#topn) will be ignored.
+Also note that with this setting it is more likely that the date counter will overlap the lower bars.
+
+- Type: string[]
+- Default: []
+- Examples:
+
+[view in gallery](/gallery/fixed-order)
+
+```js
+const options = {
+  fixedOrder: ['Algeria', 'Italy', 'Canada', 'France', 'Panama'],
+};
+```
+
+### highlightBars
+
+If `true`, the racing bars are highlighted on mouseover.
+This is implemented by adding the class `highlight` to the html element on mouseover and removing it on mouseout.
+The color of the highlight is determined by the [theme](../guides/styles-themes.md).
+
+- Type: boolean
+- Default: true
+- Examples:
+
+To change the color of the bar highlight use a modification of this css:
+
+```css
+.highlight {
+  fill: #ff2727 !important;
+}
+```
+
+This example disables highlighting bars on mouseover
+
+```js
+const options = {
+  highlightBars: false,
+};
+```
+
+### loop
+
+If `true`, the race restarts after reaching the last date.
+
+- Type: boolean
+- Default: false
+- Examples:
+
+[view in gallery](/gallery/loop)
+
+```js
+const options = {
+  loop: true,
+};
+```
+
+### selectBars
+
+If `true`, mouse clicks toggle bar select/unselect.
+This is implemented by toggle of the class `selected` on the html element on click.
+The color of the selected bars is determined by the [theme](../guides/styles-themes.md).
+
+- Type: boolean
+- Default: true
+- Examples:
+
+To change the color of the selected bar use a modification of this css:
+
+```css
+.selected {
+  fill: #d12020 !important;
+  stroke: #777777 !important;
+  stroke-width: 1 !important;
+}
+```
+
+This example disables selecting bars on click:
+
+```js
+const options = {
+  selectBars: false,
 };
 ```
 
@@ -129,13 +270,13 @@ If no elements were found with the current selector, an error will be thrown.
 - Default: '#race'
 - Examples:
 
-```javascript
+```js
 const options = {
   selector: '#race',
 };
 ```
 
-```javascript
+```js
 const options = {
   selector: '.mydiv',
 };
@@ -153,7 +294,7 @@ If it cannot be parsed as date, an error will be thrown.
 
 [view in gallery](/gallery/start-end-dates)
 
-```javascript
+```js
 const options = {
   startDate: '1970-01-01',
 };
@@ -169,9 +310,45 @@ If provided, displays chart sub-title
 
 [view in gallery](/gallery/title-string)
 
-```javascript
+```js
 const options = {
   subTitle: 'in millions',
+};
+```
+
+### theme
+
+Selects the theme to use. See [styles and themes](../guides/styles-themes.md) for details.
+
+- Type: string
+- Valid values: ["light", "dark"]
+- Default: "light"
+- Examples:
+
+[view in gallery](/gallery/theme-dark)
+
+```js
+const options = {
+  theme: 'dark',
+};
+```
+
+### tickDuration
+
+The duration (in milliseconds) during which each date is displayed.
+Decreasing the value increases the "speed" at which the chart runs.
+
+- Type: number
+- Default: 500
+- Examples:
+
+This chart runs fast!
+
+[view in gallery](/gallery/tick-duration)
+
+```js
+const options = {
+  tickDuration: 200,
 };
 ```
 
@@ -185,7 +362,7 @@ If provided, displays chart title
 
 [view in gallery](/gallery/title-string)
 
-```javascript
+```js
 const options = {
   title: 'World Population',
 };
@@ -201,7 +378,7 @@ Number of bars to show. This represents the number of data items with highest va
 
 [view in gallery](/gallery/top-n)
 
-```javascript
+```js
 const options = {
   topN: 5,
 };
@@ -228,7 +405,7 @@ The function should return a string. This string will be displayed for the used 
 
 [view in gallery](/gallery/date-counter)
 
-```javascript
+```js
 const options = {
   dateCounter: (currentDate, dateSlice, allDates) =>
     `${dates.indexOf(currentDate) + 1} of ${dates.length}`,
@@ -239,7 +416,7 @@ const options = {
 
 [view in gallery](/gallery/caption-data-function)
 
-```javascript
+```js
 const options = {
   caption: (currentDate, dateSlice, allDates) =>
     `Total: ${Math.round(dateSlice.reduce((acc, curr) => acc + curr.value, 0))}`,
@@ -248,7 +425,7 @@ const options = {
 
 - This example displays the mean of the displayed data values in the `caption`
 
-```javascript
+```js
 const barsToShow = 5;
 function calculateMean(currentDate, dateSlice, allDates) => {
   const values = dateSlice
@@ -269,7 +446,7 @@ const options = {
 
 [view in gallery](/gallery/data-gh-push)
 
-```javascript
+```js
 const getYearQuarter = (currentDate, dateSlice, allDates) => {
   const month = Number(currentDate.slice(5, 7));
   const year = Number(currentDate.slice(0, 4));
@@ -289,7 +466,7 @@ const options = {
   colorMap: {}
   colorSeed: ""
 ✔ dataShape: "long"
-  dataTransform: null,
+✔ dataTransform: null,
 ✔ dateCounter: "MM/YYYY"
   disableClickEvents: true
   disableKeyboardEvents: true
@@ -297,15 +474,14 @@ const options = {
   fillDateGaps: false
   fillDateGapsValue: "interpolate"
   fixedScale: false
+✔ fixedOrder: []
   height: ""
-  highlightBars: true
+✔ highlightBars: true
   injectStyles: true
   labelsOnBars: true
   labelsWidth: 150
-  loop: false
-  minHeight: 300
-  minWidth: 500
-  selectBars: true
+✔ loop: false
+✔ selectBars: true
 ✔ selector: "#race"
   showControls: "all"
   showGroups: true
@@ -313,7 +489,7 @@ const options = {
   showOverlays: "none"
 ✔ startDate: ""
 ✔ subTitle: ""
-  theme: "light"
+✔ theme: "light"
   tickDuration: 500
 ✔ title: ""
 ✔ topN: 10

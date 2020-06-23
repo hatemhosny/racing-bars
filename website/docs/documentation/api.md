@@ -4,7 +4,7 @@ title: API
 
 ### `race(data, options)`
 
-### `loadData(url,type)`
+### `loadData(url, type)`
 
 ### `generateId()`
 
