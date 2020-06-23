@@ -842,7 +842,7 @@
 
       function showRace(_) {
         if (store.getState().ticker.isLastDate) {
-          if (store.getState().options.loop) {
+          if (store.getState().options.loop || store.getState().ticker.event === 'playButton' || store.getState().ticker.event === 'apiStart' || store.getState().ticker.event === 'keyboardToggle' || store.getState().ticker.event === 'mouseClick') {
             loop();
           } else {
             stop('end');
@@ -944,7 +944,6 @@
 
     function dispatch(action) {
       state = reducer(state, action);
-      console.log(state);
       notifySubscribers();
       return action;
     }
@@ -1242,6 +1241,7 @@
     var maxValue;
     var groups = store.getState().data.groups;
     var dates = store.getState().ticker.dates;
+    var lastDate = dates[0];
     var _store$getState$optio = store.getState().options,
         selector = _store$getState$optio.selector,
         showGroups = _store$getState$optio.showGroups,
@@ -1452,7 +1452,7 @@
     }
 
     function renderFrame() {
-      if (!x || !store.getState().ticker.isRunning) {
+      if (!x) {
         return;
       }
 
@@ -1531,12 +1531,14 @@
       }).transition().duration(tickDuration).ease(d3$1.easeLinear).attr('y', function (d) {
         return barY(d) + barHalfHeight;
       });
+      var sameDate = lastDate === currentDate;
       valueLabels.transition().duration(tickDuration).ease(d3$1.easeLinear).attr('x', function (d) {
         return x(d.value) + 5;
       }).attr('y', function (d) {
         return barY(d) + barHalfHeight;
       }).tween('text', function (d) {
-        var i = d3$1.interpolateRound(d.lastValue, d.value);
+        var lastValue = sameDate ? d.value : d.lastValue;
+        var i = d3$1.interpolateRound(lastValue, d.value);
         return function (t) {
           this.textContent = d3$1.format(',')(i(t));
         };
@@ -1588,6 +1590,7 @@
       captionText.html(getText(caption, currentDate, CompleteDateSlice, dates));
       dateCounterText.html(getText(dateCounter, currentDate, CompleteDateSlice, dates, true)).call(halo);
       updateControls();
+      lastDate = currentDate;
     }
 
     function resize() {

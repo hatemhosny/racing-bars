@@ -11,7 +11,13 @@ export function createTicker(store: Store): Ticker {
 
     function showRace(_: number) {
       if (store.getState().ticker.isLastDate) {
-        if (store.getState().options.loop) {
+        if (
+          store.getState().options.loop ||
+          store.getState().ticker.event === 'playButton' ||
+          store.getState().ticker.event === 'apiStart' ||
+          store.getState().ticker.event === 'keyboardToggle' ||
+          store.getState().ticker.event === 'mouseClick'
+        ) {
           loop();
         } else {
           stop('end');
