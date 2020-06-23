@@ -909,6 +909,7 @@
 
     function dispatch(action) {
       state = reducer(state, action);
+      console.log(state);
       notifySubscribers();
       return action;
     }

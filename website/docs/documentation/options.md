@@ -189,6 +189,28 @@ const options = {
 };
 ```
 
+### fixedScale
+
+If `true`, the scale of the chart will be fixed all through the whole date range.
+The maximum value for the chart scale will not be changed between dates.
+
+Note that if initial values are much smaller that later values,
+bar labels may not initially be visible ([view in gallery](/gallery/fixed-scale)).
+You may then want to set [`labelsOnBars`](#labelsonbars) to `false`
+([view in gallery](/gallery/fixed-scale-labels)).
+
+- Type: boolean
+- Default: false
+- Examples:
+
+[view in gallery](/gallery/fixed-scale2)
+
+```js
+const options = {
+  fixedScale: true,
+};
+```
+
 ### highlightBars
 
 If `true`, the racing bars are highlighted on mouseover.
