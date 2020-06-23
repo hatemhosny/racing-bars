@@ -13,29 +13,41 @@ export function registerEvents(store: Store, ticker: Ticker) {
   registerKeyboardEvents();
 
   function registerControlButtonEvents() {
-    addEventHandler(root, elements.skipBack, 'click', ticker.skipBack);
-    addEventHandler(root, elements.play, 'click', ticker.start);
-    addEventHandler(root, elements.pause, 'click', ticker.stop);
-    addEventHandler(root, elements.skipForward, 'click', ticker.skipForward);
+    addEventHandler(root, elements.skipBack, 'click', () => {
+      ticker.skipBack('skipBackButton');
+    });
+    addEventHandler(root, elements.play, 'click', () => {
+      ticker.start('playButton');
+    });
+    addEventHandler(root, elements.pause, 'click', () => {
+      ticker.stop('pauseButton');
+    });
+    addEventHandler(root, elements.skipForward, 'click', () => {
+      ticker.skipForward('skipForwardButton');
+    });
   }
 
   function registerOverlayEvents() {
     addEventHandler(root, elements.overlayPlay, 'click', () => {
       hideElement(root, elements.overlay);
-      ticker.start();
+      ticker.start('playOverlay');
     });
     addEventHandler(root, elements.overlayRepeat, 'click', () => {
       hideElement(root, elements.overlay);
-      ticker.loop();
-      ticker.start();
+      ticker.skipBack('repeatOverlay');
+      ticker.start('repeatOverlay');
     });
   }
 
   function registerClickEvents() {
     if (!store.getState().options.disableClickEvents) {
       const svg = root.querySelector('svg') as SVGSVGElement;
-      svg.addEventListener('click', ticker.toggle);
-      root.addEventListener('dblclick', ticker.skipForward);
+      svg.addEventListener('click', () => {
+        ticker.toggle('mouseClick');
+      });
+      root.addEventListener('dblclick', () => {
+        ticker.skipForward('mouseDoubleClick');
+      });
     }
   }
 
@@ -52,16 +64,16 @@ export function registerEvents(store: Store, ticker: Ticker) {
         // TODO: keyCode is deprecated
         switch (e.keyCode) {
           case keyCodes.spacebar:
-            ticker.toggle();
+            ticker.toggle('keyboardToggle');
             break;
           case keyCodes.a:
-            ticker.skipBack();
+            ticker.skipBack('keyboardSkipBack');
             break;
           case keyCodes.s:
-            ticker.toggle();
+            ticker.toggle('keyboardToggle');
             break;
           case keyCodes.d:
-            ticker.skipForward();
+            ticker.skipForward('keyboardSkipForward');
             break;
         }
       });

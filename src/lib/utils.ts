@@ -127,17 +127,25 @@ export function getElement(root: HTMLElement, className: string) {
   return root.querySelector('.' + className) as HTMLElement;
 }
 
-export function showElement(root: HTMLElement, className: string) {
+export function showElement(root: HTMLElement, className: string, useVisibility = false) {
   const element = getElement(root, className);
   if (element) {
-    element.style.display = 'flex';
+    if (useVisibility) {
+      element.style.visibility = 'unset';
+    } else {
+      element.style.display = 'flex';
+    }
   }
 }
 
-export function hideElement(root: HTMLElement, className: string) {
+export function hideElement(root: HTMLElement, className: string, useVisibility = false) {
   const element = getElement(root, className);
   if (element) {
-    element.style.display = 'none';
+    if (useVisibility) {
+      element.style.visibility = 'hidden';
+    } else {
+      element.style.display = 'none';
+    }
   }
 }
 

@@ -8,7 +8,6 @@ import { actions, Store } from './store';
 import {
   getHeight,
   getWidth,
-  getElement,
   hideElement,
   showElement,
   getText,
@@ -346,7 +345,7 @@ export function createRenderer(data: Data[], store: Store): Renderer {
   }
 
   function renderFrame() {
-    if (!x) {
+    if (!x || !store.getState().ticker.isRunning) {
       return;
     }
 
@@ -601,7 +600,7 @@ export function createRenderer(data: Data[], store: Store): Renderer {
       (showOverlays === 'all' || showOverlays === 'play') &&
       !store.getState().ticker.isRunning
     ) {
-      getElement(root, elements.controls).style.visibility = 'hidden';
+      hideElement(root, elements.controls, true);
       showElement(root, elements.overlay);
       showElement(root, elements.overlayPlay);
       hideElement(root, elements.overlayRepeat);
@@ -610,13 +609,13 @@ export function createRenderer(data: Data[], store: Store): Renderer {
       (showOverlays === 'all' || showOverlays === 'repeat') &&
       !(store.getState().options.loop && store.getState().ticker.isRunning)
     ) {
-      getElement(root, elements.controls).style.visibility = 'hidden';
+      hideElement(root, elements.controls, true);
       showElement(root, elements.overlay);
       showElement(root, elements.overlayRepeat);
       hideElement(root, elements.overlayPlay);
     } else {
-      getElement(root, elements.controls).style.visibility = 'unset';
-      getElement(root, elements.overlay).style.display = 'none';
+      showElement(root, elements.controls, true);
+      hideElement(root, elements.overlay);
     }
   }
 

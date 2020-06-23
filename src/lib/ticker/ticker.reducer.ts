@@ -1,7 +1,8 @@
-import { TickerState, TickerAction } from './ticker.models';
+import { TickerState, TickerAction, TickerEvent } from './ticker.models';
 import { actionTypes } from './ticker.actions';
 
 const initialState: TickerState = {
+  event: 'initial',
   isRunning: false,
   currentDate: '',
   isFirstDate: true,
@@ -20,6 +21,7 @@ export function tickerReducer(state = initialState, action: TickerAction): Ticke
         isFirstDate: true,
         isLastDate: false,
         dates,
+        event: action.event,
       };
     }
 
@@ -33,6 +35,7 @@ export function tickerReducer(state = initialState, action: TickerAction): Ticke
         currentDate,
         isFirstDate: currentDate === state.dates[0],
         isLastDate: currentDate === state.dates[state.dates.length - 1],
+        event: action.event,
       };
     }
 
@@ -40,6 +43,7 @@ export function tickerReducer(state = initialState, action: TickerAction): Ticke
       return {
         ...state,
         isRunning: action.payload as boolean,
+        event: action.event,
       };
     }
 
@@ -49,6 +53,7 @@ export function tickerReducer(state = initialState, action: TickerAction): Ticke
         currentDate: state.dates[0],
         isFirstDate: true,
         isLastDate: false,
+        event: action.event,
       };
     }
 
@@ -58,6 +63,7 @@ export function tickerReducer(state = initialState, action: TickerAction): Ticke
         currentDate: state.dates[state.dates.length - 1],
         isFirstDate: false,
         isLastDate: true,
+        event: action.event,
       };
     }
 
@@ -74,6 +80,7 @@ export function tickerReducer(state = initialState, action: TickerAction): Ticke
         currentDate: newDate,
         isFirstDate: newDate === state.dates[0],
         isLastDate: newDate === state.dates[lastIndex],
+        event: action.event,
       };
     }
 
@@ -87,6 +94,14 @@ export function tickerReducer(state = initialState, action: TickerAction): Ticke
         currentDate: newDate,
         isFirstDate: newDate === state.dates[0],
         isLastDate: newDate === state.dates[state.dates.length - 1],
+        event: action.event,
+      };
+    }
+
+    case actionTypes.event: {
+      return {
+        ...state,
+        event: action.payload as TickerEvent,
       };
     }
 

@@ -10,6 +10,8 @@ export function createStore(reducer: Reducer = rootReducer, preloadedState?: Sta
 
   function dispatch(action: Action) {
     state = reducer(state, action);
+    // eslint-disable-next-line no-console
+    console.log(state);
     notifySubscribers();
     return action;
   }
