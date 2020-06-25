@@ -5,7 +5,7 @@ export const RacingBarsComponent = {
   name: 'racing-bars',
   inheritAttrs: false,
   created() {
-    this.elementId = generateId();
+    this.elementId = this.$attrs['element-id'] || generateId();
   },
   render(createElement) {
     return createElement('div', { domProps: { id: this.elementId } });

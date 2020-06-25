@@ -1,65 +1,72 @@
 import * as d3 from '../d3';
 import { actions, Store } from '../store';
-import { Ticker } from './ticker.models';
+import { Ticker, TickerEvent } from './ticker.models';
 
 export function createTicker(store: Store): Ticker {
   let ticker: d3.Timer;
 
-  function start() {
+  function start(event: TickerEvent) {
     ticker = d3.interval(showRace, store.getState().options.tickDuration);
-    store.dispatch(actions.ticker.setRunning(true));
+    store.dispatch(actions.ticker.setRunning(true, event));
 
     function showRace(_: number) {
       if (store.getState().ticker.isLastDate) {
-        if (store.getState().options.loop) {
+        if (
+          store.getState().options.loop ||
+          store.getState().ticker.event === 'playButton' ||
+          store.getState().ticker.event === 'apiStart' ||
+          store.getState().ticker.event === 'keyboardToggle' ||
+          store.getState().ticker.event === 'mouseClick'
+        ) {
           loop();
         } else {
-          stop();
+          stop('end');
         }
       } else {
-        store.dispatch(actions.ticker.inc());
+        store.dispatch(actions.ticker.inc('running'));
       }
     }
   }
 
-  function stop() {
+  function stop(event: TickerEvent) {
     if (ticker) {
       ticker.stop();
     }
-    store.dispatch(actions.ticker.setRunning(false));
+    store.dispatch(actions.ticker.setRunning(false, event));
   }
 
-  function skipBack() {
-    stop();
-    store.dispatch(actions.ticker.setFirst());
+  function skipBack(event: TickerEvent) {
+    stop(event);
+    store.dispatch(actions.ticker.setFirst(event));
   }
 
   function loop() {
-    store.dispatch(actions.ticker.setFirst());
+    store.dispatch(actions.ticker.setFirst('loop'));
   }
 
-  function skipForward() {
-    stop();
-    store.dispatch(actions.ticker.setLast());
+  function skipForward(event: TickerEvent) {
+    stop(event);
+    store.dispatch(actions.ticker.setLast(event));
+    store.dispatch(actions.ticker.setLast(event)); // workaround to avoid showing lastValue
   }
 
-  function toggle() {
+  function toggle(event: TickerEvent) {
     if (store.getState().ticker.isLastDate) {
-      skipBack();
-      start();
+      skipBack(event);
+      start(event);
     } else if (store.getState().ticker.isRunning) {
-      stop();
+      stop(event);
     } else {
-      if (!store.getState().ticker.isFirstDate) {
-        // to avoid lastValue flicker
-        store.dispatch(actions.ticker.inc());
-      }
-      start();
+      // if (!store.getState().ticker.isFirstDate) {
+      //   // to avoid lastValue flicker
+      //   store.dispatch(actions.ticker.inc(event));
+      // }
+      start(event);
     }
   }
 
-  function goToDate(date: string) {
-    store.dispatch(actions.ticker.updateDate(date));
+  function goToDate(date: string, event: TickerEvent) {
+    store.dispatch(actions.ticker.updateDate(date, event));
   }
 
   return {

@@ -8,7 +8,6 @@ import { actions, Store } from './store';
 import {
   getHeight,
   getWidth,
-  getElement,
   hideElement,
   showElement,
   getText,
@@ -47,6 +46,8 @@ export function createRenderer(data: Data[], store: Store): Renderer {
 
   const groups = store.getState().data.groups;
   const dates = store.getState().ticker.dates;
+  let lastDate = dates[0];
+
   const { selector, showGroups, highlightBars, selectBars } = store.getState().options;
   const root = document.querySelector(selector) as HTMLElement;
 
@@ -474,6 +475,7 @@ export function createRenderer(data: Data[], store: Store): Renderer {
       .ease(d3.easeLinear)
       .attr('y', (d: Data) => barY(d) + barHalfHeight);
 
+    const sameDate = lastDate === currentDate;
     valueLabels
       .transition()
       .duration(tickDuration)
@@ -481,7 +483,8 @@ export function createRenderer(data: Data[], store: Store): Renderer {
       .attr('x', (d: Data) => x(d.value) + 5)
       .attr('y', (d: Data) => barY(d) + barHalfHeight)
       .tween('text', function (d: Data) {
-        const i = d3.interpolateRound(d.lastValue as number, d.value);
+        const lastValue = sameDate ? d.value : (d.lastValue as number);
+        const i = d3.interpolateRound(lastValue, d.value);
         return function (t: number) {
           this.textContent = d3.format(',')(i(t));
         };
@@ -558,6 +561,8 @@ export function createRenderer(data: Data[], store: Store): Renderer {
       .html(getText(dateCounter, currentDate, CompleteDateSlice, dates, true))
       .call(halo);
     updateControls();
+
+    lastDate = currentDate;
   }
 
   function resize() {
@@ -601,7 +606,7 @@ export function createRenderer(data: Data[], store: Store): Renderer {
       (showOverlays === 'all' || showOverlays === 'play') &&
       !store.getState().ticker.isRunning
     ) {
-      getElement(root, elements.controls).style.visibility = 'hidden';
+      hideElement(root, elements.controls, true);
       showElement(root, elements.overlay);
       showElement(root, elements.overlayPlay);
       hideElement(root, elements.overlayRepeat);
@@ -610,13 +615,13 @@ export function createRenderer(data: Data[], store: Store): Renderer {
       (showOverlays === 'all' || showOverlays === 'repeat') &&
       !(store.getState().options.loop && store.getState().ticker.isRunning)
     ) {
-      getElement(root, elements.controls).style.visibility = 'hidden';
+      hideElement(root, elements.controls, true);
       showElement(root, elements.overlay);
       showElement(root, elements.overlayRepeat);
       hideElement(root, elements.overlayPlay);
     } else {
-      getElement(root, elements.controls).style.visibility = 'unset';
-      getElement(root, elements.overlay).style.display = 'none';
+      showElement(root, elements.controls, true);
+      hideElement(root, elements.overlay);
     }
   }
 

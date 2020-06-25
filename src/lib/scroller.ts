@@ -35,9 +35,9 @@ export function createScroller(element: HTMLElement, store: Store) {
   function goToDate() {
     const index = Math.ceil(window.pageYOffset / step);
     if (index < dates.length) {
-      store.dispatch(actions.ticker.updateDate(dates[index]));
+      store.dispatch(actions.ticker.updateDate(dates[index], 'scroll'));
     } else {
-      store.dispatch(actions.ticker.setLast());
+      store.dispatch(actions.ticker.setLast('scroll'));
     }
   }
 }

@@ -22,6 +22,7 @@ return `Q${quarter} ${year}`
 
 <div className="gallery">
   <RacingBarsComponent
+    elementId="gallery-data-hg-push"
     dataUrl="/data/gh-push.csv"
     dataType="csv"
     title="Top Programming Languages"

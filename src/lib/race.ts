@@ -36,10 +36,10 @@ export function race(data: Data[] | WideData[], options: Partial<Options> = {}) 
   store.subscribe(renderer.renderFrame);
   store.subscribe(DOMEventSubscriber(store));
 
-  ticker.start();
+  ticker.start('loaded');
 
   if (!autorun) {
-    ticker.stop();
+    ticker.stop('loaded');
   }
 
   registerEvents(store, ticker);
@@ -54,30 +54,30 @@ export function race(data: Data[] | WideData[], options: Partial<Options> = {}) 
     // TODO: validate user input
     start: () => {
       if (!store.getState().ticker.isRunning) {
-        ticker.start();
+        ticker.start('apiStart');
       }
     },
     stop: () => {
-      ticker.stop();
+      ticker.stop('apiStop');
     },
     rewind: () => {
-      ticker.skipBack();
+      ticker.skipBack('apiSkipBack');
     },
     fastforward: () => {
-      ticker.skipForward();
+      ticker.skipForward('apiSkipForward');
     },
     loop: () => {
       ticker.loop();
     },
     inc: (value = 1) => {
-      store.dispatch(actions.ticker.inc(value));
+      store.dispatch(actions.ticker.inc('apiInc', value));
     },
     dec: (value = 1) => {
-      store.dispatch(actions.ticker.dec(value));
+      store.dispatch(actions.ticker.dec('apiDec', value));
     },
     getDate: () => store.getState().ticker.currentDate,
     setDate: (inputDate: string | Date) => {
-      store.dispatch(actions.ticker.updateDate(getDateString(inputDate)));
+      store.dispatch(actions.ticker.updateDate(getDateString(inputDate), 'apiSetDate'));
     },
     getAllDates: () => [...store.getState().ticker.dates],
     createScroller: () => {

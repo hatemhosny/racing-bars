@@ -12,6 +12,7 @@ A demo for showing the dark theme.
 
 <div className="gallery">
   <RacingBarsComponent
+    elementId="gallery-theme-dark"
     dataUrl="/data/population.csv"
     dataType="csv"
     title="World Population"
