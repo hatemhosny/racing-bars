@@ -12,6 +12,7 @@ A demo for using `loop`.
 
 <div className="gallery">
   <RacingBarsComponent
+    elementId="gallery-loop"
     dataUrl="/data/population.csv"
     dataType="csv"
     startDate="1970-01-01"

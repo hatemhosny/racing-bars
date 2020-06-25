@@ -3,11 +3,11 @@ import React from 'react';
 import { generateId, race } from '../../dist/racing-bars.esm';
 import { getData } from '../get-data';
 
-export class RacingBarsComponent extends React.Component {
+export class RacingBarsComponent extends React.PureComponent {
   constructor(props) {
     super(props);
     this.props = props;
-    this.elementId = generateId();
+    this.elementId = props.elementId || generateId();
   }
 
   render() {

@@ -1,5 +1,5 @@
 ---
-title: Fixed Scale
+title: Fixed Scale (invisible labels!)
 ---
 
 import { RacingBarsComponent } from '../racing-bars.js';
@@ -15,6 +15,7 @@ To avoid such problem, consider setting [`labelsOnBars`](/docs/documentation/opt
 
 <div className="gallery">
   <RacingBarsComponent
+    elementId="gallery-fixed-sacle"
     dataUrl="/data/covid-19.csv"
     dataType="csv"
     title="World Population"

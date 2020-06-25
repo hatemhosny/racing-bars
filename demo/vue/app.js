@@ -5,12 +5,14 @@ export default {
   components: { RacingBars },
   methods: {
     getData() {
-      return racingBars.loadData('../data/procedures.json');
+      return racingBars.loadData('../data/population.csv', 'csv');
     },
   },
   template: `
   <racing-bars
-    data-url="../data/procedures.json"
+    element-id="hi-vue"
+    data-url="../data/population.csv"
+    data-type="csv"
     title="Hello from vue!"
     height="600"
     width="600"

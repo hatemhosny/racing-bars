@@ -12,6 +12,7 @@ A demo showing the use of [Brand Values dataset](/docs/sample-datasets#brand-val
 
 <div className="gallery">
   <RacingBarsComponent
+    elementId="gallery-data-brand-values"
     dataUrl="/data/brand-values.csv"
     dataType="csv"
     title="18 years of Interbrand’s Top Global Brands"

@@ -661,8 +661,7 @@
     setFirst: 'ticker/setFirst',
     setLast: 'ticker/setLast',
     inc: 'ticker/inc',
-    dec: 'ticker/dec',
-    event: 'ticker/event'
+    dec: 'ticker/dec'
   };
   var initialize = function initialize(dates) {
     return {
@@ -821,13 +820,6 @@
           });
         }
 
-      case actionTypes$2.event:
-        {
-          return _extends(_extends({}, state), {}, {
-            event: action.payload
-          });
-        }
-
       default:
         return state;
     }
@@ -872,6 +864,7 @@
 
     function skipForward(event) {
       stop(event);
+      store.dispatch(actions.ticker.setLast(event));
       store.dispatch(actions.ticker.setLast(event));
     }
 

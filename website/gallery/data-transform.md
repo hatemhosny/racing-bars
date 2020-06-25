@@ -17,6 +17,7 @@ icon: `https://www.countryflags.io/${d.code.toLowerCase()}/flat/64.png`,
 
 <div className="gallery">
   <RacingBarsComponent
+    elementId="gallery-data-transfom"
     dataUrl="/data/population.csv"
     dataType="csv"
     dataTransform={transformFn}

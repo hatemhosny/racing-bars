@@ -47,6 +47,7 @@ export function createTicker(store: Store): Ticker {
   function skipForward(event: TickerEvent) {
     stop(event);
     store.dispatch(actions.ticker.setLast(event));
+    store.dispatch(actions.ticker.setLast(event)); // workaround to avoid showing lastValue
   }
 
   function toggle(event: TickerEvent) {

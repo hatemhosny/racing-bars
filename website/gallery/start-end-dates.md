@@ -15,6 +15,7 @@ So the chart will end at the date that is less than or equal to the `endDate`.
 
 <div className="gallery">
   <RacingBarsComponent
+    elementId="gallery-start-end-dates"
     dataUrl="/data/population.csv"
     dataType="csv"
     startDate="1970-01-01"

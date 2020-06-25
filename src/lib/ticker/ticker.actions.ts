@@ -8,7 +8,6 @@ export const actionTypes = {
   setLast: 'ticker/setLast',
   inc: 'ticker/inc',
   dec: 'ticker/dec',
-  event: 'ticker/event',
 };
 
 export const initialize = (dates: string[]): TickerAction => ({

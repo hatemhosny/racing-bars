@@ -17,6 +17,7 @@ caption: (currentDate, dateSlice, allDates) =>
 
 <div className="gallery">
   <RacingBarsComponent
+    elementId="gallery-caption-data-function"
     dataUrl="/data/population.csv"
     dataType="csv"
     caption={options.caption}

@@ -12,6 +12,7 @@ This example shows the use of date formatting in `dateCounter`
 
 <div className="gallery">
   <RacingBarsComponent
+    elementId="gallery-date-counter-format"
     dataUrl="/data/population.csv"
     dataType="csv"
     dateCounter="MMM DD, YYYY 🌍"

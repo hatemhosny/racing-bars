@@ -16,6 +16,7 @@ Also note that with this setting it is more likely that the date counter will ov
 
 <div className="gallery">
   <RacingBarsComponent
+    elementId="gallery-fixed-order"
     dataUrl="/data/population.csv"
     dataType="csv"
     title="World Population"

@@ -1,4 +1,4 @@
-import { TickerState, TickerAction, TickerEvent } from './ticker.models';
+import { TickerState, TickerAction } from './ticker.models';
 import { actionTypes } from './ticker.actions';
 
 const initialState: TickerState = {
@@ -95,13 +95,6 @@ export function tickerReducer(state = initialState, action: TickerAction): Ticke
         isFirstDate: newDate === state.dates[0],
         isLastDate: newDate === state.dates[state.dates.length - 1],
         event: action.event,
-      };
-    }
-
-    case actionTypes.event: {
-      return {
-        ...state,
-        event: action.payload as TickerEvent,
       };
     }
 
