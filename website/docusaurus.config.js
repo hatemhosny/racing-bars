@@ -30,6 +30,11 @@ module.exports = {
           position: 'left',
         },
         {
+          href: 'https://jsbin.com/kesapad/edit?html,output',
+          label: 'Playground',
+          position: 'right',
+        },
+        {
           href: 'https://github.com/hatemhosny/racing-bars',
           label: 'GitHub',
           position: 'right',
@@ -120,4 +125,5 @@ module.exports = {
       },
     ],
   ],
+  scripts: ['https://static.jsbin.com/js/embed.min.js?4.1.7'],
 };
