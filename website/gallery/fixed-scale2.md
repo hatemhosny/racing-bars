@@ -31,6 +31,7 @@ A demo for using [`fixedScale`](/docs/documentation/options#fixedscale).
     title: 'Brand Values',
     fixedScale: true,
   };
+
   racingBars.loadData('/data/brand-values.csv', 'csv').then((data) => {
     racingBars.race(data, options);
   });

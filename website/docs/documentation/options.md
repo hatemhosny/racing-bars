@@ -50,6 +50,106 @@ const options = {
 };
 ```
 
+### colorMap
+
+This controls the colors of the bars. It accepts either an array of strings or an object.
+
+If an array is supplied, it will be used as a color palette.
+Only the colors in the array will be used.
+If the number of data item names/groups are larger than the array length, the colors will be repeated.
+
+On the other hand, an object can be supplied to map specific item names/groups to colors.
+The objects does not have to include all names.
+Note that names are case-sensitive.
+
+The colors specified in the array or object can be
+color names (e.g 'red'), hex codes (e.g. '#FF0000') or RGB codes (e.g. 'rgb(255, 0, 0)').
+
+- Type: string[] | {[key: string]: string}
+- Default: ""
+- Examples:
+
+This example uses an array as color palette.
+
+[view in gallery](/gallery/color-palette)
+
+```js
+const palette = [
+  '#636EFA',
+  '#EF553B',
+  '#00CC96',
+  '#AB63FA',
+  '#FFA15A',
+  '#19D3F3',
+  '#FF6692',
+  '#B6E880',
+  '#FF97FF',
+  '#FECB52',
+];
+
+const options = {
+  colorMap: palette,
+};
+```
+
+This example uses an object to map specific items to colors.
+
+[view in gallery](/gallery/color-map)
+
+```js
+const countryColors = {
+  India: 'orange',
+  'United States': 'blue',
+};
+
+const options = {
+  colorMap: countryColors,
+  showGroups: false,
+};
+```
+
+This example uses an object to map groups to colors.
+
+[view in gallery](/gallery/color-map-groups)
+
+```js
+const continentColors = {
+  Asia: 'yellow',
+  Europe: 'green',
+};
+
+const options = {
+  colorMap: continentColors,
+  showGroups: true,
+};
+```
+
+:::info
+Notice that if groups are shown ([showGroups](#showgroups) is set to 'true' [default], and the dataset has the field 'group'),
+this setting affects 'group' colors, otherwise it affects 'name' colors, but not both.
+:::
+
+### colorSeed
+
+A seed used to change bar colors. This causes shuffling the names/groups before being assigned to colors.
+The same seed guarantees the assignment to same color.
+This has no effect if the bar color is determined in the data (by the optional field `color`),
+or by [`colorMap`](#colormap) object that maps the item name/group.
+
+- Type: number | string
+- Default: ""
+- Examples:
+
+This example changes bar colors using `colorSeed`
+
+[view in gallery](/gallery/color-seed)
+
+```js
+const options = {
+  colorSeed: 42,
+};
+```
+
 ### dataShape
 
 Instruction whether the data shape is <a href="https://en.wikipedia.org/wiki/Wide_and_narrow_data" target="_blank">"long" or "wide"</a>.
@@ -116,7 +216,7 @@ racingBars.loadData('/data/population.json').then((data) => {
 ```
 
 But the `dataTransform` option was added to facilitate the use in the provided [React](../packages/react.md), [Vue](../packages/vue.md) and [Python](../packages/python.md) packages where the component may load the data from url.
-So it would be a lot more convenient to be able to also pass a transformation function that would run before creating the chart.
+So it would be more convenient to be able to also pass a transformation function that would run before creating the chart.
 
 ### dateCounter
 
@@ -304,6 +404,53 @@ const options = {
 };
 ```
 
+### showGroups
+
+If `true` (default) and if the dataset has the optional field `group`, bars of items in the same group will have same color.
+A legend is placed above the chart listing the groups and their colors.
+A click on the group legend toggles showing/hiding this group. Double click on the legend leads to only showing this group.
+Triple click on any legend will reset the group filter (show all groups).
+
+- Type: boolean
+- Default: `true`
+- Examples:
+
+[view in gallery](/gallery/show-groups)
+
+```js
+const options = {
+  showGroups: false,
+};
+```
+
+### showIcons
+
+If `true` (default) and if the dataset has the optional field `icon`, an icon will be shown on bars.
+The `icon` field will be used as the url for the image used.
+
+This will take some space from the bar, so some labels may not be visible. If so, consider setting the option [`labelsOnBars`](#labelsonbars) to `false`.
+
+- Type: boolean
+- Default: `true`
+- Examples:
+
+[view in gallery](/gallery/data-transform)
+
+```js
+const options = {
+  showIcons: true,
+};
+
+racingBars.loadData('/data/population.csv', 'csv').then((data) => {
+  const dataWithIcons = data.map((d) => ({
+    ...d,
+    icon: `https://www.countryflags.io/${d.code.toLowerCase()}/flat/64.png`,
+  }));
+
+  racingBars.race(dataWithIcons, options);
+});
+```
+
 ### startDate
 
 If provided, the data is filtered so that the `date` field of the data item is more than or equal to the given date.
@@ -485,8 +632,8 @@ const options = {
 <!--
 ✔ autorun: true
 ✔ caption: ""
-  colorMap: {}
-  colorSeed: ""
+✔ colorMap: {}
+✔ colorSeed: ""
 ✔ dataShape: "long"
 ✔ dataTransform: null,
 ✔ dateCounter: "MM/YYYY"
@@ -506,13 +653,13 @@ const options = {
 ✔ selectBars: true
 ✔ selector: "#race"
   showControls: "all"
-  showGroups: true
-  showIcons: false
+✔ showGroups: true
+✔ showIcons: false
   showOverlays: "none"
 ✔ startDate: ""
 ✔ subTitle: ""
 ✔ theme: "light"
-  tickDuration: 500
+✔ tickDuration: 500
 ✔ title: ""
 ✔ topN: 10
   width: ""

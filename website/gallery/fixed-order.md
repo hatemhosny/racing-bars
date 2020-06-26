@@ -43,6 +43,7 @@ Also note that with this setting it is more likely that the date counter will ov
     topN: 3,
     tickDuration: 100,
   };
+
   racingBars.loadData('/data/population.csv', 'csv').then((data) => {
     racingBars.race(data, options);
   });

@@ -33,6 +33,7 @@ So the chart will end at the date that is less than or equal to the `endDate`.
     startDate: '1970-01-01',
     endDate: '1999-12-31',
   };
+
   racingBars.loadData('/data/population.csv', 'csv').then((data) => {
     racingBars.race(data, options);
   });

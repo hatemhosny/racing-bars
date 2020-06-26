@@ -36,6 +36,7 @@ To avoid such problem, consider setting [`labelsOnBars`](/docs/documentation/opt
     subTitle: 'in millions',
     fixedScale: true,
   };
+
   racingBars.loadData('/data/covid-19.csv', 'csv').then((data) => {
     racingBars.race(data, options);
   });

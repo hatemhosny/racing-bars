@@ -21,7 +21,7 @@ export interface Options {
   labelsOnBars: boolean;
   labelsWidth: number;
   showIcons: boolean;
-  colorSeed: string;
+  colorSeed: string | number;
   showGroups: boolean;
   tickDuration: number;
   topN: number;

@@ -36,6 +36,7 @@ to avoid [such problem](./fixed-scale).
     fixedScale: true,
     labelsOnBars: false,
   };
+
   racingBars.loadData('/data/covid-19.csv', 'csv').then((data) => {
     racingBars.race(data, options);
   });

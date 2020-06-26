@@ -28,6 +28,7 @@ A demo for using string in caption.
     selector: '#race',
     caption: 'Source: World Bank',
   };
+
   racingBars.loadData('/data/population.csv', 'csv').then((data) => {
     racingBars.race(data, options);
   });

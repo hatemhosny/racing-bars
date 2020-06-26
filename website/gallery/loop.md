@@ -32,6 +32,7 @@ A demo for using `loop`.
     endDate: '1980-01-01',
     loop: true,
   };
+
   racingBars.loadData('/data/population.csv', 'csv').then((data) => {
     racingBars.race(data, options);
   });

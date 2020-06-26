@@ -16,6 +16,8 @@ Each data item has the following fields:
   Passing this string to `new Date()` should return a date. If an entry cannot be parsed as date an error will be thrown.
 - `name`: `string` (required) a string holding the name of each item (bar label). e.g. country name
 - `value`: `number` (required) the value of the name in that date.
+- `color`: `string` (optional) the color to use for the bar.
+  can be color name (e.g 'red'), hex code (e.g. '#FF0000') or RGB code (e.g. 'rgb(255, 0, 0)').
 - `group`: `string` (optional) a string representing a group for a number of names.
   This has One-to-Many relation with `name` A group can have many names, but each name can be in one group. e.g. continent
 - `icon`: `string` (optional) a string holding the url of an icon that would be displayed in bars.

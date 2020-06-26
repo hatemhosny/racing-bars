@@ -1,38 +1,46 @@
 ---
-title: Dark Theme
+title: Color Map
 ---
 
 import { RacingBarsComponent } from '../racing-bars.js';
 
-A demo for showing the dark theme.
+A demo for using a color map.
 
 <!--truncate-->
 
 ### Chart
 
+export const countryColors = {
+India: 'orange',
+'United States': 'blue',
+};
+
 <div className="gallery">
   <RacingBarsComponent
-    elementId="gallery-theme-dark"
+    elementId="gallery-color-map"
     dataUrl="/data/population.csv"
     dataType="csv"
     title="World Population"
-    subTitle="in millions"
+    colorMap={countryColors}
     showGroups={false}
-    theme="dark"
   />
 </div>
 
 ### Code
 
-```html {8}
+```html {11}
 <div id="race"></div>
 <script>
+  const countryColors = {
+    India: 'orange',
+    'United States': 'blue',
+  };
+
   const options = {
     selector: '#race',
     title: 'World Population',
-    subTitle: 'in millions',
+    colorMap: countryColors,
     showGroups: false,
-    theme: 'dark',
   };
 
   racingBars.loadData('/data/population.csv', 'csv').then((data) => {

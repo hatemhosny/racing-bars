@@ -30,6 +30,7 @@ A demo for using string in `title` and `subTitle`.
     title: 'World Population',
     subTitle: 'in millions',
   };
+
   racingBars.loadData('/data/population.csv', 'csv').then((data) => {
     racingBars.race(data, options);
   });

@@ -28,6 +28,7 @@ A demo for using `topN` to choose the number of bars to display.
     selector: '#race',
     topN: 5,
   };
+
   racingBars.loadData('/data/population.csv', 'csv').then((data) => {
     racingBars.race(data, options);
   });

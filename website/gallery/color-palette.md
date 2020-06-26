@@ -1,38 +1,62 @@
 ---
-title: Dark Theme
+title: Color Palette
 ---
 
 import { RacingBarsComponent } from '../racing-bars.js';
 
-A demo for showing the dark theme.
+A demo for using a color palette.
 
 <!--truncate-->
 
 ### Chart
 
+export const palette = [
+'#636EFA',
+'#EF553B',
+'#00CC96',
+'#AB63FA',
+'#FFA15A',
+'#19D3F3',
+'#FF6692',
+'#B6E880',
+'#FF97FF',
+'#FECB52',
+];
+
 <div className="gallery">
   <RacingBarsComponent
-    elementId="gallery-theme-dark"
+    elementId="gallery-color-palette"
     dataUrl="/data/population.csv"
     dataType="csv"
     title="World Population"
-    subTitle="in millions"
+    colorMap={palette}
     showGroups={false}
-    theme="dark"
   />
 </div>
 
 ### Code
 
-```html {8}
+```html {19}
 <div id="race"></div>
 <script>
+  const palette = [
+    '#636EFA',
+    '#EF553B',
+    '#00CC96',
+    '#AB63FA',
+    '#FFA15A',
+    '#19D3F3',
+    '#FF6692',
+    '#B6E880',
+    '#FF97FF',
+    '#FECB52',
+  ];
+
   const options = {
     selector: '#race',
     title: 'World Population',
-    subTitle: 'in millions',
+    colorMap: palette,
     showGroups: false,
-    theme: 'dark',
   };
 
   racingBars.loadData('/data/population.csv', 'csv').then((data) => {

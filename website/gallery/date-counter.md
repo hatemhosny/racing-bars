@@ -35,6 +35,7 @@ dateCounter: (currentDate, dateSlice, allDates) =>
     dateCounter: (currentDate, dateSlice, allDates) =>
       `${allDates.indexOf(currentDate) + 1} of ${allDates.length}`,
   };
+
   racingBars.loadData('/data/population.csv', 'csv').then((data) => {
     racingBars.race(data, options);
   });

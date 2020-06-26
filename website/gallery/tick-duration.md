@@ -32,6 +32,7 @@ A demo for using `tickDuration` to control chart "speed".
     subTitle: 'in millions',
     tickDuration: 200,
   };
+
   racingBars.loadData('/data/population.csv', 'csv').then((data) => {
     racingBars.race(data, options);
   });

@@ -28,6 +28,7 @@ This example shows the use of date formatting in `dateCounter`
     selector: '#race',
     dateCounter: 'MMM DD, YYYY 🌍',
   };
+
   racingBars.loadData('/data/population.csv', 'csv').then((data) => {
     racingBars.race(data, options);
   });

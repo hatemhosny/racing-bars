@@ -1,10 +1,10 @@
 ---
-title: Data Transform
+title: Icons
 ---
 
 import { RacingBarsComponent } from '../racing-bars.js';
 
-A demo showing the use of [dataTransform function](/docs/documentation/options#datatransform).
+A demo showing the use of icons ([`showIcons`](/docs/documentation/options#showicons)).
 
 <!--truncate-->
 
@@ -22,38 +22,35 @@ icon: `https://www.countryflags.io/${d.code.toLowerCase()}/flat/64.png`,
     dataType="csv"
     dataTransform={transformFn}
     title="World Population in 60 Years"
-    subTitle="Country Population in millions"
-    caption="Source: World Bank"
-    dateCounter="YYYY"
     showIcons={true}
     labelsOnBars={false}
+    showGroups={false}
   />
 </div>
 
 ### Code
 
-```html {11}
+```html {7,8}
 <div id="race"></div>
 <script>
-  const transformFn = (data) =>
-    data.map((d) => ({
+  const options = {
+    selector: '#race',
+    dataTransform: transformFn,
+    title: 'World Population',
+    showIcons: true,
+    labelsOnBars: false,
+    showGroups: false,
+  };
+
+  racingBars.loadData('/data/population.csv', 'csv').then((data) => {
+    const dataWithIcons = data.map((d) => ({
       ...d,
       icon: `https://www.countryflags.io/${d.code.toLowerCase()}/flat/64.png`,
     }));
 
-  const options = {
-    selector: '#race',
-    dataTransform: transformFn,
-    title: 'World Population in 60 Years',
-    subTitle: 'Country Population in millions',
-    caption: 'Source: World Bank',
-    dateCounter: 'YYYY',
-    showIcons: true,
-    labelsOnBars: false,
-  };
-
-  racingBars.loadData('/data/population.csv', 'csv').then((data) => {
-    racingBars.race(data, options);
+    racingBars.race(dataWithIcons, options);
   });
 </script>
 ```
+
+Notice setting [`labelsOnBars`](/docs/documentation/options#labelsonbars) to false to keep the labels visible, since the icons will take some space on the bar.
