@@ -1,43 +1,44 @@
-/* eslint-disable */
 import React from 'react';
-import { generateId, race } from '../../dist';
-import { getData } from '../get-data';
+import { generateId, race, Race } from '../..';
+import { getData, Props } from '..';
 
 export class RacingBarsComponent extends React.PureComponent {
-  constructor(props) {
+  public elementId: string;
+  public racer: Race | undefined;
+  public constructor(props: Props) {
     super(props);
-    this.props = props;
+    // this.props = props;
     this.elementId = props.elementId || generateId();
   }
 
-  render() {
+  public render() {
     return React.createElement('div', { id: this.elementId });
   }
 
-  componentDidMount() {
+  public componentDidMount() {
     setTimeout(() => {
       this.runRace();
     });
   }
 
-  componentDidUpdate() {
+  public componentDidUpdate() {
     setTimeout(() => {
       this.runRace();
     });
   }
 
-  componentWillUnmount() {
+  public componentWillUnmount() {
     this.cleanUp();
   }
 
-  async runRace() {
+  public async runRace() {
     this.cleanUp();
-    const { dataPromise, options } = getData(this.props, this.elementId);
+    const { dataPromise, options } = getData(this.props as Props, this.elementId);
     const data = await dataPromise;
     this.racer = race(data, options);
   }
 
-  cleanUp() {
+  public cleanUp() {
     if (this.racer) {
       this.racer.stop();
     }

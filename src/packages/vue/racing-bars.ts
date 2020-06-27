@@ -1,5 +1,5 @@
-import { generateId, race } from '../../dist';
-import { getData } from '../get-data';
+import { generateId, race } from '../..';
+import { getData } from '..';
 
 export const RacingBarsComponent = {
   name: 'racing-bars',
@@ -7,7 +7,7 @@ export const RacingBarsComponent = {
   created() {
     this.elementId = this.$attrs['element-id'] || generateId();
   },
-  render(createElement) {
+  render(createElement: any) {
     return createElement('div', { domProps: { id: this.elementId } });
   },
   mounted() {
@@ -25,9 +25,12 @@ export const RacingBarsComponent = {
   },
   methods: {
     async runRace() {
-      function toCamelCase(attrs) {
-        const camelize = (s) => s.replace(/-./g, (x) => x.toUpperCase()[1]);
-        return Object.assign(...Object.keys(attrs).map((key) => ({ [camelize(key)]: attrs[key] })));
+      function toCamelCase(attrs: { [key: string]: any }) {
+        const camelize = (s: string) => s.replace(/-./g, (x) => x.toUpperCase()[1]);
+        return Object.assign(
+          {},
+          ...Object.keys(attrs).map((key) => ({ [camelize(key)]: attrs[key] })),
+        );
       }
 
       this.cleanUp();

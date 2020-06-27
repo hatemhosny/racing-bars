@@ -10,8 +10,9 @@ import { Options } from './options';
 import { registerEvents, DOMEventSubscriber } from './events';
 import { createScroller } from './scroller';
 import { safeName } from './utils';
+import { Race } from './models';
 
-export function race(data: Data[] | WideData[], options: Partial<Options> = {}) {
+export function race(data: Data[] | WideData[], options: Partial<Options> = {}): Race {
   const store = createStore(rootReducer);
 
   store.dispatch(actions.options.optionsLoaded(options));
@@ -19,7 +20,7 @@ export function race(data: Data[] | WideData[], options: Partial<Options> = {}) 
 
   const root = document.querySelector(selector) as HTMLElement;
   if (!root) {
-    return;
+    return (undefined as unknown) as Race;
   }
 
   if (injectStyles) {
