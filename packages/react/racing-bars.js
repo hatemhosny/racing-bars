@@ -1,6 +1,6 @@
 /* eslint-disable */
 import React from 'react';
-import { generateId, race } from '../../dist/racing-bars.esm';
+import { generateId, race } from '../../dist';
 import { getData } from '../get-data';
 
 export class RacingBarsComponent extends React.PureComponent {

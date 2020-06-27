@@ -1,2 +1,2 @@
-export * as racingBars from '../../dist/racing-bars.esm';
+export * as racingBars from '../../dist';
 export { RacingBarsComponent } from './racing-bars';

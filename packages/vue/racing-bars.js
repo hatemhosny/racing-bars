@@ -1,4 +1,4 @@
-import { generateId, race } from '../../dist/racing-bars.esm';
+import { generateId, race } from '../../dist';
 import { getData } from '../get-data';
 
 export const RacingBarsComponent = {

@@ -1,4 +1,4 @@
-import { loadData } from '../dist/racing-bars.esm';
+import { loadData } from '../dist';
 
 export function getData(props, elementId) {
   const selector = '#' + elementId;

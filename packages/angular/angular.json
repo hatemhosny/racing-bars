@@ -1,0 +1,164 @@
+{
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "version": 1,
+  "newProjectRoot": "projects",
+  "projects": {
+    "racing-bars": {
+      "projectType": "library",
+      "root": "projects/racing-bars",
+      "sourceRoot": "projects/racing-bars/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/racing-bars/tsconfig.lib.json",
+            "project": "projects/racing-bars/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/racing-bars/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/racing-bars/src/test.ts",
+            "tsConfig": "projects/racing-bars/tsconfig.spec.json",
+            "karmaConfig": "projects/racing-bars/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/racing-bars/tsconfig.lib.json",
+              "projects/racing-bars/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "consumer": {
+      "projectType": "application",
+      "schematics": {},
+      "root": "projects/consumer",
+      "sourceRoot": "projects/consumer/src",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/consumer",
+            "index": "projects/consumer/src/index.html",
+            "main": "projects/consumer/src/main.ts",
+            "polyfills": "projects/consumer/src/polyfills.ts",
+            "tsConfig": "projects/consumer/tsconfig.app.json",
+            "aot": true,
+            "assets": [
+              "projects/consumer/src/favicon.ico",
+              "projects/consumer/src/assets"
+            ],
+            "styles": [
+              "projects/consumer/src/styles.css"
+            ],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "projects/consumer/src/environments/environment.ts",
+                  "with": "projects/consumer/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "consumer:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "consumer:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "consumer:build"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/consumer/src/test.ts",
+            "polyfills": "projects/consumer/src/polyfills.ts",
+            "tsConfig": "projects/consumer/tsconfig.spec.json",
+            "karmaConfig": "projects/consumer/karma.conf.js",
+            "assets": [
+              "projects/consumer/src/favicon.ico",
+              "projects/consumer/src/assets"
+            ],
+            "styles": [
+              "projects/consumer/src/styles.css"
+            ],
+            "scripts": []
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/consumer/tsconfig.app.json",
+              "projects/consumer/tsconfig.spec.json",
+              "projects/consumer/e2e/tsconfig.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        },
+        "e2e": {
+          "builder": "@angular-devkit/build-angular:protractor",
+          "options": {
+            "protractorConfig": "projects/consumer/e2e/protractor.conf.js",
+            "devServerTarget": "consumer:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "consumer:serve:production"
+            }
+          }
+        }
+      }
+    }},
+  "defaultProject": "racing-bars"
+}

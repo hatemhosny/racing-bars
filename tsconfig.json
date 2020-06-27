@@ -41,6 +41,6 @@
     "typeRoots": ["node_modules/@types", "src/types"]
   },
   "include": ["src/**/*.ts", "packages/**/*.ts", "packages/react/index.js"],
-  "exclude": ["node_modules/**", "src/lib/tmp"],
+  "exclude": ["node_modules/**", "packages/**"],
   "compileOnSave": true
 }
