@@ -7,7 +7,6 @@ export class RacingBarsComponent extends React.PureComponent {
   public racer: Race | undefined;
   public constructor(props: Props) {
     super(props);
-    // this.props = props;
     this.elementId = props.elementId || generateId();
   }
 

@@ -1,4 +1,4 @@
-import { loadData, Options, Data, WideData } from '../../dist';
+import { loadData, Options, Data, WideData } from 'racing-bars/dist';
 
 export function getData(props: Props, elementId: string) {
   const selector = '#' + elementId;

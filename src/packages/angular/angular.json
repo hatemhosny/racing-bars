@@ -36,9 +36,7 @@
               "projects/racing-bars/tsconfig.lib.json",
               "projects/racing-bars/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
           }
         }
       }
@@ -59,13 +57,8 @@
             "polyfills": "projects/consumer/src/polyfills.ts",
             "tsConfig": "projects/consumer/tsconfig.app.json",
             "aot": true,
-            "assets": [
-              "projects/consumer/src/favicon.ico",
-              "projects/consumer/src/assets"
-            ],
-            "styles": [
-              "projects/consumer/src/styles.css"
-            ],
+            "assets": ["projects/consumer/src/favicon.ico", "projects/consumer/src/assets"],
+            "styles": ["projects/consumer/src/styles.css"],
             "scripts": []
           },
           "configurations": {
@@ -123,13 +116,8 @@
             "polyfills": "projects/consumer/src/polyfills.ts",
             "tsConfig": "projects/consumer/tsconfig.spec.json",
             "karmaConfig": "projects/consumer/karma.conf.js",
-            "assets": [
-              "projects/consumer/src/favicon.ico",
-              "projects/consumer/src/assets"
-            ],
-            "styles": [
-              "projects/consumer/src/styles.css"
-            ],
+            "assets": ["projects/consumer/src/favicon.ico", "projects/consumer/src/assets"],
+            "styles": ["projects/consumer/src/styles.css"],
             "scripts": []
           }
         },
@@ -141,9 +129,7 @@
               "projects/consumer/tsconfig.spec.json",
               "projects/consumer/e2e/tsconfig.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
           }
         },
         "e2e": {
@@ -159,6 +145,7 @@
           }
         }
       }
-    }},
+    }
+  },
   "defaultProject": "racing-bars"
 }
