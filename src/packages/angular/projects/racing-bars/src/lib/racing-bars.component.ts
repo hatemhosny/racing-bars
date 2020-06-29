@@ -1,5 +1,6 @@
 import { Component, Input, OnInit, AfterViewInit, OnChanges, OnDestroy } from '@angular/core';
-import { generateId, loadData, race } from '..';
+import { racingBars } from '..';
+import { Options, Data, WideData, Race } from '../srclib';
 import { getData } from './shared';
 
 @Component({
@@ -7,68 +8,57 @@ import { getData } from './shared';
   template: `<div id="{{ id }}"></div>`,
 })
 export class RacingBarsComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy {
-  @Input() public data: any;
+  @Input() public data: Data[] | WideData[];
   @Input() public dataUrl: string;
   @Input() public dataType: 'json' | 'csv' | 'tsv' | 'xml' | undefined;
   @Input() public elementId: string;
 
-  @Input() public dataShape: 'long' | 'wide';
-  @Input() public dataTransform: null | ((data: any) => any);
-  @Input() public fillDateGaps: false | 'years' | 'months' | 'days';
-  @Input() public fillDateGapsValue: 'last' | 'interpolate';
-  @Input() public title: string;
-  @Input() public subTitle: string;
-  @Input() public dateCounter:
-    | string
-    | ((currentDate: string, dateSlice: any[], allDates: string[]) => string);
-  @Input() public startDate: string;
-  @Input() public endDate: string;
-  @Input() public loop: boolean;
-  @Input() public caption: string;
-  @Input() public labelsOnBars: boolean;
-  @Input() public labelsWidth: number;
-  @Input() public showIcons: boolean;
-  @Input() public colorSeed: string | number;
-  @Input() public showGroups: boolean;
-  @Input() public tickDuration: number;
-  @Input() public topN: number;
-  @Input() public inputHeight: string;
-  @Input() public inputWidth: string;
-  @Input() public minHeight: number;
-  @Input() public minWidth: number;
-  @Input() public height: string;
-  @Input() public width: string;
-  @Input() public disableClickEvents: boolean;
-  @Input() public disableKeyboardEvents: boolean;
-  @Input() public showControls: 'all' | 'play' | 'none';
-  @Input() public showOverlays: 'all' | 'play' | 'repeat' | 'none';
-  @Input() public autorun: boolean;
-  @Input() public injectStyles: boolean;
-  @Input() public theme: string;
-  @Input() public colorMap: { [key: string]: string };
-  @Input() public fixedScale: boolean;
-  @Input() public fixedOrder: string[];
-  @Input() public highlightBars: boolean;
-  @Input() public selectBars: boolean;
+  @Input() public dataShape: Options['dataShape'];
+  @Input() public dataTransform: Options['dataTransform'];
+  @Input() public fillDateGaps: Options['fillDateGaps'];
+  @Input() public fillDateGapsValue: Options['fillDateGapsValue'];
+  @Input() public title: Options['title'];
+  @Input() public subTitle: Options['subTitle'];
+  @Input() public dateCounter: Options['dateCounter'];
+  @Input() public startDate: Options['startDate'];
+  @Input() public endDate: Options['endDate'];
+  @Input() public loop: Options['loop'];
+  @Input() public caption: Options['caption'];
+  @Input() public labelsOnBars: Options['labelsOnBars'];
+  @Input() public labelsWidth: Options['labelsWidth'];
+  @Input() public showIcons: Options['showIcons'];
+  @Input() public colorSeed: Options['colorSeed'];
+  @Input() public showGroups: Options['showGroups'];
+  @Input() public tickDuration: Options['tickDuration'];
+  @Input() public topN: Options['topN'];
+  @Input() public height: Options['height'];
+  @Input() public width: Options['width'];
+  @Input() public disableClickEvents: Options['disableClickEvents'];
+  @Input() public disableKeyboardEvents: Options['disableKeyboardEvents'];
+  @Input() public showControls: Options['showControls'];
+  @Input() public showOverlays: Options['showOverlays'];
+  @Input() public autorun: Options['autorun'];
+  @Input() public injectStyles: Options['injectStyles'];
+  @Input() public theme: Options['theme'];
+  @Input() public colorMap: Options['colorMap'];
+  @Input() public fixedScale: Options['fixedScale'];
+  @Input() public fixedOrder: Options['fixedOrder'];
+  @Input() public highlightBars: Options['highlightBars'];
+  @Input() public selectBars: Options['selectBars'];
 
   public id: string;
-  public racer: any;
+  public racer: Race;
 
   public ngOnInit() {
-    // this.id = '';
-    this.id = this.elementId || generateId();
+    this.id = this.elementId || racingBars.generateId();
   }
 
-  public async ngAfterViewInit() {
-    // this.runRace();
-    const data = await loadData('assets/data/population.csv', 'csv');
-    // eslint-disable-next-line no-console
-    console.log(data, this.getProps());
-    race(data, this.getProps());
+  public ngAfterViewInit() {
+    this.runRace();
   }
 
   public ngOnChanges() {
-    // this.runRace();
+    this.runRace();
   }
 
   public ngOnDestroy() {
@@ -79,10 +69,7 @@ export class RacingBarsComponent implements OnInit, AfterViewInit, OnChanges, On
     this.cleanUp();
     const { dataPromise, options } = getData(this.getProps(), this.id);
     const data = await dataPromise;
-    // eslint-disable-next-line no-console
-    console.log(data, options);
-
-    this.racer = race(data, options);
+    this.racer = racingBars.race(data, options);
   }
 
   private cleanUp() {
@@ -115,10 +102,6 @@ export class RacingBarsComponent implements OnInit, AfterViewInit, OnChanges, On
       showGroups: this.showGroups,
       tickDuration: this.tickDuration,
       topN: this.topN,
-      inputHeight: this.inputHeight,
-      inputWidth: this.inputWidth,
-      minHeight: this.minHeight,
-      minWidth: this.minWidth,
       height: this.height,
       width: this.width,
       disableClickEvents: this.disableClickEvents,
