@@ -1,69 +1,74 @@
-import { Component, Input, OnInit, OnChanges, OnDestroy } from '@angular/core';
-import { getData, Props } from './shared';
-import { generateId, race, Race } from './racing-bars-lib';
+import { Component, Input, OnInit, AfterViewInit, OnChanges, OnDestroy } from '@angular/core';
+import { generateId, loadData, race } from '..';
+import { getData } from './shared';
 
 @Component({
   selector: 'racing-bars',
   template: `<div id="{{ id }}"></div>`,
 })
-export class RacingBarsComponent implements OnInit, OnChanges, OnDestroy {
-  @Input() public data: Props['data'];
-  @Input() public dataUrl: Props['dataUrl'];
-  @Input() public dataType: Props['dataType'];
-  @Input() public elementId: Props['elementId'];
+export class RacingBarsComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy {
+  @Input() public data: any;
+  @Input() public dataUrl: string;
+  @Input() public dataType: 'json' | 'csv' | 'tsv' | 'xml' | undefined;
+  @Input() public elementId: string;
 
-  @Input() public dataShape: Props['dataShape'];
-  @Input() public dataTransform: Props['dataTransform'];
-  @Input() public fillDateGaps: Props['fillDateGaps'];
-  @Input() public fillDateGapsValue: Props['fillDateGapsValue'];
-  @Input() public title: Props['title'];
-  @Input() public subTitle: Props['subTitle'];
-  @Input() public dateCounter: Props['dateCounter'];
-  @Input() public startDate: Props['startDate'];
-  @Input() public endDate: Props['endDate'];
-  @Input() public loop: Props['loop'];
-  @Input() public caption: Props['caption'];
-  @Input() public labelsOnBars: Props['labelsOnBars'];
-  @Input() public labelsWidth: Props['labelsWidth'];
-  @Input() public showIcons: Props['showIcons'];
-  @Input() public colorSeed: Props['colorSeed'];
-  @Input() public showGroups: Props['showGroups'];
-  @Input() public tickDuration: Props['tickDuration'];
-  @Input() public topN: Props['topN'];
-  @Input() public inputHeight: Props['inputHeight'];
-  @Input() public inputWidth: Props['inputWidth'];
-  @Input() public minHeight: Props['minHeight'];
-  @Input() public minWidth: Props['minWidth'];
-  @Input() public height: Props['height'];
-  @Input() public width: Props['width'];
-  @Input() public disableClickEvents: Props['disableClickEvents'];
-  @Input() public disableKeyboardEvents: Props['disableKeyboardEvents'];
-  @Input() public showControls: Props['showControls'];
-  @Input() public showOverlays: Props['showOverlays'];
-  @Input() public autorun: Props['autorun'];
-  @Input() public injectStyles: Props['injectStyles'];
-  @Input() public theme: Props['theme'];
-  @Input() public colorMap: Props['colorMap'];
-  @Input() public fixedScale: Props['fixedScale'];
-  @Input() public fixedOrder: Props['fixedOrder'];
-  @Input() public highlightBars: Props['highlightBars'];
-  @Input() public selectBars: Props['selectBars'];
+  @Input() public dataShape: 'long' | 'wide';
+  @Input() public dataTransform: null | ((data: any) => any);
+  @Input() public fillDateGaps: false | 'years' | 'months' | 'days';
+  @Input() public fillDateGapsValue: 'last' | 'interpolate';
+  @Input() public title: string;
+  @Input() public subTitle: string;
+  @Input() public dateCounter:
+    | string
+    | ((currentDate: string, dateSlice: any[], allDates: string[]) => string);
+  @Input() public startDate: string;
+  @Input() public endDate: string;
+  @Input() public loop: boolean;
+  @Input() public caption: string;
+  @Input() public labelsOnBars: boolean;
+  @Input() public labelsWidth: number;
+  @Input() public showIcons: boolean;
+  @Input() public colorSeed: string | number;
+  @Input() public showGroups: boolean;
+  @Input() public tickDuration: number;
+  @Input() public topN: number;
+  @Input() public inputHeight: string;
+  @Input() public inputWidth: string;
+  @Input() public minHeight: number;
+  @Input() public minWidth: number;
+  @Input() public height: string;
+  @Input() public width: string;
+  @Input() public disableClickEvents: boolean;
+  @Input() public disableKeyboardEvents: boolean;
+  @Input() public showControls: 'all' | 'play' | 'none';
+  @Input() public showOverlays: 'all' | 'play' | 'repeat' | 'none';
+  @Input() public autorun: boolean;
+  @Input() public injectStyles: boolean;
+  @Input() public theme: string;
+  @Input() public colorMap: { [key: string]: string };
+  @Input() public fixedScale: boolean;
+  @Input() public fixedOrder: string[];
+  @Input() public highlightBars: boolean;
+  @Input() public selectBars: boolean;
 
   public id: string;
-  public racer: Race | undefined;
+  public racer: any;
 
-  public constructor() {
+  public ngOnInit() {
+    // this.id = '';
     this.id = this.elementId || generateId();
   }
 
-  public ngOnInit() {
+  public async ngAfterViewInit() {
+    // this.runRace();
+    const data = await loadData('assets/data/population.csv', 'csv');
     // eslint-disable-next-line no-console
-    console.log(this.getProps());
-    this.runRace();
+    console.log(data, this.getProps());
+    race(data, this.getProps());
   }
 
   public ngOnChanges() {
-    this.runRace();
+    // this.runRace();
   }
 
   public ngOnDestroy() {
@@ -74,6 +79,9 @@ export class RacingBarsComponent implements OnInit, OnChanges, OnDestroy {
     this.cleanUp();
     const { dataPromise, options } = getData(this.getProps(), this.id);
     const data = await dataPromise;
+    // eslint-disable-next-line no-console
+    console.log(data, options);
+
     this.racer = race(data, options);
   }
 
