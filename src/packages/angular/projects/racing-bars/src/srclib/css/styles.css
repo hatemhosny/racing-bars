@@ -1,0 +1,106 @@
+__selector__ text {
+  font-size: 16px;
+  font-family: Open Sans, sans-serif;
+}
+
+__selector__ text.title {
+  font-size: 24px;
+  font-weight: 500;
+}
+
+__selector__ text.subTitle {
+  font-weight: 500;
+}
+
+__selector__ text.caption {
+  font-weight: 400;
+  font-size: 24px;
+}
+__selector__ text.legend-text {
+  user-select: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+__selector__ text.label {
+  font-weight: 600;
+}
+
+__selector__ text.valueLabel {
+  font-weight: 300;
+}
+
+__selector__ text.dateCounterText {
+  font-size: 64px;
+  font-weight: 700;
+}
+
+__selector__ .xAxis .tick:nth-child(2) text {
+  text-anchor: start;
+}
+
+__selector__ .tick line {
+  shape-rendering: CrispEdges;
+}
+
+__selector__ path.domain {
+  display: none;
+}
+
+__selector__ {
+  position: relative;
+}
+
+__selector__ .controls {
+  /*  width and right are set dynamically in renderer.ts */
+  position: absolute;
+  top: 0;
+  display: flex;
+}
+
+__selector__ .controls div,
+__selector__ .overlay div {
+  cursor: pointer;
+  font-size: 24px;
+  font-weight: 700;
+  width: 38px;
+  height: 38px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  margin: 5px;
+  text-align: center;
+}
+
+__selector__ .controls svg {
+  margin: 5px auto;
+  width: 28px;
+  height: 28px;
+}
+
+__selector__ .overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+__selector__ .overlay div {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 200px;
+  height: 200px;
+  -moz-border-radius: 100px;
+  -webkit-border-radius: 100px;
+  border-radius: 100px;
+}
+__selector__ .overlay svg {
+  height: 50%;
+  width: 50%;
+}

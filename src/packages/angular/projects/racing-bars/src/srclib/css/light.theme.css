@@ -1,0 +1,86 @@
+/* __selector__ {
+  background-color: #ffffff;
+}
+
+__selector__ text.title {
+  fill: #fafafa;
+} */
+
+__selector__ text.subTitle {
+  fill: #777777;
+}
+
+__selector__ text.dateCounterText {
+  fill: #bbbbbb;
+  opacity: 1;
+}
+
+__selector__ text.caption {
+  fill: #777777;
+}
+
+__selector__ .halo {
+  fill: #ffffff;
+  stroke: #ffffff;
+  stroke-width: 10;
+  stroke-linejoin: round;
+  opacity: 1;
+}
+
+__selector__ text.legend-text {
+  fill: #000000;
+}
+
+__selector__ text.label {
+  fill: #000000;
+}
+
+__selector__ text.label.outside-bars {
+  fill: #000000;
+}
+
+__selector__ text.valueLabel {
+  fill: #000000;
+}
+
+__selector__ .tick text {
+  fill: #777777;
+}
+
+__selector__ .tick line {
+  shape-rendering: CrispEdges;
+  stroke: #dddddd;
+}
+
+__selector__ .tick line.origin {
+  stroke: #aaaaaa;
+}
+
+__selector__ .controls div,
+__selector__ .overlay div {
+  color: #ffffff;
+  background: #777777;
+  border: 1px solid black;
+  opacity: 0.5;
+}
+
+__selector__ .controls div:hover,
+__selector__ .overlay div:hover {
+  background: #aaaaaa;
+  color: black;
+}
+
+__selector__ .overlay {
+  background-color: black;
+  opacity: 0.7;
+}
+
+__selector__ .highlight {
+  fill: #ff2727 !important;
+}
+
+__selector__ .selected {
+  fill: #d12020 !important;
+  stroke: #777777 !important;
+  stroke-width: 1 !important;
+}
