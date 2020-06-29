@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, AfterViewInit, OnChanges, OnDestroy } from '@angular/core';
+import { Component, Input, OnInit, OnChanges, OnDestroy } from '@angular/core';
 import { racingBars } from '..';
 import { Options, Data, WideData, Race } from '../srclib';
 import { getData } from './shared';
@@ -6,8 +6,19 @@ import { getData } from './shared';
 @Component({
   selector: 'racing-bars',
   template: `<div id="{{ id }}"></div>`,
+  styles: [
+    `
+      :host {
+        display: block;
+      }
+      div {
+        height: 100%;
+        width: 100%;
+      }
+    `,
+  ],
 })
-export class RacingBarsComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy {
+export class RacingBarsComponent implements OnInit, OnChanges, OnDestroy {
   @Input() public data: Data[] | WideData[];
   @Input() public dataUrl: string;
   @Input() public dataType: 'json' | 'csv' | 'tsv' | 'xml' | undefined;
@@ -51,9 +62,6 @@ export class RacingBarsComponent implements OnInit, AfterViewInit, OnChanges, On
 
   public ngOnInit() {
     this.id = this.elementId || racingBars.generateId();
-  }
-
-  public ngAfterViewInit() {
     this.runRace();
   }
 
