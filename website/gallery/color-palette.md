@@ -25,7 +25,6 @@ export const palette = [
 
 <div className="gallery">
   <RacingBarsComponent
-    elementId="gallery-color-palette"
     dataUrl="/data/population.csv"
     dataType="csv"
     title="World Population"

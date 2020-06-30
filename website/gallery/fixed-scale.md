@@ -15,7 +15,6 @@ To avoid such problem, consider setting [`labelsOnBars`](/docs/documentation/opt
 
 <div className="gallery">
   <RacingBarsComponent
-    elementId="gallery-fixed-sacle"
     dataUrl="/data/covid-19.csv"
     dataType="csv"
     title="World Population"

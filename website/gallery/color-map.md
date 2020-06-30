@@ -17,7 +17,6 @@ India: 'orange',
 
 <div className="gallery">
   <RacingBarsComponent
-    elementId="gallery-color-map"
     dataUrl="/data/population.csv"
     dataType="csv"
     title="World Population"

@@ -12,7 +12,6 @@ A demo showing the use of [covid-19 dataset](/docs/sample-datasets#covid-19).
 
 <div className="gallery">
   <RacingBarsComponent
-    elementId="gallery-data-covid-19"
     dataUrl="/data/covid-19.csv"
     dataType="csv"
     title="Covid-19"

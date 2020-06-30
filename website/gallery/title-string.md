@@ -12,7 +12,6 @@ A demo for using string in `title` and `subTitle`.
 
 <div className="gallery">
   <RacingBarsComponent
-    elementId="gallery-title-string"
     dataUrl="/data/population.csv"
     dataType="csv"
     title="World Population"

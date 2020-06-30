@@ -12,7 +12,6 @@ A demo for using color seed.
 
 <div className="gallery">
   <RacingBarsComponent
-    elementId="gallery-color-seed"
     dataUrl="/data/population.csv"
     dataType="csv"
     title="World Population"
@@ -45,7 +44,6 @@ A demo for using color seed.
 
 <div className="gallery">
   <RacingBarsComponent
-    elementId="gallery-color-seed2"
     dataUrl="/data/population.csv"
     dataType="csv"
     title="World Population"

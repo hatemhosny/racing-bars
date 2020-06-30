@@ -12,7 +12,6 @@ A demo for using `tickDuration` to control chart "speed".
 
 <div className="gallery">
   <RacingBarsComponent
-    elementId="gallery-tick-duration"
     dataUrl="/data/population.csv"
     dataType="csv"
     title="World Population"

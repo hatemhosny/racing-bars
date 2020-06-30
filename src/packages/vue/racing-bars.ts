@@ -41,7 +41,7 @@ export const RacingBarsComponent = {
     },
     cleanUp() {
       if (this.racer) {
-        this.racer.stop();
+        this.racer.destroy();
       }
     },
   },

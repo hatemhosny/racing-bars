@@ -12,7 +12,6 @@ A demo for using string in caption.
 
 <div className="gallery">
   <RacingBarsComponent
-    elementId="gallery-caption-string"
     dataUrl="/data/population.csv"
     dataType="csv"
     caption="Source: World Bank"

@@ -12,7 +12,6 @@ A demo for groups ([`showGroups`](../docs/documentation/options#showgroups)).
 
 <div className="gallery">
   <RacingBarsComponent
-    elementId="gallery-show-groups"
     dataUrl="/data/population.csv"
     dataType="csv"
     title="World Population"
@@ -43,7 +42,6 @@ A demo for groups ([`showGroups`](../docs/documentation/options#showgroups)).
 
 <div className="gallery">
   <RacingBarsComponent
-    elementId="gallery-show-groups2"
     dataUrl="/data/population.csv"
     dataType="csv"
     title="World Population"

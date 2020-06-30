@@ -39,7 +39,7 @@ export class RacingBarsComponent extends React.PureComponent {
 
   public cleanUp() {
     if (this.racer) {
-      this.racer.stop();
+      this.racer.destroy();
     }
   }
 }

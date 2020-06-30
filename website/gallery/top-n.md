@@ -12,7 +12,6 @@ A demo for using `topN` to choose the number of bars to display.
 
 <div className="gallery">
   <RacingBarsComponent
-    elementId="gallery-top-n"
     dataUrl="/data/population.csv"
     dataType="csv"
     topN="5"

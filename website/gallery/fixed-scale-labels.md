@@ -13,7 +13,6 @@ to avoid [such problem](./fixed-scale).
 
 <div className="gallery">
   <RacingBarsComponent
-    elementId="gallery-fixed-scale-labels"
     dataUrl="/data/covid-19.csv"
     dataType="csv"
     title="World Population"
