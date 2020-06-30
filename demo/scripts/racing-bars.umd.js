@@ -248,13 +248,6 @@
       }
     }
   }
-  function addEventHandler(root, className, event, handler) {
-    var element = getElement(root, className);
-
-    if (element) {
-      element.addEventListener(event, handler);
-    }
-  }
   function getText(param, currentDate, dateSlice, dates, isDate) {
     if (isDate === void 0) {
       isDate = false;
@@ -608,33 +601,44 @@
 
     switch (action.type) {
       case actionTypes$1.optionsLoaded:
-        var startDate = action.payload.startDate ? getDateString(action.payload.startDate) : '';
-        var endDate = action.payload.endDate ? getDateString(action.payload.endDate) : '';
-        var inputHeight = action.payload.height || state.inputHeight;
-        var inputWidth = action.payload.width || state.inputWidth;
-        var fixedOrder = Array.isArray(action.payload.fixedOrder) ? action.payload.fixedOrder : state.fixedOrder;
-        var topN = state.topN;
+        {
+          var excludedKeys = ['inputHeight', 'inputWidth', 'minHeight', 'minWidth'];
+          var options = {};
+          Object.keys(action.payload).forEach(function (key) {
+            if (action.payload[key] && !excludedKeys.includes(key)) {
+              options[key] = action.payload[key];
+            }
+          });
+          var startDate = options.startDate ? getDateString(options.startDate) : '';
+          var endDate = options.endDate ? getDateString(options.endDate) : '';
+          var inputHeight = options.height || state.inputHeight;
+          var inputWidth = options.width || state.inputWidth;
+          var fixedOrder = Array.isArray(options.fixedOrder) ? [].concat(options.fixedOrder) : state.fixedOrder;
+          var colorMap = Array.isArray(options.colorMap) ? [].concat(options.colorMap) : typeof options.colorMap === 'object' ? _extends({}, options.colorMap) : state.colorMap;
+          var topN = state.topN;
 
-        if (Number(action.payload.topN)) {
-          topN = Number(action.payload.topN);
+          if (Number(options.topN)) {
+            topN = Number(options.topN);
+          }
+
+          if (fixedOrder.length > 0 && topN > fixedOrder.length) {
+            topN = fixedOrder.length;
+          }
+
+          var tickDuration = Number(options.tickDuration) || state.tickDuration;
+          var labelsWidth = Number(options.labelsWidth) || state.labelsWidth;
+          return _extends(_extends(_extends({}, state), options), {}, {
+            startDate: startDate,
+            endDate: endDate,
+            inputHeight: inputHeight,
+            inputWidth: inputWidth,
+            fixedOrder: fixedOrder,
+            colorMap: colorMap,
+            topN: topN,
+            tickDuration: tickDuration,
+            labelsWidth: labelsWidth
+          });
         }
-
-        if (fixedOrder.length > 0 && topN > fixedOrder.length) {
-          topN = fixedOrder.length;
-        }
-
-        var tickDuration = Number(action.payload.tickDuration) || state.tickDuration;
-        var labelsWidth = Number(action.payload.labelsWidth) || state.labelsWidth;
-        return _extends(_extends(_extends({}, state), action.payload), {}, {
-          startDate: startDate,
-          endDate: endDate,
-          inputHeight: inputHeight,
-          inputWidth: inputWidth,
-          fixedOrder: fixedOrder,
-          topN: topN,
-          tickDuration: tickDuration,
-          labelsWidth: labelsWidth
-        });
 
       case actionTypes$1.changeOptions:
         return _extends(_extends({}, state), action.payload);
@@ -963,10 +967,15 @@
       });
     }
 
+    function unubscribeAll() {
+      subscribers.length = 0;
+    }
+
     return {
       getState: getState,
       dispatch: dispatch,
-      subscribe: subscribe
+      subscribe: subscribe,
+      unubscribeAll: unubscribeAll
     };
   }
 
@@ -1782,6 +1791,13 @@
       }
     }
   }
+  function addEventHandler(root, className, event, handler) {
+    var element = getElement(root, className);
+
+    if (element) {
+      element.addEventListener(event, handler);
+    }
+  }
 
   function dispatchDOMEvent(store) {
     var element = document.querySelector(store.getState().options.selector);
@@ -1856,7 +1872,7 @@
     var root = document.querySelector(selector);
 
     if (!root) {
-      return;
+      return undefined;
     }
 
     if (injectStyles) {
@@ -1883,22 +1899,38 @@
       registerEvents(store, ticker);
     }
 
+    var destroyed = false;
+
+    function _destroy() {
+      ticker.stop('destroy');
+      store.unubscribeAll();
+      window.removeEventListener('resize', resize);
+      root.innerHTML = '';
+      destroyed = true;
+    }
+
     return {
       start: function start() {
+        if (destroyed) return;
+
         if (!store.getState().ticker.isRunning) {
           ticker.start('apiStart');
         }
       },
       stop: function stop() {
+        if (destroyed) return;
         ticker.stop('apiStop');
       },
       rewind: function rewind() {
+        if (destroyed) return;
         ticker.skipBack('apiSkipBack');
       },
       fastforward: function fastforward() {
+        if (destroyed) return;
         ticker.skipForward('apiSkipForward');
       },
       loop: function loop() {
+        if (destroyed) return;
         ticker.loop();
       },
       inc: function inc(value) {
@@ -1906,6 +1938,7 @@
           value = 1;
         }
 
+        if (destroyed) return;
         store.dispatch(actions.ticker.inc('apiInc', value));
       },
       dec: function dec(value) {
@@ -1913,47 +1946,63 @@
           value = 1;
         }
 
+        if (destroyed) return;
         store.dispatch(actions.ticker.dec('apiDec', value));
       },
       getDate: function getDate() {
-        return store.getState().ticker.currentDate;
+        return destroyed ? '' : store.getState().ticker.currentDate;
       },
       setDate: function setDate(inputDate) {
+        if (destroyed) return;
         store.dispatch(actions.ticker.updateDate(getDateString(inputDate), 'apiSetDate'));
       },
       getAllDates: function getAllDates() {
-        return [].concat(store.getState().ticker.dates);
+        return destroyed ? [''] : [].concat(store.getState().ticker.dates);
       },
       createScroller: function createScroller$1() {
+        if (destroyed) return;
+
         createScroller(root, store);
       },
       selections: {
         select: function select(name) {
+          if (destroyed) return;
           d3$1.select(root).select('rect.' + safeName(name)).classed('selected', true);
           store.dispatch(actions.data.addSelection(name));
         },
         unselect: function unselect(name) {
+          if (destroyed) return;
           d3$1.select(root).select('rect.' + safeName(name)).classed('selected', false);
           store.dispatch(actions.data.removeSelection(name));
         },
         unselectAll: function unselectAll() {
+          if (destroyed) return;
           d3$1.select(root).selectAll('rect').classed('selected', false);
           store.dispatch(actions.data.resetSelections());
         }
       },
       groups: {
         hide: function hide(group) {
+          if (destroyed) return;
           store.dispatch(actions.data.addFilter(group));
         },
         show: function show(group) {
+          if (destroyed) return;
           store.dispatch(actions.data.removeFilter(group));
         },
         showOnly: function showOnly(group) {
+          if (destroyed) return;
           store.dispatch(actions.data.allExceptFilter(group));
         },
         showAll: function showAll() {
+          if (destroyed) return;
           store.dispatch(actions.data.resetFilters());
         }
+      },
+      destroy: function destroy() {
+        if (destroyed) return;
+
+        _destroy();
       }
     };
   }

@@ -50,4 +50,5 @@ export type TickerEvent =
   | 'apiInc'
   | 'apiDec'
   | 'apiSetDate'
-  | 'scroll';
+  | 'scroll'
+  | 'destroy';

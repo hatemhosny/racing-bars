@@ -156,18 +156,6 @@ export function removeElement(root: HTMLElement, className: string) {
   }
 }
 
-export function addEventHandler(
-  root: HTMLElement,
-  className: string,
-  event: string,
-  handler: () => void,
-) {
-  const element = getElement(root, className);
-  if (element) {
-    element.addEventListener(event, handler);
-  }
-}
-
 export function getText(
   param: string | ParamFunction,
   currentDate: string,

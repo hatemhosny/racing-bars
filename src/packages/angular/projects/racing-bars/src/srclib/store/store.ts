@@ -37,9 +37,14 @@ export function createStore(reducer: Reducer = rootReducer, preloadedState?: Sta
     });
   }
 
+  function unubscribeAll() {
+    subscribers.length = 0;
+  }
+
   return {
     getState,
     dispatch,
     subscribe,
+    unubscribeAll,
   };
 }

@@ -21,6 +21,7 @@ export interface Race {
     showOnly: (group: string) => void;
     showAll: () => void;
   };
+  destroy: () => void;
 }
 
 export interface Renderer {

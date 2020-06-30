@@ -1,7 +1,7 @@
 import { elements } from './elements';
 import { Store } from './store';
 import { Ticker } from './ticker';
-import { addEventHandler, hideElement } from './utils';
+import { hideElement, getElement } from './utils';
 import { DOMCustomEvent } from './models';
 
 export function registerEvents(store: Store, ticker: Ticker) {
@@ -78,6 +78,18 @@ export function registerEvents(store: Store, ticker: Ticker) {
         }
       });
     }
+  }
+}
+
+export function addEventHandler(
+  root: HTMLElement,
+  className: string,
+  event: string,
+  handler: () => void,
+) {
+  const element = getElement(root, className);
+  if (element) {
+    element.addEventListener(event, handler);
   }
 }
 

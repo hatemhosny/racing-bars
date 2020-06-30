@@ -82,7 +82,7 @@ export class RacingBarsComponent implements OnInit, OnChanges, OnDestroy {
 
   private cleanUp() {
     if (this.racer) {
-      this.racer.stop();
+      this.racer.destroy();
     }
   }
 
