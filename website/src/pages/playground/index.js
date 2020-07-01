@@ -1,9 +1,9 @@
 import React from 'react';
 import Layout from '@theme/Layout';
 
-function Hello() {
+function Playground() {
   return (
-    <Layout title="Hello">
+    <Layout title="Playground">
       <div
         style={{
           display: 'flex',
@@ -14,7 +14,7 @@ function Hello() {
         }}
       >
         <iframe
-          src="https://jsbin.com/kesapad/edit?html,output"
+          src="https://repl.it/@hatemhosny/racing-bars?lite=true#index.js"
           style={{
             width: '95vw',
             height: '450px',
@@ -22,11 +22,15 @@ function Hello() {
             borderRadius: '4px',
             overflow: 'hidden',
           }}
-          title="hatemhosny/codesandbox-demo"
+          scrolling="no"
+          frameborder="no"
+          allowtransparency="true"
+          allowfullscreen="true"
+          sandbox="allow-forms allow-pointer-lock allow-popups allow-same-origin allow-scripts allow-modals"
         ></iframe>
       </div>
     </Layout>
   );
 }
 
-export default Hello;
+export default Playground;

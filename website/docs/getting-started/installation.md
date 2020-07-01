@@ -38,9 +38,18 @@ then you can import it:
 </script>
 ```
 
-### Direct Download
+### Direct download
 
 The library can alternatively be downloaded directly as:
 
 - UMD module: [download](#)
 - ES module: [download](#)
+
+### Lite bundle
+
+If you are already using d3, you may use the "lite" bundle which does not include d3
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/d3@5.16.0/dist/d3.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/racing-bars/lite/index.umd.js"></script>
+```

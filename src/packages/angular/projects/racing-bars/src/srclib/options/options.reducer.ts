@@ -48,10 +48,10 @@ export function optionsReducer(state = initialState, action: OptionsAction): Opt
       const excludedKeys = ['inputHeight', 'inputWidth', 'minHeight', 'minWidth'];
       const options: Partial<Options> = {};
 
-      // remove falsey values and excluded keys
+      // remove null, undefined and excluded keys
       (Object.keys(action.payload) as Array<keyof Options>).forEach((key) => {
-        if (action.payload[key] && !excludedKeys.includes(key)) {
-          (options[key] as any) = action.payload[key];
+        if (!excludedKeys.includes(key)) {
+          (options[key] as any) = action.payload[key] ?? state[key];
         }
       });
 

@@ -605,8 +605,10 @@
           var excludedKeys = ['inputHeight', 'inputWidth', 'minHeight', 'minWidth'];
           var options = {};
           Object.keys(action.payload).forEach(function (key) {
-            if (action.payload[key] && !excludedKeys.includes(key)) {
-              options[key] = action.payload[key];
+            if (!excludedKeys.includes(key)) {
+              var _action$payload$key;
+
+              options[key] = (_action$payload$key = action.payload[key]) != null ? _action$payload$key : state[key];
             }
           });
           var startDate = options.startDate ? getDateString(options.startDate) : '';

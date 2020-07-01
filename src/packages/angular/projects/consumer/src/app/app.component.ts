@@ -2,7 +2,12 @@ import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-root',
-  template: `<racing-bars dataUrl="assets/data/population.csv" dataType="csv"> </racing-bars>`,
+  template: `<racing-bars
+    dataUrl="assets/data/population.csv"
+    dataType="csv"
+    title="World Population"
+  >
+  </racing-bars>`,
   styles: [
     `
       racing-bars {
