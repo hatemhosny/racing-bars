@@ -1,9 +1,10 @@
 # Dependencies
 node_modules
 
-# Production
+# build files
 /build
-/dist
+dist
+/website/static/api
 
 # Generated files
 coverage

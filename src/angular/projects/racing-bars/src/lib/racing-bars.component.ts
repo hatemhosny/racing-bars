@@ -1,6 +1,5 @@
 import { Component, Input, OnInit, OnChanges, OnDestroy } from '@angular/core';
-import { racingBars } from '..';
-import { Options, Data, WideData, Race } from '../srclib';
+import { generateId, race, Options, Data, WideData, Race } from '../srclib';
 import { getData } from './shared';
 
 @Component({
@@ -61,7 +60,7 @@ export class RacingBarsComponent implements OnInit, OnChanges, OnDestroy {
   public racer: Race;
 
   public ngOnInit() {
-    this.id = this.elementId || racingBars.generateId();
+    this.id = this.elementId || generateId();
     this.runRace();
   }
 
@@ -77,7 +76,7 @@ export class RacingBarsComponent implements OnInit, OnChanges, OnDestroy {
     this.cleanUp();
     const { dataPromise, options } = getData(this.getProps(), this.id);
     const data = await dataPromise;
-    this.racer = racingBars.race(data, options);
+    this.racer = race(data, options);
   }
 
   private cleanUp() {

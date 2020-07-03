@@ -1,4 +1,4 @@
-import { loadData } from '../..';
+import { loadData } from '..';
 
 export function getData(props: any, elementId: string) {
   const selector = '#' + elementId;

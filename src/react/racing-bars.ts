@@ -1,5 +1,5 @@
 import React from 'react';
-import { generateId, race, Race } from '../..';
+import { generateId, race, Race } from '..';
 import { getData } from '../shared';
 
 export class RacingBarsComponent extends React.PureComponent {

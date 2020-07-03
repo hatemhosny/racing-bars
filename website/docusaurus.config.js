@@ -32,6 +32,11 @@ module.exports = {
         {
           href: 'https://jsbin.com/kesapad/edit?html,output',
           label: 'Playground',
+          position: 'left',
+        },
+        {
+          href: '/api/modules/_index_.html',
+          label: 'API',
           position: 'right',
         },
         {

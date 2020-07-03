@@ -1,4 +1,4 @@
-import { generateId, race } from '../..';
+import { generateId, race } from '..';
 import { getData } from '../shared';
 
 export const RacingBarsComponent = {
