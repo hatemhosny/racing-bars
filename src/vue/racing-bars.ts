@@ -1,5 +1,5 @@
-import { generateId, race } from '..';
-import { getData } from '../shared';
+import { race } from '..';
+import { generateId, getData } from '../shared';
 
 export const RacingBarsComponent = {
   name: 'racing-bars',

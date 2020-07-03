@@ -67,19 +67,11 @@ export function random(InputSeed: string | number) {
   return x - Math.floor(x);
 }
 
-export function randomString(prefix: string, n: number) {
-  const rnd = Array(3)
-    .fill(null)
-    .map(() => Math.random().toString(36).substr(2))
-    .join('');
-  return prefix + rnd.slice(-n);
-}
-
-export function shuffle(arr: any[], seed: number) {
+export function shuffle(arr: string[], seed: number) {
   const array = [...arr];
   let m = array.length;
-  let t;
-  let i;
+  let t: string;
+  let i: number;
 
   while (m) {
     i = Math.floor(random(seed) * m--);
@@ -92,12 +84,8 @@ export function shuffle(arr: any[], seed: number) {
   return array;
 }
 
-export function generateId(prefix = 'racingbars', n = 8) {
-  return randomString(prefix, n);
-}
-
 export function getHeight(element: HTMLElement, minHeight: number, height?: string) {
-  let newHeight;
+  let newHeight: number;
   if (!height) {
     newHeight = element.getBoundingClientRect().height;
   } else if (String(height).startsWith('window')) {
@@ -110,7 +98,7 @@ export function getHeight(element: HTMLElement, minHeight: number, height?: stri
 }
 
 export function getWidth(element: HTMLElement, minWidth: number, width?: string) {
-  let newWidth;
+  let newWidth: number;
   if (!width) {
     newWidth = element.getBoundingClientRect().width;
   } else if (String(width).startsWith('window')) {

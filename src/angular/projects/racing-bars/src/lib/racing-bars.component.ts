@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, OnChanges, OnDestroy } from '@angular/core';
-import { generateId, race, Data, WideData, Race } from '../srclib';
-import { getData } from './shared';
+import { race, Data, WideData, Race } from '../srclib';
+import { generateId, getData } from './shared';
 
 @Component({
   selector: 'racing-bars',
