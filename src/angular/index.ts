@@ -1,2 +1,2 @@
 export * from './projects/racing-bars/src';
-export * as racingBars from '..';
+export { Props } from '../shared';

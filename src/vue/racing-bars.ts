@@ -1,5 +1,5 @@
 import { race } from '..';
-import { generateId, getData } from '../shared';
+import { generateId, getDataPromiseAndOptions, Props } from '../shared';
 
 export const RacingBarsComponent = {
   name: 'racing-bars',
@@ -25,7 +25,7 @@ export const RacingBarsComponent = {
   },
   methods: {
     async runRace() {
-      function toCamelCase(attrs: { [key: string]: any }) {
+      function toCamelCase(attrs: any) {
         const camelize = (s: string) => s.replace(/-./g, (x) => x.toUpperCase()[1]);
         return Object.assign(
           {},
@@ -34,8 +34,8 @@ export const RacingBarsComponent = {
       }
 
       this.cleanUp();
-      const attrs = toCamelCase(this.$attrs);
-      const { dataPromise, options } = getData(attrs, this.elementId);
+      const attrs: Props = toCamelCase(this.$attrs);
+      const { dataPromise, options } = getDataPromiseAndOptions(attrs, this.elementId);
       const data = await dataPromise;
       this.racer = race(data, options);
     },

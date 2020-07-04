@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, OnChanges, OnDestroy } from '@angular/core';
 import { race, Data, WideData, Race } from '../srclib';
-import { generateId, getData } from './shared';
+import { generateId, getDataPromiseAndOptions, Props } from './shared';
 
 @Component({
   selector: 'racing-bars',
@@ -57,6 +57,7 @@ export class RacingBarsComponent implements OnInit, OnChanges, OnDestroy {
   @Input() public fixedOrder: string[];
   @Input() public highlightBars: boolean;
   @Input() public selectBars: boolean;
+
   public id: string;
   public racer: Race;
 
@@ -75,7 +76,7 @@ export class RacingBarsComponent implements OnInit, OnChanges, OnDestroy {
 
   private async runRace() {
     this.cleanUp();
-    const { dataPromise, options } = getData(this.getProps(), this.id);
+    const { dataPromise, options } = getDataPromiseAndOptions(this.getProps(), this.id);
     const data = await dataPromise;
     this.racer = race(data, options);
   }
@@ -86,7 +87,7 @@ export class RacingBarsComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  private getProps() {
+  private getProps(): Props {
     return {
       data: this.data,
       dataUrl: this.dataUrl,

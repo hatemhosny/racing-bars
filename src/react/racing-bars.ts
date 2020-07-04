@@ -1,11 +1,12 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
 import React from 'react';
 import { race, Race } from '..';
-import { generateId, getData } from '../shared';
+import { generateId, getDataPromiseAndOptions, Props } from '../shared';
 
 export class RacingBarsComponent extends React.PureComponent {
   public elementId: string;
   public racer: Race | undefined;
-  public constructor(props: any) {
+  public constructor(props: Props) {
     super(props);
     this.elementId = props.elementId || generateId();
   }
@@ -32,7 +33,7 @@ export class RacingBarsComponent extends React.PureComponent {
 
   public async runRace() {
     this.cleanUp();
-    const { dataPromise, options } = getData(this.props as any, this.elementId);
+    const { dataPromise, options } = getDataPromiseAndOptions(this.props as Props, this.elementId);
     const data = await dataPromise;
     this.racer = race(data, options);
   }

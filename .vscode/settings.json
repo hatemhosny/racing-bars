@@ -19,5 +19,8 @@ Happy linting! 💖
     "*.md": "mdx"
   },
   "jest.autoEnable": false,
-  "python.formatting.provider": "black"
+  "python.formatting.provider": "black",
+  "conventionalCommits.scopes": [
+    "frameworks"
+  ]
 }

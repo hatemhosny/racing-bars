@@ -1,4 +1,4 @@
 .eslintrc.js
 dist
-src/css2ts.js
-src/react/react.js
+src/**/*.js
+website/**/*.js

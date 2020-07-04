@@ -1,3 +1,3 @@
 // required for ./shared
 
-export { loadData } from '../srclib';
+export { loadData, Data, WideData, Options } from '../srclib';

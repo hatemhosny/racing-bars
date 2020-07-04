@@ -10,17 +10,18 @@ module.exports = {
     {
       type: 'category',
       label: 'Documentation',
-      items: [
-        'documentation/data',
-        'documentation/options',
-        'documentation/api',
-        'documentation/events',
-      ],
+      items: ['documentation/data', 'documentation/options', 'documentation/events'],
     },
     {
       type: 'category',
-      label: 'Packages',
-      items: ['packages/react', 'packages/vue', 'packages/typescript', 'packages/python'],
+      label: 'Frameworks and Languages',
+      items: [
+        'frameworks/angular',
+        'frameworks/react',
+        'frameworks/vue',
+        'frameworks/typescript',
+        'frameworks/python',
+      ],
     },
     {
       type: 'category',
