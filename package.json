@@ -1,6 +1,6 @@
 {
   "name": "racing-bars",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "Bar Chart Race",
   "repository": "https://github.com/hatemhosny/racing-bars",
   "license": "MIT",
@@ -48,11 +48,11 @@
     "symlink:ng-shared": "symlink-dir src/shared src/angular/projects/racing-bars/src/lib/shared",
     "install:angular": "cd src/angular && npm i",
     "symlinks": "run-s symlink:*",
-    "postinstall": "run-s install:angular symlinks",
-    "version": "standard-version",
     "reset": "git clean -dfx && git reset --hard && npm i",
+    "postinstall": "run-s install:angular symlinks",
     "clean": "recursive-delete dist",
-    "prepare-release": "run-s reset build test cov doc:html version doc:publish"
+    "release": "standard-version",
+    "prepare-release": "run-s reset build test cov release doc:publish"
   },
   "scripts-info": {
     "info": "Display information about the package scripts",
@@ -89,6 +89,7 @@
     "classnames": "2.2.6",
     "codecov": "3.7.0",
     "cz-conventional-changelog": "3.2.0",
+    "docusaurus-lunr-search": "^2.0.1",
     "eslint": "7.0.0",
     "eslint-config-prettier": "6.11.0",
     "eslint-plugin-import": "2.20.2",

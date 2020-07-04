@@ -21,6 +21,7 @@ Happy linting! 💖
   "jest.autoEnable": false,
   "python.formatting.provider": "black",
   "conventionalCommits.scopes": [
-    "frameworks"
+    "frameworks",
+    "docs"
   ]
 }

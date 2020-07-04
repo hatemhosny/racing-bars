@@ -129,6 +129,7 @@ module.exports = {
         editUrl: 'https://github.com/facebook/docusaurus/edit/master/website/blog/',
       },
     ],
+    [path.resolve(__dirname, '../node_modules/docusaurus-lunr-search/')],
   ],
   scripts: ['https://static.jsbin.com/js/embed.min.js?4.1.7'],
 };
