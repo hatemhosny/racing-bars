@@ -22,6 +22,7 @@ Happy linting! 💖
   "python.formatting.provider": "black",
   "conventionalCommits.scopes": [
     "frameworks",
-    "docs"
+    "docs",
+    "website"
   ]
 }

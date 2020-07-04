@@ -16,6 +16,7 @@ module.exports = {
       type: 'category',
       label: 'Frameworks and Languages',
       items: [
+        'frameworks/js',
         'frameworks/angular',
         'frameworks/react',
         'frameworks/vue',

@@ -95,6 +95,9 @@ module.exports = {
       ],
       copyright: `Copyright © ${new Date().getFullYear()} Hatem Hosny.`,
     },
+    prism: {
+      additionalLanguages: ['r', 'julia'],
+    },
   },
   presets: [
     [
@@ -131,5 +134,4 @@ module.exports = {
     ],
     [path.resolve(__dirname, '../node_modules/docusaurus-lunr-search/')],
   ],
-  scripts: ['https://static.jsbin.com/js/embed.min.js?4.1.7'],
 };
