@@ -36,7 +36,7 @@ export class RacingBarsComponent implements OnInit, OnChanges, OnDestroy {
   @Input() public endDate: string;
   @Input() public loop: boolean;
   @Input() public caption: string;
-  @Input() public labelsOnBars: boolean;
+  @Input() public labelsPosition: 'inside' | 'outside';
   @Input() public labelsWidth: number;
   @Input() public showIcons: boolean;
   @Input() public colorSeed: string | number;
@@ -104,7 +104,7 @@ export class RacingBarsComponent implements OnInit, OnChanges, OnDestroy {
       endDate: this.endDate,
       loop: this.loop,
       caption: this.caption,
-      labelsOnBars: this.labelsOnBars,
+      labelsPosition: this.labelsPosition,
       labelsWidth: this.labelsWidth,
       showIcons: this.showIcons,
       colorSeed: this.colorSeed,

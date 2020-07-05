@@ -25,7 +25,7 @@ icon: `https://www.countryflags.io/${d.code.toLowerCase()}/flat/64.png`,
     caption="Source: World Bank"
     dateCounter="YYYY"
     showIcons={true}
-    labelsOnBars={false}
+    labelsPosition="outside"
   />
 </div>
 
@@ -48,7 +48,7 @@ icon: `https://www.countryflags.io/${d.code.toLowerCase()}/flat/64.png`,
     caption: 'Source: World Bank',
     dateCounter: 'YYYY',
     showIcons: true,
-    labelsOnBars: false,
+    labelsPosition: 'outside',
   };
 
   racingBars.loadData('/data/population.csv', 'csv').then((data) => {

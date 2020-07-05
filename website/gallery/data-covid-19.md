@@ -17,7 +17,7 @@ A demo showing the use of [covid-19 dataset](/docs/sample-datasets#covid-19).
     title="Covid-19"
     subTitle="Number of confirmed cases"
     dateCounter="MMM DD, YYYY"
-    labelsOnBars={false}
+    labelsPosition="outside"
 />
 
 </div>
@@ -32,7 +32,7 @@ A demo showing the use of [covid-19 dataset](/docs/sample-datasets#covid-19).
     title: 'Covid-19',
     subTitle: 'Number of confirmed cases',
     dateCounter: 'MMM DD, YYYY',
-    labelsOnBars: false,
+    labelsPosition: 'outside',
   };
 
   racingBars.loadData('/data/covid-19.csv', 'csv').then((data) => {

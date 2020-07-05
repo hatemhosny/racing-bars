@@ -23,7 +23,7 @@ const initialState: Options = {
   subTitle: '',
   caption: '',
   dateCounter: 'MM/YYYY',
-  labelsOnBars: true,
+  labelsPosition: 'inside',
   labelsWidth: 150,
   showIcons: false,
   showControls: 'all',

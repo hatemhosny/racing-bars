@@ -54,7 +54,7 @@
       showGroups: false,
       autorun: false,
       // colorSeed: "asdfs",
-      labelsOnBars: false,
+      labelsPosition: 'outside',
       labelsWidth: 250,
       // embedStyles: false,
       // theme: 'dark',
@@ -66,7 +66,12 @@
       racingBars.race(data, { ...options, selector: '#race1' });
     });
     racingBars.loadData('data/population.csv', 'csv').then((data) => {
-      racingBars.race(data, { ...options, selector: '#race2', theme: 'dark', labelsOnBars: true });
+      racingBars.race(data, {
+        ...options,
+        selector: '#race2',
+        theme: 'dark',
+        labelsPosition: 'inside',
+      });
     });
     racingBars.loadData('data/population.csv', 'csv').then((data) => {
       racingBars.race(data, { ...options, selector: '#race3', startDate: '2010-12-31' });

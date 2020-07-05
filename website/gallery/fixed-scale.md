@@ -9,7 +9,7 @@ A demo for using [`fixedScale`](/docs/documentation/options#fixedscale).
 <!--truncate-->
 
 Notice that initially most of the bar labels are not visible.
-To avoid such problem, consider setting [`labelsOnBars`](/docs/documentation/options#labelsonbars) to `false` ([demo](./fixed-scale-labels)).
+To avoid such problem, consider setting [`labelsPosition`](/docs/documentation/options#labelsposition) to `'outside'` ([demo](./fixed-scale-labels)).
 
 ### Chart
 
@@ -17,8 +17,7 @@ To avoid such problem, consider setting [`labelsOnBars`](/docs/documentation/opt
   <RacingBarsComponent
     dataUrl="/data/covid-19.csv"
     dataType="csv"
-    title="World Population"
-    subTitle="in millions"
+    title="Covid-19 Confirmed Cases"
     fixedScale={true}
 />
 
@@ -26,13 +25,12 @@ To avoid such problem, consider setting [`labelsOnBars`](/docs/documentation/opt
 
 ### Code
 
-```html {7}
+```html {6}
 <div id="race"></div>
 <script>
   const options = {
     selector: '#race',
-    title: 'World Population',
-    subTitle: 'in millions',
+    title: 'Covid-19 Confirmed Cases',
     fixedScale: true,
   };
 

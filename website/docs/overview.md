@@ -54,7 +54,7 @@ This code:
     dateCounter: 'MMM YYYY',
     showGroups: false,
     showIcons: true,
-    labelsOnBars: false,
+    labelsPosition: 'outside',
     labelsWidth: 120,
     autorun: false,
     showOverlays: 'all',
@@ -91,7 +91,7 @@ icon: `https://www.countryflags.io/${d.code.toLowerCase()}/flat/64.png`,
       dateCounter= "MMM YYYY"
       showGroups={false}
       showIcons={true}
-      labelsOnBars={false}
+      labelsPosition="outside"
       labelsWidth="120"
       autorun={false}
       showOverlays="all"

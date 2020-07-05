@@ -55,7 +55,7 @@ export interface Props {
   endDate: string;
   loop: boolean;
   caption: string;
-  labelsOnBars: boolean;
+  labelsPosition: 'inside' | 'outside';
   labelsWidth: number;
   showIcons: boolean;
   colorSeed: string | number;

@@ -22,7 +22,7 @@ icon: `https://www.countryflags.io/${d.code.toLowerCase()}/flat/64.png`,
     dataTransform={transformFn}
     title="World Population in 60 Years"
     showIcons={true}
-    labelsOnBars={false}
+    labelsPosition="outside"
     showGroups={false}
   />
 </div>
@@ -37,7 +37,7 @@ icon: `https://www.countryflags.io/${d.code.toLowerCase()}/flat/64.png`,
     dataTransform: transformFn,
     title: 'World Population',
     showIcons: true,
-    labelsOnBars: false,
+    labelsPosition: 'outside',
     showGroups: false,
   };
 
@@ -52,4 +52,4 @@ icon: `https://www.countryflags.io/${d.code.toLowerCase()}/flat/64.png`,
 </script>
 ```
 
-Notice setting [`labelsOnBars`](/docs/documentation/options#labelsonbars) to false to keep the labels visible, since the icons will take some space on the bar.
+Notice setting [`labelsPosition`](/docs/documentation/options#labelsposition) to `'outside'` to keep the labels visible, since the icons will take some space on the bar.

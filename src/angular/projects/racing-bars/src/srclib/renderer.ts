@@ -57,7 +57,7 @@ export function createRenderer(data: Data[], store: Store): Renderer {
       subTitle,
       caption,
       dateCounter,
-      labelsOnBars,
+      labelsPosition,
       showIcons,
       labelsWidth,
       inputHeight,
@@ -86,7 +86,7 @@ export function createRenderer(data: Data[], store: Store): Renderer {
     updateControls();
 
     function renderInitialFrame() {
-      const labelsArea = labelsOnBars ? 0 : labelsWidth;
+      const labelsArea = labelsPosition === 'inside' ? 0 : labelsWidth;
       const groupsArea = showGroups ? 40 : 0;
 
       margin = {
@@ -184,9 +184,10 @@ export function createRenderer(data: Data[], store: Store): Renderer {
       barY = (d: Data) => y(d.rank as number) + 5;
       iconSize = showIcons ? barHeight * 0.9 : 0;
       iconSpace = showIcons ? iconSize + labelPadding : 0;
-      labelX = labelsOnBars
-        ? (d: Data) => x(d.value) - labelPadding - iconSpace
-        : margin.left - labelPadding;
+      labelX =
+        labelsPosition === 'inside'
+          ? (d: Data) => x(d.value) - labelPadding - iconSpace
+          : margin.left - labelPadding;
 
       xAxis = d3
         .axisTop(x)
@@ -224,7 +225,7 @@ export function createRenderer(data: Data[], store: Store): Renderer {
         .enter()
         .append('text')
         .attr('class', 'label')
-        .classed('outside-bars', !labelsOnBars)
+        .classed('outside-bars', labelsPosition !== 'inside')
         .attr('x', labelX)
         .attr('y', (d: Data) => barY(d) + barHalfHeight)
         .style('text-anchor', 'end')
@@ -359,7 +360,7 @@ export function createRenderer(data: Data[], store: Store): Renderer {
       dateCounter,
       fixedScale,
       fixedOrder,
-      labelsOnBars,
+      labelsPosition,
     } = store.getState().options;
 
     const topN = fixedOrder.length > 0 ? fixedOrder.length : store.getState().options.topN;
@@ -430,7 +431,7 @@ export function createRenderer(data: Data[], store: Store): Renderer {
       .enter()
       .append('text')
       .attr('class', 'label')
-      .classed('outside-bars', !labelsOnBars)
+      .classed('outside-bars', labelsPosition !== 'inside')
       .attr('x', labelX)
       .attr('y', () => y(topN + 1) + 5 + barHalfHeight)
       .style('text-anchor', 'end')

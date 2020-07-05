@@ -296,7 +296,7 @@ The maximum value for the chart scale will not be changed between dates.
 
 Note that if initial values are much smaller that later values,
 bar labels may not initially be visible ([view in gallery](/gallery/fixed-scale)).
-You may then want to set [`labelsOnBars`](#labelsonbars) to `false`
+You may then want to set [`labelsPosition`](#labelsposition) to `"outside"`
 ([view in gallery](/gallery/fixed-scale-labels)).
 
 - Type: boolean
@@ -334,6 +334,27 @@ This example disables highlighting bars on mouseover
 ```js
 const options = {
   highlightBars: false,
+};
+```
+
+### labelsPosition
+
+Sets the position of bar labels. If set to `"inside"`, the labels are positioned inside the bars.
+Otherwise, the labels are positioned on the left side of the bars.
+
+Note that if this is set to `"inside"` (default),
+bars with small width (low values) may have their labels partially invisible ([demo](/gallery/fixed-scale)).
+
+- Type: string
+- Valid values: ["inside", "outside"]
+- Default: "inside"
+- Examples:
+
+[view in gallery](/gallery/labelsposition)
+
+```js
+const options = {
+  labelsPosition: 'outside',
 };
 ```
 
@@ -428,7 +449,7 @@ const options = {
 If `true` (default) and if the dataset has the optional field `icon`, an icon will be shown on bars.
 The `icon` field will be used as the url for the image used.
 
-This will take some space from the bar, so some labels may not be visible. If so, consider setting the option [`labelsOnBars`](#labelsonbars) to `false`.
+This will take some space from the bar, so some labels may not be visible. If so, consider setting the option [`labelsPosition`](#labelsposition) to `'outside'`.
 
 - Type: boolean
 - Default: `true`
@@ -647,7 +668,7 @@ const options = {
   height: ""
 ✔ highlightBars: true
   injectStyles: true
-  labelsOnBars: true
+  labelsPosition: 'inside'
   labelsWidth: 150
 ✔ loop: false
 ✔ selectBars: true

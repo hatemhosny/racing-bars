@@ -4,7 +4,7 @@ title: Fixed Scale (with Visible Labels)
 
 import { RacingBarsComponent } from '../racing-bars.js';
 
-A demo for using [`fixedScale`](/docs/documentation/options#fixedscale) with [`labelsOnBars`](/docs/documentation/options#labelsonbars),
+A demo for using [`fixedScale`](/docs/documentation/options#fixedscale) with [`labelsPosition`](/docs/documentation/options#labelsposition),
 to avoid [such problem](./fixed-scale).
 
 <!--truncate-->
@@ -15,25 +15,23 @@ to avoid [such problem](./fixed-scale).
   <RacingBarsComponent
     dataUrl="/data/covid-19.csv"
     dataType="csv"
-    title="World Population"
-    subTitle="in millions"
+    title="Covid-19 Confirmed Cases"
     fixedScale={true}
-    labelsOnBars={false}
+    labelsPosition="outside"
 />
 
 </div>
 
 ### Code
 
-```html {7,8}
+```html {6,7}
 <div id="race"></div>
 <script>
   const options = {
     selector: '#race',
-    title: 'World Population',
-    subTitle: 'in millions',
+    title: 'Covid-19 Confirmed Cases',
     fixedScale: true,
-    labelsOnBars: false,
+    labelsPosition: 'outside',
   };
 
   racingBars.loadData('/data/covid-19.csv', 'csv').then((data) => {
