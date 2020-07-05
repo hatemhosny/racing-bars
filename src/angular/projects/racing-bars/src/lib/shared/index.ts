@@ -32,11 +32,10 @@ export function generateId(prefix = 'racingbars', n = 8) {
 
 /**
  * Interface for component props.
- * Defines [Options for components](/docs/documentation/options).
- *
- * @extends [[Options]]
+ * Defines options passed to components (angular/react/vue).
+ * See [options documentations](/docs/documentation/options) for details.
  */
-export interface Props extends Partial<Options> {
+export interface Props {
   /** Data array */
   data: Data[] | WideData[];
   /** Url to fetch data from. This is ignored if [[Props.data]] is specified. */
@@ -45,4 +44,36 @@ export interface Props extends Partial<Options> {
   dataType: 'json' | 'csv' | 'tsv' | 'xml' | undefined;
   /** an `id` to assign to the generated DOM element */
   elementId: string;
+  dataShape: 'long' | 'wide';
+  dataTransform: null | ((data: Data[] | WideData[]) => Data[] | WideData[]);
+  fillDateGaps: false | 'years' | 'months' | 'days';
+  fillDateGapsValue: 'last' | 'interpolate';
+  title: string;
+  subTitle: string;
+  dateCounter: string | ((currentDate: string, dateSlice: Data[], allDates: string[]) => string);
+  startDate: string;
+  endDate: string;
+  loop: boolean;
+  caption: string;
+  labelsOnBars: boolean;
+  labelsWidth: number;
+  showIcons: boolean;
+  colorSeed: string | number;
+  showGroups: boolean;
+  tickDuration: number;
+  topN: number;
+  height: string;
+  width: string;
+  disableClickEvents: boolean;
+  disableKeyboardEvents: boolean;
+  showControls: 'all' | 'play' | 'none';
+  showOverlays: 'all' | 'play' | 'repeat' | 'none';
+  autorun: boolean;
+  injectStyles: boolean;
+  theme: string;
+  colorMap: { [key: string]: string } | string[];
+  fixedScale: boolean;
+  fixedOrder: string[];
+  highlightBars: boolean;
+  selectBars: boolean;
 }
