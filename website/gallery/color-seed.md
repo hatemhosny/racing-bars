@@ -2,7 +2,7 @@
 title: Color Seed
 ---
 
-import { RacingBarsComponent } from '../racing-bars.js';
+import RacingBars from '../racing-bars.js';
 
 A demo for using color seed.
 
@@ -11,7 +11,7 @@ A demo for using color seed.
 ### Chart
 
 <div className="gallery">
-  <RacingBarsComponent
+  <RacingBars
     dataUrl="/data/population.csv"
     dataType="csv"
     title="World Population"
@@ -43,7 +43,7 @@ A demo for using color seed.
 ### Chart
 
 <div className="gallery">
-  <RacingBarsComponent
+  <RacingBars
     dataUrl="/data/population.csv"
     dataType="csv"
     title="World Population"

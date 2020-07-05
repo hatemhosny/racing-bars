@@ -2,7 +2,7 @@
 title: Chart Speed (tickDuration)
 ---
 
-import { RacingBarsComponent } from '../racing-bars.js';
+import RacingBars from '../racing-bars.js';
 
 A demo for using `tickDuration` to control chart "speed".
 
@@ -11,7 +11,7 @@ A demo for using `tickDuration` to control chart "speed".
 ### Chart
 
 <div className="gallery">
-  <RacingBarsComponent
+  <RacingBars
     dataUrl="/data/population.csv"
     dataType="csv"
     title="World Population"

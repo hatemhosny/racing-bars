@@ -1,7 +1,7 @@
 import { race } from '..';
 import { generateId, getDataPromiseAndOptions, Props } from '../shared';
 
-export const RacingBarsComponent = {
+const RacingBarsComponent = {
   name: 'racing-bars',
   inheritAttrs: false,
   created() {
@@ -46,3 +46,5 @@ export const RacingBarsComponent = {
     },
   },
 };
+
+export default RacingBarsComponent;

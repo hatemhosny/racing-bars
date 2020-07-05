@@ -2,7 +2,7 @@
 title: Caption (string)
 ---
 
-import { RacingBarsComponent } from '../racing-bars.js';
+import RacingBars from '../racing-bars.js';
 import CodeTabs from '../src/Components/code-tabs/code-tabs.js'
 import TabItem from '@theme/TabItem';
 
@@ -13,7 +13,7 @@ A demo for using string in caption.
 ### Chart
 
 <div className="gallery">
-  <RacingBarsComponent
+  <RacingBars
     dataUrl="/data/population.csv"
     dataType="csv"
     caption="Source: World Bank"
@@ -73,9 +73,9 @@ loadData('/data/population.csv', 'csv').then((data: Data[]) => {
 
 <!-- prettier-ignore-start -->
 ```jsx
-import { RacingBarsComponent } from 'racing-bars/react';
+import RacingBars from 'racing-bars/react';
 
-<RacingBarsComponent
+<RacingBars
   dataUrl="/data/population.csv"
   dataType="csv"
   // highlight-next-line
@@ -88,7 +88,7 @@ import { RacingBarsComponent } from 'racing-bars/react';
 <TabItem value="vue">
 
 ```js
-import { RacingBarsComponent as RacingBars } from 'racing-bars/vue';
+import RacingBars from 'racing-bars/vue';
 
 export default {
   name: 'app',

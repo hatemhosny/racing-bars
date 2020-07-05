@@ -2,7 +2,7 @@
 title: Labels Position
 ---
 
-import { RacingBarsComponent } from '../racing-bars.js';
+import RacingBars from '../racing-bars.js';
 
 A demo for using [`labelsPosition`](/docs/documentation/options#labelsposition).
 
@@ -13,7 +13,7 @@ A demo for using [`labelsPosition`](/docs/documentation/options#labelsposition).
 ### Chart
 
 <div className="gallery">
-  <RacingBarsComponent
+  <RacingBars
     dataUrl="/data/population.csv"
     dataType="csv"
     title="World Population"
@@ -46,7 +46,7 @@ A demo for using [`labelsPosition`](/docs/documentation/options#labelsposition).
 ### Chart
 
 <div className="gallery">
-  <RacingBarsComponent
+  <RacingBars
     dataUrl="/data/population.csv"
     dataType="csv"
     title="World Population"

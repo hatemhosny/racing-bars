@@ -2,7 +2,7 @@
 title: Brand Values Dataset
 ---
 
-import { RacingBarsComponent } from '../racing-bars.js';
+import RacingBars from '../racing-bars.js';
 
 A demo showing the use of [Brand Values dataset](/docs/sample-datasets#brand-values).
 
@@ -11,7 +11,7 @@ A demo showing the use of [Brand Values dataset](/docs/sample-datasets#brand-val
 ### Chart
 
 <div className="gallery">
-  <RacingBarsComponent
+  <RacingBars
     dataUrl="/data/brand-values.csv"
     dataType="csv"
     title="18 years of Interbrand’s Top Global Brands"

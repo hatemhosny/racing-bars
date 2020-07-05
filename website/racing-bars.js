@@ -1,1 +1,1 @@
-export { RacingBarsComponent, racingBars } from '../dist/react';
+export { default } from '../dist/react';

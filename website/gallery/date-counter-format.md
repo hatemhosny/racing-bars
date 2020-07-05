@@ -2,7 +2,7 @@
 title: Date Counter (format)
 ---
 
-import { RacingBarsComponent } from '../racing-bars.js';
+import RacingBars from '../racing-bars.js';
 
 This example shows the use of date formatting in `dateCounter`
 
@@ -11,7 +11,7 @@ This example shows the use of date formatting in `dateCounter`
 ### Chart
 
 <div className="gallery">
-  <RacingBarsComponent
+  <RacingBars
     dataUrl="/data/population.csv"
     dataType="csv"
     dateCounter="MMM DD, YYYY 🌍"

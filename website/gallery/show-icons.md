@@ -2,7 +2,7 @@
 title: Icons
 ---
 
-import { RacingBarsComponent } from '../racing-bars.js';
+import RacingBars from '../racing-bars.js';
 
 A demo showing the use of icons ([`showIcons`](/docs/documentation/options#showicons)).
 
@@ -16,7 +16,7 @@ icon: `https://www.countryflags.io/${d.code.toLowerCase()}/flat/64.png`,
 }));
 
 <div className="gallery">
-  <RacingBarsComponent
+  <RacingBars
     dataUrl="/data/population.csv"
     dataType="csv"
     dataTransform={transformFn}

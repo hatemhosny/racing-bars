@@ -2,7 +2,7 @@
 title: Title and Sub-Title
 ---
 
-import { RacingBarsComponent } from '../racing-bars.js';
+import RacingBars from '../racing-bars.js';
 
 A demo for using string in `title` and `subTitle`.
 
@@ -11,7 +11,7 @@ A demo for using string in `title` and `subTitle`.
 ### Chart
 
 <div className="gallery">
-  <RacingBarsComponent
+  <RacingBars
     dataUrl="/data/population.csv"
     dataType="csv"
     title="World Population"

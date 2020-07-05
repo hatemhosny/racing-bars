@@ -2,7 +2,7 @@
 title: Fixed Scale (with Visible Labels)
 ---
 
-import { RacingBarsComponent } from '../racing-bars.js';
+import RacingBars from '../racing-bars.js';
 
 A demo for using [`fixedScale`](/docs/documentation/options#fixedscale) with [`labelsPosition`](/docs/documentation/options#labelsposition),
 to avoid [such problem](./fixed-scale).
@@ -12,7 +12,7 @@ to avoid [such problem](./fixed-scale).
 ### Chart
 
 <div className="gallery">
-  <RacingBarsComponent
+  <RacingBars
     dataUrl="/data/covid-19.csv"
     dataType="csv"
     title="Covid-19 Confirmed Cases"

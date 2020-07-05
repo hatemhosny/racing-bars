@@ -2,7 +2,7 @@
 title: Caption (data function)
 ---
 
-import { RacingBarsComponent } from '../racing-bars.js';
+import RacingBars from '../racing-bars.js';
 
 This example shows the use of [data function](../docs/documentation/options#data-function) in caption.
 
@@ -16,7 +16,7 @@ caption: (currentDate, dateSlice, allDates) =>
 };
 
 <div className="gallery">
-  <RacingBarsComponent
+  <RacingBars
     dataUrl="/data/population.csv"
     dataType="csv"
     caption={options.caption}

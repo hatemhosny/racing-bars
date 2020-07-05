@@ -2,7 +2,7 @@
 title: GDP Dataset
 ---
 
-import { RacingBarsComponent } from '../racing-bars.js';
+import RacingBars from '../racing-bars.js';
 
 A demo showing the use of [GDP dataset](/docs/sample-datasets#gdp).
 
@@ -16,7 +16,7 @@ icon: `https://www.countryflags.io/${d.code.toLowerCase()}/flat/64.png`,
 }));
 
 <div className="gallery">
-  <RacingBarsComponent
+  <RacingBars
     dataUrl="/data/gdp.csv"
     dataType="csv"
     dataTransform={transformFn}

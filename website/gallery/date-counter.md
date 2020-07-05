@@ -2,7 +2,7 @@
 title: Date Counter
 ---
 
-import { RacingBarsComponent } from '../racing-bars.js';
+import RacingBars from '../racing-bars.js';
 
 This example shows the use of [data functions](#).
 The `dateCounter` uses a function to show '[count] of [total]'
@@ -17,7 +17,7 @@ dateCounter: (currentDate, dateSlice, allDates) =>
 };
 
 <div className="gallery">
-  <RacingBarsComponent
+  <RacingBars
     dataUrl="/data/population.csv"
     dataType="csv"
     dateCounter={options.dateCounter}

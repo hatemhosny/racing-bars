@@ -3,7 +3,7 @@ import React from 'react';
 import { race, Race } from '..';
 import { generateId, getDataPromiseAndOptions, Props } from '../shared';
 
-export class RacingBarsComponent extends React.PureComponent {
+class RacingBarsComponent extends React.PureComponent {
   public elementId: string;
   public racer: Race | undefined;
   public constructor(props: Props) {
@@ -44,3 +44,5 @@ export class RacingBarsComponent extends React.PureComponent {
     }
   }
 }
+
+export default RacingBarsComponent;

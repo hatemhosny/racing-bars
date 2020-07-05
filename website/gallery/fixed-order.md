@@ -2,7 +2,7 @@
 title: Fixed Order
 ---
 
-import { RacingBarsComponent } from '../racing-bars.js';
+import RacingBars from '../racing-bars.js';
 
 A demo for using [`fixedOrder`](/docs/documentation/options#fixedorder).
 
@@ -15,7 +15,7 @@ Also note that with this setting it is more likely that the date counter will ov
 ### Chart
 
 <div className="gallery">
-  <RacingBarsComponent
+  <RacingBars
     dataUrl="/data/population.csv"
     dataType="csv"
     title="World Population"

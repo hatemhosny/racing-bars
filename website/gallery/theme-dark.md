@@ -2,7 +2,7 @@
 title: Dark Theme
 ---
 
-import { RacingBarsComponent } from '../racing-bars.js';
+import RacingBars from '../racing-bars.js';
 
 A demo for showing the dark theme.
 
@@ -11,7 +11,7 @@ A demo for showing the dark theme.
 ### Chart
 
 <div className="gallery">
-  <RacingBarsComponent
+  <RacingBars
     dataUrl="/data/population.csv"
     dataType="csv"
     title="World Population"

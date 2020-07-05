@@ -11,7 +11,7 @@ Available for vanilla [javascript](./getting-started/installation.md),
 [vue](./packages/vue.md)
 and [python](./packages/python.md).
 
-import { RacingBarsComponent } from '../racing-bars.js';
+import RacingBars from '../racing-bars.js';
 
 This code:
 
@@ -27,7 +27,7 @@ This code:
 ... produces this chart:
 
 <div className="gallery">
-  <RacingBarsComponent
+  <RacingBars
     dataUrl="/data/population.csv"
     dataType="csv"
   />
@@ -81,7 +81,7 @@ icon: `https://www.countryflags.io/${d.code.toLowerCase()}/flat/64.png`,
 
 <div style={{width: 800, height: 400}}>
   <div className="gallery">
-    <RacingBarsComponent
+    <RacingBars
       dataUrl="/data/population.csv"
       dataType="csv"
       dataTransform={transformFn}

@@ -2,7 +2,7 @@
 title: Fixed Scale (invisible labels!)
 ---
 
-import { RacingBarsComponent } from '../racing-bars.js';
+import RacingBars from '../racing-bars.js';
 
 A demo for using [`fixedScale`](/docs/documentation/options#fixedscale).
 
@@ -14,7 +14,7 @@ To avoid such problem, consider setting [`labelsPosition`](/docs/documentation/o
 ### Chart
 
 <div className="gallery">
-  <RacingBarsComponent
+  <RacingBars
     dataUrl="/data/covid-19.csv"
     dataType="csv"
     title="Covid-19 Confirmed Cases"

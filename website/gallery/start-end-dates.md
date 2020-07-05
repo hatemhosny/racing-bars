@@ -2,7 +2,7 @@
 title: Start and End Dates
 ---
 
-import { RacingBarsComponent } from '../racing-bars.js';
+import RacingBars from '../racing-bars.js';
 
 A demo for using `startDate` and `endDate`.
 
@@ -14,7 +14,7 @@ So the chart will end at the date that is less than or equal to the `endDate`.
 ### Chart
 
 <div className="gallery">
-  <RacingBarsComponent
+  <RacingBars
     dataUrl="/data/population.csv"
     dataType="csv"
     startDate="1970-01-01"

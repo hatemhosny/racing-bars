@@ -2,7 +2,7 @@
 title: Fixed Scale
 ---
 
-import { RacingBarsComponent } from '../racing-bars.js';
+import RacingBars from '../racing-bars.js';
 
 A demo for using [`fixedScale`](/docs/documentation/options#fixedscale).
 
@@ -11,7 +11,7 @@ A demo for using [`fixedScale`](/docs/documentation/options#fixedscale).
 ### Chart
 
 <div className="gallery">
-  <RacingBarsComponent
+  <RacingBars
     dataUrl="/data/brand-values.csv"
     dataType="csv"
     title="Brand Values"

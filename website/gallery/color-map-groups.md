@@ -2,7 +2,7 @@
 title: Color Map for Groups
 ---
 
-import { RacingBarsComponent } from '../racing-bars.js';
+import RacingBars from '../racing-bars.js';
 
 A demo for using a color map for groups.
 
@@ -16,7 +16,7 @@ Europe: 'green',
 };
 
 <div className="gallery">
-  <RacingBarsComponent
+  <RacingBars
     dataUrl="/data/population.csv"
     dataType="csv"
     title="World Population"

@@ -2,7 +2,7 @@
 title: Loop
 ---
 
-import { RacingBarsComponent } from '../racing-bars.js';
+import RacingBars from '../racing-bars.js';
 
 A demo for using `loop`.
 
@@ -11,7 +11,7 @@ A demo for using `loop`.
 ### Chart
 
 <div className="gallery">
-  <RacingBarsComponent
+  <RacingBars
     dataUrl="/data/population.csv"
     dataType="csv"
     startDate="1970-01-01"

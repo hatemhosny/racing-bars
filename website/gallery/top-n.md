@@ -2,7 +2,7 @@
 title: TopN
 ---
 
-import { RacingBarsComponent } from '../racing-bars.js';
+import RacingBars from '../racing-bars.js';
 
 A demo for using `topN` to choose the number of bars to display.
 
@@ -11,7 +11,7 @@ A demo for using `topN` to choose the number of bars to display.
 ### Chart
 
 <div className="gallery">
-  <RacingBarsComponent
+  <RacingBars
     dataUrl="/data/population.csv"
     dataType="csv"
     topN="5"

@@ -1,3 +1,1 @@
-export { RacingBarsComponent } from './racing-bars';
-export * as racingBars from '..';
-export { Props } from '../shared';
+export { default } from './racing-bars';

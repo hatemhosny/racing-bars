@@ -2,7 +2,7 @@
 title: Github Push Events Dataset
 ---
 
-import { RacingBarsComponent } from '../racing-bars.js';
+import RacingBars from '../racing-bars.js';
 
 A demo showing the use of [Github Push Events dataset](/docs/sample-datasets#github-push-events).
 
@@ -21,7 +21,7 @@ return `Q${quarter} ${year}`
 };
 
 <div className="gallery">
-  <RacingBarsComponent
+  <RacingBars
     dataUrl="/data/gh-push.csv"
     dataType="csv"
     title="Top Programming Languages"

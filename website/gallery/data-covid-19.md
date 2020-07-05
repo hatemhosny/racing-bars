@@ -2,7 +2,7 @@
 title: Covid-19 Dataset
 ---
 
-import { RacingBarsComponent } from '../racing-bars.js';
+import RacingBars from '../racing-bars.js';
 
 A demo showing the use of [covid-19 dataset](/docs/sample-datasets#covid-19).
 
@@ -11,7 +11,7 @@ A demo showing the use of [covid-19 dataset](/docs/sample-datasets#covid-19).
 ### Chart
 
 <div className="gallery">
-  <RacingBarsComponent
+  <RacingBars
     dataUrl="/data/covid-19.csv"
     dataType="csv"
     title="Covid-19"
