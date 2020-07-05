@@ -24,6 +24,7 @@ Happy linting! 💖
     "frameworks",
     "docs",
     "website",
-    "options"
+    "options",
+    "renderer"
   ]
 }

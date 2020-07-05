@@ -59,6 +59,7 @@ export function createRenderer(data: Data[], store: Store): Renderer {
       dateCounter,
       labelsPosition,
       showIcons,
+      showControls,
       labelsWidth,
       inputHeight,
       inputWidth,
@@ -86,12 +87,21 @@ export function createRenderer(data: Data[], store: Store): Renderer {
     updateControls();
 
     function renderInitialFrame() {
+      const titleHeight = title ? 55 : 0;
+      const subTitleHeight = !subTitle ? 0 : title ? 20 : 40;
+      const groupsHeight = !showGroups ? 0 : titleHeight || subTitleHeight ? 20 : 30;
+      const controlsHeight = showControls !== 'none' ? 50 : 0;
+      const topAxisPadding = 15;
+      const HeaderHeight = Math.max(
+        titleHeight + subTitleHeight + groupsHeight,
+        controlsHeight,
+        10,
+      );
       const labelsArea = labelsPosition === 'inside' ? 0 : labelsWidth;
-      const groupsArea = showGroups ? 40 : 0;
 
       margin = {
-        top: 80 + groupsArea,
-        right: 0,
+        top: HeaderHeight + topAxisPadding,
+        right: 20,
         bottom: 5,
         left: 0 + labelsArea,
       };
@@ -113,7 +123,7 @@ export function createRenderer(data: Data[], store: Store): Renderer {
         .append('text')
         .attr('class', 'subTitle')
         .attr('x', titlePadding)
-        .attr('y', 55)
+        .attr('y', titleHeight || 24)
         .html(getText(subTitle, currentDate, CompleteDateSlice, dates));
 
       if (showGroups) {
@@ -135,24 +145,24 @@ export function createRenderer(data: Data[], store: Store): Renderer {
           .attr('class', 'legend-color')
           .attr('width', 10)
           .attr('height', 10)
-          .attr('y', 75)
+          .attr('y', margin.top - 35)
           .style('fill', (d: string) => getColor({ group: d } as Data, store));
 
         legends
           .append('text')
           .attr('class', 'legend-text')
           .attr('x', 20)
-          .attr('y', 75 + 10)
+          .attr('y', margin.top - 25)
           .html((d: string) => d);
 
-        let legendX = margin.left;
+        let legendX = margin.left + titlePadding;
         let legendY = 0;
         legends.each(function () {
           const wrapper = d3.select(this);
           const text = wrapper.select('text') as any;
           const bbox = text.node().getBBox();
           if (legendX + bbox.width > width) {
-            legendX = margin.left;
+            legendX = margin.left + titlePadding;
             legendY += 30;
           }
           wrapper.attr('transform', 'translate(' + legendX + ', ' + legendY + ')');

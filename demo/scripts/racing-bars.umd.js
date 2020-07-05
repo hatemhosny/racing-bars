@@ -154,12 +154,6 @@
     var x = Math.sin(seed) * 10000;
     return x - Math.floor(x);
   }
-  function randomString(prefix, n) {
-    var rnd = Array(3).fill(null).map(function () {
-      return Math.random().toString(36).substr(2);
-    }).join('');
-    return prefix + rnd.slice(-n);
-  }
   function shuffle(arr, seed) {
     var array = [].concat(arr);
     var m = array.length;
@@ -175,17 +169,6 @@
     }
 
     return array;
-  }
-  function generateId(prefix, n) {
-    if (prefix === void 0) {
-      prefix = 'racingbars';
-    }
-
-    if (n === void 0) {
-      n = 8;
-    }
-
-    return randomString(prefix, n);
   }
   function getHeight(element, minHeight, height) {
     var newHeight;
@@ -576,7 +559,7 @@
     subTitle: '',
     caption: '',
     dateCounter: 'MM/YYYY',
-    labelsOnBars: true,
+    labelsPosition: 'inside',
     labelsWidth: 150,
     showIcons: false,
     showControls: 'all',
@@ -1259,8 +1242,9 @@
           subTitle = _store$getState$optio2.subTitle,
           caption = _store$getState$optio2.caption,
           dateCounter = _store$getState$optio2.dateCounter,
-          labelsOnBars = _store$getState$optio2.labelsOnBars,
+          labelsPosition = _store$getState$optio2.labelsPosition,
           showIcons = _store$getState$optio2.showIcons,
+          showControls = _store$getState$optio2.showControls,
           labelsWidth = _store$getState$optio2.labelsWidth,
           inputHeight = _store$getState$optio2.inputHeight,
           inputWidth = _store$getState$optio2.inputWidth,
@@ -1286,32 +1270,37 @@
       updateControls();
 
       function renderInitialFrame() {
-        var labelsArea = labelsOnBars ? 0 : labelsWidth;
-        var groupsArea = showGroups ? 40 : 0;
+        var titleHeight = title ? 55 : 0;
+        var subTitleHeight = !subTitle ? 0 : title ? 20 : 40;
+        var groupsHeight = !showGroups ? 0 : titleHeight || subTitleHeight ? 20 : 30;
+        var controlsHeight = showControls !== 'none' ? 50 : 0;
+        var topAxisPadding = 15;
+        var HeaderHeight = Math.max(titleHeight + subTitleHeight + groupsHeight, controlsHeight, 10);
+        var labelsArea = labelsPosition === 'inside' ? 0 : labelsWidth;
         margin = {
-          top: 80 + groupsArea,
-          right: 0,
+          top: HeaderHeight + topAxisPadding,
+          right: 20,
           bottom: 5,
           left: 0 + labelsArea
         };
         svg = d3$1.select(root).append('svg').attr('width', width).attr('height', height);
         titleText = svg.append('text').attr('class', 'title').attr('x', titlePadding).attr('y', 24).html(getText(title, currentDate, CompleteDateSlice, dates));
-        subTitleText = svg.append('text').attr('class', 'subTitle').attr('x', titlePadding).attr('y', 55).html(getText(subTitle, currentDate, CompleteDateSlice, dates));
+        subTitleText = svg.append('text').attr('class', 'subTitle').attr('x', titlePadding).attr('y', titleHeight || 24).html(getText(subTitle, currentDate, CompleteDateSlice, dates));
 
         if (showGroups) {
           var legendsWrapper = svg.append('g');
           var legends = legendsWrapper.selectAll('.legend-wrapper').data(groups).enter().append('g').attr('class', 'legend-wrapper').style('cursor', 'pointer').style('opacity', function (d) {
             return store.getState().data.groupFilter.includes(d) ? 0.3 : 1;
           }).on('click', legendClick);
-          legends.append('rect').attr('class', 'legend-color').attr('width', 10).attr('height', 10).attr('y', 75).style('fill', function (d) {
+          legends.append('rect').attr('class', 'legend-color').attr('width', 10).attr('height', 10).attr('y', margin.top - 35).style('fill', function (d) {
             return getColor({
               group: d
             }, store);
           });
-          legends.append('text').attr('class', 'legend-text').attr('x', 20).attr('y', 75 + 10).html(function (d) {
+          legends.append('text').attr('class', 'legend-text').attr('x', 20).attr('y', margin.top - 25).html(function (d) {
             return d;
           });
-          var legendX = margin.left;
+          var legendX = margin.left + titlePadding;
           var legendY = 0;
           legends.each(function () {
             var wrapper = d3$1.select(this);
@@ -1319,7 +1308,7 @@
             var bbox = text.node().getBBox();
 
             if (legendX + bbox.width > width) {
-              legendX = margin.left;
+              legendX = margin.left + titlePadding;
               legendY += 30;
             }
 
@@ -1354,7 +1343,7 @@
 
         iconSize = showIcons ? barHeight * 0.9 : 0;
         iconSpace = showIcons ? iconSize + labelPadding : 0;
-        labelX = labelsOnBars ? function (d) {
+        labelX = labelsPosition === 'inside' ? function (d) {
           return x(d.value) - labelPadding - iconSpace;
         } : margin.left - labelPadding;
         xAxis = d3$1.axisTop(x).ticks(width > 500 ? 5 : 2).tickSize(-(height - (margin.top + margin.bottom))).tickFormat(function (n) {
@@ -1374,7 +1363,7 @@
         }).on('click', selectFn).on('mouseover', highlightFn).on('mouseout', highlightFn);
         svg.selectAll('text.label').data(dateSlice, function (d) {
           return d.name;
-        }).enter().append('text').attr('class', 'label').classed('outside-bars', !labelsOnBars).attr('x', labelX).attr('y', function (d) {
+        }).enter().append('text').attr('class', 'label').classed('outside-bars', labelsPosition !== 'inside').attr('x', labelX).attr('y', function (d) {
           return barY(d) + barHalfHeight;
         }).style('text-anchor', 'end').html(function (d) {
           return d.name;
@@ -1468,7 +1457,7 @@
           dateCounter = _store$getState$optio3.dateCounter,
           fixedScale = _store$getState$optio3.fixedScale,
           fixedOrder = _store$getState$optio3.fixedOrder,
-          labelsOnBars = _store$getState$optio3.labelsOnBars;
+          labelsPosition = _store$getState$optio3.labelsPosition;
       var topN = fixedOrder.length > 0 ? fixedOrder.length : store.getState().options.topN;
       var currentDate = store.getState().ticker.currentDate;
       var CompleteDateSlice = getDateSlice(data, currentDate, store.getState().data.groupFilter);
@@ -1510,7 +1499,7 @@
       var labels = svg.selectAll('.label').data(dateSlice, function (d) {
         return d.name;
       });
-      labels.enter().append('text').attr('class', 'label').classed('outside-bars', !labelsOnBars).attr('x', labelX).attr('y', function () {
+      labels.enter().append('text').attr('class', 'label').classed('outside-bars', labelsPosition !== 'inside').attr('x', labelX).attr('y', function () {
         return y(topN + 1) + 5 + barHalfHeight;
       }).style('text-anchor', 'end').html(function (d) {
         return d.name;
@@ -2010,7 +1999,6 @@
   }
 
   exports.d3 = d3;
-  exports.generateId = generateId;
   exports.loadData = loadData;
   exports.race = race;
 
