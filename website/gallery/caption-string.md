@@ -40,6 +40,22 @@ A demo for using string in caption.
 ```
 
 </TabItem>
+<TabItem value="esm">
+
+```js {5}
+import { loadData, race } from './racing-bars.esm.js';
+
+const options = {
+  selector: '#race',
+  caption: 'Source: World Bank',
+};
+
+loadData('/data/population.csv', 'csv').then((data) => {
+  race(data, options);
+});
+```
+
+</TabItem>
 <TabItem value="ts">
 
 ```ts {5}
