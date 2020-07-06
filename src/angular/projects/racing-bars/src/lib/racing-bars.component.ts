@@ -50,10 +50,10 @@ export class RacingBarsComponent implements OnInit, OnChanges, OnDestroy {
   @Input() public marginRight: number;
   @Input() public marginBottom: number;
   @Input() public marginLeft: number;
-  @Input() public disableClickEvents: boolean;
-  @Input() public disableKeyboardEvents: boolean;
-  @Input() public showControls: 'all' | 'play' | 'none';
-  @Input() public showOverlays: 'all' | 'play' | 'repeat' | 'none';
+  @Input() public mouseControls: boolean;
+  @Input() public keyboardControls: boolean;
+  @Input() public controlButtons: 'all' | 'play' | 'none';
+  @Input() public overlays: 'all' | 'play' | 'repeat' | 'none';
   @Input() public autorun: boolean;
   @Input() public injectStyles: boolean;
   @Input() public theme: string;
@@ -123,10 +123,10 @@ export class RacingBarsComponent implements OnInit, OnChanges, OnDestroy {
       marginRight: this.marginRight,
       marginBottom: this.marginBottom,
       marginLeft: this.marginLeft,
-      disableClickEvents: this.disableClickEvents,
-      disableKeyboardEvents: this.disableKeyboardEvents,
-      showControls: this.showControls,
-      showOverlays: this.showOverlays,
+      mouseControls: this.mouseControls,
+      keyboardControls: this.keyboardControls,
+      controlButtons: this.controlButtons,
+      overlays: this.overlays,
       autorun: this.autorun,
       injectStyles: this.injectStyles,
       theme: this.theme,

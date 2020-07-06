@@ -150,6 +150,30 @@ const options = {
 };
 ```
 
+### controlButtons
+
+Shows/hides buttons that control the chart (play/pause/skip-back/skip-forward).
+The value "all" shows all buttons.
+The value "play" shows one button (play or pause).
+The value "none" hides all buttons.
+
+- Type: string
+- Valid values: ["all", "play", "none"]
+- Default: "none"
+- Examples:
+
+This example shows all control buttons
+
+[view in gallery](/gallery/control-buttons)
+
+```js
+const options = {
+  controlButtons: 'all',
+};
+```
+
+See the guide on [`chart controls`](../guides/chart-controls.md) for other alternatives of controlling charts.
+
 ### dataShape
 
 Instruction whether the data shape is <a href="https://en.wikipedia.org/wiki/Wide_and_narrow_data" target="_blank">"long" or "wide"</a>.
@@ -479,6 +503,36 @@ const options = {
 };
 ```
 
+### overlays
+
+Shows/hides semi-transparent overlays that cover the chart and show buttons that control it.
+There are 2 overlays: play (at the beginning) and repeat (at the end).
+
+The value "all" shows both overlays.
+The value "play" shows an overlay at the beginning of the race with a play button.
+The value "repeat" shows an overlay at the end of the race with a repeat button.
+The value "none" hides both overlays.
+
+- Type: string
+- Valid values: ["all", "play", "repeat", "none"]
+- Default: "none"
+- Examples:
+
+This example shows both overlays
+
+[view in gallery](/gallery/overlays)
+
+```js
+const options = {
+  overlays: 'all',
+};
+```
+
+Please note that setting [`autorun`](#autorun) to `true` (default) will skip the play overlay,
+while setting [`loop`](#loop) to `true` will skip the repeat overlay.
+
+See the guide on [`chart controls`](../guides/chart-controls.md) for other alternatives of controlling charts.
+
 ### selectBars
 
 If `true`, mouse clicks toggle bar select/unselect.
@@ -793,7 +847,7 @@ const options = {
 ✔ caption: ""
 ✔ colorMap: {}
 ✔ colorSeed: ""
-  controlButtons: "none"
+✔ controlButtons: "none"
 ✔ dataShape: "long"
 ✔ dataTransform: null,
 ✔ dateCounter: "MM/YYYY"
@@ -814,7 +868,7 @@ const options = {
 ✔ marginRight: 20
 ✔ marginTop: 0
    mouseControls: false
-  overlays: "none"
+✔ overlays: "none"
 ✔ selectBars: true
 ✔ selector: "#race"
 ✔ showGroups: true

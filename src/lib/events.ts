@@ -1,7 +1,7 @@
 import { elements } from './elements';
 import { Store } from './store';
 import { Ticker } from './ticker';
-import { hideElement, getElement } from './utils';
+import { hideElement, getElement, getClicks } from './utils';
 import { DOMCustomEvent } from './models';
 
 export function registerEvents(store: Store, ticker: Ticker) {
@@ -42,11 +42,21 @@ export function registerEvents(store: Store, ticker: Ticker) {
   function registerClickEvents() {
     if (store.getState().options.mouseControls) {
       const svg = root.querySelector('svg') as SVGSVGElement;
-      svg.addEventListener('click', () => {
-        ticker.toggle('mouseClick');
-      });
-      root.addEventListener('dblclick', () => {
-        ticker.skipForward('mouseDoubleClick');
+      svg.addEventListener('click', (clickEvent) => {
+        // ignore clicks to group legends
+        const target = clickEvent.target as HTMLElement;
+        if (!target || target.classList.contains('legend')) return;
+
+        getClicks(clickEvent, function (event: any) {
+          const clicks = event.detail;
+          if (clicks === 3) {
+            ticker.skipBack('mouseTripleClick');
+          } else if (clicks === 2) {
+            ticker.skipForward('mouseDoubleClick');
+          } else {
+            ticker.toggle('mouseClick');
+          }
+        });
       });
     }
   }

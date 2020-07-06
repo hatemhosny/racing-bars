@@ -137,7 +137,7 @@ export function createRenderer(data: Data[], store: Store): Renderer {
           .data(groups)
           .enter()
           .append('g')
-          .attr('class', 'legend-wrapper')
+          .attr('class', 'legend legend-wrapper')
           .style('cursor', 'pointer')
           .style('opacity', (d: string) =>
             store.getState().data.groupFilter.includes(d) ? 0.3 : 1,
@@ -146,7 +146,7 @@ export function createRenderer(data: Data[], store: Store): Renderer {
 
         legends
           .append('rect')
-          .attr('class', 'legend-color')
+          .attr('class', 'legend legend-color')
           .attr('width', 10)
           .attr('height', 10)
           .attr('y', margin.top - 35)
@@ -154,7 +154,7 @@ export function createRenderer(data: Data[], store: Store): Renderer {
 
         legends
           .append('text')
-          .attr('class', 'legend-text')
+          .attr('class', 'legend legend-text')
           .attr('x', 20)
           .attr('y', margin.top - 25)
           .html((d: string) => d);

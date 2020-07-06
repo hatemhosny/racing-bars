@@ -1305,15 +1305,15 @@
 
         if (showGroups) {
           var legendsWrapper = svg.append('g');
-          var legends = legendsWrapper.selectAll('.legend-wrapper').data(groups).enter().append('g').attr('class', 'legend-wrapper').style('cursor', 'pointer').style('opacity', function (d) {
+          var legends = legendsWrapper.selectAll('.legend-wrapper').data(groups).enter().append('g').attr('class', 'legend legend-wrapper').style('cursor', 'pointer').style('opacity', function (d) {
             return store.getState().data.groupFilter.includes(d) ? 0.3 : 1;
           }).on('click', legendClick);
-          legends.append('rect').attr('class', 'legend-color').attr('width', 10).attr('height', 10).attr('y', margin.top - 35).style('fill', function (d) {
+          legends.append('rect').attr('class', 'legend legend-color').attr('width', 10).attr('height', 10).attr('y', margin.top - 35).style('fill', function (d) {
             return getColor({
               group: d
             }, store);
           });
-          legends.append('text').attr('class', 'legend-text').attr('x', 20).attr('y', margin.top - 25).html(function (d) {
+          legends.append('text').attr('class', 'legend legend-text').attr('x', 20).attr('y', margin.top - 25).html(function (d) {
             return d;
           });
           var legendX = margin.left + titlePadding;
@@ -1759,11 +1759,20 @@
     function registerClickEvents() {
       if (store.getState().options.mouseControls) {
         var svg = root.querySelector('svg');
-        svg.addEventListener('click', function () {
-          ticker.toggle('mouseClick');
-        });
-        root.addEventListener('dblclick', function () {
-          ticker.skipForward('mouseDoubleClick');
+        svg.addEventListener('click', function (clickEvent) {
+          var target = clickEvent.target;
+          if (!target || target.classList.contains('legend')) return;
+          getClicks(clickEvent, function (event) {
+            var clicks = event.detail;
+
+            if (clicks === 3) {
+              ticker.skipBack('mouseTripleClick');
+            } else if (clicks === 2) {
+              ticker.skipForward('mouseDoubleClick');
+            } else {
+              ticker.toggle('mouseClick');
+            }
+          });
         });
       }
     }
