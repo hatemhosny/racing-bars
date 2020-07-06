@@ -40,7 +40,7 @@ export function registerEvents(store: Store, ticker: Ticker) {
   }
 
   function registerClickEvents() {
-    if (!store.getState().options.disableClickEvents) {
+    if (store.getState().options.mouseControls) {
       const svg = root.querySelector('svg') as SVGSVGElement;
       svg.addEventListener('click', () => {
         ticker.toggle('mouseClick');
@@ -52,7 +52,7 @@ export function registerEvents(store: Store, ticker: Ticker) {
   }
 
   function registerKeyboardEvents() {
-    if (!store.getState().options.disableKeyboardEvents) {
+    if (store.getState().options.keyboardControls) {
       document.addEventListener('keypress', function (e) {
         const keyCodes = {
           spacebar: 32,

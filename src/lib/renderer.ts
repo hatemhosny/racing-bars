@@ -59,7 +59,7 @@ export function createRenderer(data: Data[], store: Store): Renderer {
       dateCounter,
       labelsPosition,
       showIcons,
-      showControls,
+      controlButtons,
       labelsWidth,
       inputHeight,
       inputWidth,
@@ -94,7 +94,7 @@ export function createRenderer(data: Data[], store: Store): Renderer {
       const titleHeight = title ? 55 : 0;
       const subTitleHeight = !subTitle ? 0 : title ? 20 : 40;
       const groupsHeight = !showGroups ? 0 : titleHeight || subTitleHeight ? 20 : 30;
-      const controlsHeight = showControls !== 'none' ? 50 : 0;
+      const controlsHeight = controlButtons !== 'none' ? 50 : 0;
       const topAxisPadding = 15;
       const HeaderHeight = Math.max(
         titleHeight + subTitleHeight + groupsHeight,
@@ -334,11 +334,11 @@ export function createRenderer(data: Data[], store: Store): Renderer {
         .html((d) => Object.values(d)[0] as string)
         .attr('class', (d) => Object.keys(d)[0]);
 
-      if (store.getState().options.showControls === 'play') {
+      if (store.getState().options.controlButtons === 'play') {
         hideElement(root, elements.skipBack);
         hideElement(root, elements.skipForward);
       }
-      if (store.getState().options.showControls === 'none') {
+      if (store.getState().options.controlButtons === 'none') {
         hideElement(root, elements.controls);
       }
     }
@@ -614,7 +614,7 @@ export function createRenderer(data: Data[], store: Store): Renderer {
   }
 
   function updateControls() {
-    const showOverlays = store.getState().options.showOverlays;
+    const showOverlays = store.getState().options.overlays;
 
     if (store.getState().ticker.isRunning) {
       showElement(root, elements.pause);

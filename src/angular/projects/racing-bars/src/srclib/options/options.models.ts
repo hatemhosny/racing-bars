@@ -35,10 +35,10 @@ export interface Options {
   marginRight: number;
   marginBottom: number;
   marginLeft: number;
-  disableClickEvents: boolean;
-  disableKeyboardEvents: boolean;
-  showControls: 'all' | 'play' | 'none';
-  showOverlays: 'all' | 'play' | 'repeat' | 'none';
+  mouseControls: boolean;
+  keyboardControls: boolean;
+  controlButtons: 'all' | 'play' | 'none';
+  overlays: 'all' | 'play' | 'repeat' | 'none';
   autorun: boolean;
   injectStyles: boolean;
   theme: string;

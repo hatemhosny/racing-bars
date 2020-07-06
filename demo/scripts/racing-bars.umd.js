@@ -550,8 +550,8 @@
     showGroups: false,
     tickDuration: 500,
     topN: 10,
-    disableClickEvents: true,
-    disableKeyboardEvents: true,
+    mouseControls: false,
+    keyboardControls: false,
     autorun: true,
     loop: false,
     injectStyles: true,
@@ -562,8 +562,8 @@
     labelsPosition: 'inside',
     labelsWidth: 150,
     showIcons: false,
-    showControls: 'none',
-    showOverlays: 'none',
+    controlButtons: 'none',
+    overlays: 'none',
     inputHeight: '',
     inputWidth: '',
     minHeight: 300,
@@ -1256,7 +1256,7 @@
           dateCounter = _store$getState$optio2.dateCounter,
           labelsPosition = _store$getState$optio2.labelsPosition,
           showIcons = _store$getState$optio2.showIcons,
-          showControls = _store$getState$optio2.showControls,
+          controlButtons = _store$getState$optio2.controlButtons,
           labelsWidth = _store$getState$optio2.labelsWidth,
           inputHeight = _store$getState$optio2.inputHeight,
           inputWidth = _store$getState$optio2.inputWidth,
@@ -1289,7 +1289,7 @@
         var titleHeight = title ? 55 : 0;
         var subTitleHeight = !subTitle ? 0 : title ? 20 : 40;
         var groupsHeight = !showGroups ? 0 : titleHeight || subTitleHeight ? 20 : 30;
-        var controlsHeight = showControls !== 'none' ? 50 : 0;
+        var controlsHeight = controlButtons !== 'none' ? 50 : 0;
         var topAxisPadding = 15;
         var HeaderHeight = Math.max(titleHeight + subTitleHeight + groupsHeight, controlsHeight + groupsHeight, 10);
         var labelsArea = labelsPosition === 'inside' ? 0 : labelsWidth;
@@ -1436,12 +1436,12 @@
           return Object.keys(d)[0];
         });
 
-        if (store.getState().options.showControls === 'play') {
+        if (store.getState().options.controlButtons === 'play') {
           hideElement(root, elements.skipBack);
           hideElement(root, elements.skipForward);
         }
 
-        if (store.getState().options.showControls === 'none') {
+        if (store.getState().options.controlButtons === 'none') {
           hideElement(root, elements.controls);
         }
       }
@@ -1616,7 +1616,7 @@
     }
 
     function updateControls() {
-      var showOverlays = store.getState().options.showOverlays;
+      var showOverlays = store.getState().options.overlays;
 
       if (store.getState().ticker.isRunning) {
         showElement(root, elements.pause);
@@ -1757,7 +1757,7 @@
     }
 
     function registerClickEvents() {
-      if (!store.getState().options.disableClickEvents) {
+      if (store.getState().options.mouseControls) {
         var svg = root.querySelector('svg');
         svg.addEventListener('click', function () {
           ticker.toggle('mouseClick');
@@ -1769,7 +1769,7 @@
     }
 
     function registerKeyboardEvents() {
-      if (!store.getState().options.disableKeyboardEvents) {
+      if (store.getState().options.keyboardControls) {
         document.addEventListener('keypress', function (e) {
           var keyCodes = {
             spacebar: 32,

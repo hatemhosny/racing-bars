@@ -793,11 +793,10 @@ const options = {
 ✔ caption: ""
 ✔ colorMap: {}
 ✔ colorSeed: ""
+  controlButtons: "none"
 ✔ dataShape: "long"
 ✔ dataTransform: null,
 ✔ dateCounter: "MM/YYYY"
-  disableClickEvents: true
-  disableKeyboardEvents: true
 ✔ endDate: ""
   fillDateGaps: false
   fillDateGapsValue: "interpolate"
@@ -806,19 +805,20 @@ const options = {
 ✔ height: ""
 ✔ highlightBars: true
   injectStyles: true
+  keyboardControls: false
 ✔ labelsPosition: 'inside'
 ✔ labelsWidth: 150
 ✔ loop: false
-✔  marginBottom: 5
-✔  marginLeft: 0
-✔  marginRight: 20
-✔  marginTop: 0
+✔ marginBottom: 5
+✔ marginLeft: 0
+✔ marginRight: 20
+✔ marginTop: 0
+   mouseControls: false
+  overlays: "none"
 ✔ selectBars: true
 ✔ selector: "#race"
-  showControls: "all"
 ✔ showGroups: true
 ✔ showIcons: false
-  showOverlays: "none"
 ✔ startDate: ""
 ✔ subTitle: ""
 ✔ theme: "light"
