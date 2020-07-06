@@ -71,14 +71,12 @@ icon: `https://www.countryflags.io/${d.code.toLowerCase()}/flat/64.png`,
 
 ```html
 <style>
-  .container {
+  #population-race {
     width: 800px;
     height: 450px;
   }
 </style>
-<div class="container">
-  <div id="population-race"></div>
-</div>
+<div id="population-race"></div>
 <script>
   const options = {
     selector: '#population-race',

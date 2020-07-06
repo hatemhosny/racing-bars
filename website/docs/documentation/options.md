@@ -311,6 +311,39 @@ const options = {
 };
 ```
 
+### height
+
+Specifies the height of the chart.
+If left `undefined`, the chart uses the height of the selected DOM element (specified by [`selector`](#selector)),
+what can be set by css for example.
+The height can be set to a number (in pixels), or can be set to ratio of window `innerHeight`. The string value "window\*0.8" sets the height to 0.8 of the window `innerHeight`.
+
+Note that the minimum allowed height of the chart is 300px.
+
+If `height` is undefined or specified as ratio to window `innerHeight`, the chart is responsive (will resize on window resize).
+
+- Type: number | "window\*`number`" | undefined
+- Default: undefined
+- Examples:
+
+This sets the height to 600px:
+
+```js
+const options = {
+  height: 600,
+};
+```
+
+This sets the height to 0.5 of window `innerHeight`:
+
+```js
+const options = {
+  height: 'window*0.5',
+};
+```
+
+see the guide on [`chart size`](../guides/chart-size.md) for more details.
+
 ### highlightBars
 
 If `true`, the racing bars are highlighted on mouseover.
@@ -358,6 +391,22 @@ const options = {
 };
 ```
 
+### labelsWidth
+
+The width (in pixels) of the area for bar labels on the left side of the chart.
+It is ignored if `labelsPosition` is set to "inside" (default).
+
+- Type: number
+- Default: 150
+- Examples:
+
+```js
+const options = {
+  labelsPosition: 'outside',
+  labelsWidth: 200,
+};
+```
+
 ### loop
 
 If `true`, the race restarts after reaching the last date.
@@ -371,6 +420,62 @@ If `true`, the race restarts after reaching the last date.
 ```js
 const options = {
   loop: true,
+};
+```
+
+### marginBottom
+
+The bottom margin of the chart in pixels (still inside the SVG element).
+
+- Type: number
+- Default: 5
+- Examples:
+
+```js
+const options = {
+  marginBottom: 10,
+};
+```
+
+### marginLeft
+
+The left margin of the chart in pixels (still inside the SVG element).
+
+- Type: number
+- Default: 0
+- Examples:
+
+```js
+const options = {
+  marginLeft: 10,
+};
+```
+
+### marginRight
+
+The right margin of the chart in pixels (still inside the SVG element).
+
+- Type: number
+- Default: 20
+- Examples:
+
+```js
+const options = {
+  marginRight: 10,
+};
+```
+
+### marginTop
+
+The top margin of the chart in pixels (still inside the SVG element).
+
+- Type: number
+- Default: 0
+- Examples:
+
+```js
+const options = {
+  marginTop: 10,
 };
 ```
 
@@ -574,6 +679,39 @@ const options = {
 };
 ```
 
+### width
+
+Specifies the width of the chart.
+If left `undefined`, the chart uses the width of the selected DOM element (specified by [`selector`](#selector)),
+what can be set by css for example.
+The width can be set to a number (in pixels), or can be set to ratio of window `innerWidth`. The string value "window\*0.8" sets the width to 0.8 of the window `innerWidth`.
+
+Note that the minimum allowed width of the chart is 500px.
+
+If `width` is undefined or specified as ratio to window `innerWidth`, the chart is responsive (will resize on window resize).
+
+- Type: number | "window\*`number`" | undefined
+- Default: undefined
+- Examples:
+
+This sets the width to 900px:
+
+```js
+const options = {
+  width: 900,
+};
+```
+
+This sets the width to 0.5 of window `innerWidth`:
+
+```js
+const options = {
+  width: 'window*0.5',
+};
+```
+
+see the guide on [`chart size`](../guides/chart-size.md) for more details.
+
 ## Data Function
 
 Each of the options `title`, `subTitle`, `DateCounter` and `caption` can accept a function that takes arguments calculated from provided data and returns a string.
@@ -663,18 +801,18 @@ const options = {
 ✔ endDate: ""
   fillDateGaps: false
   fillDateGapsValue: "interpolate"
-  fixedScale: false
 ✔ fixedOrder: []
-  height: ""
+✔ fixedScale: false
+✔ height: ""
 ✔ highlightBars: true
   injectStyles: true
-  labelsPosition: 'inside'
-  labelsWidth: 150
+✔ labelsPosition: 'inside'
+✔ labelsWidth: 150
 ✔ loop: false
-   marginBottom: 5
-   marginLeft: 0
-   marginRight: 20
-   marginTop: 0
+✔  marginBottom: 5
+✔  marginLeft: 0
+✔  marginRight: 20
+✔  marginTop: 0
 ✔ selectBars: true
 ✔ selector: "#race"
   showControls: "all"
@@ -687,5 +825,5 @@ const options = {
 ✔ tickDuration: 500
 ✔ title: ""
 ✔ topN: 10
-  width: ""
+✔ width: ""
  -->
