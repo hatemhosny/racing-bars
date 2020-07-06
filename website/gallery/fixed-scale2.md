@@ -12,7 +12,7 @@ A demo for using [`fixedScale`](/docs/documentation/options#fixedscale).
 
 <div className="gallery">
   <RacingBars
-    dataUrl="/data/brand-values.csv"
+    dataUrl="/data/brands.csv"
     dataType="csv"
     title="Brand Values"
     fixedScale={true}
@@ -31,7 +31,7 @@ A demo for using [`fixedScale`](/docs/documentation/options#fixedscale).
     fixedScale: true,
   };
 
-  racingBars.loadData('/data/brand-values.csv', 'csv').then((data) => {
+  racingBars.loadData('/data/brands.csv', 'csv').then((data) => {
     racingBars.race(data, options);
   });
 </script>

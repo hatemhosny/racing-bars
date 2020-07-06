@@ -12,7 +12,7 @@ A demo showing the use of [Brand Values dataset](/docs/sample-datasets#brand-val
 
 <div className="gallery">
   <RacingBars
-    dataUrl="/data/brand-values.csv"
+    dataUrl="/data/brands.csv"
     dataType="csv"
     title="18 years of Interbrand’s Top Global Brands"
     subTitle="Brand value, $m"
@@ -35,7 +35,7 @@ A demo showing the use of [Brand Values dataset](/docs/sample-datasets#brand-val
     colorSeed: 45,
   };
 
-  racingBars.loadData('/data/brand-values.csv', 'csv').then((data) => {
+  racingBars.loadData('/data/brands.csv', 'csv').then((data) => {
     racingBars.race(data, options);
   });
 </script>

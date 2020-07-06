@@ -81,13 +81,13 @@ Data item fields: date, name, value
 
 #### JSON
 
-- <a href="/data/brand-values.json" target="_blank" class="external">long</a>
-- <a href="/data/brand-values-wide.json" target="_blank" class="external">wide</a>
+- <a href="/data/brands.json" target="_blank" class="external">long</a>
+- <a href="/data/brands-wide.json" target="_blank" class="external">wide</a>
 
 #### CSV
 
-- <a href="/data/brand-values.csv" target="_blank" class="external">long</a>
-- <a href="/data/brand-values-wide.csv" target="_blank" class="external">wide</a>
+- <a href="/data/brands.csv" target="_blank" class="external">long</a>
+- <a href="/data/brands-wide.csv" target="_blank" class="external">wide</a>
 
 ### Github Push Events
 

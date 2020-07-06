@@ -17,7 +17,7 @@ This chart:
 
 <div className="gallery">
   <RacingBars
-    dataUrl="/data/population.csv"
+    dataUrl="/data/brands.csv"
     dataType="csv"
   />
 </div>
@@ -28,7 +28,7 @@ This chart:
 ```html
 <div id="race"></div>
 <script>
-  racingBars.loadData('/data/population.json').then((data) => {
+  racingBars.loadData('/data/brands.json').then((data) => {
     racingBars.race(data);
   });
 </script>
@@ -51,8 +51,8 @@ icon: `https://www.countryflags.io/${d.code.toLowerCase()}/flat/64.png`,
       title="World Population in 60 Years"
       subTitle="Country Population in millions"
       caption="Source: World Bank"
-      dateCounter= "MMM YYYY"
-      showGroups={false}
+      dateCounter= "YYYY"
+      showGroups={true}
       showIcons={true}
       labelsPosition="outside"
       labelsWidth="160"
@@ -70,20 +70,20 @@ icon: `https://www.countryflags.io/${d.code.toLowerCase()}/flat/64.png`,
 <style>
   .container {
     width: 800px;
-    height: 400px;
+    height: 450px;
   }
 </style>
 <div class="container">
-  <div id="race2"></div>
+  <div id="population-race"></div>
 </div>
 <script>
   const options = {
-    selector: '#race2',
+    selector: '#population-race',
     title: 'World Population in 60 Years',
     subTitle: 'Country Population in millions',
     caption: 'Source: World Bank',
-    dateCounter: 'MMM YYYY',
-    showGroups: false,
+    dateCounter: 'YYYY',
+    showGroups: true,
     showIcons: true,
     labelsPosition: 'outside',
     labelsWidth: 160,
