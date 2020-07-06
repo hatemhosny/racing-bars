@@ -671,6 +671,10 @@ const options = {
   labelsPosition: 'inside'
   labelsWidth: 150
 ✔ loop: false
+   marginBottom: 5
+   marginLeft: 0
+   marginRight: 20
+   marginTop: 0
 ✔ selectBars: true
 ✔ selector: "#race"
   showControls: "all"

@@ -45,6 +45,10 @@ export class RacingBarsComponent implements OnInit, OnChanges, OnDestroy {
   @Input() public topN: number;
   @Input() public height: string;
   @Input() public width: string;
+  @Input() public marginTop: number;
+  @Input() public marginRight: number;
+  @Input() public marginBottom: number;
+  @Input() public marginLeft: number;
   @Input() public disableClickEvents: boolean;
   @Input() public disableKeyboardEvents: boolean;
   @Input() public showControls: 'all' | 'play' | 'none';
@@ -113,6 +117,10 @@ export class RacingBarsComponent implements OnInit, OnChanges, OnDestroy {
       topN: this.topN,
       height: this.height,
       width: this.width,
+      marginTop: this.marginTop,
+      marginRight: this.marginRight,
+      marginBottom: this.marginBottom,
+      marginLeft: this.marginLeft,
       disableClickEvents: this.disableClickEvents,
       disableKeyboardEvents: this.disableKeyboardEvents,
       showControls: this.showControls,

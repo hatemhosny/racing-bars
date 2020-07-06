@@ -32,16 +32,18 @@
       // dataShape: 'wide',
       // fillDateGaps: 'months',
       // fillDateGapsValue: 'last',
-      // title: 'A Tale of 11 Years',
-      // subTitle: 'Top 10 Surgical Procedures',
+      // title: 'World Population',
+      // subTitle: 'in millions',
       // showGroups: false,
       // showControls: 'none',
-      // showGroups: false,
-
+      // marginTop: 0,
+      // marginRight: 0,
+      // marginBottom: 0,
+      // marginLeft: 0,
       // dateCounter: 'MM/YYYY',
       // dateCounter: (currentDate, dateSlice, dates) =>
       //   `${dates.indexOf(currentDate) + 1} of ${dates.length}`,
-      // caption: 'Aswan Heart Centre',
+      caption: 'Source: World Bank',
       // caption: (date, dateSlice, allDates) =>
       //   `Total: ${Math.round(dateSlice.reduce((acc, curr) => acc + curr.value, 0))}`,
       // `Max: ${Math.round(Math.max(...dateSlice.map((d) => d.value)))}`,
@@ -57,7 +59,7 @@
       // disableKeyboardEvents: true,
 
       // showOverlays: 'all',
-      // showIcons: true,
+      showIcons: true,
       // autorun: false,
       // colorSeed: "asdfs",
       // labelsPosition: 'outside',
@@ -75,7 +77,7 @@
       data = data.map((d) => ({
         ...d,
         value: Number(d.value) * 1000,
-        // icon: `https://www.countryflags.io/${d.code.toLowerCase()}/flat/64.png`,
+        icon: `https://www.countryflags.io/${d.code.toLowerCase()}/flat/64.png`,
       }));
       racingBars.race(data, options);
     });

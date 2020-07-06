@@ -26,7 +26,7 @@ const initialState: Options = {
   labelsPosition: 'inside',
   labelsWidth: 150,
   showIcons: false,
-  showControls: 'all',
+  showControls: 'none',
   showOverlays: 'none',
   inputHeight: '',
   inputWidth: '',
@@ -34,6 +34,10 @@ const initialState: Options = {
   minWidth: 500,
   height: '',
   width: '',
+  marginTop: 0,
+  marginRight: 20,
+  marginBottom: 5,
+  marginLeft: 0,
   theme: 'light',
   colorMap: {},
   fixedScale: false,
@@ -81,6 +85,10 @@ export function optionsReducer(state = initialState, action: OptionsAction): Opt
 
       const tickDuration = Number(options.tickDuration) || state.tickDuration;
       const labelsWidth = Number(options.labelsWidth) || state.labelsWidth;
+      const marginTop = Number(options.marginTop) || state.marginTop;
+      const marginRight = Number(options.marginRight) || state.marginRight;
+      const marginBottom = Number(options.marginBottom) || state.marginBottom;
+      const marginLeft = Number(options.marginLeft) || state.marginLeft;
       return {
         ...state,
         ...options,
@@ -93,6 +101,10 @@ export function optionsReducer(state = initialState, action: OptionsAction): Opt
         topN,
         tickDuration,
         labelsWidth,
+        marginTop,
+        marginRight,
+        marginBottom,
+        marginLeft,
       };
     }
     case actionTypes.changeOptions:

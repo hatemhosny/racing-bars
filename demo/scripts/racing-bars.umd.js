@@ -570,6 +570,10 @@
     minWidth: 500,
     height: '',
     width: '',
+    marginTop: 0,
+    marginRight: 20,
+    marginBottom: 5,
+    marginLeft: 0,
     theme: 'light',
     colorMap: {},
     fixedScale: false,
@@ -612,6 +616,10 @@
 
           var tickDuration = Number(options.tickDuration) || state.tickDuration;
           var labelsWidth = Number(options.labelsWidth) || state.labelsWidth;
+          var marginTop = Number(options.marginTop) || state.marginTop;
+          var marginRight = Number(options.marginRight) || state.marginRight;
+          var marginBottom = Number(options.marginBottom) || state.marginBottom;
+          var marginLeft = Number(options.marginLeft) || state.marginLeft;
           return _extends(_extends(_extends({}, state), options), {}, {
             startDate: startDate,
             endDate: endDate,
@@ -621,7 +629,11 @@
             colorMap: colorMap,
             topN: topN,
             tickDuration: tickDuration,
-            labelsWidth: labelsWidth
+            labelsWidth: labelsWidth,
+            marginTop: marginTop,
+            marginRight: marginRight,
+            marginBottom: marginBottom,
+            marginLeft: marginLeft
           });
         }
 
@@ -1250,6 +1262,10 @@
           inputWidth = _store$getState$optio2.inputWidth,
           minHeight = _store$getState$optio2.minHeight,
           minWidth = _store$getState$optio2.minWidth,
+          marginTop = _store$getState$optio2.marginTop,
+          marginRight = _store$getState$optio2.marginRight,
+          marginBottom = _store$getState$optio2.marginBottom,
+          marginLeft = _store$getState$optio2.marginLeft,
           fixedScale = _store$getState$optio2.fixedScale,
           fixedOrder = _store$getState$optio2.fixedOrder;
       var topN = fixedOrder.length > 0 ? fixedOrder.length : store.getState().options.topN;
@@ -1275,17 +1291,17 @@
         var groupsHeight = !showGroups ? 0 : titleHeight || subTitleHeight ? 20 : 30;
         var controlsHeight = showControls !== 'none' ? 50 : 0;
         var topAxisPadding = 15;
-        var HeaderHeight = Math.max(titleHeight + subTitleHeight + groupsHeight, controlsHeight, 10);
+        var HeaderHeight = Math.max(titleHeight + subTitleHeight + groupsHeight, controlsHeight + groupsHeight, 10);
         var labelsArea = labelsPosition === 'inside' ? 0 : labelsWidth;
         margin = {
-          top: HeaderHeight + topAxisPadding,
-          right: 20,
-          bottom: 5,
-          left: 0 + labelsArea
+          top: marginTop + HeaderHeight + topAxisPadding,
+          right: marginRight,
+          bottom: marginBottom,
+          left: marginLeft + labelsArea
         };
         svg = d3$1.select(root).append('svg').attr('width', width).attr('height', height);
-        titleText = svg.append('text').attr('class', 'title').attr('x', titlePadding).attr('y', 24).html(getText(title, currentDate, CompleteDateSlice, dates));
-        subTitleText = svg.append('text').attr('class', 'subTitle').attr('x', titlePadding).attr('y', titleHeight || 24).html(getText(subTitle, currentDate, CompleteDateSlice, dates));
+        titleText = svg.append('text').attr('class', 'title').attr('x', marginLeft + titlePadding).attr('y', marginTop + 24).html(getText(title, currentDate, CompleteDateSlice, dates));
+        subTitleText = svg.append('text').attr('class', 'subTitle').attr('x', marginLeft + titlePadding).attr('y', marginTop + (titleHeight || 24)).html(getText(subTitle, currentDate, CompleteDateSlice, dates));
 
         if (showGroups) {
           var legendsWrapper = svg.append('g');
@@ -1397,7 +1413,7 @@
         }
 
         var endY = height - margin.bottom;
-        var endX = width - margin.right - barPadding;
+        var endX = width - margin.right;
         var dateCounterTextY = caption ? endY - 30 : endY - 5;
         dateCounterText = svg.append('text').attr('class', 'dateCounterText').attr('x', endX).attr('y', dateCounterTextY).style('text-anchor', 'end').html(getText(dateCounter, currentDate, CompleteDateSlice, dates, true)).call(halo);
         captionText = svg.append('text').attr('class', 'caption').attr('x', endX - 10).attr('y', endY - 5).style('text-anchor', 'end').html(getText(caption, currentDate, CompleteDateSlice, dates));
@@ -1414,7 +1430,7 @@
           skipForward: icons.skipForward
         }];
         var elementWidth = root.getBoundingClientRect().width;
-        d3$1.select(root).append('div').classed('controls', true).style('width', width).style('right', elementWidth - width + margin.right + barPadding + 'px').selectAll('div').data(controlIcons).enter().append('div').html(function (d) {
+        d3$1.select(root).append('div').classed('controls', true).style('position', 'absolute').style('top', marginTop + 'px').style('width', width).style('right', elementWidth - width + margin.right + barPadding + 'px').selectAll('div').data(controlIcons).enter().append('div').html(function (d) {
           return Object.values(d)[0];
         }).attr('class', function (d) {
           return Object.keys(d)[0];
@@ -1455,6 +1471,7 @@
           subTitle = _store$getState$optio3.subTitle,
           caption = _store$getState$optio3.caption,
           dateCounter = _store$getState$optio3.dateCounter,
+          marginBottom = _store$getState$optio3.marginBottom,
           fixedScale = _store$getState$optio3.fixedScale,
           fixedOrder = _store$getState$optio3.fixedOrder,
           labelsPosition = _store$getState$optio3.labelsPosition;
@@ -1484,7 +1501,7 @@
       }).classed('selected', function (d) {
         return store.getState().data.selected.includes(d.name);
       }).attr('x', x(0) + 1).attr('width', barWidth).attr('y', function () {
-        return y(topN + 1) + 5;
+        return y(topN + 1) + marginBottom + 5;
       }).attr('height', barHeight).style('fill', function (d) {
         return getColor(d, store);
       }).on('click', selectFn).on('mouseover', highlightFn).on('mouseout', highlightFn).transition().duration(tickDuration).ease(d3$1.easeLinear).attr('y', barY);
@@ -1494,13 +1511,13 @@
       bars.exit().transition().duration(tickDuration).ease(d3$1.easeLinear).attr('width', function (d) {
         return Math.abs(x(d.value) - x(0) - 1);
       }).attr('y', function () {
-        return y(topN + 1) + 5;
+        return y(topN + 1) + marginBottom + 5;
       }).remove();
       var labels = svg.selectAll('.label').data(dateSlice, function (d) {
         return d.name;
       });
       labels.enter().append('text').attr('class', 'label').classed('outside-bars', labelsPosition !== 'inside').attr('x', labelX).attr('y', function () {
-        return y(topN + 1) + 5 + barHalfHeight;
+        return y(topN + 1) + marginBottom + 5 + barHalfHeight;
       }).style('text-anchor', 'end').html(function (d) {
         return d.name;
       }).on('click', selectFn).on('mouseover', highlightFn).on('mouseout', highlightFn).transition().duration(tickDuration).ease(d3$1.easeLinear).attr('y', function (d) {
@@ -1510,7 +1527,7 @@
         return barY(d) + barHalfHeight;
       });
       labels.exit().transition().duration(tickDuration).ease(d3$1.easeLinear).attr('x', labelX).attr('y', function () {
-        return y(topN + 1) + 5;
+        return y(topN + 1) + marginBottom + 5;
       }).remove();
       var valueLabels = svg.selectAll('.valueLabel').data(dateSlice, function (d) {
         return d.name;
@@ -1518,7 +1535,7 @@
       valueLabels.enter().append('text').attr('class', 'valueLabel').attr('x', function (d) {
         return x(d.value) + 5;
       }).attr('y', function () {
-        return y(topN + 1) + 5;
+        return y(topN + 1) + marginBottom + 5;
       }).text(function (d) {
         return d3$1.format(',.0f')(d.lastValue);
       }).transition().duration(tickDuration).ease(d3$1.easeLinear).attr('y', function (d) {
@@ -1539,7 +1556,7 @@
       valueLabels.exit().transition().duration(tickDuration).ease(d3$1.easeLinear).attr('x', function (d) {
         return x(d.value) + 5;
       }).attr('y', function () {
-        return y(topN + 1) + 5;
+        return y(topN + 1) + marginBottom + 5;
       }).remove();
 
       if (store.getState().options.showIcons) {
@@ -1549,7 +1566,7 @@
         iconPatterns.enter().append('svg:pattern').attr('class', 'svgpattern').attr('id', getIconID).attr('width', iconSize).attr('height', iconSize).append('svg:image').attr('xlink:href', function (d) {
           return d.icon;
         }).attr('width', iconSize).attr('height', iconSize).style('z-index', '99').attr('x', 0).attr('y', 0);
-        iconPatterns.exit().remove();
+        iconPatterns.exit().transition().duration(tickDuration).ease(d3$1.easeLinear).remove();
 
         var _icons = svg.selectAll('circle').data(dateSlice, function (d) {
           return d.name;
@@ -1666,7 +1683,7 @@
     };
   }
 
-  var styles = "\n__selector__ text {\n  font-size: 16px;\n  font-family: Open Sans, sans-serif;\n}\n\n__selector__ text.title {\n  font-size: 24px;\n  font-weight: 500;\n}\n\n__selector__ text.subTitle {\n  font-weight: 500;\n}\n\n__selector__ text.caption {\n  font-weight: 400;\n  font-size: 24px;\n}\n__selector__ text.legend-text {\n  user-select: none;\n  -webkit-user-select: none;\n  -khtml-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n}\n__selector__ text.label {\n  font-weight: 600;\n}\n\n__selector__ text.valueLabel {\n  font-weight: 300;\n}\n\n__selector__ text.dateCounterText {\n  font-size: 64px;\n  font-weight: 700;\n}\n\n__selector__ .xAxis .tick:nth-child(2) text {\n  text-anchor: start;\n}\n\n__selector__ .tick line {\n  shape-rendering: CrispEdges;\n}\n\n__selector__ path.domain {\n  display: none;\n}\n\n__selector__ {\n  position: relative;\n}\n\n__selector__ .controls {\n  /*  width and right are set dynamically in renderer.ts */\n  position: absolute;\n  top: 0;\n  display: flex;\n}\n\n__selector__ .controls div,\n__selector__ .overlay div {\n  cursor: pointer;\n  font-size: 24px;\n  font-weight: 700;\n  width: 38px;\n  height: 38px;\n  -moz-border-radius: 5px;\n  -webkit-border-radius: 5px;\n  border-radius: 5px;\n  margin: 5px;\n  text-align: center;\n}\n\n__selector__ .controls svg {\n  margin: 5px auto;\n  width: 28px;\n  height: 28px;\n}\n\n__selector__ .overlay {\n  position: absolute;\n  top: 0;\n  left: 0;\n  width: 100%;\n  height: 100%;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n__selector__ .overlay div {\n  position: relative;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  width: 200px;\n  height: 200px;\n  -moz-border-radius: 100px;\n  -webkit-border-radius: 100px;\n  border-radius: 100px;\n}\n__selector__ .overlay svg {\n  height: 50%;\n  width: 50%;\n}\n";
+  var styles = "\n__selector__ text {\n  font-size: 16px;\n  font-family: Open Sans, sans-serif;\n}\n\n__selector__ text.title {\n  font-size: 24px;\n  font-weight: 500;\n}\n\n__selector__ text.subTitle {\n  font-weight: 500;\n}\n\n__selector__ text.caption {\n  font-weight: 400;\n  font-size: 24px;\n}\n__selector__ text.legend-text {\n  user-select: none;\n  -webkit-user-select: none;\n  -khtml-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n}\n__selector__ text.label {\n  font-weight: 600;\n}\n\n__selector__ text.valueLabel {\n  font-weight: 300;\n}\n\n__selector__ text.dateCounterText {\n  font-size: 64px;\n  font-weight: 700;\n}\n\n__selector__ .xAxis .tick:nth-child(2) text {\n  text-anchor: start;\n}\n\n__selector__ .tick line {\n  shape-rendering: CrispEdges;\n}\n\n__selector__ path.domain {\n  display: none;\n}\n\n__selector__ {\n  position: relative;\n}\n\n__selector__ .controls {\n  /*  position is set dynamically in renderer.ts */\n  display: flex;\n}\n\n__selector__ .controls div,\n__selector__ .overlay div {\n  cursor: pointer;\n  font-size: 24px;\n  font-weight: 700;\n  width: 38px;\n  height: 38px;\n  -moz-border-radius: 5px;\n  -webkit-border-radius: 5px;\n  border-radius: 5px;\n  margin: 5px;\n  text-align: center;\n}\n\n__selector__ .controls svg {\n  margin: 5px auto;\n  width: 28px;\n  height: 28px;\n}\n\n__selector__ .overlay {\n  position: absolute;\n  top: 0;\n  left: 0;\n  width: 100%;\n  height: 100%;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n__selector__ .overlay div {\n  position: relative;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  width: 200px;\n  height: 200px;\n  -moz-border-radius: 100px;\n  -webkit-border-radius: 100px;\n  border-radius: 100px;\n}\n__selector__ .overlay svg {\n  height: 50%;\n  width: 50%;\n}\n";
   var themes = {
     "dark": "\n__selector__ {\n  background-color: #313639;\n}\n\n__selector__ text.title {\n  fill: #fafafa;\n}\n\n__selector__ text.subTitle {\n  fill: #cccccc;\n}\n\n__selector__ text.dateCounterText {\n  fill: #cccccc;\n  opacity: 1;\n}\n\n__selector__ text.caption {\n  fill: #cccccc;\n}\n\n__selector__ .halo {\n  fill: #313639;\n  stroke: #313639;\n  stroke-width: 10;\n  stroke-linejoin: round;\n  opacity: 1;\n}\n\n__selector__ text.legend-text {\n  fill: #fafafa;\n}\n\n__selector__ text.label {\n  fill: #313639;\n}\n\n__selector__ text.label.outside-bars {\n  fill: #fafafa;\n}\n\n__selector__ text.valueLabel {\n  fill: #fafafa;\n}\n\n__selector__ .tick text {\n  fill: #cccccc;\n}\n\n__selector__ .tick line {\n  shape-rendering: CrispEdges;\n  stroke: #dddddd;\n}\n\n__selector__ .tick line.origin {\n  stroke: #aaaaaa;\n}\n\n__selector__ .controls div,\n__selector__ .overlay div {\n  color: #ffffff;\n  background: #777777;\n  border: 1px solid black;\n  opacity: 0.5;\n}\n\n__selector__ .controls div:hover,\n__selector__ .overlay div:hover {\n  background: #aaaaaa;\n  color: black;\n}\n\n__selector__ .overlay {\n  background-color: black;\n  opacity: 0.7;\n}\n\n__selector__ .highlight {\n  fill: #ff2727 !important;\n}\n\n__selector__ .selected {\n  fill: #d12020 !important;\n  stroke: #777777 !important;\n  stroke-width: 1 !important;\n}\n",
     "light": "\n/* __selector__ {\n  background-color: #ffffff;\n}\n\n__selector__ text.title {\n  fill: #fafafa;\n} */\n\n__selector__ text.subTitle {\n  fill: #777777;\n}\n\n__selector__ text.dateCounterText {\n  fill: #bbbbbb;\n  opacity: 1;\n}\n\n__selector__ text.caption {\n  fill: #777777;\n}\n\n__selector__ .halo {\n  fill: #ffffff;\n  stroke: #ffffff;\n  stroke-width: 10;\n  stroke-linejoin: round;\n  opacity: 1;\n}\n\n__selector__ text.legend-text {\n  fill: #000000;\n}\n\n__selector__ text.label {\n  fill: #000000;\n}\n\n__selector__ text.label.outside-bars {\n  fill: #000000;\n}\n\n__selector__ text.valueLabel {\n  fill: #000000;\n}\n\n__selector__ .tick text {\n  fill: #777777;\n}\n\n__selector__ .tick line {\n  shape-rendering: CrispEdges;\n  stroke: #dddddd;\n}\n\n__selector__ .tick line.origin {\n  stroke: #aaaaaa;\n}\n\n__selector__ .controls div,\n__selector__ .overlay div {\n  color: #ffffff;\n  background: #777777;\n  border: 1px solid black;\n  opacity: 0.5;\n}\n\n__selector__ .controls div:hover,\n__selector__ .overlay div:hover {\n  background: #aaaaaa;\n  color: black;\n}\n\n__selector__ .overlay {\n  background-color: black;\n  opacity: 0.7;\n}\n\n__selector__ .highlight {\n  fill: #ff2727 !important;\n}\n\n__selector__ .selected {\n  fill: #d12020 !important;\n  stroke: #777777 !important;\n  stroke-width: 1 !important;\n}\n"

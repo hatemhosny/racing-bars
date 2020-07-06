@@ -65,6 +65,10 @@ export function createRenderer(data: Data[], store: Store): Renderer {
       inputWidth,
       minHeight,
       minWidth,
+      marginTop,
+      marginRight,
+      marginBottom,
+      marginLeft,
       fixedScale,
       fixedOrder,
     } = store.getState().options;
@@ -94,16 +98,16 @@ export function createRenderer(data: Data[], store: Store): Renderer {
       const topAxisPadding = 15;
       const HeaderHeight = Math.max(
         titleHeight + subTitleHeight + groupsHeight,
-        controlsHeight,
+        controlsHeight + groupsHeight,
         10,
       );
       const labelsArea = labelsPosition === 'inside' ? 0 : labelsWidth;
 
       margin = {
-        top: HeaderHeight + topAxisPadding,
-        right: 20,
-        bottom: 5,
-        left: 0 + labelsArea,
+        top: marginTop + HeaderHeight + topAxisPadding,
+        right: marginRight,
+        bottom: marginBottom,
+        left: marginLeft + labelsArea,
       };
 
       svg = d3 //
@@ -115,15 +119,15 @@ export function createRenderer(data: Data[], store: Store): Renderer {
       titleText = svg //
         .append('text')
         .attr('class', 'title')
-        .attr('x', titlePadding)
-        .attr('y', 24)
+        .attr('x', marginLeft + titlePadding)
+        .attr('y', marginTop + 24)
         .html(getText(title, currentDate, CompleteDateSlice, dates));
 
       subTitleText = svg //
         .append('text')
         .attr('class', 'subTitle')
-        .attr('x', titlePadding)
-        .attr('y', titleHeight || 24)
+        .attr('x', marginLeft + titlePadding)
+        .attr('y', marginTop + (titleHeight || 24))
         .html(getText(subTitle, currentDate, CompleteDateSlice, dates));
 
       if (showGroups) {
@@ -286,7 +290,7 @@ export function createRenderer(data: Data[], store: Store): Renderer {
       }
 
       const endY = height - margin.bottom;
-      const endX = width - margin.right - barPadding;
+      const endX = width - margin.right;
       const dateCounterTextY = caption ? endY - 30 : endY - 5;
       dateCounterText = svg
         .append('text')
@@ -319,6 +323,8 @@ export function createRenderer(data: Data[], store: Store): Renderer {
       d3.select(root)
         .append('div')
         .classed('controls', true)
+        .style('position', 'absolute')
+        .style('top', marginTop + 'px')
         .style('width', width)
         .style('right', elementWidth - width + margin.right + barPadding + 'px')
         .selectAll('div')
@@ -368,6 +374,7 @@ export function createRenderer(data: Data[], store: Store): Renderer {
       subTitle,
       caption,
       dateCounter,
+      marginBottom,
       fixedScale,
       fixedOrder,
       labelsPosition,
@@ -406,7 +413,7 @@ export function createRenderer(data: Data[], store: Store): Renderer {
       .classed('selected', (d: Data) => store.getState().data.selected.includes(d.name))
       .attr('x', x(0) + 1)
       .attr('width', barWidth)
-      .attr('y', () => y(topN + 1) + 5)
+      .attr('y', () => y(topN + 1) + marginBottom + 5)
       .attr('height', barHeight)
       .style('fill', (d: Data) => getColor(d, store))
       .on('click', selectFn)
@@ -430,7 +437,7 @@ export function createRenderer(data: Data[], store: Store): Renderer {
       .duration(tickDuration)
       .ease(d3.easeLinear)
       .attr('width', (d: Data) => Math.abs(x(d.value) - x(0) - 1))
-      .attr('y', () => y(topN + 1) + 5)
+      .attr('y', () => y(topN + 1) + marginBottom + 5)
       .remove();
 
     const labels = svg //
@@ -443,7 +450,7 @@ export function createRenderer(data: Data[], store: Store): Renderer {
       .attr('class', 'label')
       .classed('outside-bars', labelsPosition !== 'inside')
       .attr('x', labelX)
-      .attr('y', () => y(topN + 1) + 5 + barHalfHeight)
+      .attr('y', () => y(topN + 1) + marginBottom + 5 + barHalfHeight)
       .style('text-anchor', 'end')
       .html((d: Data) => d.name)
       .on('click', selectFn)
@@ -467,7 +474,7 @@ export function createRenderer(data: Data[], store: Store): Renderer {
       .duration(tickDuration)
       .ease(d3.easeLinear)
       .attr('x', labelX)
-      .attr('y', () => y(topN + 1) + 5)
+      .attr('y', () => y(topN + 1) + marginBottom + 5)
       .remove();
 
     const valueLabels = svg //
@@ -479,7 +486,7 @@ export function createRenderer(data: Data[], store: Store): Renderer {
       .append('text')
       .attr('class', 'valueLabel')
       .attr('x', (d: Data) => x(d.value) + 5)
-      .attr('y', () => y(topN + 1) + 5)
+      .attr('y', () => y(topN + 1) + marginBottom + 5)
       .text((d: Data) => d3.format(',.0f')(d.lastValue as number))
       .transition()
       .duration(tickDuration)
@@ -507,7 +514,7 @@ export function createRenderer(data: Data[], store: Store): Renderer {
       .duration(tickDuration)
       .ease(d3.easeLinear)
       .attr('x', (d: Data) => x(d.value) + 5)
-      .attr('y', () => y(topN + 1) + 5)
+      .attr('y', () => y(topN + 1) + marginBottom + 5)
       .remove();
 
     if (store.getState().options.showIcons) {
@@ -528,7 +535,12 @@ export function createRenderer(data: Data[], store: Store): Renderer {
         .attr('x', 0)
         .attr('y', 0);
 
-      iconPatterns.exit().remove();
+      iconPatterns //
+        .exit()
+        .transition()
+        .duration(tickDuration)
+        .ease(d3.easeLinear)
+        .remove();
 
       const icons = svg //
         .selectAll('circle')

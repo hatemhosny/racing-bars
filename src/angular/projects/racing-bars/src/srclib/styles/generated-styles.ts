@@ -58,9 +58,7 @@ __selector__ {
 }
 
 __selector__ .controls {
-  /*  width and right are set dynamically in renderer.ts */
-  position: absolute;
-  top: 0;
+  /*  position is set dynamically in renderer.ts */
   display: flex;
 }
 

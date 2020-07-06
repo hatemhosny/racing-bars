@@ -31,6 +31,10 @@ export interface Options {
   minWidth: number;
   height: string;
   width: string;
+  marginTop: number;
+  marginRight: number;
+  marginBottom: number;
+  marginLeft: number;
   disableClickEvents: boolean;
   disableKeyboardEvents: boolean;
   showControls: 'all' | 'play' | 'none';

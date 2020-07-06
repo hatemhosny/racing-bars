@@ -13,7 +13,17 @@ and [python](./packages/python.md).
 
 import RacingBars from '../racing-bars.js';
 
-This code:
+This chart:
+
+<div className="gallery">
+  <RacingBars
+    dataUrl="/data/population.csv"
+    dataType="csv"
+  />
+</div>
+<p> </p>
+
+...is produced by this code:
 
 ```html
 <div id="race"></div>
@@ -24,16 +34,37 @@ This code:
 </script>
 ```
 
-... produces this chart:
+<p style={{height: 30}}> </p>
+<p>...while that chart:</p>
 
-<div className="gallery">
-  <RacingBars
-    dataUrl="/data/population.csv"
-    dataType="csv"
-  />
+export const transformFn = (data) => data.map((d) => ({
+...d,
+icon: `https://www.countryflags.io/${d.code.toLowerCase()}/flat/64.png`,
+}));
+
+<div style={{width: 800, height: 450}}>
+  <div className="gallery">
+    <RacingBars
+      dataUrl="/data/population.csv"
+      dataType="csv"
+      dataTransform={transformFn}
+      title="World Population in 60 Years"
+      subTitle="Country Population in millions"
+      caption="Source: World Bank"
+      dateCounter= "MMM YYYY"
+      showGroups={false}
+      showIcons={true}
+      labelsPosition="outside"
+      labelsWidth="160"
+      autorun={false}
+      showOverlays="all"
+      showControls="all"
+      theme="dark"
+    />
+  </div>
 </div>
-<p> </p>
-<p>... while that code:</p>
+
+<p>... is produced by that code:</p>
 
 ```html
 <style>
@@ -55,9 +86,10 @@ This code:
     showGroups: false,
     showIcons: true,
     labelsPosition: 'outside',
-    labelsWidth: 120,
+    labelsWidth: 160,
     autorun: false,
     showOverlays: 'all',
+    showControls: 'all',
     theme: 'dark',
   };
 
@@ -71,31 +103,3 @@ This code:
   });
 </script>
 ```
-
-... produces that chart:
-
-export const transformFn = (data) => data.map((d) => ({
-...d,
-icon: `https://www.countryflags.io/${d.code.toLowerCase()}/flat/64.png`,
-}));
-
-<div style={{width: 800, height: 400}}>
-  <div className="gallery">
-    <RacingBars
-      dataUrl="/data/population.csv"
-      dataType="csv"
-      dataTransform={transformFn}
-      title="World Population in 60 Years"
-      subTitle="Country Population in millions"
-      caption="Source: World Bank"
-      dateCounter= "MMM YYYY"
-      showGroups={false}
-      showIcons={true}
-      labelsPosition="outside"
-      labelsWidth="120"
-      autorun={false}
-      showOverlays="all"
-      theme="dark"
-    />
-  </div>
-</div>
