@@ -4,7 +4,7 @@ import { generateId, getDataPromiseAndOptions, Props } from './shared';
 
 @Component({
   selector: 'racing-bars',
-  template: `<div id="{{ id }}"></div>`,
+  template: `<div id="{{ elementId }}">{{ loadingContent }}</div>`,
   styles: [
     `
       :host {
@@ -22,6 +22,7 @@ export class RacingBarsComponent implements OnInit, OnChanges, OnDestroy {
   @Input() public dataUrl: string;
   @Input() public dataType: 'json' | 'csv' | 'tsv' | 'xml' | undefined;
   @Input() public elementId: string;
+  @Input() public loadingContent: string;
 
   @Input() public dataShape: 'long' | 'wide';
   @Input() public dataTransform: null | ((data: Data[] | WideData[]) => Data[] | WideData[]);
@@ -62,11 +63,11 @@ export class RacingBarsComponent implements OnInit, OnChanges, OnDestroy {
   @Input() public highlightBars: boolean;
   @Input() public selectBars: boolean;
 
-  public id: string;
   public racer: Race;
 
   public ngOnInit() {
-    this.id = this.elementId || generateId();
+    this.elementId = this.elementId ?? generateId();
+    this.loadingContent = this.loadingContent ?? 'Loading...';
     this.runRace();
   }
 
@@ -80,7 +81,7 @@ export class RacingBarsComponent implements OnInit, OnChanges, OnDestroy {
 
   private async runRace() {
     this.cleanUp();
-    const { dataPromise, options } = getDataPromiseAndOptions(this.getProps(), this.id);
+    const { dataPromise, options } = getDataPromiseAndOptions(this.getProps(), this.elementId);
     const data = await dataPromise;
     this.racer = race(data, options);
   }
@@ -97,6 +98,7 @@ export class RacingBarsComponent implements OnInit, OnChanges, OnDestroy {
       dataUrl: this.dataUrl,
       dataType: this.dataType,
       elementId: this.elementId,
+      loadingContent: this.loadingContent,
       dataShape: this.dataShape,
       dataTransform: this.dataTransform,
       fillDateGaps: this.fillDateGaps,

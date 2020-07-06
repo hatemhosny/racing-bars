@@ -42,6 +42,8 @@ export interface Props extends Partial<Options> {
   dataUrl: string;
   /** Type of data fetched from Url by [[Props.dataUrl]] */
   dataType: 'json' | 'csv' | 'tsv' | 'xml' | undefined;
-  /** an `id` to assign to the generated DOM element */
+  /** An `id` to assign to the generated DOM element */
   elementId: string;
+  /** Content to show till the chart loads. This can accept HTML. */
+  loadingContent: string;
 }

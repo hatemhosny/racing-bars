@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
+// prettier-ignore
 @Component({
   selector: 'app-root',
   template: `<racing-bars

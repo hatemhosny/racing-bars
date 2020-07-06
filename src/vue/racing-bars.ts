@@ -6,9 +6,10 @@ const RacingBarsComponent = {
   inheritAttrs: false,
   created() {
     this.elementId = this.$attrs['element-id'] || generateId();
+    this.loadingContent = this.$attrs['loading-content'] ?? 'Loading...';
   },
   render(createElement: any) {
-    return createElement('div', { domProps: { id: this.elementId } });
+    return createElement('div', { domProps: { id: this.elementId } }, this.loadingContent);
   },
   mounted() {
     this.$nextTick(() => {

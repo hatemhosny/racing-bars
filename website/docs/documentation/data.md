@@ -44,7 +44,7 @@ The order of the items is not important.
 
 this is represented in JSON like that:
 
-```json title="sample.json"
+```json title="long.json"
 [
   {
     "date": "2017-01-01",
@@ -101,7 +101,7 @@ this is represented in JSON like that:
 
 and in CSV like that
 
-```csv title="sample.csv"
+```csv title="long.csv"
 date,name,value
 2017-01-01,"Egypt",96.44
 2017-01-01,Singapore,5.61
@@ -145,7 +145,7 @@ to load `json`, `csv`, `tsv` or `xml` data from URL into a javascript object.
 - Load JSON from URL
 
 ```js
-racingBars.loadData('sample.json').then((data) => {
+racingBars.loadData('long.json').then((data) => {
   racingBars.race(data);
 });
 ```
@@ -153,7 +153,7 @@ racingBars.loadData('sample.json').then((data) => {
 - Load CSV from URL
 
 ```js
-racingBars.loadData('sample.csv', 'csv').then((data) => {
+racingBars.loadData('long.csv', 'csv').then((data) => {
   racingBars.race(data);
 });
 ```
@@ -173,7 +173,7 @@ Each item (row), contains `date` field and other fields with key (column name), 
 
 JSON:
 
-```json title="sample-wide.json"
+```json title="wide.json"
 [
   {
     "date": "2017-01-01",
@@ -196,7 +196,7 @@ JSON:
 
 CSV:
 
-```csv title="sample-wide.csv"
+```csv title="wide.csv"
 date,Canada,Egypt,Greece,Panama,Singapore
 2017-01-01,36.54,96.44,10.75,4.11,5.61
 2018-01-01,37.06,98.42,10.73,4.18,5.64
@@ -234,7 +234,7 @@ racingBars.race(data, { dataShape: 'wide' });
 - Load JSON from URL
 
 ```js
-racingBars.loadData('sample-wide.json').then((data) => {
+racingBars.loadData('wide.json').then((data) => {
   racingBars.race(data, { dataShape: 'wide' });
 });
 ```
@@ -242,7 +242,7 @@ racingBars.loadData('sample-wide.json').then((data) => {
 - Load CSV from URL
 
 ```js
-racingBars.loadData('sample-wide.csv', 'csv').then((data) => {
+racingBars.loadData('wide.csv', 'csv').then((data) => {
   racingBars.race(data, { dataShape: 'wide' });
 });
 ```

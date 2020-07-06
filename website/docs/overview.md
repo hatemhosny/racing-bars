@@ -5,8 +5,9 @@ title: Overview
 Racing Bars is an [open-source](https://github.com/hatemhosny/racing-bars), light-weight (25kb gzipped),
 easy-to-use, and [feature-rich](./features.md) javascript library for racing bar charts.
 It is based on <a href="https://d3js.org" target="_blank" className="external">D3.js</a>.
-Available for vanilla [javascript](./getting-started/installation.md),
+Available for [vanilla javascript](./getting-started/installation.md),
 [typescript](./packages/typescript.md),
+[angular](./packages/angular.md),
 [react](./packages/react.md),
 [vue](./packages/vue.md)
 and [python](./packages/python.md).
@@ -59,6 +60,8 @@ icon: `https://www.countryflags.io/${d.code.toLowerCase()}/flat/64.png`,
       autorun={false}
       showOverlays="all"
       showControls="all"
+      highlightBars={true}
+      selectBars={true}
       theme="dark"
     />
   </div>
@@ -90,6 +93,8 @@ icon: `https://www.countryflags.io/${d.code.toLowerCase()}/flat/64.png`,
     autorun: false,
     showOverlays: 'all',
     showControls: 'all',
+    highlightBars: true,
+    selectBars: true,
     theme: 'dark',
   };
 

@@ -10,7 +10,7 @@ const initialState: Options = {
   fillDateGapsValue: 'interpolate',
   startDate: '',
   endDate: '',
-  colorSeed: 45,
+  colorSeed: '',
   showGroups: false,
   tickDuration: 500,
   topN: 10,
@@ -42,8 +42,8 @@ const initialState: Options = {
   colorMap: {},
   fixedScale: false,
   fixedOrder: [],
-  highlightBars: true,
-  selectBars: true,
+  highlightBars: false,
+  selectBars: false,
 };
 
 export function optionsReducer(state = initialState, action: OptionsAction): Options {

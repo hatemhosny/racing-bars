@@ -547,7 +547,7 @@
     startDate: '',
     endDate: '',
     colorSeed: '',
-    showGroups: true,
+    showGroups: false,
     tickDuration: 500,
     topN: 10,
     disableClickEvents: true,
@@ -562,7 +562,7 @@
     labelsPosition: 'inside',
     labelsWidth: 150,
     showIcons: false,
-    showControls: 'all',
+    showControls: 'none',
     showOverlays: 'none',
     inputHeight: '',
     inputWidth: '',
@@ -578,8 +578,8 @@
     colorMap: {},
     fixedScale: false,
     fixedOrder: [],
-    highlightBars: true,
-    selectBars: true
+    highlightBars: false,
+    selectBars: false
   };
   function optionsReducer(state, action) {
     if (state === void 0) {

@@ -5,14 +5,17 @@ import { generateId, getDataPromiseAndOptions, Props } from '../shared';
 
 class RacingBarsComponent extends React.PureComponent {
   public elementId: string;
+  public loadingContent: string;
   public racer: Race | undefined;
+
   public constructor(props: Props) {
     super(props);
     this.elementId = props.elementId || generateId();
+    this.loadingContent = props.loadingContent ?? 'Loading...';
   }
 
   public render() {
-    return React.createElement('div', { id: this.elementId });
+    return React.createElement('div', { id: this.elementId }, this.loadingContent);
   }
 
   public componentDidMount() {

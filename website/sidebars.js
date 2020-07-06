@@ -17,10 +17,10 @@ module.exports = {
       label: 'Frameworks and Languages',
       items: [
         'frameworks/js',
+        'frameworks/typescript',
         'frameworks/angular',
         'frameworks/react',
         'frameworks/vue',
-        'frameworks/typescript',
         'frameworks/python',
       ],
     },
