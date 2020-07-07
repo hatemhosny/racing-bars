@@ -1780,27 +1780,30 @@
     function registerKeyboardEvents() {
       if (store.getState().options.keyboardControls) {
         document.addEventListener('keypress', function (e) {
+          var target = document.activeElement;
+          if (target && ['input', 'textarea'].includes(target.tagName.toLowerCase())) return;
           var keyCodes = {
             spacebar: 32,
-            a: 97,
-            d: 100,
-            s: 115
+            A: 97,
+            S: 115,
+            D: 100
           };
 
           switch (e.keyCode) {
             case keyCodes.spacebar:
               ticker.toggle('keyboardToggle');
+              e.preventDefault();
               break;
 
-            case keyCodes.a:
+            case keyCodes.A:
               ticker.skipBack('keyboardSkipBack');
               break;
 
-            case keyCodes.s:
+            case keyCodes.S:
               ticker.toggle('keyboardToggle');
               break;
 
-            case keyCodes.d:
+            case keyCodes.D:
               ticker.skipForward('keyboardSkipForward');
               break;
           }

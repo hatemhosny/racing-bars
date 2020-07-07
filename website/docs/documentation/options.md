@@ -394,6 +394,29 @@ const options = {
 };
 ```
 
+### keyboardControls
+
+This allows controlling the chart by the keyboard.
+If `true`, the key <kbd>A</kbd> triggers skip-back, the key <kbd>S</kbd> and <kbd>spacebar</kbd> toggle play/pause and the key <kbd>D</kbd> triggers skip-forward.
+
+If the currently active element is an `input` or a `textarea` (i.e. the user is typing), the keyboard events are ignored.
+
+Note that if there are multiple charts in the page, all the charts with the option `keyboardControls` enabled, will be affected.
+
+- Type: boolean
+- Default: false
+- Examples:
+
+[view in gallery](/gallery/keyboard-controls)
+
+```js
+const options = {
+  keyboardControls: true,
+};
+```
+
+See the guide on [`chart controls`](../guides/chart-controls.md) for other alternatives of controlling charts.
+
 ### labelsPosition
 
 Sets the position of bar labels. If set to `"inside"`, the labels are positioned inside the bars.
@@ -503,6 +526,23 @@ const options = {
 };
 ```
 
+### mouseControls
+
+This allows controlling the chart by mouse clicks.
+If `true`, mouse click toggles play/pause, double-click triggers skip-forward and triple-click triggers skip-back.
+
+- Type: boolean
+- Default: false
+- Examples:
+
+```js
+const options = {
+  mouseControls: true,
+};
+```
+
+See the guide on [`chart controls`](../guides/chart-controls.md) for other alternatives of controlling charts.
+
 ### overlays
 
 Shows/hides semi-transparent overlays that cover the chart and show buttons that control it.
@@ -588,7 +628,8 @@ const options = {
 
 If `true` (default) and if the dataset has the optional field `group`, bars of items in the same group will have same color.
 A legend is placed above the chart listing the groups and their colors.
-A click on the group legend toggles showing/hiding this group. Double click on the legend leads to only showing this group.
+A click on the group legend toggles showing/hiding this group.
+Double click on the legend shows this group only.
 Triple click on any legend will reset the group filter (show all groups).
 
 - Type: boolean
@@ -859,7 +900,7 @@ const options = {
 ✔ height: ""
 ✔ highlightBars: true
   injectStyles: true
-  keyboardControls: false
+✔ keyboardControls: false
 ✔ labelsPosition: 'inside'
 ✔ labelsWidth: 150
 ✔ loop: false
@@ -867,7 +908,7 @@ const options = {
 ✔ marginLeft: 0
 ✔ marginRight: 20
 ✔ marginTop: 0
-   mouseControls: false
+✔ mouseControls: false
 ✔ overlays: "none"
 ✔ selectBars: true
 ✔ selector: "#race"
