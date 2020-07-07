@@ -23,7 +23,7 @@ Also note that with this setting it is more likely that the date counter will ov
     dateCounter="YYYY"
     fixedOrder={['Algeria', 'Italy', 'Canada', 'France', 'Argentina']}
     topN="3"
-    tickDuration="100"
+    tickDuration="200"
 />
 
 </div>
@@ -39,8 +39,8 @@ Also note that with this setting it is more likely that the date counter will ov
     subTitle: 'in millions',
     dateCounter: 'YYYY',
     fixedOrder: ['Algeria', 'Italy', 'Canada', 'France', 'Panama'],
-    topN: 3,
-    tickDuration: 100,
+    topN: 3, // ignored
+    tickDuration: 200,
   };
 
   racingBars.loadData('/data/population.csv', 'csv').then((data) => {

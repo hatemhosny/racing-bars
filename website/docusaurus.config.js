@@ -6,14 +6,14 @@ module.exports = {
   url: 'https://your-docusaurus-test-site.com',
   baseUrl: '/',
   favicon: 'img/favicon.ico',
-  organizationName: 'facebook', // Usually your GitHub org/user name.
-  projectName: 'docusaurus', // Usually your repo name.
+  organizationName: 'hatemhosny', // Usually your GitHub org/user name.
+  projectName: 'racing-bars', // Usually your repo name.
   themeConfig: {
     navbar: {
       title: 'Racing Bars',
       logo: {
-        alt: 'My Site Logo',
-        src: 'img/logo.svg',
+        alt: 'Racing Bars',
+        src: 'img/logo.png',
       },
       links: [
         {

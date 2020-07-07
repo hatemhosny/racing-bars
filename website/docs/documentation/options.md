@@ -394,6 +394,28 @@ const options = {
 };
 ```
 
+### injectStyles
+
+The CSS required by the charts are injected into the top of the head element of the HTML document.
+This allows usage with a single script tag.
+The injected CSS is scoped to the element specified in the [`selector`](#selector) option.
+You may wish to disable this behaviour and have control on CSS.
+To do this set the option `injectStyles` to `false`, and no CSS will be injected
+
+- Type: boolean
+- Default: true
+- Examples:
+
+```js
+const options = {
+  injectStyles: false,
+};
+```
+
+You may want to refer to the <a href="https://github.com/hatemhosny/racing-bars/tree/master/src/lib/css" class="external" target="_blank">CSS used by the library</a> if you wish to use it as a starting point.
+
+See the guide on [`styles and themes`](../guides/styles-themes.md) for more details.
+
 ### keyboardControls
 
 This allows controlling the chart by the keyboard.
@@ -899,7 +921,7 @@ const options = {
 ✔ fixedScale: false
 ✔ height: ""
 ✔ highlightBars: true
-  injectStyles: true
+✔ injectStyles: true
 ✔ keyboardControls: false
 ✔ labelsPosition: 'inside'
 ✔ labelsWidth: 150

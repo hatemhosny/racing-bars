@@ -13,6 +13,9 @@
       height: 100%;
       width: 95%;
     }
+    text {
+      display: none;
+    }
   </style>
 </head>
 
@@ -26,16 +29,10 @@
   <script>
     const options = {
       selector: '#race',
-      title: 'A Tale of 11 Years',
-      subTitle: 'Top 10 Surgical Procedures',
-      loop: false,
-      autorun: false,
+      keyboardControls: true,
       labelsPosition: 'outside',
-      tickDuration: 100,
-      // fixedScale: true,
-      // fixedOrder: ['Algeria', 'Italy', 'Canada', 'France', 'Panama'],
+      dateCounter: '',
       fixedOrder: ['France', 'Italy', 'Argentina', 'Algeria', 'Canada'],
-      topN: 3,
     };
     racingBars.loadData('data/population.csv', 'csv').then((data) => {
       racingBars.race(data, options);
