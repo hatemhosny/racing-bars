@@ -37,7 +37,7 @@ module.exports = {
         'guides/groups',
         'guides/dynamic-values',
         'guides/chart-controls',
-        'guides/fillDateGaps',
+        'guides/fill-date-gaps',
         'guides/multiple-charts',
       ],
     },

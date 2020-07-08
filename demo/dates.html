@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8" />
+  <style>
+    #container {
+      height: 95vh;
+      /* width: 95vw; */
+      width: 100%;
+      margin-top: 15px;
+    }
+    .race {
+      margin: auto;
+      height: 100%;
+      width: 95%;
+    }
+  </style>
+</head>
+
+<body>
+<div id="container">
+  <div id="race" class="race"></div>
+</div>
+
+<script src="scripts/d3.min.js"></script>
+<script src="scripts/racing-bars.umd.js"></script>
+<script>
+const dates = [
+  "2012-06-30",
+  "2012-09-28",
+  "2012-12-30",
+  "2013-03-30",
+  "2013-06-30",
+  "2013-09-30",
+  "2013-12-30",
+  "2014-03-30",
+  "2014-06-30",
+  "2014-09-30",
+  "2014-12-30",
+  "2015-03-30",
+  "2015-06-30",
+  "2015-09-30",
+  "2015-12-30",
+  "2016-03-30",
+  "2016-06-30",
+  "2016-09-30",
+  "2016-12-30",
+  "2017-03-30",
+  "2017-06-30",
+  "2017-09-30",
+  "2017-12-30",
+  "2018-03-30",
+  "2018-06-30",
+  "2018-09-30",
+  "2018-12-30",
+  "2019-03-30",
+  "2019-06-30",
+  "2019-09-30",
+  "2019-12-30",
+  "2020-03-30",
+].map(d => new Date(d));
+
+function getDateRange(date1, date2, interval){
+
+  const range = [date1, ...d3.timeDay.range(date1, date2)];
+
+  const daysInMonth = (date) => new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
+
+  const sameDay = date1.getDate() === date2.getDate()
+  const sameMonth = date1.getMonth() === date2.getMonth()
+  const sameYear = date1.getFullYear() === date2.getFullYear()
+
+  const numberOfDays = d3.timeDay.count(date1, date2)
+  const numberOfMonths = d3.timeMonth.count(date1, date2)
+  const numberOfYears = d3.timeYear.count(date1, date2)
+
+  let outputRange = [];
+
+  if (interval === 'year'){
+    if (sameMonth && sameDay){
+      outputRange = range.filter(date =>{
+        if (date.getMonth() === date1.getMonth()){
+          if (date.getDate() === date1.getDate()) return true;
+          if (date1.getDate() > daysInMonth(date)){
+            return date.getDate() === daysInMonth(date);
+          }
+        }
+      });
+    } else {
+      outputRange = range.filter(date =>
+      range.indexOf(date) % Math.round(range.length/(numberOfYears)) === 0
+      );
+    }
+  } else if (interval === 'month'){
+    if (sameDay){
+      outputRange = range.filter(date => {
+        if (date.getDate() === date1.getDate()) return true;
+        if (date1.getDate() > daysInMonth(date)){
+          return date.getDate() === daysInMonth(date);
+        }
+      });
+    } else {
+      outputRange = range.filter(date =>
+      range.indexOf(date) % Math.round(range.length/(numberOfMonths)) === 0
+      );
+    }
+  } else if (interval === 'day'){
+    outputRange = range;
+  }
+
+  if (outputRange.length === 0) {
+    outputRange = [date1, date2];
+  }
+  if (getDateString(date1) !== getDateString(outputRange[0])) {
+    outputRange = [date1, ...outputRange];
+  }
+  if (getDateString(date2) !== getDateString(outputRange[outputRange.length -1])) {
+    outputRange = [...outputRange, date2];
+  }
+
+  return outputRange;
+
+}
+
+console.log(getDateRange(dates[0], dates[dates.length - 1], 'year').map(getDateString));
+
+
+function getDateString(inputDate) {
+  const date = new Date(inputDate);
+  if (isNaN(+date)) {
+    throw new Error(`"${inputDate}" is not a valid date`);
+  }
+
+  const year = date.getFullYear().toString();
+  const month = zeroPad((1 + date.getMonth()).toString(), 2);
+  const day = zeroPad(date.getDate().toString(), 2);
+
+  return `${year}-${month}-${day}`;
+
+  function zeroPad(n, w) {
+  while (n.toString().length < w) {
+    n = '0' + n;
+  }
+  return n;
+}
+}
+</script>
+</body>
+</html>

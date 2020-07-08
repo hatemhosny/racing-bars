@@ -339,6 +339,71 @@
     };
     return format.replace('MMM', monthNames[month]).replace('DDD', weekDays[weekDayIndex]).replace('YYYY', year).replace('MM', month).replace('DD', day);
   }
+  function getDateRange(date1, date2, interval) {
+    var range = [date1].concat(d3$1.timeDay.range(date1, date2));
+
+    var daysInMonth = function daysInMonth(date) {
+      return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
+    };
+
+    var sameDay = date1.getDate() === date2.getDate();
+    var sameMonth = date1.getMonth() === date2.getMonth();
+    var numberOfMonths = d3$1.timeMonth.count(date1, date2);
+    var numberOfYears = d3$1.timeYear.count(date1, date2);
+    var outputRange = [];
+
+    if (interval === 'year') {
+      if (sameMonth && sameDay) {
+        outputRange = range.filter(function (date) {
+          if (date.getMonth() === date1.getMonth()) {
+            if (date.getDate() === date1.getDate()) return true;
+
+            if (date1.getDate() > daysInMonth(date)) {
+              return date.getDate() === daysInMonth(date);
+            }
+          }
+
+          return false;
+        });
+      } else {
+        outputRange = range.filter(function (date) {
+          return range.indexOf(date) % Math.round(range.length / numberOfYears) === 0;
+        });
+      }
+    } else if (interval === 'month') {
+      if (sameDay) {
+        outputRange = range.filter(function (date) {
+          if (date.getDate() === date1.getDate()) return true;
+
+          if (date1.getDate() > daysInMonth(date)) {
+            return date.getDate() === daysInMonth(date);
+          }
+
+          return false;
+        });
+      } else {
+        outputRange = range.filter(function (date) {
+          return range.indexOf(date) % Math.round(range.length / numberOfMonths) === 0;
+        });
+      }
+    } else if (interval === 'day') {
+      outputRange = range;
+    }
+
+    if (outputRange.length === 0) {
+      outputRange = [date1, date2];
+    }
+
+    if (getDateString(date1) !== getDateString(outputRange[0])) {
+      outputRange = [date1].concat(outputRange);
+    }
+
+    if (getDateString(date2) !== getDateString(outputRange[outputRange.length - 1])) {
+      outputRange = [].concat(outputRange, [date2]);
+    }
+
+    return outputRange;
+  }
 
   var actionTypes = {
     dataLoaded: 'data/loaded',
@@ -542,7 +607,7 @@
     selector: '#race',
     dataShape: 'long',
     dataTransform: null,
-    fillDateGaps: false,
+    fillDateGapsInterval: null,
     fillDateGapsValue: 'interpolate',
     startDate: '',
     endDate: '',
@@ -1019,8 +1084,8 @@
       return a.date.localeCompare(b.date) || a.name.localeCompare(b.name);
     });
 
-    if (options.fillDateGaps) {
-      data = fillGaps(data, options.fillDateGaps, options.fillDateGapsValue);
+    if (options.fillDateGapsInterval) {
+      data = fillGaps(data, options.fillDateGapsInterval, options.fillDateGapsValue);
     }
 
     data = calculateLastValues(data);
@@ -1120,10 +1185,8 @@
     return wide;
   }
 
-  function fillGaps(data, period, fillValue) {
-    var intervalRange = period === 'years' ? d3$1.timeYear.range : period === 'months' ? d3$1.timeMonth.range : period === 'days' ? d3$1.timeDay.range : null;
-
-    if (!intervalRange) {
+  function fillGaps(data, interval, fillValue) {
+    if (!interval) {
       return data;
     }
 
@@ -1134,7 +1197,7 @@
     });
     var allData = wideData.reduce(function (acc, row, i) {
       var lastDate = acc[acc.length - 1].date;
-      var range = intervalRange(lastDate, row.date);
+      var range = getDateRange(lastDate, row.date, interval).slice(1);
       var rangeStep = 1 / range.length;
 
       if (i < wideData.length) {

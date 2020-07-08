@@ -9,7 +9,7 @@ export interface Options {
   selector: string;
   dataShape: 'long' | 'wide';
   dataTransform: null | ((data: Data[] | WideData[]) => Data[] | WideData[]);
-  fillDateGaps: false | 'years' | 'months' | 'days';
+  fillDateGapsInterval: null | 'year' | 'month' | 'day';
   fillDateGapsValue: 'last' | 'interpolate';
   title: string;
   subTitle: string;

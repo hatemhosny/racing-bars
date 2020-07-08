@@ -6,7 +6,7 @@ const initialState: Options = {
   selector: '#race',
   dataShape: 'long',
   dataTransform: null,
-  fillDateGaps: false,
+  fillDateGapsInterval: null,
   fillDateGapsValue: 'interpolate',
   startDate: '',
   endDate: '',

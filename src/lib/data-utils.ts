@@ -1,6 +1,6 @@
 import * as d3 from './d3';
 
-import { getDateString, getDates } from './dates';
+import { getDateString, getDates, getDateRange } from './dates';
 import { Data, WideData } from './data';
 import { actions, Store } from './store';
 import { Options } from './options';
@@ -37,8 +37,8 @@ export function prepareData(rawData: Data[], store: Store) {
     })
     .sort((a, b) => a.date.localeCompare(b.date) || a.name.localeCompare(b.name));
 
-  if (options.fillDateGaps) {
-    data = fillGaps(data, options.fillDateGaps, options.fillDateGapsValue);
+  if (options.fillDateGapsInterval) {
+    data = fillGaps(data, options.fillDateGapsInterval, options.fillDateGapsValue);
   }
 
   data = calculateLastValues(data);
@@ -123,19 +123,10 @@ function longDataToWide(long: Data[]) {
 
 function fillGaps(
   data: Data[],
-  period: Options['fillDateGaps'],
+  interval: Options['fillDateGapsInterval'],
   fillValue: Options['fillDateGapsValue'],
 ) {
-  const intervalRange =
-    period === 'years'
-      ? d3.timeYear.range
-      : period === 'months'
-      ? d3.timeMonth.range
-      : period === 'days'
-      ? d3.timeDay.range
-      : null;
-
-  if (!intervalRange) {
+  if (!interval) {
     return data;
   }
 
@@ -145,7 +136,8 @@ function fillGaps(
     .reduce(
       (acc: any[], row, i) => {
         const lastDate = acc[acc.length - 1].date;
-        const range = intervalRange(lastDate, row.date);
+        const range = getDateRange(lastDate, row.date, interval).slice(1);
+
         const rangeStep = 1 / range.length;
         if (i < wideData.length) {
           const iData = d3.interpolate(wideData[i - 1], wideData[i]);
