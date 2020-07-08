@@ -1085,7 +1085,7 @@
     });
 
     if (options.fillDateGapsInterval) {
-      data = fillGaps(data, options.fillDateGapsInterval, options.fillDateGapsValue);
+      data = fillGaps(data, options.fillDateGapsInterval, options.fillDateGapsValue, options.topN);
     }
 
     data = calculateLastValues(data);
@@ -1185,7 +1185,7 @@
     return wide;
   }
 
-  function fillGaps(data, interval, fillValue) {
+  function fillGaps(data, interval, fillValue, topN) {
     if (!interval) {
       return data;
     }
@@ -1201,7 +1201,7 @@
       var rangeStep = 1 / range.length;
 
       if (i < wideData.length) {
-        var iData = d3$1.interpolate(wideData[i - 1], wideData[i]);
+        var iData = interpolateTopN(wideData[i - 1], wideData[i], topN);
         var newData = [];
         range.forEach(function (_, j) {
           var values = fillValue === 'last' ? iData(0) : iData((j + 1) * rangeStep);
@@ -1231,6 +1231,45 @@
       });
     });
     return wideDataToLong(allData, true);
+  }
+
+  function interpolateTopN(data1, data2, topN) {
+    if (data1 === void 0) {
+      data1 = {};
+    }
+
+    if (data2 === void 0) {
+      data2 = {};
+    }
+
+    var topData1 = getTopN(data1, topN);
+    var topData2 = getTopN(data2, topN);
+    var topNames = Array.from(new Set([].concat(topData1, topData2)));
+    var filteredData1 = topNames.reduce(function (obj, curr) {
+      obj[curr] = data1[curr];
+      return obj;
+    }, {});
+    var filteredData2 = topNames.reduce(function (obj, curr) {
+      obj[curr] = data2[curr];
+      return obj;
+    }, {});
+    return d3$1.interpolate(filteredData1, filteredData2);
+
+    function getTopN(data, topN) {
+      if (data === void 0) {
+        data = {};
+      }
+
+      return Object.keys(data).filter(function (key) {
+        return key !== 'date';
+      }).map(function (key) {
+        return data[key];
+      }).sort(function (a, b) {
+        return b.value - a.value;
+      }).slice(0, topN).map(function (d) {
+        return d.name;
+      });
+    }
   }
 
   function getDateSlice(data, date, groupFilter) {

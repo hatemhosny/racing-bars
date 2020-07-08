@@ -38,7 +38,7 @@ export function prepareData(rawData: Data[], store: Store) {
     .sort((a, b) => a.date.localeCompare(b.date) || a.name.localeCompare(b.name));
 
   if (options.fillDateGapsInterval) {
-    data = fillGaps(data, options.fillDateGapsInterval, options.fillDateGapsValue);
+    data = fillGaps(data, options.fillDateGapsInterval, options.fillDateGapsValue, options.topN);
   }
 
   data = calculateLastValues(data);
@@ -125,6 +125,7 @@ function fillGaps(
   data: Data[],
   interval: Options['fillDateGapsInterval'],
   fillValue: Options['fillDateGapsValue'],
+  topN: number,
 ) {
   if (!interval) {
     return data;
@@ -140,7 +141,7 @@ function fillGaps(
 
         const rangeStep = 1 / range.length;
         if (i < wideData.length) {
-          const iData = d3.interpolate(wideData[i - 1], wideData[i]);
+          const iData = interpolateTopN(wideData[i - 1], wideData[i], topN);
           const newData: any[] = [];
           range.forEach((_, j) => {
             const values = fillValue === 'last' ? iData(0) : iData((j + 1) * rangeStep);
@@ -162,6 +163,40 @@ function fillGaps(
     .map((d) => ({ ...d, date: getDateString(d.date) }));
 
   return wideDataToLong(allData, true);
+}
+
+/** Interpolate only topN before and after the date range to improve performace */
+function interpolateTopN(
+  data1: Partial<WideData> = {},
+  data2: Partial<WideData> = {},
+  topN: number,
+) {
+  const topData1 = getTopN(data1, topN);
+  const topData2 = getTopN(data2, topN);
+  const topNames = Array.from(new Set([...topData1, ...topData2]));
+
+  const filteredData1 = topNames.reduce((obj, curr) => {
+    obj[curr] = data1[curr];
+    return obj;
+  }, {} as WideData);
+
+  const filteredData2 = topNames.reduce((obj, curr) => {
+    obj[curr] = data2[curr];
+    return obj;
+  }, {} as WideData);
+
+  return d3.interpolate(filteredData1, filteredData2);
+
+  function getTopN(data: { [key: string]: { name: string; value: number } } = {}, topN: number) {
+    return Object.keys(data)
+      .filter((key) => key !== 'date')
+      .map((key) => data[key])
+      .sort(function (a, b) {
+        return b.value - a.value;
+      })
+      .slice(0, topN)
+      .map((d) => d.name);
+  }
 }
 
 export function getDateSlice(data: Data[], date: string, groupFilter: string[]) {
