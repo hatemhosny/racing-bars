@@ -26,7 +26,7 @@ export class RacingBarsComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input() public dataShape: 'long' | 'wide';
   @Input() public dataTransform: null | ((data: Data[] | WideData[]) => Data[] | WideData[]);
-  @Input() public fillDateGaps: false | 'years' | 'months' | 'days';
+  @Input() public fillDateGapsInterval: null | 'year' | 'month' | 'day';
   @Input() public fillDateGapsValue: 'last' | 'interpolate';
   @Input() public title: string;
   @Input() public subTitle: string;
@@ -101,7 +101,7 @@ export class RacingBarsComponent implements OnInit, OnChanges, OnDestroy {
       loadingContent: this.loadingContent,
       dataShape: this.dataShape,
       dataTransform: this.dataTransform,
-      fillDateGaps: this.fillDateGaps,
+      fillDateGapsInterval: this.fillDateGapsInterval,
       fillDateGapsValue: this.fillDateGapsValue,
       title: this.title,
       subTitle: this.subTitle,

@@ -199,7 +199,7 @@ This function accepts the loaded data (typically an array of data items).
 It may perform various data transformation operations (e.g map, filter, reshape, ..etc).
 It then returns an array of data items that will be used by the [`race`](../documentation/api.md#racedata-options) method.
 
-- Type: function `(data: Data[] | any) => Data[] | WideData[]`
+- Type: function `(data: Data[] | any) => Data[] | WideData[]` | null
 - Default: null
 - Examples:
 
@@ -291,6 +291,77 @@ const options = {
   endDate: '1999-12-31',
 };
 ```
+
+### fillDateGapsInterval
+
+:::info
+
+This option is still experimental.
+
+:::
+
+By default, the chart displays only the dates present in the dataset.
+Missing dates (date gaps) are skipped.
+
+Setting `fillDateGapsInterval` fills the date gaps between [`startDate`](#startdate) and [`endDate`](#enddate).
+The interval at which the date gaps are filled is determined by the value of this option.
+
+For example, setting it to "year" ensures that every year between `startDate` and `endDate` is represented.
+The values computed for the data items in the missing dates are determined by [`fillDateGapsValue`](#filldategapsvalue).
+
+- Type: string | null
+- Valid values: ["year", "month", "day"]
+- Default: null
+- Examples:
+
+[view in gallery](/gallery/fill-date-gaps)
+
+```js
+const options = {
+  fillDateGapsInterval: 'year',
+};
+```
+
+:::caution
+
+Using this feature in large datasets, having to fill large number of missing dates can significantly affect performance.  
+i.e. using the value "day" over a wide range of dates will be significantly slower than "year".
+
+Use with caution!
+
+:::
+
+See the guide on [`Filling Date Gaps`](../guides/fill-date-gaps.md) for details.
+
+### fillDateGapsValue
+
+:::info
+
+This option is still experimental.
+
+:::
+
+Determines the values computed for the data items in the missing dates on filling date gaps.  
+If set to "interpolate", the value of data items in the missing date will be the average between 2 present dates.  
+If set to "last", the value of data items in the missing date will be equal to the values of the last present date.
+
+This is only effective if [`fillDateGapsInterval`](#filldategapsinterval) is set.
+
+- Type: string
+- Valid values: ["interpolate", "last"]
+- Default: "interpolate"
+- Examples:
+
+[view in gallery](/gallery/fill-date-gaps)
+
+```js
+const options = {
+  fillDateGapsInterval: 'year',
+  fillDateGapsValue: 'interpolate',
+};
+```
+
+See the guide on [`Filling Date Gaps`](../guides/fill-date-gaps.md) for details.
 
 ### fixedOrder
 
