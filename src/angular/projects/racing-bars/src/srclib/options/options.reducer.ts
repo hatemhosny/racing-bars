@@ -26,7 +26,7 @@ const initialState: Options = {
   labelsPosition: 'inside',
   labelsWidth: 150,
   showIcons: false,
-  controlButtons: 'none',
+  controlButtons: 'all',
   overlays: 'none',
   inputHeight: '',
   inputWidth: '',

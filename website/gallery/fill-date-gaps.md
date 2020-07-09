@@ -29,7 +29,6 @@ value: Number(d.value)*1000,
     dataType="csv"
     title="World Population"
     fillDateGapsInterval={null}
-    endDate="1965-01-01"
     dataTransform={multiplyBy1000}
     controlButtons="all"
 />
@@ -74,7 +73,6 @@ value: Number(d.value)*1000,
     title="World Population"
     fillDateGapsInterval="month"
     fillDateGapsValue="interpolate"
-    endDate="1965-01-01"
     dataTransform={multiplyBy1000}
     controlButtons="all"
 />
@@ -90,7 +88,6 @@ value: Number(d.value)*1000,
     title: 'World Population',
     fillDateGapsInterval: 'month',
     fillDateGapsValue: 'interpolate',
-    endDate: '1965-01-01',
     dataTransform: multiplyBy1000,
     controlButtons: 'all',
   };
@@ -120,7 +117,6 @@ value: Number(d.value)*1000,
     title="World Population"
     fillDateGapsInterval="month"
     fillDateGapsValue="last"
-    endDate="1965-01-01"
     dataTransform={multiplyBy1000}
     controlButtons="all"
 />
@@ -136,7 +132,6 @@ value: Number(d.value)*1000,
     title: 'World Population',
     fillDateGapsInterval: 'month',
     fillDateGapsValue: 'last',
-    endDate: '1965-01-01',
     dataTransform: multiplyBy1000,
     controlButtons: 'all',
   };

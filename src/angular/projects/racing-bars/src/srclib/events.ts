@@ -1,4 +1,4 @@
-import { elements } from './elements';
+import { elements } from './renderer';
 import { Store } from './store';
 import { Ticker } from './ticker';
 import { hideElement, getElement, getClicks } from './utils';

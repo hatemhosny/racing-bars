@@ -627,7 +627,7 @@
     labelsPosition: 'inside',
     labelsWidth: 150,
     showIcons: false,
-    controlButtons: 'none',
+    controlButtons: 'all',
     overlays: 'none',
     inputHeight: '',
     inputWidth: '',
@@ -1296,14 +1296,150 @@
     return slice.length > 0 ? slice : emptyData;
   }
 
-  var icons = {
-    skipBack: "<svg viewBox=\"0 0 32 32\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" fill=\"none\" stroke=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\"><g><path d=\"M28.46,4a3,3,0,0,0-3,.07l-15.2,9.41A3,3,0,0,0,9,15V5A3,3,0,0,0,6,2H5A3,3,0,0,0,2,5V27a3,3,0,0,0,3,3H6a3,3,0,0,0,3-3V17a3,3,0,0,0,1.22,1.53L25.42,28a3,3,0,0,0,1.58.46,3,3,0,0,0,3-3V6.59A3,3,0,0,0,28.46,4Z\"/></g></svg>",
-    play: "<svg viewBox=\"0 0 32 32\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" fill=\"none\" stroke=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\"><g><path d=\"M26.78,13.45,11.58,4A3,3,0,0,0,7,6.59V25.41a3,3,0,0,0,3,3A3,3,0,0,0,11.58,28l15.2-9.41a3,3,0,0,0,0-5.1Z\"/></g></svg>",
-    pause: "<svg viewBox=\"0 0 32 32\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" fill=\"none\" stroke=\"currentColor\" xmlns:svg=\"http://www.w3.org/2000/svg\"><g transform=\"translate(-17)\"><path d=\"m 27,2 h -1 c -1.656854,0 -3,1.3431458 -3,3 v 12 c -0.04755,3.269656 0,6.666667 0,10 0,1.656854 1.343146,3 3,3 h 1 c 1.656854,0 3,-1.343146 3,-3 V 5 C 30,3.3431458 28.656854,2 27,2 Z\" /></g><g transform=\"translate(-4)\"><path d=\"m 27,2 h -1 c -1.656854,0 -3,1.3431458 -3,3 v 12 c -0.04755,3.269656 0,6.666667 0,10 0,1.656854 1.343146,3 3,3 h 1 c 1.656854,0 3,-1.343146 3,-3 V 5 C 30,3.3431458 28.656854,2 27,2 Z\" /></g></svg>",
-    skipForward: "<svg viewBox=\"0 0 32 32\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" fill=\"none\" stroke=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\"><g><path d=\"M27,2H26a3,3,0,0,0-3,3V15a3,3,0,0,0-1.22-1.53L6.58,4A3,3,0,0,0,2,6.59V25.41a3,3,0,0,0,3,3A3,3,0,0,0,6.58,28l15.2-9.41A3,3,0,0,0,23,17V27a3,3,0,0,0,3,3h1a3,3,0,0,0,3-3V5A3,3,0,0,0,27,2Z\"/></g></svg>",
-    overlayPlay: "<svg viewBox=\"0 0 32 32\" fill=\"currentColor\" stroke=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\"><g><path d=\"M26.78,13.45,11.58,4A3,3,0,0,0,7,6.59V25.41a3,3,0,0,0,3,3A3,3,0,0,0,11.58,28l15.2-9.41a3,3,0,0,0,0-5.1Z\"/></g></svg>",
-    overlayRepeat: "<svg viewBox=\"0 0 32 32\" fill=\"currentColor\" stroke=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\"><g><path d=\"M18,4A12,12,0,0,0,6.05,15H3a1,1,0,0,0-.88.53,1,1,0,0,0,0,1l4,6a1,1,0,0,0,1.66,0l4-6a1,1,0,0,0,.05-1A1,1,0,0,0,11,15H8.05A10,10,0,1,1,18,26a1,1,0,0,0,0,2A12,12,0,0,0,18,4Z\"/></g></svg>"
-  };
+  function calculateDimensions(store, renderOptions) {
+    var _store$getState$optio = store.getState().options,
+        minHeight = _store$getState$optio.minHeight,
+        inputHeight = _store$getState$optio.inputHeight,
+        minWidth = _store$getState$optio.minWidth,
+        inputWidth = _store$getState$optio.inputWidth,
+        title = _store$getState$optio.title,
+        subTitle = _store$getState$optio.subTitle,
+        showGroups = _store$getState$optio.showGroups,
+        controlButtons = _store$getState$optio.controlButtons,
+        marginTop = _store$getState$optio.marginTop,
+        marginRight = _store$getState$optio.marginRight,
+        marginBottom = _store$getState$optio.marginBottom,
+        marginLeft = _store$getState$optio.marginLeft,
+        labelsPosition = _store$getState$optio.labelsPosition,
+        labelsWidth = _store$getState$optio.labelsWidth,
+        topN = _store$getState$optio.topN,
+        showIcons = _store$getState$optio.showIcons;
+    var root = renderOptions.root,
+        maxValue = renderOptions.maxValue;
+    var height = renderOptions.height = getHeight(root, minHeight, inputHeight);
+    var width = renderOptions.width = getWidth(root, minWidth, inputWidth);
+    var titlePadding = 5;
+    var titleHeight = title ? 55 : 0;
+    var subTitleHeight = !subTitle ? 0 : title ? 20 : 40;
+    var groupsHeight = !showGroups ? 0 : titleHeight || subTitleHeight ? 20 : 30;
+    var controlsHeight = controlButtons !== 'none' ? 50 : 0;
+    var headerHeight = Math.max(titleHeight + subTitleHeight + groupsHeight, controlsHeight + groupsHeight, 10);
+    var labelsArea = labelsPosition === 'inside' ? 0 : labelsWidth;
+    var topAxisPadding = 15;
+    var margin = {
+      top: marginTop + headerHeight + topAxisPadding,
+      right: marginRight,
+      bottom: marginBottom,
+      left: marginLeft + labelsArea
+    };
+    var x = renderOptions.x = d3$1.scaleLinear().domain([0, maxValue]).range([margin.left, width - margin.right - 65]);
+    var y = renderOptions.y = d3$1.scaleLinear().domain([topN, 0]).range([height - margin.bottom, margin.top]);
+    var barPadding = renderOptions.barPadding = (height - (margin.bottom + margin.top)) / (topN * 5);
+    var labelPadding = renderOptions.labelPadding = 8;
+
+    renderOptions.barWidth = function (d) {
+      return Math.abs(x(d.value) - x(0) - 1);
+    };
+
+    var barHeight = renderOptions.barHeight = y(1) - y(0) - barPadding;
+    renderOptions.barHalfHeight = (y(1) - y(0)) / 2 + 1;
+
+    renderOptions.barY = function (d) {
+      return y(d.rank) + 5;
+    };
+
+    var iconSize = renderOptions.iconSize = showIcons ? barHeight * 0.9 : 0;
+    var iconSpace = renderOptions.iconSpace = showIcons ? iconSize + labelPadding : 0;
+    renderOptions.labelX = labelsPosition === 'inside' ? function (d) {
+      return x(d.value) - labelPadding - iconSpace;
+    } : margin.left - labelPadding;
+    renderOptions.titlePadding = titlePadding;
+    renderOptions.titleHeight = titleHeight;
+    renderOptions.margin = margin;
+  }
+
+  function halo(text, renderOptions) {
+    renderOptions.svg.selectAll('.halo').remove();
+    text.select(function () {
+      return this.parentNode.insertBefore(this.cloneNode(true), this);
+    }).classed('halo', true);
+  }
+  function legendClick(d, store) {
+    getClicks(d3$1.event, function (event) {
+      var clicks = event.detail;
+
+      if (clicks === 3) {
+        store.dispatch(actions.data.resetFilters());
+      } else if (clicks === 2) {
+        store.dispatch(actions.data.allExceptFilter(d));
+      } else {
+        store.dispatch(actions.data.toggleFilter(d));
+      }
+    });
+  }
+  function highlightFn(d, store, renderOptions) {
+    if (store.getState().options.highlightBars) {
+      toggleClass(renderOptions.root, 'rect.' + safeName(d.name), 'highlight');
+    }
+  }
+  function selectFn(d, store, renderOptions) {
+    if (store.getState().options.selectBars) {
+      toggleClass(renderOptions.root, 'rect.' + safeName(d.name), 'selected');
+      store.dispatch(actions.data.toggleSelection(d.name));
+    }
+  }
+
+  function renderHeader(store, renderOptions, CompleteDateSlice) {
+    var groups = store.getState().data.groups;
+    var dates = store.getState().ticker.dates;
+    var currentDate = store.getState().ticker.currentDate;
+    var _store$getState$optio = store.getState().options,
+        title = _store$getState$optio.title,
+        subTitle = _store$getState$optio.subTitle,
+        marginTop = _store$getState$optio.marginTop,
+        marginLeft = _store$getState$optio.marginLeft,
+        showGroups = _store$getState$optio.showGroups;
+    var svg = renderOptions.svg,
+        margin = renderOptions.margin,
+        width = renderOptions.width,
+        titlePadding = renderOptions.titlePadding,
+        titleHeight = renderOptions.titleHeight;
+    renderOptions.titleText = svg.append('text').attr('class', 'title').attr('x', marginLeft + titlePadding).attr('y', marginTop + 24).html(getText(title, currentDate, CompleteDateSlice, dates));
+    renderOptions.subTitleText = svg.append('text').attr('class', 'subTitle').attr('x', marginLeft + titlePadding).attr('y', marginTop + (titleHeight || 24)).html(getText(subTitle, currentDate, CompleteDateSlice, dates));
+
+    if (showGroups) {
+      var legendsWrapper = svg.append('g');
+      var legends = legendsWrapper.selectAll('.legend-wrapper').data(groups).enter().append('g').attr('class', 'legend legend-wrapper').style('cursor', 'pointer').style('opacity', function (d) {
+        return store.getState().data.groupFilter.includes(d) ? 0.3 : 1;
+      }).on('click', function (d) {
+        return legendClick(d, store);
+      });
+      legends.append('rect').attr('class', 'legend legend-color').attr('width', 10).attr('height', 10).attr('y', margin.top - 35).style('fill', function (d) {
+        return getColor({
+          group: d
+        }, store);
+      });
+      legends.append('text').attr('class', 'legend legend-text').attr('x', 20).attr('y', margin.top - 25).html(function (d) {
+        return d;
+      });
+      var legendX = margin.left + titlePadding;
+      var legendY = 0;
+      legends.each(function () {
+        var wrapper = d3$1.select(this);
+        var text = wrapper.select('text');
+        var bbox = text.node().getBBox();
+
+        if (legendX + bbox.width > width) {
+          legendX = margin.left + titlePadding;
+          legendY += 30;
+        }
+
+        wrapper.attr('transform', 'translate(' + legendX + ', ' + legendY + ')');
+        legendX += bbox.width + 40;
+      });
+      margin.top += legendY;
+    }
+  }
 
   var elements = {
     controls: 'controls',
@@ -1316,472 +1452,417 @@
     overlayRepeat: 'overlayRepeat'
   };
 
-  function createRenderer(data, store) {
-    var margin;
-    var svg;
-    var x;
-    var y;
-    var xAxis;
-    var titlePadding = 5;
-    var barPadding;
-    var labelPadding;
-    var barWidth;
-    var barHeight;
-    var barHalfHeight;
-    var defs;
-    var iconSize;
-    var iconSpace;
-    var titleText;
-    var subTitleText;
-    var captionText;
-    var dateCounterText;
-    var labelX;
-    var barY;
-    var height;
-    var width;
-    var maxValue;
-    var groups = store.getState().data.groups;
-    var dates = store.getState().ticker.dates;
-    var lastDate = dates[0];
+  var buttons = {
+    skipBack: "<svg viewBox=\"0 0 32 32\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" fill=\"none\" stroke=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\"><g><path d=\"M28.46,4a3,3,0,0,0-3,.07l-15.2,9.41A3,3,0,0,0,9,15V5A3,3,0,0,0,6,2H5A3,3,0,0,0,2,5V27a3,3,0,0,0,3,3H6a3,3,0,0,0,3-3V17a3,3,0,0,0,1.22,1.53L25.42,28a3,3,0,0,0,1.58.46,3,3,0,0,0,3-3V6.59A3,3,0,0,0,28.46,4Z\"/></g></svg>",
+    play: "<svg viewBox=\"0 0 32 32\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" fill=\"none\" stroke=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\"><g><path d=\"M26.78,13.45,11.58,4A3,3,0,0,0,7,6.59V25.41a3,3,0,0,0,3,3A3,3,0,0,0,11.58,28l15.2-9.41a3,3,0,0,0,0-5.1Z\"/></g></svg>",
+    pause: "<svg viewBox=\"0 0 32 32\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" fill=\"none\" stroke=\"currentColor\" xmlns:svg=\"http://www.w3.org/2000/svg\"><g transform=\"translate(-17)\"><path d=\"m 27,2 h -1 c -1.656854,0 -3,1.3431458 -3,3 v 12 c -0.04755,3.269656 0,6.666667 0,10 0,1.656854 1.343146,3 3,3 h 1 c 1.656854,0 3,-1.343146 3,-3 V 5 C 30,3.3431458 28.656854,2 27,2 Z\" /></g><g transform=\"translate(-4)\"><path d=\"m 27,2 h -1 c -1.656854,0 -3,1.3431458 -3,3 v 12 c -0.04755,3.269656 0,6.666667 0,10 0,1.656854 1.343146,3 3,3 h 1 c 1.656854,0 3,-1.343146 3,-3 V 5 C 30,3.3431458 28.656854,2 27,2 Z\" /></g></svg>",
+    skipForward: "<svg viewBox=\"0 0 32 32\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" fill=\"none\" stroke=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\"><g><path d=\"M27,2H26a3,3,0,0,0-3,3V15a3,3,0,0,0-1.22-1.53L6.58,4A3,3,0,0,0,2,6.59V25.41a3,3,0,0,0,3,3A3,3,0,0,0,6.58,28l15.2-9.41A3,3,0,0,0,23,17V27a3,3,0,0,0,3,3h1a3,3,0,0,0,3-3V5A3,3,0,0,0,27,2Z\"/></g></svg>",
+    overlayPlay: "<svg viewBox=\"0 0 32 32\" fill=\"currentColor\" stroke=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\"><g><path d=\"M26.78,13.45,11.58,4A3,3,0,0,0,7,6.59V25.41a3,3,0,0,0,3,3A3,3,0,0,0,11.58,28l15.2-9.41a3,3,0,0,0,0-5.1Z\"/></g></svg>",
+    overlayRepeat: "<svg viewBox=\"0 0 32 32\" fill=\"currentColor\" stroke=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\"><g><path d=\"M18,4A12,12,0,0,0,6.05,15H3a1,1,0,0,0-.88.53,1,1,0,0,0,0,1l4,6a1,1,0,0,0,1.66,0l4-6a1,1,0,0,0,.05-1A1,1,0,0,0,11,15H8.05A10,10,0,1,1,18,26a1,1,0,0,0,0,2A12,12,0,0,0,18,4Z\"/></g></svg>"
+  };
+
+  function renderControls(store, renderOptions) {
     var _store$getState$optio = store.getState().options,
-        selector = _store$getState$optio.selector,
-        showGroups = _store$getState$optio.showGroups,
-        highlightBars = _store$getState$optio.highlightBars,
-        selectBars = _store$getState$optio.selectBars;
-    var root = document.querySelector(selector);
+        marginTop = _store$getState$optio.marginTop,
+        controlButtons = _store$getState$optio.controlButtons;
+    var root = renderOptions.root,
+        width = renderOptions.width,
+        margin = renderOptions.margin,
+        barPadding = renderOptions.barPadding;
+    var elementWidth = root.getBoundingClientRect().width;
+    var controlButtonIcons = [{
+      skipBack: buttons.skipBack
+    }, {
+      play: buttons.play
+    }, {
+      pause: buttons.pause
+    }, {
+      skipForward: buttons.skipForward
+    }];
+    d3$1.select(root).append('div').classed('controls', true).style('position', 'absolute').style('top', marginTop + 'px').style('width', width).style('right', elementWidth - width + margin.right + barPadding + 'px').selectAll('div').data(controlButtonIcons).enter().append('div').html(function (d) {
+      return Object.values(d)[0];
+    }).attr('class', function (d) {
+      return Object.keys(d)[0];
+    });
 
-    function renderInitalView() {
-      var _store$getState$optio2 = store.getState().options,
-          title = _store$getState$optio2.title,
-          subTitle = _store$getState$optio2.subTitle,
-          caption = _store$getState$optio2.caption,
-          dateCounter = _store$getState$optio2.dateCounter,
-          labelsPosition = _store$getState$optio2.labelsPosition,
-          showIcons = _store$getState$optio2.showIcons,
-          controlButtons = _store$getState$optio2.controlButtons,
-          labelsWidth = _store$getState$optio2.labelsWidth,
-          inputHeight = _store$getState$optio2.inputHeight,
-          inputWidth = _store$getState$optio2.inputWidth,
-          minHeight = _store$getState$optio2.minHeight,
-          minWidth = _store$getState$optio2.minWidth,
-          marginTop = _store$getState$optio2.marginTop,
-          marginRight = _store$getState$optio2.marginRight,
-          marginBottom = _store$getState$optio2.marginBottom,
-          marginLeft = _store$getState$optio2.marginLeft,
-          fixedScale = _store$getState$optio2.fixedScale,
-          fixedOrder = _store$getState$optio2.fixedOrder;
-      var topN = fixedOrder.length > 0 ? fixedOrder.length : store.getState().options.topN;
-      var currentDate = store.getState().ticker.currentDate;
-      var CompleteDateSlice = getDateSlice(data, currentDate, store.getState().data.groupFilter);
-      var dateSlice = CompleteDateSlice.slice(0, topN);
-
-      if (dateSlice.length === 0) {
-        return;
-      }
-
-      root.innerHTML = '';
-      height = getHeight(root, minHeight, inputHeight);
-      width = getWidth(root, minWidth, inputWidth);
-      renderInitialFrame();
-      renderControls();
-      renderOverlays();
-      updateControls();
-
-      function renderInitialFrame() {
-        var titleHeight = title ? 55 : 0;
-        var subTitleHeight = !subTitle ? 0 : title ? 20 : 40;
-        var groupsHeight = !showGroups ? 0 : titleHeight || subTitleHeight ? 20 : 30;
-        var controlsHeight = controlButtons !== 'none' ? 50 : 0;
-        var topAxisPadding = 15;
-        var HeaderHeight = Math.max(titleHeight + subTitleHeight + groupsHeight, controlsHeight + groupsHeight, 10);
-        var labelsArea = labelsPosition === 'inside' ? 0 : labelsWidth;
-        margin = {
-          top: marginTop + HeaderHeight + topAxisPadding,
-          right: marginRight,
-          bottom: marginBottom,
-          left: marginLeft + labelsArea
-        };
-        svg = d3$1.select(root).append('svg').attr('width', width).attr('height', height);
-        titleText = svg.append('text').attr('class', 'title').attr('x', marginLeft + titlePadding).attr('y', marginTop + 24).html(getText(title, currentDate, CompleteDateSlice, dates));
-        subTitleText = svg.append('text').attr('class', 'subTitle').attr('x', marginLeft + titlePadding).attr('y', marginTop + (titleHeight || 24)).html(getText(subTitle, currentDate, CompleteDateSlice, dates));
-
-        if (showGroups) {
-          var legendsWrapper = svg.append('g');
-          var legends = legendsWrapper.selectAll('.legend-wrapper').data(groups).enter().append('g').attr('class', 'legend legend-wrapper').style('cursor', 'pointer').style('opacity', function (d) {
-            return store.getState().data.groupFilter.includes(d) ? 0.3 : 1;
-          }).on('click', legendClick);
-          legends.append('rect').attr('class', 'legend legend-color').attr('width', 10).attr('height', 10).attr('y', margin.top - 35).style('fill', function (d) {
-            return getColor({
-              group: d
-            }, store);
-          });
-          legends.append('text').attr('class', 'legend legend-text').attr('x', 20).attr('y', margin.top - 25).html(function (d) {
-            return d;
-          });
-          var legendX = margin.left + titlePadding;
-          var legendY = 0;
-          legends.each(function () {
-            var wrapper = d3$1.select(this);
-            var text = wrapper.select('text');
-            var bbox = text.node().getBBox();
-
-            if (legendX + bbox.width > width) {
-              legendX = margin.left + titlePadding;
-              legendY += 30;
-            }
-
-            wrapper.attr('transform', 'translate(' + legendX + ', ' + legendY + ')');
-            legendX += bbox.width + 40;
-          });
-          margin.top += legendY;
-        }
-
-        maxValue = fixedScale ? data.map(function (d) {
-          return d.value;
-        }).reduce(function (max, val) {
-          return max > val ? max : val;
-        }, 0) : d3$1.max(dateSlice, function (d) {
-          return d.value;
-        });
-        x = d3$1.scaleLinear().domain([0, maxValue]).range([margin.left, width - margin.right - 65]);
-        y = d3$1.scaleLinear().domain([topN, 0]).range([height - margin.bottom, margin.top]);
-        barPadding = (height - (margin.bottom + margin.top)) / (topN * 5);
-        labelPadding = 8;
-
-        barWidth = function barWidth(d) {
-          return Math.abs(x(d.value) - x(0) - 1);
-        };
-
-        barHeight = y(1) - y(0) - barPadding;
-        barHalfHeight = (y(1) - y(0)) / 2 + 1;
-
-        barY = function barY(d) {
-          return y(d.rank) + 5;
-        };
-
-        iconSize = showIcons ? barHeight * 0.9 : 0;
-        iconSpace = showIcons ? iconSize + labelPadding : 0;
-        labelX = labelsPosition === 'inside' ? function (d) {
-          return x(d.value) - labelPadding - iconSpace;
-        } : margin.left - labelPadding;
-        xAxis = d3$1.axisTop(x).ticks(width > 500 ? 5 : 2).tickSize(-(height - (margin.top + margin.bottom))).tickFormat(function (n) {
-          return d3$1.format(',')(n);
-        });
-        svg.append('g').attr('class', 'axis xAxis').attr('transform', "translate(0, " + margin.top + ")").call(xAxis).selectAll('.tick line').classed('origin', function (d) {
-          return d === 0;
-        });
-        svg.selectAll('rect.bar').data(dateSlice, function (d) {
-          return d.name;
-        }).enter().append('rect').attr('class', function (d) {
-          return 'bar ' + safeName(d.name);
-        }).classed('selected', function (d) {
-          return store.getState().data.selected.includes(d.name);
-        }).attr('x', x(0) + 1).attr('width', barWidth).attr('y', barY).attr('height', barHeight).style('fill', function (d) {
-          return getColor(d, store);
-        }).on('click', selectFn).on('mouseover', highlightFn).on('mouseout', highlightFn);
-        svg.selectAll('text.label').data(dateSlice, function (d) {
-          return d.name;
-        }).enter().append('text').attr('class', 'label').classed('outside-bars', labelsPosition !== 'inside').attr('x', labelX).attr('y', function (d) {
-          return barY(d) + barHalfHeight;
-        }).style('text-anchor', 'end').html(function (d) {
-          return d.name;
-        }).on('click', selectFn).on('mouseover', highlightFn).on('mouseout', highlightFn);
-        svg.selectAll('text.valueLabel').data(dateSlice, function (d) {
-          return d.name;
-        }).enter().append('text').attr('class', 'valueLabel').attr('x', function (d) {
-          return x(d.value) + 5;
-        }).attr('y', function (d) {
-          return barY(d) + barHalfHeight;
-        }).text(function (d) {
-          return d3$1.format(',.0f')(d.lastValue);
-        });
-
-        if (showIcons) {
-          defs = svg.append('svg:defs');
-          defs.selectAll('svg').data(dateSlice, function (d) {
-            return d.name;
-          }).enter().append('svg:pattern').attr('class', 'svgpattern').attr('id', getIconID).attr('width', iconSize).attr('height', iconSize).append('svg:image').attr('xlink:href', function (d) {
-            return d.icon;
-          }).attr('width', iconSize).attr('height', iconSize).attr('x', 0).attr('y', 0);
-          svg.selectAll('circle').data(dateSlice, function (d) {
-            return d.name;
-          }).enter().append('circle').attr('cx', function (d) {
-            return x(d.value) - iconSize / 2 - labelPadding;
-          }).attr('cy', function (d) {
-            return y(d.rank) + barHalfHeight;
-          }).attr('r', iconSize / 2).style('fill', 'transparent').style('fill', function (d) {
-            return "url(#" + getIconID(d) + ")";
-          });
-        }
-
-        var endY = height - margin.bottom;
-        var endX = width - margin.right;
-        var dateCounterTextY = caption ? endY - 30 : endY - 5;
-        dateCounterText = svg.append('text').attr('class', 'dateCounterText').attr('x', endX).attr('y', dateCounterTextY).style('text-anchor', 'end').html(getText(dateCounter, currentDate, CompleteDateSlice, dates, true)).call(halo);
-        captionText = svg.append('text').attr('class', 'caption').attr('x', endX - 10).attr('y', endY - 5).style('text-anchor', 'end').html(getText(caption, currentDate, CompleteDateSlice, dates));
-      }
-
-      function renderControls() {
-        var controlIcons = [{
-          skipBack: icons.skipBack
-        }, {
-          play: icons.play
-        }, {
-          pause: icons.pause
-        }, {
-          skipForward: icons.skipForward
-        }];
-        var elementWidth = root.getBoundingClientRect().width;
-        d3$1.select(root).append('div').classed('controls', true).style('position', 'absolute').style('top', marginTop + 'px').style('width', width).style('right', elementWidth - width + margin.right + barPadding + 'px').selectAll('div').data(controlIcons).enter().append('div').html(function (d) {
-          return Object.values(d)[0];
-        }).attr('class', function (d) {
-          return Object.keys(d)[0];
-        });
-
-        if (store.getState().options.controlButtons === 'play') {
-          hideElement(root, elements.skipBack);
-          hideElement(root, elements.skipForward);
-        }
-
-        if (store.getState().options.controlButtons === 'none') {
-          hideElement(root, elements.controls);
-        }
-      }
-
-      function renderOverlays() {
-        var overlayIcons = [{
-          overlayPlay: icons.overlayPlay
-        }, {
-          overlayRepeat: icons.overlayRepeat
-        }];
-        d3$1.select(root).append('div').classed('overlay', true).style('minHeight', minHeight + 'px').style('minWidth', minWidth + 'px').selectAll('div').data(overlayIcons).enter().append('div').html(function (d) {
-          return Object.values(d)[0];
-        }).attr('class', function (d) {
-          return Object.keys(d)[0];
-        });
-      }
+    if (controlButtons === 'play') {
+      hideElement(root, elements.skipBack);
+      hideElement(root, elements.skipForward);
     }
 
-    function renderFrame() {
-      if (!x) {
-        return;
-      }
+    if (controlButtons === 'none') {
+      hideElement(root, elements.controls);
+    }
+  }
+  function updateControls(store, renderOptions) {
+    var _store$getState$optio2 = store.getState().options,
+        overlays = _store$getState$optio2.overlays,
+        loop = _store$getState$optio2.loop;
+    var root = renderOptions.root;
 
-      var _store$getState$optio3 = store.getState().options,
-          tickDuration = _store$getState$optio3.tickDuration,
-          title = _store$getState$optio3.title,
-          subTitle = _store$getState$optio3.subTitle,
-          caption = _store$getState$optio3.caption,
-          dateCounter = _store$getState$optio3.dateCounter,
-          marginBottom = _store$getState$optio3.marginBottom,
-          fixedScale = _store$getState$optio3.fixedScale,
-          fixedOrder = _store$getState$optio3.fixedOrder,
-          labelsPosition = _store$getState$optio3.labelsPosition;
-      var topN = fixedOrder.length > 0 ? fixedOrder.length : store.getState().options.topN;
-      var currentDate = store.getState().ticker.currentDate;
-      var CompleteDateSlice = getDateSlice(data, currentDate, store.getState().data.groupFilter);
-      var dateSlice = CompleteDateSlice.slice(0, topN);
+    if (store.getState().ticker.isRunning) {
+      showElement(root, elements.pause);
+      hideElement(root, elements.play);
+    } else {
+      showElement(root, elements.play);
+      hideElement(root, elements.pause);
+    }
 
-      if (showGroups) {
-        svg.selectAll('.legend-wrapper').style('opacity', function (d) {
-          return store.getState().data.groupFilter.includes(d) ? 0.3 : 1;
-        });
-      }
+    if (store.getState().ticker.isFirstDate && (overlays === 'all' || overlays === 'play') && !store.getState().ticker.isRunning) {
+      hideElement(root, elements.controls, true);
+      showElement(root, elements.overlay);
+      showElement(root, elements.overlayPlay);
+      hideElement(root, elements.overlayRepeat);
+    } else if (store.getState().ticker.isLastDate && (overlays === 'all' || overlays === 'repeat') && !(loop && store.getState().ticker.isRunning)) {
+      hideElement(root, elements.controls, true);
+      showElement(root, elements.overlay);
+      showElement(root, elements.overlayRepeat);
+      hideElement(root, elements.overlayPlay);
+    } else {
+      showElement(root, elements.controls, true);
+      hideElement(root, elements.overlay);
+    }
+  }
+  function renderOverlays(store, renderOptions) {
+    var _store$getState$optio3 = store.getState().options,
+        minHeight = _store$getState$optio3.minHeight,
+        minWidth = _store$getState$optio3.minWidth;
+    var root = renderOptions.root;
+    var overlayButtonIcons = [{
+      overlayPlay: buttons.overlayPlay
+    }, {
+      overlayRepeat: buttons.overlayRepeat
+    }];
+    d3$1.select(root).append('div').classed('overlay', true).style('minHeight', minHeight + 'px').style('minWidth', minWidth + 'px').selectAll('div').data(overlayButtonIcons).enter().append('div').html(function (d) {
+      return Object.values(d)[0];
+    }).attr('class', function (d) {
+      return Object.keys(d)[0];
+    });
+  }
 
-      if (!fixedScale) {
-        x.domain([0, d3$1.max(dateSlice, function (d) {
-          return d.value;
-        })]);
-        svg.select('.xAxis').transition().duration(tickDuration).ease(d3$1.easeLinear).call(xAxis);
-      }
+  function renderInitalView(data, store, renderOptions) {
+    var _store$getState$optio = store.getState().options,
+        selector = _store$getState$optio.selector,
+        caption = _store$getState$optio.caption,
+        dateCounter = _store$getState$optio.dateCounter,
+        labelsPosition = _store$getState$optio.labelsPosition,
+        showIcons = _store$getState$optio.showIcons,
+        fixedScale = _store$getState$optio.fixedScale,
+        fixedOrder = _store$getState$optio.fixedOrder;
+    var dates = store.getState().ticker.dates;
+    renderOptions.lastDate = dates[0];
+    var root = renderOptions.root = document.querySelector(selector);
+    var topN = fixedOrder.length > 0 ? fixedOrder.length : store.getState().options.topN;
+    var currentDate = store.getState().ticker.currentDate;
+    var CompleteDateSlice = getDateSlice(data, currentDate, store.getState().data.groupFilter);
+    var dateSlice = CompleteDateSlice.slice(0, topN);
+    if (!root || dateSlice.length === 0) return;
+    root.innerHTML = '';
+    renderInitialFrame();
+    renderControls(store, renderOptions);
+    renderOverlays(store, renderOptions);
+    updateControls(store, renderOptions);
 
-      var bars = svg.selectAll('.bar').data(dateSlice, function (d) {
-        return d.name;
+    function renderInitialFrame() {
+      renderOptions.maxValue = fixedScale ? data.map(function (d) {
+        return d.value;
+      }).reduce(function (max, val) {
+        return max > val ? max : val;
+      }, 0) : d3$1.max(dateSlice, function (d) {
+        return d.value;
       });
-      bars.enter().append('rect').attr('class', function (d) {
+      calculateDimensions(store, renderOptions);
+      var margin = renderOptions.margin,
+          width = renderOptions.width,
+          height = renderOptions.height,
+          x = renderOptions.x,
+          y = renderOptions.y,
+          barWidth = renderOptions.barWidth,
+          barHeight = renderOptions.barHeight,
+          barY = renderOptions.barY,
+          barHalfHeight = renderOptions.barHalfHeight,
+          labelX = renderOptions.labelX,
+          iconSize = renderOptions.iconSize,
+          labelPadding = renderOptions.labelPadding;
+      var svg = renderOptions.svg = d3$1.select(root).append('svg').attr('width', width).attr('height', height);
+      renderHeader(store, renderOptions, CompleteDateSlice);
+      var xAxis = renderOptions.xAxis = d3$1.axisTop(x).ticks(width > 500 ? 5 : 2).tickSize(-(height - (margin.top + margin.bottom))).tickFormat(function (n) {
+        return d3$1.format(',')(n);
+      });
+      svg.append('g').attr('class', 'axis xAxis').attr('transform', "translate(0, " + margin.top + ")").call(xAxis).selectAll('.tick line').classed('origin', function (d) {
+        return d === 0;
+      });
+      svg.selectAll('rect.bar').data(dateSlice, function (d) {
+        return d.name;
+      }).enter().append('rect').attr('class', function (d) {
         return 'bar ' + safeName(d.name);
       }).classed('selected', function (d) {
         return store.getState().data.selected.includes(d.name);
-      }).attr('x', x(0) + 1).attr('width', barWidth).attr('y', function () {
-        return y(topN + 1) + marginBottom + 5;
-      }).attr('height', barHeight).style('fill', function (d) {
+      }).attr('x', x(0) + 1).attr('width', barWidth).attr('y', barY).attr('height', barHeight).style('fill', function (d) {
         return getColor(d, store);
-      }).on('click', selectFn).on('mouseover', highlightFn).on('mouseout', highlightFn).transition().duration(tickDuration).ease(d3$1.easeLinear).attr('y', barY);
-      bars.transition().duration(tickDuration).ease(d3$1.easeLinear).attr('width', function (d) {
-        return Math.abs(x(d.value) - x(0) - 1);
-      }).attr('y', barY);
-      bars.exit().transition().duration(tickDuration).ease(d3$1.easeLinear).attr('width', function (d) {
-        return Math.abs(x(d.value) - x(0) - 1);
-      }).attr('y', function () {
-        return y(topN + 1) + marginBottom + 5;
-      }).remove();
-      var labels = svg.selectAll('.label').data(dateSlice, function (d) {
-        return d.name;
+      }).on('click', function (d) {
+        return selectFn(d, store, renderOptions);
+      }).on('mouseover', function (d) {
+        return highlightFn(d, store, renderOptions);
+      }).on('mouseout', function (d) {
+        return highlightFn(d, store, renderOptions);
       });
-      labels.enter().append('text').attr('class', 'label').classed('outside-bars', labelsPosition !== 'inside').attr('x', labelX).attr('y', function () {
-        return y(topN + 1) + marginBottom + 5 + barHalfHeight;
+      svg.selectAll('text.label').data(dateSlice, function (d) {
+        return d.name;
+      }).enter().append('text').attr('class', 'label').classed('outside-bars', labelsPosition !== 'inside').attr('x', labelX).attr('y', function (d) {
+        return barY(d) + barHalfHeight;
       }).style('text-anchor', 'end').html(function (d) {
         return d.name;
-      }).on('click', selectFn).on('mouseover', highlightFn).on('mouseout', highlightFn).transition().duration(tickDuration).ease(d3$1.easeLinear).attr('y', function (d) {
-        return barY(d) + barHalfHeight;
+      }).on('click', function (d) {
+        return selectFn(d, store, renderOptions);
+      }).on('mouseover', function (d) {
+        return highlightFn(d, store, renderOptions);
+      }).on('mouseout', function (d) {
+        return highlightFn(d, store, renderOptions);
       });
-      labels.transition().duration(tickDuration).ease(d3$1.easeLinear).attr('x', labelX).attr('y', function (d) {
-        return barY(d) + barHalfHeight;
-      });
-      labels.exit().transition().duration(tickDuration).ease(d3$1.easeLinear).attr('x', labelX).attr('y', function () {
-        return y(topN + 1) + marginBottom + 5;
-      }).remove();
-      var valueLabels = svg.selectAll('.valueLabel').data(dateSlice, function (d) {
+      svg.selectAll('text.valueLabel').data(dateSlice, function (d) {
         return d.name;
-      });
-      valueLabels.enter().append('text').attr('class', 'valueLabel').attr('x', function (d) {
-        return x(d.value) + 5;
-      }).attr('y', function () {
-        return y(topN + 1) + marginBottom + 5;
-      }).text(function (d) {
-        return d3$1.format(',.0f')(d.lastValue);
-      }).transition().duration(tickDuration).ease(d3$1.easeLinear).attr('y', function (d) {
-        return barY(d) + barHalfHeight;
-      });
-      var sameDate = lastDate === currentDate;
-      valueLabels.transition().duration(tickDuration).ease(d3$1.easeLinear).attr('x', function (d) {
+      }).enter().append('text').attr('class', 'valueLabel').attr('x', function (d) {
         return x(d.value) + 5;
       }).attr('y', function (d) {
         return barY(d) + barHalfHeight;
-      }).tween('text', function (d) {
-        var lastValue = sameDate ? d.value : d.lastValue;
-        var i = d3$1.interpolateRound(lastValue, d.value);
-        return function (t) {
-          this.textContent = d3$1.format(',')(i(t));
-        };
+      }).text(function (d) {
+        return d3$1.format(',.0f')(d.lastValue);
       });
-      valueLabels.exit().transition().duration(tickDuration).ease(d3$1.easeLinear).attr('x', function (d) {
-        return x(d.value) + 5;
-      }).attr('y', function () {
-        return y(topN + 1) + marginBottom + 5;
-      }).remove();
 
-      if (store.getState().options.showIcons) {
-        var iconPatterns = defs.selectAll('.svgpattern').data(dateSlice, function (d) {
+      if (showIcons) {
+        var defs = renderOptions.defs = svg.append('svg:defs');
+        defs.selectAll('svg').data(dateSlice, function (d) {
           return d.name;
-        });
-        iconPatterns.enter().append('svg:pattern').attr('class', 'svgpattern').attr('id', getIconID).attr('width', iconSize).attr('height', iconSize).append('svg:image').attr('xlink:href', function (d) {
+        }).enter().append('svg:pattern').attr('class', 'svgpattern').attr('id', getIconID).attr('width', iconSize).attr('height', iconSize).append('svg:image').attr('xlink:href', function (d) {
           return d.icon;
-        }).attr('width', iconSize).attr('height', iconSize).style('z-index', '99').attr('x', 0).attr('y', 0);
-        iconPatterns.exit().transition().duration(tickDuration).ease(d3$1.easeLinear).remove();
-
-        var _icons = svg.selectAll('circle').data(dateSlice, function (d) {
+        }).attr('width', iconSize).attr('height', iconSize).attr('x', 0).attr('y', 0);
+        svg.selectAll('circle').data(dateSlice, function (d) {
           return d.name;
-        });
-
-        _icons.enter().append('circle').attr('cx', function (d) {
-          return x(d.value) - iconSize / 2 - labelPadding;
-        }).attr('cy', function () {
-          return y(topN + 1) + iconSize + barHalfHeight;
-        }).attr('r', iconSize / 2).style('z-index', '99').style('fill', 'transparent').style('fill', function (d) {
-          return "url(#" + getIconID(d) + ")";
-        }).transition().duration(tickDuration).ease(d3$1.easeLinear).attr('cy', function (d) {
-          return y(d.rank) + barHalfHeight;
-        });
-
-        _icons.transition().duration(tickDuration).ease(d3$1.easeLinear).attr('cx', function (d) {
+        }).enter().append('circle').attr('cx', function (d) {
           return x(d.value) - iconSize / 2 - labelPadding;
         }).attr('cy', function (d) {
           return y(d.rank) + barHalfHeight;
+        }).attr('r', iconSize / 2).style('fill', 'transparent').style('fill', function (d) {
+          return "url(#" + getIconID(d) + ")";
         });
-
-        _icons.exit().transition().duration(tickDuration).ease(d3$1.easeLinear).attr('cx', function (d) {
-          return x(d.value) - iconSize / 2 - labelPadding;
-        }).attr('cy', function () {
-          return y(topN + 1) + iconSize + barHalfHeight;
-        }).remove();
       }
 
-      titleText.html(getText(title, currentDate, CompleteDateSlice, dates));
-      subTitleText.html(getText(subTitle, currentDate, CompleteDateSlice, dates));
-      captionText.html(getText(caption, currentDate, CompleteDateSlice, dates));
-      dateCounterText.html(getText(dateCounter, currentDate, CompleteDateSlice, dates, true)).call(halo);
-      updateControls();
-      lastDate = currentDate;
+      var endY = height - margin.bottom;
+      var endX = width - margin.right;
+      var dateCounterTextY = caption ? endY - 30 : endY - 5;
+      renderOptions.dateCounterText = svg.append('text').attr('class', 'dateCounterText').attr('x', endX).attr('y', dateCounterTextY).style('text-anchor', 'end').html(getText(dateCounter, currentDate, CompleteDateSlice, dates, true)).call(function (text) {
+        return halo(text, renderOptions);
+      });
+      renderOptions.captionText = svg.append('text').attr('class', 'caption').attr('x', endX - 10).attr('y', endY - 5).style('text-anchor', 'end').html(getText(caption, currentDate, CompleteDateSlice, dates));
+    }
+  }
+
+  function renderFrame(data, store, renderOptions) {
+    var svg = renderOptions.svg,
+        titleText = renderOptions.titleText,
+        subTitleText = renderOptions.subTitleText,
+        dateCounterText = renderOptions.dateCounterText,
+        captionText = renderOptions.captionText,
+        x = renderOptions.x,
+        y = renderOptions.y,
+        xAxis = renderOptions.xAxis,
+        labelPadding = renderOptions.labelPadding,
+        barWidth = renderOptions.barWidth,
+        barHeight = renderOptions.barHeight,
+        barHalfHeight = renderOptions.barHalfHeight,
+        barY = renderOptions.barY,
+        iconSize = renderOptions.iconSize,
+        labelX = renderOptions.labelX,
+        defs = renderOptions.defs,
+        lastDate = renderOptions.lastDate;
+    var dates = store.getState().ticker.dates;
+    var showGroups = store.getState().options.showGroups;
+
+    if (!x) {
+      return;
     }
 
-    function resize() {
-      if (!store.getState().options.inputHeight && !store.getState().options.inputWidth || String(store.getState().options.inputHeight).startsWith('window') || String(store.getState().options.inputWidth).startsWith('window')) {
-        height = getHeight(root, store.getState().options.minHeight, store.getState().options.inputHeight);
-        width = getWidth(root, store.getState().options.minWidth, store.getState().options.inputWidth);
-        var currentPosition = root.style.position;
-        renderInitalView();
-        renderFrame();
-        updateControls();
-        root.style.position = currentPosition;
-      }
-    }
+    var _store$getState$optio = store.getState().options,
+        tickDuration = _store$getState$optio.tickDuration,
+        title = _store$getState$optio.title,
+        subTitle = _store$getState$optio.subTitle,
+        caption = _store$getState$optio.caption,
+        dateCounter = _store$getState$optio.dateCounter,
+        marginBottom = _store$getState$optio.marginBottom,
+        fixedScale = _store$getState$optio.fixedScale,
+        fixedOrder = _store$getState$optio.fixedOrder,
+        labelsPosition = _store$getState$optio.labelsPosition;
+    var topN = fixedOrder.length > 0 ? fixedOrder.length : store.getState().options.topN;
+    var currentDate = store.getState().ticker.currentDate;
+    var CompleteDateSlice = getDateSlice(data, currentDate, store.getState().data.groupFilter);
+    var dateSlice = CompleteDateSlice.slice(0, topN);
 
-    function updateControls() {
-      var showOverlays = store.getState().options.overlays;
-
-      if (store.getState().ticker.isRunning) {
-        showElement(root, elements.pause);
-        hideElement(root, elements.play);
-      } else {
-        showElement(root, elements.play);
-        hideElement(root, elements.pause);
-      }
-
-      if (store.getState().ticker.isFirstDate && (showOverlays === 'all' || showOverlays === 'play') && !store.getState().ticker.isRunning) {
-        hideElement(root, elements.controls, true);
-        showElement(root, elements.overlay);
-        showElement(root, elements.overlayPlay);
-        hideElement(root, elements.overlayRepeat);
-      } else if (store.getState().ticker.isLastDate && (showOverlays === 'all' || showOverlays === 'repeat') && !(store.getState().options.loop && store.getState().ticker.isRunning)) {
-        hideElement(root, elements.controls, true);
-        showElement(root, elements.overlay);
-        showElement(root, elements.overlayRepeat);
-        hideElement(root, elements.overlayPlay);
-      } else {
-        showElement(root, elements.controls, true);
-        hideElement(root, elements.overlay);
-      }
-    }
-
-    function halo(text) {
-      svg.selectAll('.halo').remove();
-      text.select(function () {
-        return this.parentNode.insertBefore(this.cloneNode(true), this);
-      }).classed('halo', true);
-    }
-
-    function legendClick(d) {
-      getClicks(d3$1.event, function (event) {
-        var clicks = event.detail;
-
-        if (clicks === 3) {
-          store.dispatch(actions.data.resetFilters());
-        } else if (clicks === 2) {
-          store.dispatch(actions.data.allExceptFilter(d));
-        } else {
-          store.dispatch(actions.data.toggleFilter(d));
-        }
+    if (showGroups) {
+      svg.selectAll('.legend-wrapper').style('opacity', function (d) {
+        return store.getState().data.groupFilter.includes(d) ? 0.3 : 1;
       });
     }
 
-    function highlightFn(d) {
-      if (highlightBars) {
-        toggleClass(root, 'rect.' + safeName(d.name), 'highlight');
-      }
+    if (!fixedScale) {
+      x.domain([0, d3$1.max(dateSlice, function (d) {
+        return d.value;
+      })]);
+      svg.select('.xAxis').transition().duration(tickDuration).ease(d3$1.easeLinear).call(xAxis);
     }
 
-    function selectFn(d) {
-      if (selectBars) {
-        toggleClass(root, 'rect.' + safeName(d.name), 'selected');
-        store.dispatch(actions.data.toggleSelection(d.name));
-      }
+    var bars = svg.selectAll('.bar').data(dateSlice, function (d) {
+      return d.name;
+    });
+    bars.enter().append('rect').attr('class', function (d) {
+      return 'bar ' + safeName(d.name);
+    }).classed('selected', function (d) {
+      return store.getState().data.selected.includes(d.name);
+    }).attr('x', x(0) + 1).attr('width', barWidth).attr('y', function () {
+      return y(topN + 1) + marginBottom + 5;
+    }).attr('height', barHeight).style('fill', function (d) {
+      return getColor(d, store);
+    }).on('click', function (d) {
+      return selectFn(d, store, renderOptions);
+    }).on('mouseover', function (d) {
+      return highlightFn(d, store, renderOptions);
+    }).on('mouseout', function (d) {
+      return highlightFn(d, store, renderOptions);
+    }).transition().duration(tickDuration).ease(d3$1.easeLinear).attr('y', barY);
+    bars.transition().duration(tickDuration).ease(d3$1.easeLinear).attr('width', function (d) {
+      return Math.abs(x(d.value) - x(0) - 1);
+    }).attr('y', barY);
+    bars.exit().transition().duration(tickDuration).ease(d3$1.easeLinear).attr('width', function (d) {
+      return Math.abs(x(d.value) - x(0) - 1);
+    }).attr('y', function () {
+      return y(topN + 1) + marginBottom + 5;
+    }).remove();
+    var labels = svg.selectAll('.label').data(dateSlice, function (d) {
+      return d.name;
+    });
+    labels.enter().append('text').attr('class', 'label').classed('outside-bars', labelsPosition !== 'inside').attr('x', labelX).attr('y', function () {
+      return y(topN + 1) + marginBottom + 5 + barHalfHeight;
+    }).style('text-anchor', 'end').html(function (d) {
+      return d.name;
+    }).on('click', function (d) {
+      return selectFn(d, store, renderOptions);
+    }).on('mouseover', function (d) {
+      return highlightFn(d, store, renderOptions);
+    }).on('mouseout', function (d) {
+      return highlightFn(d, store, renderOptions);
+    }).transition().duration(tickDuration).ease(d3$1.easeLinear).attr('y', function (d) {
+      return barY(d) + barHalfHeight;
+    });
+    labels.transition().duration(tickDuration).ease(d3$1.easeLinear).attr('x', labelX).attr('y', function (d) {
+      return barY(d) + barHalfHeight;
+    });
+    labels.exit().transition().duration(tickDuration).ease(d3$1.easeLinear).attr('x', labelX).attr('y', function () {
+      return y(topN + 1) + marginBottom + 5;
+    }).remove();
+    var valueLabels = svg.selectAll('.valueLabel').data(dateSlice, function (d) {
+      return d.name;
+    });
+    valueLabels.enter().append('text').attr('class', 'valueLabel').attr('x', function (d) {
+      return x(d.value) + 5;
+    }).attr('y', function () {
+      return y(topN + 1) + marginBottom + 5;
+    }).text(function (d) {
+      return d3$1.format(',.0f')(d.lastValue);
+    }).transition().duration(tickDuration).ease(d3$1.easeLinear).attr('y', function (d) {
+      return barY(d) + barHalfHeight;
+    });
+    var sameDate = lastDate === currentDate;
+    valueLabels.transition().duration(tickDuration).ease(d3$1.easeLinear).attr('x', function (d) {
+      return x(d.value) + 5;
+    }).attr('y', function (d) {
+      return barY(d) + barHalfHeight;
+    }).tween('text', function (d) {
+      var lastValue = sameDate ? d.value : d.lastValue;
+      var i = d3$1.interpolateRound(lastValue, d.value);
+      return function (t) {
+        this.textContent = d3$1.format(',')(i(t));
+      };
+    });
+    valueLabels.exit().transition().duration(tickDuration).ease(d3$1.easeLinear).attr('x', function (d) {
+      return x(d.value) + 5;
+    }).attr('y', function () {
+      return y(topN + 1) + marginBottom + 5;
+    }).remove();
+
+    if (store.getState().options.showIcons) {
+      var iconPatterns = defs.selectAll('.svgpattern').data(dateSlice, function (d) {
+        return d.name;
+      });
+      iconPatterns.enter().append('svg:pattern').attr('class', 'svgpattern').attr('id', getIconID).attr('width', iconSize).attr('height', iconSize).append('svg:image').attr('xlink:href', function (d) {
+        return d.icon;
+      }).attr('width', iconSize).attr('height', iconSize).style('z-index', '99').attr('x', 0).attr('y', 0);
+      iconPatterns.exit().transition().duration(tickDuration).ease(d3$1.easeLinear).remove();
+      var icons = svg.selectAll('circle').data(dateSlice, function (d) {
+        return d.name;
+      });
+      icons.enter().append('circle').attr('cx', function (d) {
+        return x(d.value) - iconSize / 2 - labelPadding;
+      }).attr('cy', function () {
+        return y(topN + 1) + iconSize + barHalfHeight;
+      }).attr('r', iconSize / 2).style('z-index', '99').style('fill', 'transparent').style('fill', function (d) {
+        return "url(#" + getIconID(d) + ")";
+      }).transition().duration(tickDuration).ease(d3$1.easeLinear).attr('cy', function (d) {
+        return y(d.rank) + barHalfHeight;
+      });
+      icons.transition().duration(tickDuration).ease(d3$1.easeLinear).attr('cx', function (d) {
+        return x(d.value) - iconSize / 2 - labelPadding;
+      }).attr('cy', function (d) {
+        return y(d.rank) + barHalfHeight;
+      });
+      icons.exit().transition().duration(tickDuration).ease(d3$1.easeLinear).attr('cx', function (d) {
+        return x(d.value) - iconSize / 2 - labelPadding;
+      }).attr('cy', function () {
+        return y(topN + 1) + iconSize + barHalfHeight;
+      }).remove();
     }
 
+    titleText.html(getText(title, currentDate, CompleteDateSlice, dates));
+    subTitleText.html(getText(subTitle, currentDate, CompleteDateSlice, dates));
+    captionText.html(getText(caption, currentDate, CompleteDateSlice, dates));
+    dateCounterText.html(getText(dateCounter, currentDate, CompleteDateSlice, dates, true)).call(function (text) {
+      return halo(text, renderOptions);
+    });
+    updateControls(store, renderOptions);
+    renderOptions.lastDate = currentDate;
+  }
+
+  function resize(data, store, renderOptions) {
+    var _store$getState$optio = store.getState().options,
+        inputHeight = _store$getState$optio.inputHeight,
+        inputWidth = _store$getState$optio.inputWidth,
+        minHeight = _store$getState$optio.minHeight,
+        minWidth = _store$getState$optio.minWidth;
+    var root = renderOptions.root;
+    if (!root) return;
+
+    if (!inputHeight && !inputWidth || String(inputHeight).startsWith('window') || String(inputWidth).startsWith('window')) {
+      renderOptions.height = getHeight(root, minHeight, inputHeight);
+      renderOptions.width = getWidth(root, minWidth, inputWidth);
+      var currentPosition = root.style.position;
+      renderInitalView(data, store, renderOptions);
+      renderFrame(data, store, renderOptions);
+      updateControls(store, renderOptions);
+      root.style.position = currentPosition;
+    }
+  }
+
+  function createRenderer(data, store) {
+    var renderOptions = {};
     return {
-      renderInitalView: renderInitalView,
-      renderFrame: renderFrame,
-      resize: resize
+      renderInitalView: function renderInitalView$1() {
+        return renderInitalView(data, store, renderOptions);
+      },
+      renderFrame: function renderFrame$1() {
+        return renderFrame(data, store, renderOptions);
+      },
+      resize: function resize$1() {
+        return resize(data, store, renderOptions);
+      }
     };
   }
 
