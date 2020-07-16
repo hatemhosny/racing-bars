@@ -2,12 +2,13 @@ import { HSLColor } from 'd3';
 import { Action } from '../store';
 
 export interface DataAction extends Action {
-  payload?: DataCollections | string;
+  payload?: DataCollections | string | DateSlice;
 }
 
 export interface DataState extends DataCollections {
   groupFilter: string[];
   selected: string[];
+  dateSlices: DateSlice;
 }
 
 export interface DataCollections {
@@ -29,4 +30,8 @@ export interface Data {
 export interface WideData {
   [key: string]: any;
   date: string;
+}
+
+export interface DateSlice {
+  [key: string]: Data[];
 }

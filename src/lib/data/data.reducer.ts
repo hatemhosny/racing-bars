@@ -1,11 +1,12 @@
 import { actionTypes } from './data.actions';
-import { DataState, DataAction, DataCollections } from './data.models';
+import { DataState, DataAction, DataCollections, DateSlice } from './data.models';
 
 const initialState: DataState = {
   names: [],
   groups: [],
   groupFilter: [],
   selected: [],
+  dateSlices: {},
 };
 
 export function dataReducer(state = initialState, action: DataAction): DataState {
@@ -71,6 +72,15 @@ export function dataReducer(state = initialState, action: DataAction): DataState
       return {
         ...state,
         selected: [],
+      };
+
+    case actionTypes.addDateSlice:
+      return {
+        ...state,
+        dateSlices: {
+          ...state.dateSlices,
+          ...(action.payload as DateSlice),
+        },
       };
 
     default:

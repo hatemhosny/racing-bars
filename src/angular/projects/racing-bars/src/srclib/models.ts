@@ -24,12 +24,6 @@ export interface Race {
   destroy: () => void;
 }
 
-export interface Renderer {
-  renderInitalView: () => void;
-  renderFrame: () => void;
-  resize: () => void;
-}
-
 export interface DOMCustomEvent {
   bubbles: boolean;
   detail: {

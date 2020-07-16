@@ -8,5 +8,6 @@ export function rootReducer(state: State, action: Action): State {
     data: dataReducer(state.data, action as DataAction),
     options: optionsReducer(state.options, action as OptionsAction),
     ticker: tickerReducer(state.ticker, action as TickerAction),
+    triggerRender: action.triggerRender ?? true,
   };
 }

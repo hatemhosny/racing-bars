@@ -21,10 +21,12 @@ export function calculateDimensions(store: Store, renderOptions: RenderOptions) 
     marginLeft,
     labelsPosition,
     labelsWidth,
-    topN,
     showIcons,
+    fixedOrder,
   } = store.getState().options;
   const { root, maxValue } = renderOptions;
+
+  const topN = fixedOrder.length > 0 ? fixedOrder.length : store.getState().options.topN;
 
   const height = (renderOptions.height = getHeight(root, minHeight, inputHeight));
   const width = (renderOptions.width = getWidth(root, minWidth, inputWidth));

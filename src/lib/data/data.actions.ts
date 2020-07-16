@@ -1,4 +1,4 @@
-import { DataAction, DataCollections } from './data.models';
+import { DataAction, DataCollections, Data, DateSlice } from './data.models';
 
 export const actionTypes = {
   dataLoaded: 'data/loaded',
@@ -11,6 +11,7 @@ export const actionTypes = {
   removeSelection: 'data/removeSelection',
   toggleSelection: 'data/toggleSelection',
   resetSelections: 'data/resetSelections',
+  addDateSlice: 'data/addDateSlice',
 };
 
 export const dataLoaded = (dataCollections: DataCollections): DataAction => ({
@@ -60,3 +61,13 @@ export const toggleSelection = (selection: string): DataAction => ({
 export const resetSelections = (): DataAction => ({
   type: actionTypes.resetSelections,
 });
+
+export const addDateSlice = (date: string, dateSlice: Data[]): DataAction => {
+  const payload: DateSlice = {};
+  payload[date] = dateSlice;
+  return {
+    type: actionTypes.addDateSlice,
+    payload,
+    triggerRender: false,
+  };
+};
