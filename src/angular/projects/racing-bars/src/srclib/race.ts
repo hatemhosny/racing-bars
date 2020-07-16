@@ -1,8 +1,8 @@
 import * as d3 from './d3';
-import { prepareData } from './data-utils';
+import { prepareData, computeNextDateSubscriber } from './data-utils';
 import { getDateString } from './dates';
 import { Data, WideData } from './data';
-import { createRenderer } from './renderer';
+import { createRenderer, rendererSubscriber } from './renderer';
 import { createTicker } from './ticker';
 import { styleInject } from './styles';
 import { actions, createStore, rootReducer } from './store';
@@ -34,7 +34,8 @@ export function race(data: Data[] | WideData[], options: Partial<Options> = {}):
   const renderer = createRenderer(preparedData, store);
   renderer.renderInitalView();
 
-  store.subscribe(renderer.renderFrame);
+  store.subscribe(rendererSubscriber(store, renderer));
+  store.subscribe(computeNextDateSubscriber(preparedData, store)); // compute and cache next date
   store.subscribe(DOMEventSubscriber(store));
 
   ticker.start('loaded');

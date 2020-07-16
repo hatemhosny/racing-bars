@@ -27,7 +27,7 @@ export function renderInitalView(data: Data[], store: Store, renderOptions: Rend
 
   const topN = fixedOrder.length > 0 ? fixedOrder.length : store.getState().options.topN;
   const currentDate = store.getState().ticker.currentDate;
-  const CompleteDateSlice = getDateSlice(data, currentDate, store.getState().data.groupFilter);
+  const CompleteDateSlice = getDateSlice(currentDate, data, store);
   const dateSlice = CompleteDateSlice.slice(0, topN);
 
   if (!root || dateSlice.length === 0) return;

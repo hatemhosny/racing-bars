@@ -1,6 +1,6 @@
-import { Renderer } from '../models';
 import { Data } from '../data';
 import { Store } from '../store';
+import { Renderer } from './renderer.models';
 import { renderInitalView } from './render-initial-view';
 import { renderFrame } from './render-frame';
 import { resize } from './resize';

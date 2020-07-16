@@ -1,6 +1,6 @@
 import * as d3 from './d3';
 
-import { getDateString, getDates, getDateRange } from './dates';
+import { getDateString, getDates, getDateRange, getNextDate } from './dates';
 import { Data, WideData } from './data';
 import { actions, Store } from './store';
 import { Options } from './options';
@@ -199,14 +199,46 @@ function interpolateTopN(
   }
 }
 
-export function getDateSlice(data: Data[], date: string, groupFilter: string[]) {
-  const slice = data
-    .filter((d) => d.date === date && !isNaN(d.value))
+export function getDateSlice(date: string, data: Data[], store: Store) {
+  let dateSlice: Data[];
+  if (store.getState().data.dateSlices[date]) {
+    // use cache
+    dateSlice = store.getState().data.dateSlices[date];
+  } else {
+    const slice = data
+      .filter((d) => d.date === date && !isNaN(d.value))
+      .sort((a, b) => b.value - a.value)
+      .map((d, i) => ({ ...d, rank: getRank(d, i, store) }));
+
+    const emptyData = [{ name: '', value: 0, lastValue: 0, date, rank: 1 }];
+    dateSlice = slice.length > 0 ? slice : emptyData;
+    // save to cache
+    store.dispatch(actions.data.addDateSlice(date, dateSlice));
+  }
+  const groupFilter = store.getState().data.groupFilter;
+  return groupFilter.length > 0 ? filterGroups(dateSlice, store) : dateSlice;
+}
+
+function filterGroups(data: Data[], store: Store) {
+  const groupFilter = store.getState().data.groupFilter;
+  return data
     .filter((d) => (!!d.group ? !groupFilter.includes(d.group) : true))
-    .sort((a, b) => b.value - a.value)
-    .map((d, i) => ({ ...d, rank: d.rank ?? i }));
+    .map((d, i) => ({ ...d, rank: getRank(d, i, store) }));
+}
 
-  const emptyData = [{ name: '', value: 0, lastValue: 0, date, rank: 1 }];
+export function computeNextDateSubscriber(data: Data[], store: Store) {
+  return function () {
+    if (store.getState().ticker.event === 'running') {
+      const nextDate = getNextDate(
+        store.getState().ticker.dates,
+        store.getState().ticker.currentDate,
+      );
+      getDateSlice(nextDate, data as Data[], store);
+    }
+  };
+}
 
-  return slice.length > 0 ? slice : emptyData;
+function getRank(d: Data, i: number, store: Store) {
+  const fixedOrder = store.getState().options.fixedOrder;
+  return fixedOrder.length > 0 ? d.rank : i;
 }

@@ -404,6 +404,12 @@
 
     return outputRange;
   }
+  function getNextDate(dates, currentDate) {
+    var currentIndex = dates.indexOf(currentDate);
+    if (currentIndex === -1) return dates[0];
+    var lastIndex = dates.length - 1;
+    return currentIndex === lastIndex ? dates[0] : dates[currentIndex + 1];
+  }
 
   var actionTypes = {
     dataLoaded: 'data/loaded',
@@ -415,7 +421,8 @@
     addSelection: 'data/addSelection',
     removeSelection: 'data/removeSelection',
     toggleSelection: 'data/toggleSelection',
-    resetSelections: 'data/resetSelections'
+    resetSelections: 'data/resetSelections',
+    addDateSlice: 'data/addDateSlice'
   };
   var dataLoaded = function dataLoaded(dataCollections) {
     return {
@@ -475,12 +482,22 @@
       type: actionTypes.resetSelections
     };
   };
+  var addDateSlice = function addDateSlice(date, dateSlice) {
+    var payload = {};
+    payload[date] = dateSlice;
+    return {
+      type: actionTypes.addDateSlice,
+      payload: payload,
+      triggerRender: false
+    };
+  };
 
   var initialState = {
     names: [],
     groups: [],
     groupFilter: [],
-    selected: []
+    selected: [],
+    dateSlices: {}
   };
   function dataReducer(state, action) {
     if (state === void 0) {
@@ -542,6 +559,11 @@
           selected: []
         });
 
+      case actionTypes.addDateSlice:
+        return _extends(_extends({}, state), {}, {
+          dateSlices: _extends(_extends({}, state.dateSlices), action.payload)
+        });
+
       default:
         return state;
     }
@@ -582,6 +604,7 @@
     removeSelection: removeSelection,
     toggleSelection: toggleSelection,
     resetSelections: resetSelections,
+    addDateSlice: addDateSlice,
     dataReducer: dataReducer
   };
 
@@ -983,10 +1006,13 @@
   };
 
   function rootReducer(state, action) {
+    var _action$triggerRender;
+
     return {
       data: dataReducer(state.data, action),
       options: optionsReducer(state.options, action),
-      ticker: tickerReducer(state.ticker, action)
+      ticker: tickerReducer(state.ticker, action),
+      triggerRender: (_action$triggerRender = action.triggerRender) != null ? _action$triggerRender : true
     };
   }
 
@@ -1272,28 +1298,59 @@
     }
   }
 
-  function getDateSlice(data, date, groupFilter) {
-    var slice = data.filter(function (d) {
-      return d.date === date && !isNaN(d.value);
-    }).filter(function (d) {
-      return !!d.group ? !groupFilter.includes(d.group) : true;
-    }).sort(function (a, b) {
-      return b.value - a.value;
-    }).map(function (d, i) {
-      var _d$rank;
+  function getDateSlice(date, data, store) {
+    var dateSlice;
 
+    if (store.getState().data.dateSlices[date]) {
+      dateSlice = store.getState().data.dateSlices[date];
+    } else {
+      var slice = data.filter(function (d) {
+        return d.date === date && !isNaN(d.value);
+      }).sort(function (a, b) {
+        return b.value - a.value;
+      }).map(function (d, i) {
+        return _extends(_extends({}, d), {}, {
+          rank: getRank(d, i, store)
+        });
+      });
+      var emptyData = [{
+        name: '',
+        value: 0,
+        lastValue: 0,
+        date: date,
+        rank: 1
+      }];
+      dateSlice = slice.length > 0 ? slice : emptyData;
+      store.dispatch(actions.data.addDateSlice(date, dateSlice));
+    }
+
+    var groupFilter = store.getState().data.groupFilter;
+    return groupFilter.length > 0 ? filterGroups(dateSlice, store) : dateSlice;
+  }
+
+  function filterGroups(data, store) {
+    var groupFilter = store.getState().data.groupFilter;
+    return data.filter(function (d) {
+      return !!d.group ? !groupFilter.includes(d.group) : true;
+    }).map(function (d, i) {
       return _extends(_extends({}, d), {}, {
-        rank: (_d$rank = d.rank) != null ? _d$rank : i
+        rank: getRank(d, i, store)
       });
     });
-    var emptyData = [{
-      name: '',
-      value: 0,
-      lastValue: 0,
-      date: date,
-      rank: 1
-    }];
-    return slice.length > 0 ? slice : emptyData;
+  }
+
+  function computeNextDateSubscriber(data, store) {
+    return function () {
+      if (store.getState().ticker.event === 'running') {
+        var nextDate = getNextDate(store.getState().ticker.dates, store.getState().ticker.currentDate);
+        getDateSlice(nextDate, data, store);
+      }
+    };
+  }
+
+  function getRank(d, i, store) {
+    var fixedOrder = store.getState().options.fixedOrder;
+    return fixedOrder.length > 0 ? d.rank : i;
   }
 
   function calculateDimensions(store, renderOptions) {
@@ -1312,10 +1369,11 @@
         marginLeft = _store$getState$optio.marginLeft,
         labelsPosition = _store$getState$optio.labelsPosition,
         labelsWidth = _store$getState$optio.labelsWidth,
-        topN = _store$getState$optio.topN,
-        showIcons = _store$getState$optio.showIcons;
+        showIcons = _store$getState$optio.showIcons,
+        fixedOrder = _store$getState$optio.fixedOrder;
     var root = renderOptions.root,
         maxValue = renderOptions.maxValue;
+    var topN = fixedOrder.length > 0 ? fixedOrder.length : store.getState().options.topN;
     var height = renderOptions.height = getHeight(root, minHeight, inputHeight);
     var width = renderOptions.width = getWidth(root, minWidth, inputWidth);
     var titlePadding = 5;
@@ -1554,7 +1612,7 @@
     var root = renderOptions.root = document.querySelector(selector);
     var topN = fixedOrder.length > 0 ? fixedOrder.length : store.getState().options.topN;
     var currentDate = store.getState().ticker.currentDate;
-    var CompleteDateSlice = getDateSlice(data, currentDate, store.getState().data.groupFilter);
+    var CompleteDateSlice = getDateSlice(currentDate, data, store);
     var dateSlice = CompleteDateSlice.slice(0, topN);
     if (!root || dateSlice.length === 0) return;
     root.innerHTML = '';
@@ -1695,7 +1753,7 @@
         labelsPosition = _store$getState$optio.labelsPosition;
     var topN = fixedOrder.length > 0 ? fixedOrder.length : store.getState().options.topN;
     var currentDate = store.getState().ticker.currentDate;
-    var CompleteDateSlice = getDateSlice(data, currentDate, store.getState().data.groupFilter);
+    var CompleteDateSlice = getDateSlice(currentDate, data, store);
     var dateSlice = CompleteDateSlice.slice(0, topN);
 
     if (showGroups) {
@@ -1846,6 +1904,7 @@
       var currentPosition = root.style.position;
       renderInitalView(data, store, renderOptions);
       renderFrame(data, store, renderOptions);
+      renderFrame(data, store, renderOptions);
       updateControls(store, renderOptions);
       root.style.position = currentPosition;
     }
@@ -1862,6 +1921,14 @@
       },
       resize: function resize$1() {
         return resize(data, store, renderOptions);
+      }
+    };
+  }
+
+  function rendererSubscriber(store, renderer) {
+    return function () {
+      if (store.getState().triggerRender) {
+        renderer.renderFrame();
       }
     };
   }
@@ -2086,7 +2153,8 @@
     var ticker = createTicker(store);
     var renderer = createRenderer(preparedData, store);
     renderer.renderInitalView();
-    store.subscribe(renderer.renderFrame);
+    store.subscribe(rendererSubscriber(store, renderer));
+    store.subscribe(computeNextDateSubscriber(preparedData, store));
     store.subscribe(DOMEventSubscriber(store));
     ticker.start('loaded');
 

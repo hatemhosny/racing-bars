@@ -116,3 +116,10 @@ export function getDateRange(date1: Date, date2: Date, interval: 'year' | 'month
 
   return outputRange;
 }
+
+export function getNextDate(dates: string[], currentDate: string) {
+  const currentIndex = dates.indexOf(currentDate);
+  if (currentIndex === -1) return dates[0];
+  const lastIndex = dates.length - 1;
+  return currentIndex === lastIndex ? dates[0] : dates[currentIndex + 1];
+}

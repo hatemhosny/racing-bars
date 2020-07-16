@@ -49,7 +49,7 @@ export function renderFrame(data: Data[], store: Store, renderOptions: RenderOpt
 
   const topN = fixedOrder.length > 0 ? fixedOrder.length : store.getState().options.topN;
   const currentDate = store.getState().ticker.currentDate;
-  const CompleteDateSlice = getDateSlice(data, currentDate, store.getState().data.groupFilter);
+  const CompleteDateSlice = getDateSlice(currentDate, data, store);
   const dateSlice = CompleteDateSlice.slice(0, topN);
 
   if (showGroups) {

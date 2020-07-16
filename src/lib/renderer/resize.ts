@@ -24,6 +24,7 @@ export function resize(data: Data[], store: Store, renderOptions: RenderOptions)
 
     renderInitalView(data, store, renderOptions);
     renderFrame(data, store, renderOptions);
+    renderFrame(data, store, renderOptions); // workaround to avoid showing lastValue
     updateControls(store, renderOptions);
 
     root.style.position = currentPosition;
