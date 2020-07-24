@@ -4,11 +4,11 @@ title: Data
 
 ## Data Shape
 
-Both <a href="https://en.wikipedia.org/wiki/Wide_and_narrow_data" target="_blank" class="external">"long" and "wide"</a> data shapes are supported.
+Both <a href="https://en.wikipedia.org/wiki/Wide_and_narrow_data" target="_blank" className="external">"long" and "wide"</a> data shapes are supported.
 
 ## Long Data
 
-Also known as <a href="https://vita.had.co.nz/papers/tidy-data.pdf" target="_blank" class="external">tidy data (pdf)</a>.
+Also known as <a href="https://vita.had.co.nz/papers/tidy-data.pdf" target="_blank" className="external">tidy data (pdf)</a>.
 
 Each data item has the following fields:
 

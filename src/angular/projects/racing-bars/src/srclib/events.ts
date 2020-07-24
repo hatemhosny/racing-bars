@@ -110,11 +110,10 @@ export function addEventHandler(
 
 function dispatchDOMEvent(store: Store) {
   const element = document.querySelector(store.getState().options.selector) as HTMLElement;
-  if (!element) {
-    return;
-  }
+  if (!element) return;
+
   element.dispatchEvent(
-    new CustomEvent('racingBars/dateChanged', {
+    new CustomEvent('racingBars/dateChange', {
       bubbles: true,
       detail: {
         date: store.getState().ticker.currentDate,

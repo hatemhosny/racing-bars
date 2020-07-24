@@ -483,7 +483,7 @@ const options = {
 };
 ```
 
-You may want to refer to the <a href="https://github.com/hatemhosny/racing-bars/tree/master/src/lib/css" class="external" target="_blank">CSS used by the library</a> if you wish to use it as a starting point.
+You may want to refer to the <a href="https://github.com/hatemhosny/racing-bars/tree/master/src/lib/css" className="external" target="_blank">CSS used by the library</a> if you wish to use it as a starting point.
 
 See the guide on [`styles and themes`](../guides/styles-themes.md) for more details.
 

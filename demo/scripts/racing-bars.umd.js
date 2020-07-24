@@ -2071,12 +2071,8 @@
 
   function dispatchDOMEvent(store) {
     var element = document.querySelector(store.getState().options.selector);
-
-    if (!element) {
-      return;
-    }
-
-    element.dispatchEvent(new CustomEvent('racingBars/dateChanged', {
+    if (!element) return;
+    element.dispatchEvent(new CustomEvent('racingBars/dateChange', {
       bubbles: true,
       detail: {
         date: store.getState().ticker.currentDate,
@@ -2096,35 +2092,6 @@
         lastDate = currentDate;
       }
     };
-  }
-
-  function createScroller(element, store) {
-    var dates = store.getState().ticker.dates;
-    prepareDOM();
-    var step = document.body.clientHeight / dates.length;
-    subscribeToEvents();
-
-    function prepareDOM() {
-      element.style.position = 'fixed';
-      element.style.top = '0';
-      var scrollElement = document.createElement('div');
-      scrollElement.style.height = window.innerHeight * 10 + 'px';
-      document.body.appendChild(scrollElement);
-    }
-
-    function subscribeToEvents() {
-      window.addEventListener('scroll', goToDate);
-    }
-
-    function goToDate() {
-      var index = Math.ceil(window.pageYOffset / step);
-
-      if (index < dates.length) {
-        store.dispatch(actions.ticker.updateDate(dates[index], 'scroll'));
-      } else {
-        store.dispatch(actions.ticker.setLast('scroll'));
-      }
-    }
   }
 
   function race(data, options) {
@@ -2224,47 +2191,38 @@
         store.dispatch(actions.ticker.updateDate(getDateString(inputDate), 'apiSetDate'));
       },
       getAllDates: function getAllDates() {
-        return destroyed ? [''] : [].concat(store.getState().ticker.dates);
+        return destroyed ? [] : [].concat(store.getState().ticker.dates);
       },
-      createScroller: function createScroller$1() {
+      select: function select(name) {
         if (destroyed) return;
-
-        createScroller(root, store);
+        d3$1.select(root).select('rect.' + safeName(name)).classed('selected', true);
+        store.dispatch(actions.data.addSelection(name));
       },
-      selections: {
-        select: function select(name) {
-          if (destroyed) return;
-          d3$1.select(root).select('rect.' + safeName(name)).classed('selected', true);
-          store.dispatch(actions.data.addSelection(name));
-        },
-        unselect: function unselect(name) {
-          if (destroyed) return;
-          d3$1.select(root).select('rect.' + safeName(name)).classed('selected', false);
-          store.dispatch(actions.data.removeSelection(name));
-        },
-        unselectAll: function unselectAll() {
-          if (destroyed) return;
-          d3$1.select(root).selectAll('rect').classed('selected', false);
-          store.dispatch(actions.data.resetSelections());
-        }
+      unselect: function unselect(name) {
+        if (destroyed) return;
+        d3$1.select(root).select('rect.' + safeName(name)).classed('selected', false);
+        store.dispatch(actions.data.removeSelection(name));
       },
-      groups: {
-        hide: function hide(group) {
-          if (destroyed) return;
-          store.dispatch(actions.data.addFilter(group));
-        },
-        show: function show(group) {
-          if (destroyed) return;
-          store.dispatch(actions.data.removeFilter(group));
-        },
-        showOnly: function showOnly(group) {
-          if (destroyed) return;
-          store.dispatch(actions.data.allExceptFilter(group));
-        },
-        showAll: function showAll() {
-          if (destroyed) return;
-          store.dispatch(actions.data.resetFilters());
-        }
+      unselectAll: function unselectAll() {
+        if (destroyed) return;
+        d3$1.select(root).selectAll('rect').classed('selected', false);
+        store.dispatch(actions.data.resetSelections());
+      },
+      hideGroup: function hideGroup(group) {
+        if (destroyed) return;
+        store.dispatch(actions.data.addFilter(group));
+      },
+      showGroup: function showGroup(group) {
+        if (destroyed) return;
+        store.dispatch(actions.data.removeFilter(group));
+      },
+      showOnlyGroup: function showOnlyGroup(group) {
+        if (destroyed) return;
+        store.dispatch(actions.data.allExceptFilter(group));
+      },
+      showAllGroups: function showAllGroups() {
+        if (destroyed) return;
+        store.dispatch(actions.data.resetFilters());
       },
       destroy: function destroy() {
         if (destroyed) return;

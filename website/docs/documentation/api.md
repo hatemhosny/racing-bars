@@ -2,7 +2,7 @@
 title: API
 ---
 
-The detailed API is documented <a href="/api/modules/_index_.html" target="_blank" class="external">here</a>.
+The detailed API is documented <a href="/api/modules/_index_.html" target="_blank" className="external">here</a>.
 
 This page is an overview and a guide for usage.
 
@@ -170,7 +170,7 @@ See guides on [Chart Controls](../guides/chart-controls.md) and [Slider](../guid
 
 ### [d3](/api/modules/_index_._lib_d3_.html)
 
-The methods used from <a href="https://d3js.org" target="_blank" class="external">d3 library</a> are re-exported under the property `d3`.
+The methods used from <a href="https://d3js.org" target="_blank" className="external">d3 library</a> are re-exported under the property `d3`.
 This is not the complete library. These are just the methods used internally by the library.
 They are re-exported in case you want to use just this small subset, without having to use the full d3 library.
 

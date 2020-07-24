@@ -68,7 +68,7 @@
       autorun: false,
     };
 
-    racingBars.loadData('data/procedures.json').then((data) => {
+    racingBars.loadData('data/population.json').then((data) => {
       let racer = racingBars.race(data, options);
 
       let slider = document.getElementById('myRange');
@@ -77,9 +77,16 @@
       slider.oninput = function () {
         racer.setDate(dates[slider.value]);
       };
-      document.addEventListener('racingBars/dateChanged', (e) => {
+      document.addEventListener('racingBars/dateChange', (e) => {
         slider.value = dates.indexOf(e.detail.date);
       });
+    });
+
+    document.addEventListener('racingBars/dateChange', (e) => {
+      console.log(e.target);
+      console.log(e.detail.date);
+      console.log(e.detail.isFirst);
+      console.log(e.detail.isLast);
     });
   </script>
 </body>
