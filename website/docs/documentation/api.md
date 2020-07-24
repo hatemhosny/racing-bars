@@ -88,28 +88,40 @@ Accepts a date as a string (e.g. 'YYYY-MM-DD') or a javascript date object, and 
 
 Returns as array of strings, containing all unique dates in the dataset sorted in ascending order (formatted as 'YYYY-MM-DD').
 
-#### select(name: string) : void;
+#### select(name: string) : void
 
 Selects the bar with the supplied name. This occurs by adding the CSS class `selected`.
 See the option [`selectBars`](./options.md#selectbars)
 
-#### unselect(name: string) : void;
+#### unselect(name: string) : void
 
 Unselects the bar with the supplied name. This occurs by removing the CSS class `selected`.
 See the option [`selectBars`](./options.md#selectbars)
 
-#### unselectAll() : void;
+#### unselectAll() : void
 
 Unselects all bars. Removes the CSS class `selected` from all bars.
 See the option [`selectBars`](./options.md#selectbars)
 
-#### hideGroup(group: string) : void;
+#### hideGroup(group: string) : void
 
-#### showGroup(group: string) : void;
+Hides the group with the supplied name.
+See the option [`showGroups`](./options.md#showgroups)
 
-#### showOnlyGroup(group: string) : void;
+#### showGroup(group: string) : void
 
-#### showAllGroups() : void;
+Shows the group with the supplied name if it was hidden.
+See the option [`showGroups`](./options.md#showgroups)
+
+#### showOnlyGroup(group: string) : void
+
+Hides all groups except the one with the supplied name.
+See the option [`showGroups`](./options.md#showgroups)
+
+#### showAllGroups() : void
+
+Shows all groups.
+See the option [`showGroups`](./options.md#showgroups)
 
 ##### destroy() : void
 
@@ -148,6 +160,7 @@ racingBars.loadData('/data/population.csv', 'csv').then((data) => {
   racer.destroy();
   console.log(racer.getDate()); // ""
   console.log(racer.getAllDates()); // []
+  console.log(document.querySelector('#race').innerHTML); // ""
 });
 ```
 
