@@ -27,6 +27,7 @@ Happy linting! 💖
     "options",
     "renderer",
     "events",
-    "data"
+    "data",
+    "api"
   ]
 }

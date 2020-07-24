@@ -446,8 +446,16 @@ This is implemented by adding the class `highlight` to the html element on mouse
 The color of the highlight is determined by the [theme](../guides/styles-themes.md).
 
 - Type: boolean
-- Default: true
+- Default: `false`
 - Examples:
+
+This example enables highlighting bars on mouseover
+
+```js
+const options = {
+  highlightBars: true,
+};
+```
 
 To change the color of the bar highlight use a modification of this css:
 
@@ -455,14 +463,6 @@ To change the color of the bar highlight use a modification of this css:
 .highlight {
   fill: #ff2727 !important;
 }
-```
-
-This example disables highlighting bars on mouseover
-
-```js
-const options = {
-  highlightBars: false,
-};
 ```
 
 ### injectStyles
@@ -673,8 +673,16 @@ This is implemented by toggle of the class `selected` on the html element on cli
 The color of the selected bars is determined by the [theme](../guides/styles-themes.md).
 
 - Type: boolean
-- Default: true
+- Default: false
 - Examples:
+
+This example enables selecting bars on click:
+
+```js
+const options = {
+  selectBars: true,
+};
+```
 
 To change the color of the selected bar use a modification of this css:
 
@@ -684,14 +692,6 @@ To change the color of the selected bar use a modification of this css:
   stroke: #777777 !important;
   stroke-width: 1 !important;
 }
-```
-
-This example disables selecting bars on click:
-
-```js
-const options = {
-  selectBars: false,
-};
 ```
 
 ### selector
@@ -719,33 +719,33 @@ const options = {
 
 ### showGroups
 
-If `true` (default) and if the dataset has the optional field `group`, bars of items in the same group will have same color.
+If `true` and if the dataset has the optional field `group`, bars of items in the same group will have same color.
 A legend is placed above the chart listing the groups and their colors.
 A click on the group legend toggles showing/hiding this group.
 Double click on the legend shows this group only.
 Triple click on any legend will reset the group filter (show all groups).
 
 - Type: boolean
-- Default: `true`
+- Default: `false`
 - Examples:
 
 [view in gallery](/gallery/show-groups)
 
 ```js
 const options = {
-  showGroups: false,
+  showGroups: true,
 };
 ```
 
 ### showIcons
 
-If `true` (default) and if the dataset has the optional field `icon`, an icon will be shown on bars.
+If `true` and if the dataset has the optional field `icon`, an icon will be shown on bars.
 The `icon` field will be used as the url for the image used.
 
 This will take some space from the bar, so some labels may not be visible. If so, consider setting the option [`labelsPosition`](#labelsposition) to `'outside'`.
 
 - Type: boolean
-- Default: `true`
+- Default: `false`
 - Examples:
 
 [view in gallery](/gallery/data-transform)

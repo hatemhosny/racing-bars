@@ -1,6 +1,9 @@
 import { actions, Store } from './store';
 
-export function createScroller(element: HTMLElement, store: Store) {
+export function createScroller(store: Store) {
+  const root = document.querySelector(store.getState().options.selector) as HTMLElement;
+  if (!root) return;
+
   const dates = store.getState().ticker.dates;
   prepareDOM();
 
@@ -9,8 +12,8 @@ export function createScroller(element: HTMLElement, store: Store) {
   subscribeToEvents();
 
   function prepareDOM() {
-    element.style.position = 'fixed';
-    element.style.top = '0';
+    root.style.position = 'fixed';
+    root.style.top = '0';
 
     const scrollElement = document.createElement('div');
     scrollElement.style.height = window.innerHeight * 10 + 'px';

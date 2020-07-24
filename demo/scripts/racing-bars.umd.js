@@ -2181,28 +2181,24 @@
     }
 
     return {
-      start: function start() {
+      play: function play() {
         if (destroyed) return;
 
         if (!store.getState().ticker.isRunning) {
           ticker.start('apiStart');
         }
       },
-      stop: function stop() {
+      pause: function pause() {
         if (destroyed) return;
         ticker.stop('apiStop');
       },
-      rewind: function rewind() {
+      skipBack: function skipBack() {
         if (destroyed) return;
         ticker.skipBack('apiSkipBack');
       },
-      fastforward: function fastforward() {
+      skipForward: function skipForward() {
         if (destroyed) return;
         ticker.skipForward('apiSkipForward');
-      },
-      loop: function loop() {
-        if (destroyed) return;
-        ticker.loop();
       },
       inc: function inc(value) {
         if (value === void 0) {

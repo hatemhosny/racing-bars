@@ -35,11 +35,6 @@ module.exports = {
           position: 'left',
         },
         {
-          href: '/api/modules/_index_.html',
-          label: 'API',
-          position: 'right',
-        },
-        {
           href: 'https://github.com/hatemhosny/racing-bars',
           label: 'GitHub',
           position: 'right',
@@ -93,7 +88,7 @@ module.exports = {
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} Hatem Hosny.`,
+      copyright: `Copyright © ${new Date().getFullYear()} Hatem Hosny. <br /> Made with ❤ and typescript.`,
     },
     prism: {
       additionalLanguages: ['r', 'julia'],

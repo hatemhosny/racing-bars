@@ -8,7 +8,6 @@ import { styleInject } from './styles';
 import { actions, createStore, rootReducer } from './store';
 import { Options } from './options';
 import { registerEvents, DOMEventSubscriber } from './events';
-import { createScroller } from './scroller';
 import { safeName } from './utils';
 import { Race } from './models';
 
@@ -63,27 +62,23 @@ export function race(data: Data[] | WideData[], options: Partial<Options> = {}):
 
   return {
     // TODO: validate user input
-    start: () => {
+    play: () => {
       if (destroyed) return;
       if (!store.getState().ticker.isRunning) {
         ticker.start('apiStart');
       }
     },
-    stop: () => {
+    pause: () => {
       if (destroyed) return;
       ticker.stop('apiStop');
     },
-    rewind: () => {
+    skipBack: () => {
       if (destroyed) return;
       ticker.skipBack('apiSkipBack');
     },
-    fastforward: () => {
+    skipForward: () => {
       if (destroyed) return;
       ticker.skipForward('apiSkipForward');
-    },
-    loop: () => {
-      if (destroyed) return;
-      ticker.loop();
     },
     inc: (value = 1) => {
       if (destroyed) return;
@@ -98,49 +93,41 @@ export function race(data: Data[] | WideData[], options: Partial<Options> = {}):
       if (destroyed) return;
       store.dispatch(actions.ticker.updateDate(getDateString(inputDate), 'apiSetDate'));
     },
-    getAllDates: () => (destroyed ? [''] : [...store.getState().ticker.dates]),
-    createScroller: () => {
+    getAllDates: () => (destroyed ? [] : [...store.getState().ticker.dates]),
+    select: (name: string) => {
       if (destroyed) return;
-      createScroller(root, store);
+      d3.select(root)
+        .select('rect.' + safeName(name))
+        .classed('selected', true);
+      store.dispatch(actions.data.addSelection(name));
     },
-    selections: {
-      select: (name: string) => {
-        if (destroyed) return;
-        d3.select(root)
-          .select('rect.' + safeName(name))
-          .classed('selected', true);
-        store.dispatch(actions.data.addSelection(name));
-      },
-      unselect: (name: string) => {
-        if (destroyed) return;
-        d3.select(root)
-          .select('rect.' + safeName(name))
-          .classed('selected', false);
-        store.dispatch(actions.data.removeSelection(name));
-      },
-      unselectAll: () => {
-        if (destroyed) return;
-        d3.select(root).selectAll('rect').classed('selected', false);
-        store.dispatch(actions.data.resetSelections());
-      },
+    unselect: (name: string) => {
+      if (destroyed) return;
+      d3.select(root)
+        .select('rect.' + safeName(name))
+        .classed('selected', false);
+      store.dispatch(actions.data.removeSelection(name));
     },
-    groups: {
-      hide: (group: string) => {
-        if (destroyed) return;
-        store.dispatch(actions.data.addFilter(group));
-      },
-      show: (group: string) => {
-        if (destroyed) return;
-        store.dispatch(actions.data.removeFilter(group));
-      },
-      showOnly: (group: string) => {
-        if (destroyed) return;
-        store.dispatch(actions.data.allExceptFilter(group));
-      },
-      showAll: () => {
-        if (destroyed) return;
-        store.dispatch(actions.data.resetFilters());
-      },
+    unselectAll: () => {
+      if (destroyed) return;
+      d3.select(root).selectAll('rect').classed('selected', false);
+      store.dispatch(actions.data.resetSelections());
+    },
+    hideGroup: (group: string) => {
+      if (destroyed) return;
+      store.dispatch(actions.data.addFilter(group));
+    },
+    showGroup: (group: string) => {
+      if (destroyed) return;
+      store.dispatch(actions.data.removeFilter(group));
+    },
+    showOnlyGroup: (group: string) => {
+      if (destroyed) return;
+      store.dispatch(actions.data.allExceptFilter(group));
+    },
+    showAllGroups: () => {
+      if (destroyed) return;
+      store.dispatch(actions.data.resetFilters());
     },
     destroy: () => {
       if (destroyed) return;

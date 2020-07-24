@@ -10,7 +10,12 @@ module.exports = {
     {
       type: 'category',
       label: 'Documentation',
-      items: ['documentation/data', 'documentation/options', 'documentation/events'],
+      items: [
+        'documentation/data',
+        'documentation/options',
+        'documentation/api',
+        'documentation/events',
+      ],
     },
     {
       type: 'category',
@@ -39,6 +44,8 @@ module.exports = {
         'guides/chart-controls',
         'guides/fill-date-gaps',
         'guides/multiple-charts',
+        'guides/slider',
+        'guides/scroller',
       ],
     },
     'credits',

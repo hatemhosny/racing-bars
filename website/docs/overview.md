@@ -2,7 +2,7 @@
 title: Overview
 ---
 
-Racing Bars is an [open-source](https://github.com/hatemhosny/racing-bars), light-weight (25kb gzipped),
+Racing Bars is an [open-source](https://github.com/hatemhosny/racing-bars), light-weight (<30kb gzipped),
 easy-to-use, and [feature-rich](./features.md) javascript library for racing bar charts.
 It is based on <a href="https://d3js.org" target="_blank" className="external">D3.js</a>.
 Available for [vanilla javascript](./getting-started/installation.md),
@@ -58,8 +58,8 @@ icon: `https://www.countryflags.io/${d.code.toLowerCase()}/flat/64.png`,
       labelsPosition="outside"
       labelsWidth="160"
       autorun={false}
-      showOverlays="all"
-      showControls="all"
+      overlays="all"
+      controlButtons="all"
       highlightBars={true}
       selectBars={true}
       theme="dark"

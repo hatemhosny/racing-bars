@@ -56,7 +56,7 @@
       overlays: 'none',
       showGroups: true,
       // showIcons: true,
-      // autorun: false,
+      autorun: false,
       // colorSeed: "asdfs",
       // labelsPosition: 'outside',
       // labelsWidth: 250,
@@ -67,6 +67,7 @@
       // selectBars: true,
     };
 
+    let racer;
     racingBars.loadData('data/population.csv', 'csv').then((data) => {
       // racingBars.loadData('data/procedures.json').then((data) => {
       // racingBars.loadData('data/procedures_wide.csv', 'csv').then((data) => {
@@ -75,7 +76,7 @@
         value: Number(d.value) * 1000,
         // icon: `https://www.countryflags.io/${d.code.toLowerCase()}/flat/64.png`,
       }));
-      racingBars.race(data, options);
+      racer = racingBars.race(data, options);
     });
   </script>
 </body>
