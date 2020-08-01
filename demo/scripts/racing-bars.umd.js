@@ -1537,7 +1537,7 @@
     }, {
       skipForward: buttons.skipForward
     }];
-    d3$1.select(root).append('div').classed('controls', true).style('position', 'absolute').style('top', marginTop + 'px').style('width', width).style('right', elementWidth - width + margin.right + barPadding + 'px').selectAll('div').data(controlButtonIcons).enter().append('div').html(function (d) {
+    d3$1.select(root).append('div').classed('controls', true).style('position', 'absolute').style('top', marginTop + 'px').style('right', elementWidth - width + margin.right + barPadding + 'px').selectAll('div').data(controlButtonIcons).enter().append('div').html(function (d) {
       return Object.values(d)[0];
     }).attr('class', function (d) {
       return Object.keys(d)[0];

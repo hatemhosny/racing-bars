@@ -13,7 +13,7 @@ Note that these datasets are already included in the [Python package](./packages
 The population count (in millions) for all countries over the years 1960-2018.
 Each country is counted once a year.
 
-Source: <a href="https://github.com/datasets/population" target="_blank" className="external">https://github.com/datasets/population</a>
+Source: <a href="https://github.com/datasets/population" target="_blank" className="external"><span>https</span>://github.com/datasets/population</a>
 
 Data item fields: date, name, code, group, value
 
@@ -33,7 +33,7 @@ Data item fields: date, name, code, group, value
 
 Gross domestic product (GDP) for countries over the years 1960-2016.
 
-Source: <a href="https://github.com/datasets/gdp" target="_blank" className="external">https://github.com/datasets/gdp</a>
+Source: <a href="https://github.com/datasets/gdp" target="_blank" className="external"><span>https</span>://github.com/datasets/gdp</a>
 
 Data item fields: date, name, code, group, value
 
@@ -53,7 +53,7 @@ Data item fields: date, name, code, group, value
 
 Number of confirmed cases of Covid-19 in different countries.
 
-Source: <a href="https://github.com/datasets/covid-19" target="_blank" className="external">https://github.com/datasets/covid-19</a>
+Source: <a href="https://github.com/datasets/covid-19" target="_blank" className="external"><span>https</span>://github.com/datasets/covid-19</a>
 
 Data item fields: date, name, value
 
@@ -93,7 +93,7 @@ Data item fields: date, name, value
 
 Number of push events to github for each programming language over the period 2012-2020.
 
-Source: <a href="https://github.com/madnight/githut" target="_blank" className="external">https://github.com/madnight/githut</a>
+Source: <a href="https://github.com/madnight/githut" target="_blank" className="external"><span>https</span>://github.com/madnight/githut</a>
 
 Data item fields: date, name, value
 

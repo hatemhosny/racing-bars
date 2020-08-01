@@ -23,7 +23,6 @@ export function renderControls(store: Store, renderOptions: RenderOptions) {
     .classed('controls', true)
     .style('position', 'absolute')
     .style('top', marginTop + 'px')
-    .style('width', width)
     .style('right', elementWidth - width + margin.right + barPadding + 'px')
     .selectAll('div')
     .data(controlButtonIcons)

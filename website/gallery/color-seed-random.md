@@ -1,45 +1,35 @@
 ---
-title: Color Map for Groups
+title: Random Color Seed
 ---
 
 import RacingBars from '../racing-bars.js';
 
-A demo for using a color map for groups.
+A demo for using random color seed.
 
 <!--truncate-->
 
-### Chart
+Refresh the page to get different bar colors.
 
-export const continentColors = {
-Asia: 'yellow',
-Europe: 'green',
-};
+### Chart
 
 <div className="gallery">
   <RacingBars
     dataUrl="/data/population.csv"
     dataType="csv"
     title="World Population"
-    colorMap={continentColors}
-    showGroups={true}
+    colorSeed={Math.round(Math.random() * 100)}
   />
 </div>
 
 ### Code
 
-```html {11}
+```html {6}
 <div id="race"></div>
 <script>
-  const continentColors = {
-    Asia: 'yellow',
-    Europe: 'green',
-  };
-
   const options = {
     selector: '#race',
     title: 'World Population',
-    colorMap: continentColors,
-    showGroups: true,
+    colorSeed: Math.round(Math.random() * 100), // random number between 0-100
   };
 
   racingBars.loadData('/data/population.csv', 'csv').then((data) => {

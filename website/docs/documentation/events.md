@@ -7,8 +7,8 @@ When the chart loads and with each frame change (date change), a custom DOM even
 Listening to these events allows getting the current state of the chart and can be used with [chart controls](../guides/chart-controls.md) to interact with the chart.
 See the guide on creating a [slider](../guides/slider.md) for usage examples.
 
-- Event type: `racingBars/dateChange`
-- Event target: The DOM element specified by the [`selector` option](./options.md#selector).
+- Event type: `'racingBars/dateChange'`
+- Event target: The DOM element specified by the [`selector`](./options.md#selector) option.
 - Event bubbling: `true`
 - The `detail` property is an object that has the following properties:
   - `date`: string. A string representation of the current date in the format 'YYYY-MM-DD'.
@@ -32,3 +32,5 @@ document.addEventListener('racingBars/dateChange', (e) => {
   console.log(e.detail.isLast);
 });
 ```
+
+Note the you can get an array of all dates in the dataset using the [API method `getAllDates()`](./api.md#getalldates--string)

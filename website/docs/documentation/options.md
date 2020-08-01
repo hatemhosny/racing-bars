@@ -59,7 +59,7 @@ Only the colors in the array will be used.
 If the number of data item names/groups are larger than the array length, the colors will be repeated.
 
 On the other hand, an object can be supplied to map specific item names/groups to colors.
-The objects does not have to include all names.
+The object does not have to include all bar names. The other bars will get the default colors.
 Note that names are case-sensitive.
 
 The colors specified in the array or object can be
@@ -125,7 +125,7 @@ const options = {
 ```
 
 :::info
-Notice that if groups are shown ([showGroups](#showgroups) is set to 'true' [default], and the dataset has the field 'group'),
+Notice that if groups are shown ([showGroups](#showgroups) is set to 'true', and the dataset has the field 'group'),
 this setting affects 'group' colors, otherwise it affects 'name' colors, but not both.
 :::
 
@@ -437,7 +437,7 @@ const options = {
 };
 ```
 
-see the guide on [`chart size`](../guides/chart-size.md) for more details.
+see the guide on [`chart size`](../guides/chart-size.md).
 
 ### highlightBars
 
@@ -898,7 +898,7 @@ const options = {
 };
 ```
 
-see the guide on [`chart size`](../guides/chart-size.md) for more details.
+see the guide on [`chart size`](../guides/chart-size.md).
 
 ## Data Function
 
@@ -975,43 +975,3 @@ const options = {
   dateCounter: getYearQuarter,
 };
 ```
-
-<!--
-✔ autorun: true
-✔ caption: ""
-✔ colorMap: {}
-✔ colorSeed: ""
-✔ controlButtons: "none"
-✔ dataShape: "long"
-✔ dataTransform: null,
-✔ dateCounter: "MM/YYYY"
-✔ endDate: ""
-  fillDateGaps: false
-  fillDateGapsValue: "interpolate"
-✔ fixedOrder: []
-✔ fixedScale: false
-✔ height: ""
-✔ highlightBars: true
-✔ injectStyles: true
-✔ keyboardControls: false
-✔ labelsPosition: 'inside'
-✔ labelsWidth: 150
-✔ loop: false
-✔ marginBottom: 5
-✔ marginLeft: 0
-✔ marginRight: 20
-✔ marginTop: 0
-✔ mouseControls: false
-✔ overlays: "none"
-✔ selectBars: true
-✔ selector: "#race"
-✔ showGroups: true
-✔ showIcons: false
-✔ startDate: ""
-✔ subTitle: ""
-✔ theme: "light"
-✔ tickDuration: 500
-✔ title: ""
-✔ topN: 10
-✔ width: ""
- -->
