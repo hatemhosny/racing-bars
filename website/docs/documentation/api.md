@@ -60,6 +60,10 @@ Starts running the chart.
 
 Pauses the chart at the current date.
 
+##### toggle() : void
+
+toggles play/pause.
+
 ##### skipBack() : void
 
 Stops the chart and sets the date to the first date.
@@ -87,6 +91,10 @@ Accepts a date as a string (e.g. 'YYYY-MM-DD') or a javascript date object, and 
 ##### getAllDates() : string[]
 
 Returns as array of strings, containing all unique dates in the dataset sorted in ascending order (formatted as 'YYYY-MM-DD').
+
+##### isRunning() : boolean
+
+Returns `true` if the chart is running, otherwise returns `false`.
 
 #### select(name: string) : void
 

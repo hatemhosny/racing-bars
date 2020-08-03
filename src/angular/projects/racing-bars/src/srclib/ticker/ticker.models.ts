@@ -45,6 +45,7 @@ export type TickerEvent =
   | 'keyboardSkipForward'
   | 'apiStart'
   | 'apiStop'
+  | 'apiToggle'
   | 'apiSkipBack'
   | 'apiSkipForward'
   | 'apiInc'

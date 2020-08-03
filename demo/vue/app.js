@@ -1,8 +1,16 @@
 import RacingBars from '../../dist/vue/index.js';
 
+const callback = (racer, data) => {
+  console.log(racer);
+  console.log(data);
+  racer.play();
+  setTimeout(racer.pause, 3000);
+};
+
 export default {
   name: 'app',
   components: { RacingBars },
+  methods: { callback },
   template: `
   <racing-bars
     element-id="hi-vue"
@@ -13,5 +21,6 @@ export default {
     height="600"
     width="600"
     v-bind:autorun="false"
+    v-bind:callback="this.callback"
   />`,
 };
