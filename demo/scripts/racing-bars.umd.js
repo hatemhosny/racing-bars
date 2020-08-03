@@ -2159,6 +2159,10 @@
         if (destroyed) return;
         ticker.stop('apiStop');
       },
+      toggle: function toggle() {
+        if (destroyed) return;
+        ticker.toggle('apiToggle');
+      },
       skipBack: function skipBack() {
         if (destroyed) return;
         ticker.skipBack('apiSkipBack');
@@ -2192,6 +2196,9 @@
       },
       getAllDates: function getAllDates() {
         return destroyed ? [] : [].concat(store.getState().ticker.dates);
+      },
+      isRunning: function isRunning() {
+        return store.getState().ticker.isRunning;
       },
       select: function select(name) {
         if (destroyed) return;

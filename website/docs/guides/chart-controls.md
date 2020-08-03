@@ -59,6 +59,20 @@ See [API](../documentation/api.md#race) section for details.
 
 #### Example
 
+export let chartObj;
+
+export const callback = (racer, data) => {
+chartObj = racer;
+const myControls = document.querySelector(".myControls");
+if (myControls) myControls.style.display = 'block';
+};
+
+export const toggleChart = (e) => {
+if (!chartObj) return;
+chartObj.toggle();
+e.preventDefault();
+}
+
 <div className="gallery">
   <RacingBars
     dataUrl="/data/population.csv"
@@ -70,24 +84,46 @@ See [API](../documentation/api.md#race) section for details.
     overlays="all"
     mouseControls={true}
     keyboardControls={true}
+    callback={callback}
   />
+</div>
+
+<div className="myControls" style={{display: 'none', margin: '30px'}}>
+  <span>API command: </span>
+  <a href="#" className="toggle" onClick={toggleChart} style={{padding: '10px', border: '1px solid black'}}>
+    Play/Pause
+  </a>
 </div>
 
 #### Code
 
-```js
-const options = {
-  selector: '#race',
-  title: 'Chart Controls Demo',
-  autorun: false,
-  loop: false,
-  controlButtons: 'all',
-  overlays: 'all',
-  mouseControls: true,
-  keyboardControls: true,
-};
+```html
+<div id="race"></div>
 
-racingBars.loadData('/data/population.csv', 'csv').then((data) => {
-  racingBars.race(data, options);
-});
+<div class="apiControl" style="display: none;">
+  <span>API command: </span>
+  <a href="#">Play/Pause</a>
+</div>
+
+<script>
+  const options = {
+    selector: '#race',
+    title: 'Chart Controls Demo',
+    autorun: false,
+    loop: false,
+    controlButtons: 'all',
+    overlays: 'all',
+    mouseControls: true,
+    keyboardControls: true,
+  };
+
+  racingBars.loadData('/data/population.csv', 'csv').then((data) => {
+    const racer = racingBars.race(data, options);
+    document.querySelector('.apiControl').style.display = 'block';
+    document.querySelector('.apiControl a').addEventListener('click', (e) => {
+      racer.toggle();
+      e.preventDefault();
+    });
+  });
+</script>
 ```

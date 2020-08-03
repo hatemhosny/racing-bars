@@ -72,6 +72,10 @@ export function race(data: Data[] | WideData[], options: Partial<Options> = {}):
       if (destroyed) return;
       ticker.stop('apiStop');
     },
+    toggle: () => {
+      if (destroyed) return;
+      ticker.toggle('apiToggle');
+    },
     skipBack: () => {
       if (destroyed) return;
       ticker.skipBack('apiSkipBack');
@@ -94,6 +98,7 @@ export function race(data: Data[] | WideData[], options: Partial<Options> = {}):
       store.dispatch(actions.ticker.updateDate(getDateString(inputDate), 'apiSetDate'));
     },
     getAllDates: () => (destroyed ? [] : [...store.getState().ticker.dates]),
+    isRunning: () => store.getState().ticker.isRunning,
     select: (name: string) => {
       if (destroyed) return;
       d3.select(root)

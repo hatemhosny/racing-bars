@@ -1,6 +1,7 @@
 export interface Race {
   play: () => void;
   pause: () => void;
+  toggle: () => void;
   skipBack: () => void;
   skipForward: () => void;
   inc: (value: number) => void;
@@ -8,6 +9,7 @@ export interface Race {
   getDate: () => string;
   setDate: (inputDate: string | Date) => void;
   getAllDates: () => string[];
+  isRunning: () => boolean;
   select: (name: string) => void;
   unselect: (name: string) => void;
   unselectAll: () => void;

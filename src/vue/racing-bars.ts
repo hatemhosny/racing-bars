@@ -1,5 +1,5 @@
 import { race } from '..';
-import { generateId, getDataPromiseAndOptions, Props } from '../shared';
+import { generateId, processProps, Props } from '../shared';
 
 const RacingBarsComponent = {
   name: 'racing-bars',
@@ -33,12 +33,12 @@ const RacingBarsComponent = {
           ...Object.keys(attrs).map((key) => ({ [camelize(key)]: attrs[key] })),
         );
       }
-
       this.cleanUp();
       const attrs: Props = toCamelCase(this.$attrs);
-      const { dataPromise, options } = getDataPromiseAndOptions(attrs, this.elementId);
+      const { dataPromise, options, callback } = processProps(attrs, this.elementId);
       const data = await dataPromise;
       this.racer = race(data, options);
+      callback(this.racer, data);
     },
     cleanUp() {
       if (this.racer) {

@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, OnChanges, OnDestroy } from '@angular/core';
 import { race, Data, WideData, Race } from '../srclib';
-import { generateId, getDataPromiseAndOptions, Props } from './shared';
+import { generateId, processProps, Props } from './shared';
 
 @Component({
   selector: 'racing-bars',
@@ -23,6 +23,7 @@ export class RacingBarsComponent implements OnInit, OnChanges, OnDestroy {
   @Input() public dataType: 'json' | 'csv' | 'tsv' | 'xml' | undefined;
   @Input() public elementId: string;
   @Input() public loadingContent: string;
+  @Input() public callback: (racer: Race, data: Data[] | WideData[]) => void;
 
   @Input() public dataShape: 'long' | 'wide';
   @Input() public dataTransform: null | ((data: Data[] | WideData[]) => Data[] | WideData[]);
@@ -81,9 +82,10 @@ export class RacingBarsComponent implements OnInit, OnChanges, OnDestroy {
 
   private async runRace() {
     this.cleanUp();
-    const { dataPromise, options } = getDataPromiseAndOptions(this.getProps(), this.elementId);
+    const { dataPromise, options, callback } = processProps(this.getProps(), this.elementId);
     const data = await dataPromise;
     this.racer = race(data, options);
+    callback(this.racer, data);
   }
 
   private cleanUp() {
@@ -99,6 +101,7 @@ export class RacingBarsComponent implements OnInit, OnChanges, OnDestroy {
       dataType: this.dataType,
       elementId: this.elementId,
       loadingContent: this.loadingContent,
+      callback: this.callback,
       dataShape: this.dataShape,
       dataTransform: this.dataTransform,
       fillDateGapsInterval: this.fillDateGapsInterval,

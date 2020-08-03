@@ -1,9 +1,10 @@
-import { loadData, Data, WideData, Options } from '..';
+import { loadData, Data, WideData, Options, Race } from '..';
 
-export function getDataPromiseAndOptions(props: any, elementId: string) {
+export function processProps(props: any, elementId: string) {
   const selector = '#' + elementId;
-  const { data, dataUrl, dataType, ...attr } = props;
+  const { data, dataUrl, dataType, callback, ...attr } = props;
   const options: Partial<Options> = { ...attr, selector };
+
   let dataPromise: Promise<Data[]> | Promise<WideData[]>;
   if (dataUrl && !data) {
     dataPromise = loadData(dataUrl, dataType);
@@ -12,9 +13,14 @@ export function getDataPromiseAndOptions(props: any, elementId: string) {
   } else {
     dataPromise = Promise.resolve(data);
   }
+
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  const cb = callback && typeof callback === 'function' ? callback : (_racer: Race) => {};
+
   return {
     dataPromise,
     options,
+    callback: cb,
   };
 }
 
@@ -32,6 +38,7 @@ export function generateId(prefix = 'racingbars', n = 8) {
 
 /**
  * Interface for component props.
+ * Extends [[Options]].
  * Defines options passed to components (angular/react/vue).
  * See [options documentations](/docs/documentation/options) for details.
  */
@@ -46,4 +53,10 @@ export interface Props extends Partial<Options> {
   elementId: string;
   /** Content to show till the chart loads. This can accept HTML. */
   loadingContent: string;
+  /** Callback function that is executed after the chart loads.
+   *
+   * @param racer chart object ([[Race]]). Exposes the chart API.
+   * @param data data array. The data used by the chart before any transformation
+   */
+  callback: (racer: Race, data: Data[] | WideData[]) => void;
 }

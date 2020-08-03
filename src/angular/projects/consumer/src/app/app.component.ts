@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Race, Data, WideData } from 'dist/racing-bars/srclib';
 
 // prettier-ignore
 @Component({
@@ -7,6 +8,8 @@ import { Component, OnInit } from '@angular/core';
     dataUrl="assets/data/population.csv"
     dataType="csv"
     title="World Population"
+    [autorun]="false"
+    [callback]="callback"
   >
   </racing-bars>`,
   styles: [
@@ -21,5 +24,15 @@ import { Component, OnInit } from '@angular/core';
 export class AppComponent implements OnInit {
   public ngOnInit() {
     //
+  }
+
+  public callback(racer: Race, data: Data[] | WideData[]) {
+    if (!racer) return;
+    // eslint-disable-next-line no-console
+    console.log(racer);
+    // eslint-disable-next-line no-console
+    console.log(data);
+    racer.play();
+    setTimeout(racer.pause, 3000);
   }
 }
