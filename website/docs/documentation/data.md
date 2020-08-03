@@ -347,4 +347,4 @@ So you decide, based on how large is your data, network constraints and processi
 
 Dates that are missing from data will be skipped.
 If you need to fill date gaps, you may use the options [`fillDateGaps`](./options.md) and [`fillDateGapValue`](./options.md).
-please check the [guide](../guides/fillDateGaps.md) about filling date gaps and data interpolation.
+Please check the [guide](../guides/fill-date-gaps.md) about filling date gaps and data interpolation.

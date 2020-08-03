@@ -27,8 +27,7 @@ return `Q${quarter} ${year}`
     title="Top Programming Languages"
     subTitle="Github Push Events"
     dateCounter={options.dateCounter}
-/>
-
+  />
 </div>
 
 ### Code

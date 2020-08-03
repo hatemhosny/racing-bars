@@ -19,8 +19,7 @@ A demo for using [`labelsPosition`](/docs/documentation/options#labelsposition).
     title="World Population"
     subTitle="in millions"
     labelsPosition="inside"
-/>
-
+  />
 </div>
 
 ### Code

@@ -117,6 +117,10 @@ const options = {
   colorMap: continentColors,
   showGroups: true,
 };
+
+racingBars.loadData('/data/population.csv', 'csv').then((data) => {
+  racingBars.race(data, options);
+});
 ```
 
 :::info
@@ -126,4 +130,4 @@ Notice that if groups are shown ([showGroups](#showgroups) is set to 'true', and
 
 ## Use Colors from Dataset
 
-If [data item objects](..//documentation/data.md) in the dataset have the optional field `color`, this will be used by default.
+If [data item objects](..//documentation/data.md#long-data) in the dataset have the optional field `color`, this will be used by default.

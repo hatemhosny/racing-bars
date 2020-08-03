@@ -35,7 +35,7 @@ module.exports = {
       items: [
         'guides/chart-size',
         'guides/bar-colors',
-        'guides/styles-themes',
+        'guides/themes-styles',
         'guides/highlight-select',
         'guides/labels',
         'guides/icons',

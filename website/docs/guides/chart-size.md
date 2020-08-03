@@ -10,8 +10,8 @@ Example:
 ```html
 <style>
   #race {
+    height: 95vh;
     width: 100%;
-    height: 0.8vh;
   }
 </style>
 <div id="race"></div>

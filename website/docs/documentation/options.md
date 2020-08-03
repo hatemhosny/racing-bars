@@ -29,9 +29,7 @@ If provided, displays below the date counter on the right lower corner of the ch
 
 - Type: string | [data function](#data-function)
 - Default: ""
-- Examples:
-
-[view in gallery](/gallery/caption-string)
+- Example: [view in gallery](/gallery/caption-string)
 
 ```js
 const options = {
@@ -39,7 +37,7 @@ const options = {
 };
 ```
 
-This uses a [data function](#data-function) to display the total of data values for the current date in the `caption`
+The following example uses a [data function](#data-function) to display the sum of data values for the current date in the `caption`
 
 [view in gallery](/gallery/caption-data-function)
 
@@ -67,7 +65,7 @@ color names (e.g 'red'), hex codes (e.g. '#FF0000') or RGB codes (e.g. 'rgb(255,
 
 - Type: string[] | {[key: string]: string}
 - Default: ""
-- Examples:
+- Example:
 
 This example uses an array as color palette.
 
@@ -138,7 +136,7 @@ or by [`colorMap`](#colormap) object that maps the item name/group.
 
 - Type: number | string
 - Default: ""
-- Examples:
+- Example:
 
 This example changes bar colors using `colorSeed`
 
@@ -160,7 +158,7 @@ The value "none" hides all buttons.
 - Type: string
 - Valid values: ["all", "play", "none"]
 - Default: "none"
-- Examples:
+- Example:
 
 This example shows all control buttons
 
@@ -182,7 +180,7 @@ See ["Data" section](./data.md) for more details and examples.
 - Type: string
 - Valid values: ["long", "wide"]
 - Default: "long"
-- Examples:
+- Example:
 
 This example uses "wide" data shape
 
@@ -201,7 +199,7 @@ It then returns an array of data items that will be used by the [`race`](../docu
 
 - Type: function `(data: Data[] | any) => Data[] | WideData[]` | null
 - Default: null
-- Examples:
+- Example:
 
 This example transforms the data array. Each data item has the following fields: "date", "name", "code", "group", "value".
 The function adds a new field "icon", based on the "code" field.
@@ -239,7 +237,7 @@ racingBars.loadData('/data/population.json').then((data) => {
 });
 ```
 
-But the `dataTransform` option was added to facilitate the use in the provided [React](../packages/react.md), [Vue](../packages/vue.md) and [Python](../packages/python.md) packages where the component may load the data from url.
+But the `dataTransform` option was added to facilitate the use in the provided [Angular](../frameworks/angular.md), [React](../frameworks/react.md), [Vue](../frameworks/vue.md) and [Python](../frameworks/python.md) implementations where the component may load the data from url.
 So it would be more convenient to be able to also pass a transformation function that would run before creating the chart.
 
 ### dateCounter
@@ -251,9 +249,9 @@ If a string is used, the following will be replaced:
 
 - Type: string | [data function](#data-function)
 - Default: "MM/YYYY"
-- Examples:
+- Example:
 
-This displays formatted date
+This example displays formatted date
 
 [view in gallery](/gallery/date-counter-format)
 
@@ -263,7 +261,7 @@ const options = {
 };
 ```
 
-This uses [data function](#data-function) to display the `dateCounter` as '[count] of [total]' instead of date
+This example uses [data function](#data-function) to display the `dateCounter` as '[count] of [total]' instead of date
 
 [view in gallery](/gallery/date-counter)
 
@@ -282,9 +280,7 @@ If it cannot be parsed as date, an error will be thrown.
 
 - Type: string
 - Default: ""
-- Examples:
-
-[view in gallery](/gallery/start-end-dates)
+- Example: [view in gallery](/gallery/start-end-dates)
 
 ```js
 const options = {
@@ -312,9 +308,7 @@ The values computed for the data items in the missing dates are determined by [`
 - Type: string | null
 - Valid values: ["year", "month", "day"]
 - Default: null
-- Examples:
-
-[view in gallery](/gallery/fill-date-gaps)
+- Example: [view in gallery](/gallery/fill-date-gaps)
 
 ```js
 const options = {
@@ -350,9 +344,7 @@ This is only effective if [`fillDateGapsInterval`](#filldategapsinterval) is set
 - Type: string
 - Valid values: ["interpolate", "last"]
 - Default: "interpolate"
-- Examples:
-
-[view in gallery](/gallery/fill-date-gaps)
+- Example: [view in gallery](/gallery/fill-date-gaps)
 
 ```js
 const options = {
@@ -374,9 +366,7 @@ Also note that with this setting it is more likely that the date counter will ov
 
 - Type: string[]
 - Default: []
-- Examples:
-
-[view in gallery](/gallery/fixed-order)
+- Example: [view in gallery](/gallery/fixed-order)
 
 ```js
 const options = {
@@ -396,9 +386,7 @@ You may then want to set [`labelsPosition`](#labelsposition) to `"outside"`
 
 - Type: boolean
 - Default: false
-- Examples:
-
-[view in gallery](/gallery/fixed-scale2)
+- Example: [view in gallery](/gallery/fixed-scale2)
 
 ```js
 const options = {
@@ -419,7 +407,7 @@ If `height` is undefined or specified as ratio to window `innerHeight`, the char
 
 - Type: number | "window\*`number`" | undefined
 - Default: undefined
-- Examples:
+- Example:
 
 This sets the height to 600px:
 
@@ -443,11 +431,11 @@ see the guide on [`chart size`](../guides/chart-size.md).
 
 If `true`, the racing bars are highlighted on mouseover.
 This is implemented by adding the class `highlight` to the html element on mouseover and removing it on mouseout.
-The color of the highlight is determined by the [theme](../guides/styles-themes.md).
+The color of the highlight is determined by the [theme](../guides/themes-styles.md).
 
 - Type: boolean
 - Default: `false`
-- Examples:
+- Example:
 
 This example enables highlighting bars on mouseover
 
@@ -475,7 +463,7 @@ To do this set the option `injectStyles` to `false`, and no CSS will be injected
 
 - Type: boolean
 - Default: true
-- Examples:
+- Example:
 
 ```js
 const options = {
@@ -485,7 +473,7 @@ const options = {
 
 You may want to refer to the <a href="https://github.com/hatemhosny/racing-bars/tree/master/src/lib/css" className="external" target="_blank">CSS used by the library</a> if you wish to use it as a starting point.
 
-See the guide on [`styles and themes`](../guides/styles-themes.md) for more details.
+See the guide on [`themes and styles`](../guides/themes-styles.md) for more details.
 
 ### keyboardControls
 
@@ -498,9 +486,7 @@ Note that if there are multiple charts in the page, all the charts with the opti
 
 - Type: boolean
 - Default: false
-- Examples:
-
-[view in gallery](/gallery/keyboard-controls)
+- Example: [view in gallery](/gallery/keyboard-controls)
 
 ```js
 const options = {
@@ -521,9 +507,7 @@ bars with small width (low values) may have their labels partially invisible ([d
 - Type: string
 - Valid values: ["inside", "outside"]
 - Default: "inside"
-- Examples:
-
-[view in gallery](/gallery/labelsposition)
+- Example: [view in gallery](/gallery/labelsposition)
 
 ```js
 const options = {
@@ -538,7 +522,7 @@ It is ignored if `labelsPosition` is set to "inside" (default).
 
 - Type: number
 - Default: 150
-- Examples:
+- Example:
 
 ```js
 const options = {
@@ -553,9 +537,7 @@ If `true`, the race restarts after reaching the last date.
 
 - Type: boolean
 - Default: false
-- Examples:
-
-[view in gallery](/gallery/loop)
+- Example: [view in gallery](/gallery/loop)
 
 ```js
 const options = {
@@ -569,7 +551,7 @@ The bottom margin of the chart in pixels (still inside the SVG element).
 
 - Type: number
 - Default: 5
-- Examples:
+- Example:
 
 ```js
 const options = {
@@ -583,7 +565,7 @@ The left margin of the chart in pixels (still inside the SVG element).
 
 - Type: number
 - Default: 0
-- Examples:
+- Example:
 
 ```js
 const options = {
@@ -597,7 +579,7 @@ The right margin of the chart in pixels (still inside the SVG element).
 
 - Type: number
 - Default: 20
-- Examples:
+- Example:
 
 ```js
 const options = {
@@ -611,7 +593,7 @@ The top margin of the chart in pixels (still inside the SVG element).
 
 - Type: number
 - Default: 0
-- Examples:
+- Example:
 
 ```js
 const options = {
@@ -622,11 +604,11 @@ const options = {
 ### mouseControls
 
 This allows controlling the chart by mouse clicks.
-If `true`, mouse click toggles play/pause, double-click triggers skip-forward and triple-click triggers skip-back.
+If `true`, single-click on the chart toggles play/pause, double-click triggers skip-forward and triple-click triggers skip-back.
 
 - Type: boolean
 - Default: false
-- Examples:
+- Example:
 
 ```js
 const options = {
@@ -649,7 +631,7 @@ The value "none" hides both overlays.
 - Type: string
 - Valid values: ["all", "play", "repeat", "none"]
 - Default: "none"
-- Examples:
+- Example:
 
 This example shows both overlays
 
@@ -670,11 +652,11 @@ See the guide on [`chart controls`](../guides/chart-controls.md) for other alter
 
 If `true`, mouse clicks toggle bar select/unselect.
 This is implemented by toggle of the class `selected` on the html element on click.
-The color of the selected bars is determined by the [theme](../guides/styles-themes.md).
+The color of the selected bars is determined by the [`theme`](../guides/themes-styles.md).
 
 - Type: boolean
 - Default: false
-- Examples:
+- Example:
 
 This example enables selecting bars on click:
 
@@ -703,7 +685,7 @@ If no elements were found with the current selector, an error will be thrown.
 
 - Type: string
 - Default: '#race'
-- Examples:
+- Example:
 
 ```js
 const options = {
@@ -727,9 +709,7 @@ Triple click on any legend will reset the group filter (show all groups).
 
 - Type: boolean
 - Default: `false`
-- Examples:
-
-[view in gallery](/gallery/show-groups)
+- Example: [view in gallery](/gallery/show-groups)
 
 ```js
 const options = {
@@ -746,11 +726,9 @@ This will take some space from the bar, so some labels may not be visible. If so
 
 - Type: boolean
 - Default: `false`
-- Examples:
+- Example: [view in gallery](/gallery/icons)
 
-[view in gallery](/gallery/data-transform)
-
-```js
+```js {2,8}
 const options = {
   showIcons: true,
 };
@@ -773,9 +751,7 @@ If it cannot be parsed as date, an error will be thrown.
 
 - Type: string
 - Default: ""
-- Examples:
-
-[view in gallery](/gallery/start-end-dates)
+- Example: [view in gallery](/gallery/start-end-dates)
 
 ```js
 const options = {
@@ -789,9 +765,7 @@ If provided, displays chart sub-title
 
 - Type: string | [data function](#data-function)
 - Default: ""
-- Examples:
-
-[view in gallery](/gallery/title-string)
+- Example: [view in gallery](/gallery/title-string)
 
 ```js
 const options = {
@@ -801,14 +775,12 @@ const options = {
 
 ### theme
 
-Selects the theme to use. See [styles and themes](../guides/styles-themes.md) for details.
+Selects the theme to use. See the guide on [`themes and styles`](../guides/themes-styles.md) for details.
 
 - Type: string
 - Valid values: ["light", "dark"]
 - Default: "light"
-- Examples:
-
-[view in gallery](/gallery/theme-dark)
+- Example: [view in gallery](/gallery/theme-dark)
 
 ```js
 const options = {
@@ -823,7 +795,7 @@ Decreasing the value increases the "speed" at which the chart runs.
 
 - Type: number
 - Default: 500
-- Examples:
+- Example:
 
 This chart runs fast!
 
@@ -841,9 +813,7 @@ If provided, displays chart title
 
 - Type: string | [data function](#data-function)
 - Default: ""
-- Examples:
-
-[view in gallery](/gallery/title-string)
+- Example: [view in gallery](/gallery/title-string)
 
 ```js
 const options = {
@@ -857,9 +827,7 @@ Number of bars to show. This represents the number of data items with highest va
 
 - Type: number
 - Default: 10
-- Examples:
-
-[view in gallery](/gallery/top-n)
+- Example: [view in gallery](/gallery/top-n)
 
 ```js
 const options = {
@@ -880,7 +848,7 @@ If `width` is undefined or specified as ratio to window `innerWidth`, the chart 
 
 - Type: number | "window\*`number`" | undefined
 - Default: undefined
-- Examples:
+- Example:
 
 This sets the width to 900px:
 
@@ -902,7 +870,7 @@ see the guide on [`chart size`](../guides/chart-size.md).
 
 ## Data Function
 
-Each of the options `title`, `subTitle`, `DateCounter` and `caption` can accept a function that takes arguments calculated from provided data and returns a string.
+Each of the options [`title`](#title), [`subTitle`](#subtitle), [`DateCounter`](#datecounter) and [`caption`](#caption) can accept a function that takes arguments calculated from provided data and returns a string.
 The function will be evaluated in every date and the returned string will be displayed.
 
 ### Arguments

@@ -58,3 +58,7 @@ a.external::after {
   color: var(--ifm-link-color);
   font-size: small;
 }
+
+.custom-labels text.label {
+  fill: red !important;
+}

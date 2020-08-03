@@ -164,7 +164,8 @@ racingBars.loadData('/data/population.csv', 'csv').then((data) => {
 });
 ```
 
-See guides on [Chart Controls](../guides/chart-controls.md) and [Slider](../guides/slider.md) for usage examples.
+See the guide on [Chart Controls](../guides/chart-controls.md) for other alternatives of controlling charts.
+See the guides on [Slider](../guides/slider.md) and [Scroller](../guides/scroller.md) for usage examples.
 
 ## Modules
 
