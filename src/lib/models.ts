@@ -1,3 +1,5 @@
+import { Options } from './options';
+
 export interface Race {
   play: () => void;
   pause: () => void;
@@ -17,6 +19,7 @@ export interface Race {
   showGroup: (group: string) => void;
   showOnlyGroup: (group: string) => void;
   showAllGroups: () => void;
+  updateOptions: (newOptions: Partial<Options>) => void;
   destroy: () => void;
 }
 

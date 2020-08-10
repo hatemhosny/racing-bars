@@ -134,6 +134,10 @@ export function race(data: Data[] | WideData[], options: Partial<Options> = {}):
       if (destroyed) return;
       store.dispatch(actions.data.resetFilters());
     },
+    updateOptions: (newOptions: Partial<Options>) => {
+      // eslint-disable-next-line no-console
+      console.log(newOptions);
+    },
     destroy: () => {
       if (destroyed) return;
       destroy();

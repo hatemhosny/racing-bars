@@ -2,7 +2,7 @@ import { getDateString } from '../dates';
 import { Options, OptionsAction } from './options.models';
 import { actionTypes } from './options.actions';
 
-const initialState: Options = {
+export const defaultOptions: Options = {
   selector: '#race',
   dataShape: 'long',
   dataTransform: null,
@@ -46,7 +46,7 @@ const initialState: Options = {
   selectBars: false,
 };
 
-export function optionsReducer(state = initialState, action: OptionsAction): Options {
+export function optionsReducer(state = defaultOptions, action: OptionsAction): Options {
   switch (action.type) {
     case actionTypes.optionsLoaded: {
       const excludedKeys = ['inputHeight', 'inputWidth', 'minHeight', 'minWidth'];
