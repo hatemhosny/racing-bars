@@ -35,9 +35,9 @@ export function race(data: Data[] | WideData[], options: Partial<Options> = {}):
   }
 
   renderer.renderInitalView();
-  ticker.start('loaded');
+  ticker.start();
   if (!autorun) {
-    ticker.stop('loaded');
+    ticker.stop();
   }
 
   let events = registerEvents(store, ticker);
@@ -103,13 +103,13 @@ export function race(data: Data[] | WideData[], options: Partial<Options> = {}):
     if (autorun) {
       const { isFirstDate, isRunning } = store.getState().ticker;
       if (isFirstDate && !isRunning) {
-        ticker.start('optionsChanged');
+        ticker.start();
       }
     }
   }
 
   function destroy() {
-    ticker.stop('destroy');
+    ticker.stop();
     store.unsubscribeAll();
     events.unregister();
     window.removeEventListener('resize', resize);
@@ -124,16 +124,16 @@ export function race(data: Data[] | WideData[], options: Partial<Options> = {}):
 
   const API = {
     // TODO: validate user input
-    play: () => (!store.getState().ticker.isRunning ? ticker.start('apiStart') : undefined),
-    pause: () => ticker.stop('apiStop'),
-    toggle: () => ticker.toggle('apiToggle'),
-    skipBack: () => ticker.skipBack('apiSkipBack'),
-    skipForward: () => ticker.skipForward('apiSkipForward'),
-    inc: (value = 1) => store.dispatch(actions.ticker.inc('apiInc', +value)),
-    dec: (value = 1) => store.dispatch(actions.ticker.dec('apiDec', +value)),
+    play: () => (!store.getState().ticker.isRunning ? ticker.start() : undefined),
+    pause: () => ticker.stop(),
+    toggle: () => ticker.toggle(),
+    skipBack: () => ticker.skipBack(),
+    skipForward: () => ticker.skipForward(),
+    inc: (value = 1) => store.dispatch(actions.ticker.inc(+value)),
+    dec: (value = 1) => store.dispatch(actions.ticker.dec(+value)),
     getDate: () => store.getState().ticker.currentDate,
     setDate: (inputDate: string | Date) =>
-      store.dispatch(actions.ticker.updateDate(getDateString(inputDate), 'apiSetDate')),
+      store.dispatch(actions.ticker.updateDate(getDateString(inputDate))),
     getAllDates: () => [...store.getState().ticker.dates],
     isRunning: () => store.getState().ticker.isRunning,
     select: (name: string) => {

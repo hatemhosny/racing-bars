@@ -19,29 +19,21 @@ export function registerEvents(store: Store, ticker: Ticker) {
   return { unregister };
 
   function registerControlButtonEvents() {
-    addEventHandler(root, elements.skipBack, 'click', () => {
-      ticker.skipBack('skipBackButton');
-    });
-    addEventHandler(root, elements.play, 'click', () => {
-      ticker.start('playButton');
-    });
-    addEventHandler(root, elements.pause, 'click', () => {
-      ticker.stop('pauseButton');
-    });
-    addEventHandler(root, elements.skipForward, 'click', () => {
-      ticker.skipForward('skipForwardButton');
-    });
+    addEventHandler(root, elements.skipBack, 'click', () => ticker.skipBack());
+    addEventHandler(root, elements.play, 'click', () => ticker.start());
+    addEventHandler(root, elements.pause, 'click', () => ticker.stop());
+    addEventHandler(root, elements.skipForward, 'click', () => ticker.skipForward());
   }
 
   function registerOverlayEvents() {
     addEventHandler(root, elements.overlayPlay, 'click', () => {
       hideElement(root, elements.overlay);
-      ticker.start('playOverlay');
+      ticker.start();
     });
     addEventHandler(root, elements.overlayRepeat, 'click', () => {
       hideElement(root, elements.overlay);
-      ticker.skipBack('repeatOverlay');
-      ticker.start('repeatOverlay');
+      ticker.skipBack();
+      ticker.start();
     });
   }
 
@@ -56,11 +48,11 @@ export function registerEvents(store: Store, ticker: Ticker) {
         getClicks(clickEvent, function (event: any) {
           const clicks = event.detail;
           if (clicks === 3) {
-            ticker.skipBack('mouseTripleClick');
+            ticker.skipBack();
           } else if (clicks === 2) {
-            ticker.skipForward('mouseDoubleClick');
+            ticker.skipForward();
           } else {
-            ticker.toggle('mouseClick');
+            ticker.toggle();
           }
         });
       });
@@ -92,17 +84,17 @@ export function registerEvents(store: Store, ticker: Ticker) {
 
     switch (e.key) {
       case keys.spacebar:
-        ticker.toggle('keyboardToggle');
+        ticker.toggle();
         e.preventDefault(); // prevent scroll triggered by spacebar
         break;
       case keys.A:
-        ticker.skipBack('keyboardSkipBack');
+        ticker.skipBack();
         break;
       case keys.S:
-        ticker.toggle('keyboardToggle');
+        ticker.toggle();
         break;
       case keys.D:
-        ticker.skipForward('keyboardSkipForward');
+        ticker.skipForward();
         break;
     }
   }

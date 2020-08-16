@@ -777,68 +777,59 @@
   var initialize = function initialize(dates) {
     return {
       type: actionTypes$2.initialize,
-      payload: dates,
-      event: 'initial'
+      payload: dates
     };
   };
   var changeDates = function changeDates(dates) {
     return {
       type: actionTypes$2.changeDates,
-      payload: dates,
-      event: 'optionsChanged'
+      payload: dates
     };
   };
-  var updateDate = function updateDate(currentDate, event) {
+  var updateDate = function updateDate(currentDate) {
     return {
       type: actionTypes$2.updateDate,
-      payload: currentDate,
-      event: event
+      payload: currentDate
     };
   };
-  var setRunning = function setRunning(running, event) {
+  var setRunning = function setRunning(running) {
     return {
       type: actionTypes$2.setRunning,
-      payload: running,
-      event: event
+      payload: running
     };
   };
-  var setFirst = function setFirst(event) {
+  var setFirst = function setFirst() {
     return {
-      type: actionTypes$2.setFirst,
-      event: event
+      type: actionTypes$2.setFirst
     };
   };
-  var setLast = function setLast(event) {
+  var setLast = function setLast() {
     return {
-      type: actionTypes$2.setLast,
-      event: event
+      type: actionTypes$2.setLast
     };
   };
-  var inc = function inc(event, value) {
+  var inc = function inc(value) {
     if (value === void 0) {
       value = 1;
     }
 
     return {
       type: actionTypes$2.inc,
-      payload: value,
-      event: event
+      payload: value
     };
   };
-  var dec = function dec(event, value) {
+  var dec = function dec(value) {
     if (value === void 0) {
       value = 1;
     }
 
     return {
       type: actionTypes$2.dec,
-      payload: value,
-      event: event
+      payload: value
     };
   };
 
   var initialState$1 = {
-    event: 'initial',
     isRunning: false,
     currentDate: '',
     isFirstDate: true,
@@ -859,8 +850,7 @@
             currentDate: dates[0],
             isFirstDate: true,
             isLastDate: false,
-            dates: dates,
-            event: action.event
+            dates: dates
           });
         }
 
@@ -872,8 +862,7 @@
             currentDate: currentDate,
             isFirstDate: currentDate === _dates[0],
             isLastDate: currentDate === _dates[state.dates.length - 1],
-            dates: _dates,
-            event: action.event
+            dates: _dates
           });
         }
 
@@ -888,16 +877,14 @@
           return _extends(_extends({}, state), {}, {
             currentDate: _currentDate,
             isFirstDate: _currentDate === state.dates[0],
-            isLastDate: _currentDate === state.dates[state.dates.length - 1],
-            event: action.event
+            isLastDate: _currentDate === state.dates[state.dates.length - 1]
           });
         }
 
       case actionTypes$2.setRunning:
         {
           return _extends(_extends({}, state), {}, {
-            isRunning: action.payload,
-            event: action.event
+            isRunning: action.payload
           });
         }
 
@@ -906,8 +893,7 @@
           return _extends(_extends({}, state), {}, {
             currentDate: state.dates[0],
             isFirstDate: true,
-            isLastDate: false,
-            event: action.event
+            isLastDate: false
           });
         }
 
@@ -916,8 +902,7 @@
           return _extends(_extends({}, state), {}, {
             currentDate: state.dates[state.dates.length - 1],
             isFirstDate: false,
-            isLastDate: true,
-            event: action.event
+            isLastDate: true
           });
         }
 
@@ -930,8 +915,7 @@
           return _extends(_extends({}, state), {}, {
             currentDate: newDate,
             isFirstDate: newDate === state.dates[0],
-            isLastDate: newDate === state.dates[lastIndex],
-            event: action.event
+            isLastDate: newDate === state.dates[lastIndex]
           });
         }
 
@@ -946,8 +930,7 @@
           return _extends(_extends({}, state), {}, {
             currentDate: _newDate,
             isFirstDate: _newDate === state.dates[0],
-            isLastDate: _newDate === state.dates[state.dates.length - 1],
-            event: action.event
+            isLastDate: _newDate === state.dates[state.dates.length - 1]
           });
         }
 
@@ -959,59 +942,62 @@
   function createTicker(store) {
     var ticker;
 
-    function start(event) {
+    function start() {
+      var justStarted = true;
       ticker = d3$1.interval(showRace, store.getState().options.tickDuration);
-      store.dispatch(actions.ticker.setRunning(true, event));
+      store.dispatch(actions.ticker.setRunning(true));
 
       function showRace(_) {
-        if (store.getState().ticker.isLastDate) {
-          if (store.getState().options.loop || store.getState().ticker.event === 'playButton' || store.getState().ticker.event === 'apiStart' || store.getState().ticker.event === 'keyboardToggle' || store.getState().ticker.event === 'mouseClick') {
+        if (!store.getState().ticker.isLastDate) {
+          store.dispatch(actions.ticker.inc());
+        } else {
+          if (store.getState().options.loop || justStarted) {
             loop();
           } else {
-            stop('end');
+            stop();
           }
-        } else {
-          store.dispatch(actions.ticker.inc('running'));
         }
+
+        justStarted = false;
       }
     }
 
-    function stop(event) {
+    function stop() {
       if (ticker) {
         ticker.stop();
       }
 
-      store.dispatch(actions.ticker.setRunning(false, event));
+      store.dispatch(actions.ticker.setRunning(false));
     }
 
-    function skipBack(event) {
-      stop(event);
-      store.dispatch(actions.ticker.setFirst(event));
+    function skipBack() {
+      stop();
+      store.dispatch(actions.ticker.setFirst());
     }
 
     function loop() {
-      store.dispatch(actions.ticker.setFirst('loop'));
+      store.dispatch(actions.ticker.setFirst());
     }
 
-    function skipForward(event) {
-      stop(event);
-      store.dispatch(actions.ticker.setLast(event));
-      store.dispatch(actions.ticker.setLast(event));
+    function skipForward() {
+      stop();
+      store.dispatch(actions.ticker.setLast());
+      store.dispatch(actions.ticker.setLast());
     }
 
-    function toggle(event) {
+    function toggle() {
       if (store.getState().ticker.isLastDate) {
-        skipBack(event);
-        start(event);
+        skipBack();
+        start();
       } else if (store.getState().ticker.isRunning) {
-        stop(event);
+        stop();
       } else {
-        start(event);
+        start();
       }
     }
 
-    function goToDate(date, event) {
-      store.dispatch(actions.ticker.updateDate(date, event));
+    function goToDate(date) {
+      store.dispatch(actions.ticker.updateDate(date));
     }
 
     return {
@@ -2041,28 +2027,28 @@
 
     function registerControlButtonEvents() {
       addEventHandler(root, elements.skipBack, 'click', function () {
-        ticker.skipBack('skipBackButton');
+        return ticker.skipBack();
       });
       addEventHandler(root, elements.play, 'click', function () {
-        ticker.start('playButton');
+        return ticker.start();
       });
       addEventHandler(root, elements.pause, 'click', function () {
-        ticker.stop('pauseButton');
+        return ticker.stop();
       });
       addEventHandler(root, elements.skipForward, 'click', function () {
-        ticker.skipForward('skipForwardButton');
+        return ticker.skipForward();
       });
     }
 
     function registerOverlayEvents() {
       addEventHandler(root, elements.overlayPlay, 'click', function () {
         hideElement(root, elements.overlay);
-        ticker.start('playOverlay');
+        ticker.start();
       });
       addEventHandler(root, elements.overlayRepeat, 'click', function () {
         hideElement(root, elements.overlay);
-        ticker.skipBack('repeatOverlay');
-        ticker.start('repeatOverlay');
+        ticker.skipBack();
+        ticker.start();
       });
     }
 
@@ -2076,11 +2062,11 @@
             var clicks = event.detail;
 
             if (clicks === 3) {
-              ticker.skipBack('mouseTripleClick');
+              ticker.skipBack();
             } else if (clicks === 2) {
-              ticker.skipForward('mouseDoubleClick');
+              ticker.skipForward();
             } else {
-              ticker.toggle('mouseClick');
+              ticker.toggle();
             }
           });
         });
@@ -2110,20 +2096,20 @@
 
       switch (e.key) {
         case keys.spacebar:
-          ticker.toggle('keyboardToggle');
+          ticker.toggle();
           e.preventDefault();
           break;
 
         case keys.A:
-          ticker.skipBack('keyboardSkipBack');
+          ticker.skipBack();
           break;
 
         case keys.S:
-          ticker.toggle('keyboardToggle');
+          ticker.toggle();
           break;
 
         case keys.D:
-          ticker.skipForward('keyboardSkipForward');
+          ticker.skipForward();
           break;
       }
     }
@@ -2202,10 +2188,10 @@
     }
 
     renderer.renderInitalView();
-    ticker.start('loaded');
+    ticker.start();
 
     if (!autorun) {
-      ticker.stop('loaded');
+      ticker.stop();
     }
 
     var events = registerEvents(store, ticker);
@@ -2271,7 +2257,7 @@
             isRunning = _store$getState$ticke.isRunning;
 
         if (isFirstDate && !isRunning) {
-          ticker.start('optionsChanged');
+          ticker.start();
         }
       }
     }
@@ -2279,7 +2265,7 @@
     function destroy() {
       var _document$getElementB2;
 
-      ticker.stop('destroy');
+      ticker.stop();
       store.unsubscribeAll();
       events.unregister();
       window.removeEventListener('resize', resize);
@@ -2297,39 +2283,39 @@
 
     var API = {
       play: function play() {
-        return !store.getState().ticker.isRunning ? ticker.start('apiStart') : undefined;
+        return !store.getState().ticker.isRunning ? ticker.start() : undefined;
       },
       pause: function pause() {
-        return ticker.stop('apiStop');
+        return ticker.stop();
       },
       toggle: function toggle() {
-        return ticker.toggle('apiToggle');
+        return ticker.toggle();
       },
       skipBack: function skipBack() {
-        return ticker.skipBack('apiSkipBack');
+        return ticker.skipBack();
       },
       skipForward: function skipForward() {
-        return ticker.skipForward('apiSkipForward');
+        return ticker.skipForward();
       },
       inc: function inc(value) {
         if (value === void 0) {
           value = 1;
         }
 
-        return store.dispatch(actions.ticker.inc('apiInc', +value));
+        return store.dispatch(actions.ticker.inc(+value));
       },
       dec: function dec(value) {
         if (value === void 0) {
           value = 1;
         }
 
-        return store.dispatch(actions.ticker.dec('apiDec', +value));
+        return store.dispatch(actions.ticker.dec(+value));
       },
       getDate: function getDate() {
         return store.getState().ticker.currentDate;
       },
       setDate: function setDate(inputDate) {
-        return store.dispatch(actions.ticker.updateDate(getDateString(inputDate), 'apiSetDate'));
+        return store.dispatch(actions.ticker.updateDate(getDateString(inputDate)));
       },
       getAllDates: function getAllDates() {
         return [].concat(store.getState().ticker.dates);

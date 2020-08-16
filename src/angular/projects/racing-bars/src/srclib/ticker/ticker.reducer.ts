@@ -3,7 +3,6 @@ import { TickerState, TickerAction } from './ticker.models';
 import { actionTypes } from './ticker.actions';
 
 const initialState: TickerState = {
-  event: 'initial',
   isRunning: false,
   currentDate: '',
   isFirstDate: true,
@@ -22,7 +21,6 @@ export const tickerReducer: Reducer<TickerState, TickerAction> = (state = initia
         isFirstDate: true,
         isLastDate: false,
         dates,
-        event: action.event,
       };
     }
 
@@ -42,7 +40,6 @@ export const tickerReducer: Reducer<TickerState, TickerAction> = (state = initia
         isFirstDate: currentDate === dates[0],
         isLastDate: currentDate === dates[state.dates.length - 1],
         dates,
-        event: action.event,
       };
     }
 
@@ -56,7 +53,6 @@ export const tickerReducer: Reducer<TickerState, TickerAction> = (state = initia
         currentDate,
         isFirstDate: currentDate === state.dates[0],
         isLastDate: currentDate === state.dates[state.dates.length - 1],
-        event: action.event,
       };
     }
 
@@ -64,7 +60,6 @@ export const tickerReducer: Reducer<TickerState, TickerAction> = (state = initia
       return {
         ...state,
         isRunning: action.payload as boolean,
-        event: action.event,
       };
     }
 
@@ -74,7 +69,6 @@ export const tickerReducer: Reducer<TickerState, TickerAction> = (state = initia
         currentDate: state.dates[0],
         isFirstDate: true,
         isLastDate: false,
-        event: action.event,
       };
     }
 
@@ -84,7 +78,6 @@ export const tickerReducer: Reducer<TickerState, TickerAction> = (state = initia
         currentDate: state.dates[state.dates.length - 1],
         isFirstDate: false,
         isLastDate: true,
-        event: action.event,
       };
     }
 
@@ -101,7 +94,6 @@ export const tickerReducer: Reducer<TickerState, TickerAction> = (state = initia
         currentDate: newDate,
         isFirstDate: newDate === state.dates[0],
         isLastDate: newDate === state.dates[lastIndex],
-        event: action.event,
       };
     }
 
@@ -115,7 +107,6 @@ export const tickerReducer: Reducer<TickerState, TickerAction> = (state = initia
         currentDate: newDate,
         isFirstDate: newDate === state.dates[0],
         isLastDate: newDate === state.dates[state.dates.length - 1],
-        event: action.event,
       };
     }
 
