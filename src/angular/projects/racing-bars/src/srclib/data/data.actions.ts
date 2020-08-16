@@ -12,6 +12,7 @@ export const actionTypes = {
   toggleSelection: 'data/toggleSelection',
   resetSelections: 'data/resetSelections',
   addDateSlice: 'data/addDateSlice',
+  clearDateSlices: 'data/clearDateSlices',
 };
 
 export const dataLoaded = (dataCollections: DataCollections): DataAction => ({
@@ -71,3 +72,7 @@ export const addDateSlice = (date: string, dateSlice: Data[]): DataAction => {
     triggerRender: false,
   };
 };
+
+export const clearDateSlices = (): DataAction => ({
+  type: actionTypes.clearDateSlices,
+});

@@ -7,8 +7,8 @@ import {
   ChangeDetectorRef,
   SimpleChanges,
 } from '@angular/core';
-import { race, Race, Options } from '../srclib';
-import { generateId, processProps, Props } from './shared';
+import { race, Race, Options, generateId } from '../srclib';
+import { processProps, Props } from './shared';
 import { ComponentProps } from './component-props';
 
 @Component({
@@ -41,7 +41,7 @@ export class RacingBarsComponent extends ComponentProps
       this.props[propName] = changes[propName].currentValue;
     }
     if (this.racer) {
-      this.racer.updateOptions(this.props as Options);
+      this.racer.changeOptions(this.props as Options);
     }
   }
 

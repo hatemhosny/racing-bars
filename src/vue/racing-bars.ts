@@ -1,5 +1,5 @@
-import { race } from '..';
-import { generateId, processProps, defaultProps } from '../shared';
+import { race, generateId } from '..';
+import { processProps, defaultProps } from '../shared';
 
 const RacingBarsComponent = {
   name: 'racing-bars',
@@ -16,7 +16,7 @@ const RacingBarsComponent = {
 
       Object.keys(this.$props).forEach((key) => {
         this.$watch(key, (newVal: any) => {
-          this.racer.updateOptions({ [key]: newVal });
+          this.racer.changeOptions({ [key]: newVal });
         });
       });
     });

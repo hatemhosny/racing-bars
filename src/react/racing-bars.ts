@@ -1,7 +1,7 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import React from 'react';
-import { race, Race } from '..';
-import { generateId, processProps, Props } from '../shared';
+import { race, generateId, Race } from '..';
+import { processProps, Props } from '../shared';
 
 class RacingBarsComponent extends React.Component {
   public elementId: string;
@@ -28,7 +28,7 @@ class RacingBarsComponent extends React.Component {
     if (this.racer) {
       // TODO: do not download data
       const { options } = processProps(nextProps, this.elementId);
-      this.racer.updateOptions(options);
+      this.racer.changeOptions(options);
     }
     return false;
   }

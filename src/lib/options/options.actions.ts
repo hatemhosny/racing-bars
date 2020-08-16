@@ -1,13 +1,12 @@
 import { Options, OptionsAction } from './options.models';
 
 export const actionTypes = {
-  optionsLoaded: 'options/loaded',
+  loadOptions: 'options/load',
   changeOptions: 'options/change',
-  optionsChanged: 'options/changed',
 };
 
-export const optionsLoaded = (options: Partial<Options>): OptionsAction => ({
-  type: actionTypes.optionsLoaded,
+export const loadOptions = (options: Partial<Options>): OptionsAction => ({
+  type: actionTypes.loadOptions,
   payload: options,
 });
 

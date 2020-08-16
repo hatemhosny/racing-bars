@@ -83,6 +83,12 @@ export function dataReducer(state = initialState, action: DataAction): DataState
         },
       };
 
+    case actionTypes.clearDateSlices:
+      return {
+        ...state,
+        dateSlices: {},
+      };
+
     default:
       return state;
   }

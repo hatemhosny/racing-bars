@@ -28,14 +28,6 @@ function isPromise(p: any) {
   return Boolean(p && typeof p.then === 'function');
 }
 
-export function generateId(prefix = 'racingbars', n = 8) {
-  const rnd = Array(3)
-    .fill(null)
-    .map(() => Math.random().toString(36).substr(2))
-    .join('');
-  return prefix + rnd.slice(-n);
-}
-
 /**
  * Type for component props.
  * Extends [[Options]]

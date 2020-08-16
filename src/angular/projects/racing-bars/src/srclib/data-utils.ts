@@ -5,7 +5,7 @@ import { Data, WideData } from './data';
 import { actions, Store } from './store';
 import { Options } from './options';
 
-export function prepareData(rawData: Data[], store: Store) {
+export function prepareData(rawData: Data[], store: Store, changingOptions = false) {
   const options = store.getState().options;
 
   let data = rawData;
@@ -43,12 +43,12 @@ export function prepareData(rawData: Data[], store: Store) {
 
   data = calculateLastValues(data);
 
-  storeDataCollections(data, store);
+  storeDataCollections(data, store, changingOptions);
 
   return data;
 }
 
-function storeDataCollections(data: Data[], store: Store) {
+function storeDataCollections(data: Data[], store: Store, changingOptions: boolean) {
   const names = Array.from(new Set(data.map((d) => d.name))).sort() as string[];
   const groups = Array.from(new Set(data.map((d) => d.group)))
     .filter(Boolean)
@@ -56,7 +56,11 @@ function storeDataCollections(data: Data[], store: Store) {
   const dates = getDates(data);
 
   store.dispatch(actions.data.dataLoaded({ names, groups }));
-  store.dispatch(actions.ticker.initialize(dates));
+  if (!changingOptions) {
+    store.dispatch(actions.ticker.initialize(dates));
+  } else {
+    store.dispatch(actions.ticker.changeDates(dates));
+  }
 }
 
 function calculateLastValues(data: Data[]) {
@@ -233,7 +237,7 @@ export function computeNextDateSubscriber(data: Data[], store: Store) {
         store.getState().ticker.dates,
         store.getState().ticker.currentDate,
       );
-      getDateSlice(nextDate, data as Data[], store);
+      getDateSlice(nextDate, data, store);
     }
   };
 }

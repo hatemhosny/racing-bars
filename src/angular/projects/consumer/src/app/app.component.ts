@@ -8,6 +8,8 @@ import { Race, Data, WideData } from 'dist/racing-bars/srclib';
     dataUrl="assets/data/population.csv"
     dataType="csv"
     [title]="title"
+    [theme]="theme"
+    [topN]="topN"
     myname="hatem"
   >
   </racing-bars>`,
@@ -23,10 +25,14 @@ import { Race, Data, WideData } from 'dist/racing-bars/srclib';
 export class AppComponent implements OnInit {
 
   public title = 'initial title';
+  public theme = 'light';
+  public topN = 10;
 
   public ngOnInit() {
     setTimeout(() => {
       this.title = 'hi there';
+      this.theme = 'dark';
+      this.topN = 5;
     }, 2000);
   }
 

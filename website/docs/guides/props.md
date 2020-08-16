@@ -7,39 +7,32 @@ import RacingBars from '../../racing-bars.js';
 
 #### Example
 
-export let chartObj;
-export let topN = 5;
+Click the links to change the number of bars:
 
-export const callback = (racer, data) => {
-chartObj = racer;
-const myControls = document.querySelector(".myControls");
-if (myControls) myControls.style.display = 'block';
-};
-
-export const addBar = (e) => {
-topN += 1;
-console.log(topN);
+export const Bars = ({children, topN}) => {
+const [count, setCount] = useState(topN);
+function addBar(e) {
+setCount(count + 1);
 e.preventDefault();
 }
-
-export const Highlight = ({children, topN}) => {
-const [count, setCount] = useState(5);
-return (<div className="gallery">
+function resetBars(e) {
+setCount(topN);
+e.preventDefault();
+}
+return (<div className="gallery" style={{display: 'block'}}><p>
+<a href="#" onClick={addBar}>Add Bar</a> - <a href="#" onClick={resetBars}>Reset Bars</a></p>
 <RacingBars
-    dataUrl="/data/population.csv"
-    dataType="csv"
-    title={count}
-    autorun={true}
-    loop={false}
-    controlButtons="all"
-    overlays="all"
-    mouseControls={true}
-    keyboardControls={true}
-    topN={count}
-  /><div className="myControls" style={{margin: '30px'}}>
-<a href="#" className="toggle" onClick={()=>{setCount(count + 1);console.log(count);}} style={{padding: '10px', border: '1px solid black'}}>
-Add Bar
-</a></div></div>);
+dataUrl="/data/population.csv"
+dataType="csv"
+title={'Number of Bars: ' + count}
+autorun={true}
+loop={false}
+controlButtons="all"
+overlays="all"
+mouseControls={true}
+keyboardControls={true}
+topN={count}
+/></div>);
 };
 
-<Highlight topN="5"></Highlight>
+<Bars topN={5}></Bars>

@@ -6,11 +6,17 @@ import { DOMCustomEvent } from './models';
 
 export function registerEvents(store: Store, ticker: Ticker) {
   const root = document.querySelector(store.getState().options.selector) as HTMLElement;
+  const events: Array<{
+    element: HTMLElement | Document;
+    event: string;
+    handler: EventListener;
+  }> = [];
 
   registerControlButtonEvents();
   registerOverlayEvents();
   registerClickEvents();
   registerKeyboardEvents();
+  return unRegisterEvents;
 
   function registerControlButtonEvents() {
     addEventHandler(root, elements.skipBack, 'click', () => {
@@ -63,48 +69,65 @@ export function registerEvents(store: Store, ticker: Ticker) {
 
   function registerKeyboardEvents() {
     if (store.getState().options.keyboardControls) {
-      document.addEventListener('keypress', function (e) {
-        // ignore keyboard when user is typing in input or textarea
-        const target = document.activeElement;
-        if (target && ['input', 'textarea'].includes(target.tagName.toLowerCase())) return;
-
-        const keyCodes = {
-          spacebar: 32,
-          A: 97,
-          S: 115,
-          D: 100,
-        };
-
-        // TODO: keyCode is deprecated
-        switch (e.keyCode) {
-          case keyCodes.spacebar:
-            ticker.toggle('keyboardToggle');
-            e.preventDefault(); // prevent scroll triggered by spacebar
-            break;
-          case keyCodes.A:
-            ticker.skipBack('keyboardSkipBack');
-            break;
-          case keyCodes.S:
-            ticker.toggle('keyboardToggle');
-            break;
-          case keyCodes.D:
-            ticker.skipForward('keyboardSkipForward');
-            break;
-        }
+      document.addEventListener('keyup', handleKeyboardEvents);
+      events.push({
+        element: document,
+        event: 'keyup',
+        handler: handleKeyboardEvents as EventListener,
       });
     }
   }
-}
 
-export function addEventHandler(
-  root: HTMLElement,
-  className: string,
-  event: string,
-  handler: () => void,
-) {
-  const element = getElement(root, className);
-  if (element) {
-    element.addEventListener(event, handler);
+  function handleKeyboardEvents(e: KeyboardEvent) {
+    // ignore keyboard when user is typing in input or textarea
+    const target = document.activeElement;
+    if (target && ['input', 'textarea'].includes(target.tagName.toLowerCase())) return;
+
+    const keys = {
+      spacebar: ' ',
+      A: 'a',
+      S: 's',
+      D: 'd',
+    };
+
+    switch (e.key) {
+      case keys.spacebar:
+        ticker.toggle('keyboardToggle');
+        e.preventDefault(); // prevent scroll triggered by spacebar
+        break;
+      case keys.A:
+        ticker.skipBack('keyboardSkipBack');
+        break;
+      case keys.S:
+        ticker.toggle('keyboardToggle');
+        break;
+      case keys.D:
+        ticker.skipForward('keyboardSkipForward');
+        break;
+    }
+  }
+
+  function unRegisterEvents() {
+    events.forEach((event) => {
+      event.element.removeEventListener(event.event, event.handler);
+    });
+  }
+
+  function addEventHandler(
+    root: HTMLElement,
+    className: string,
+    event: string,
+    handler: () => void,
+  ) {
+    const element = getElement(root, className);
+    if (element) {
+      element.addEventListener(event, handler);
+      events.push({
+        element,
+        event,
+        handler,
+      });
+    }
   }
 }
 

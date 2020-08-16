@@ -51,6 +51,25 @@
     }
   }
 
+  var actionTypes = {
+    loadOptions: 'options/load',
+    changeOptions: 'options/change'
+  };
+  var loadOptions = function loadOptions(options) {
+    return {
+      type: actionTypes.loadOptions,
+      payload: options
+    };
+  };
+  var changeOptions = function changeOptions(options) {
+    return {
+      type: actionTypes.changeOptions,
+      payload: options
+    };
+  };
+
+  var Options = function Options() {};
+
   function _extends() {
     _extends = Object.assign || function (target) {
       for (var i = 1; i < arguments.length; i++) {
@@ -67,6 +86,12 @@
     };
 
     return _extends.apply(this, arguments);
+  }
+
+  function _inheritsLoose(subClass, superClass) {
+    subClass.prototype = Object.create(superClass.prototype);
+    subClass.prototype.constructor = subClass;
+    subClass.__proto__ = superClass;
   }
 
   function _objectWithoutPropertiesLoose(source, excluded) {
@@ -169,6 +194,20 @@
     }
 
     return array;
+  }
+  function generateId(prefix, n) {
+    if (prefix === void 0) {
+      prefix = 'racingbars';
+    }
+
+    if (n === void 0) {
+      n = 8;
+    }
+
+    var rnd = Array(3).fill(null).map(function () {
+      return Math.random().toString(36).substr(2);
+    }).join('');
+    return prefix + rnd.slice(-n);
   }
   function getHeight(element, minHeight, height) {
     var newHeight;
@@ -411,222 +450,7 @@
     return currentIndex === lastIndex ? dates[0] : dates[currentIndex + 1];
   }
 
-  var actionTypes = {
-    dataLoaded: 'data/loaded',
-    addFilter: 'data/addFilter',
-    removeFilter: 'data/removeFilter',
-    toggleFilter: 'data/toggleFilter',
-    resetFilters: 'data/resetFilters',
-    allExceptFilter: 'data/allExceptFilter',
-    addSelection: 'data/addSelection',
-    removeSelection: 'data/removeSelection',
-    toggleSelection: 'data/toggleSelection',
-    resetSelections: 'data/resetSelections',
-    addDateSlice: 'data/addDateSlice'
-  };
-  var dataLoaded = function dataLoaded(dataCollections) {
-    return {
-      type: actionTypes.dataLoaded,
-      payload: dataCollections
-    };
-  };
-  var addFilter = function addFilter(group) {
-    return {
-      type: actionTypes.addFilter,
-      payload: group
-    };
-  };
-  var removeFilter = function removeFilter(group) {
-    return {
-      type: actionTypes.removeFilter,
-      payload: group
-    };
-  };
-  var toggleFilter = function toggleFilter(group) {
-    return {
-      type: actionTypes.toggleFilter,
-      payload: group
-    };
-  };
-  var resetFilters = function resetFilters() {
-    return {
-      type: actionTypes.resetFilters
-    };
-  };
-  var allExceptFilter = function allExceptFilter(group) {
-    return {
-      type: actionTypes.allExceptFilter,
-      payload: group
-    };
-  };
-  var addSelection = function addSelection(selection) {
-    return {
-      type: actionTypes.addSelection,
-      payload: selection
-    };
-  };
-  var removeSelection = function removeSelection(selection) {
-    return {
-      type: actionTypes.removeSelection,
-      payload: selection
-    };
-  };
-  var toggleSelection = function toggleSelection(selection) {
-    return {
-      type: actionTypes.toggleSelection,
-      payload: selection
-    };
-  };
-  var resetSelections = function resetSelections() {
-    return {
-      type: actionTypes.resetSelections
-    };
-  };
-  var addDateSlice = function addDateSlice(date, dateSlice) {
-    var payload = {};
-    payload[date] = dateSlice;
-    return {
-      type: actionTypes.addDateSlice,
-      payload: payload,
-      triggerRender: false
-    };
-  };
-
-  var initialState = {
-    names: [],
-    groups: [],
-    groupFilter: [],
-    selected: [],
-    dateSlices: {}
-  };
-  function dataReducer(state, action) {
-    if (state === void 0) {
-      state = initialState;
-    }
-
-    switch (action.type) {
-      case actionTypes.dataLoaded:
-        {
-          var collections = action.payload;
-          return _extends(_extends({}, state), {}, {
-            names: [].concat(collections.names),
-            groups: [].concat(collections.groups)
-          });
-        }
-
-      case actionTypes.addFilter:
-        return _extends(_extends({}, state), {}, {
-          groupFilter: addToArray(state.groupFilter, action.payload)
-        });
-
-      case actionTypes.removeFilter:
-        return _extends(_extends({}, state), {}, {
-          groupFilter: removeFromArray(state.groupFilter, action.payload)
-        });
-
-      case actionTypes.toggleFilter:
-        return _extends(_extends({}, state), {}, {
-          groupFilter: toggleItem(state.groupFilter, action.payload)
-        });
-
-      case actionTypes.resetFilters:
-        return _extends(_extends({}, state), {}, {
-          groupFilter: []
-        });
-
-      case actionTypes.allExceptFilter:
-        return _extends(_extends({}, state), {}, {
-          groupFilter: removeFromArray(state.groups, action.payload)
-        });
-
-      case actionTypes.addSelection:
-        return _extends(_extends({}, state), {}, {
-          selected: addToArray(state.selected, action.payload)
-        });
-
-      case actionTypes.removeSelection:
-        return _extends(_extends({}, state), {}, {
-          selected: removeFromArray(state.selected, action.payload)
-        });
-
-      case actionTypes.toggleSelection:
-        return _extends(_extends({}, state), {}, {
-          selected: toggleItem(state.selected, action.payload)
-        });
-
-      case actionTypes.resetSelections:
-        return _extends(_extends({}, state), {}, {
-          selected: []
-        });
-
-      case actionTypes.addDateSlice:
-        return _extends(_extends({}, state), {}, {
-          dateSlices: _extends(_extends({}, state.dateSlices), action.payload)
-        });
-
-      default:
-        return state;
-    }
-  }
-
-  function addToArray(array, item) {
-    var arr = [].concat(array);
-
-    if (!arr.includes(item)) {
-      arr.push(item);
-    }
-
-    return arr;
-  }
-
-  function removeFromArray(array, item) {
-    return array.filter(function (x) {
-      return x !== item;
-    });
-  }
-
-  function toggleItem(array, item) {
-    return array.includes(item) ? removeFromArray(array, item) : addToArray(array, item);
-  }
-
-
-
-  var data = {
-    __proto__: null,
-    actionTypes: actionTypes,
-    dataLoaded: dataLoaded,
-    addFilter: addFilter,
-    removeFilter: removeFilter,
-    toggleFilter: toggleFilter,
-    resetFilters: resetFilters,
-    allExceptFilter: allExceptFilter,
-    addSelection: addSelection,
-    removeSelection: removeSelection,
-    toggleSelection: toggleSelection,
-    resetSelections: resetSelections,
-    addDateSlice: addDateSlice,
-    dataReducer: dataReducer
-  };
-
-  var actionTypes$1 = {
-    optionsLoaded: 'options/loaded',
-    changeOptions: 'options/change',
-    optionsChanged: 'options/changed'
-  };
-  var optionsLoaded = function optionsLoaded(options) {
-    return {
-      type: actionTypes$1.optionsLoaded,
-      payload: options
-    };
-  };
-  var changeOptions = function changeOptions(options) {
-    return {
-      type: actionTypes$1.changeOptions,
-      payload: options
-    };
-  };
-
-  var initialState$1 = {
+  var defaultOptions = {
     selector: '#race',
     dataShape: 'long',
     dataTransform: null,
@@ -671,11 +495,12 @@
   };
   function optionsReducer(state, action) {
     if (state === void 0) {
-      state = initialState$1;
+      state = defaultOptions;
     }
 
     switch (action.type) {
-      case actionTypes$1.optionsLoaded:
+      case actionTypes.loadOptions:
+      case actionTypes.changeOptions:
         {
           var excludedKeys = ['inputHeight', 'inputWidth', 'minHeight', 'minWidth'];
           var options = {};
@@ -686,22 +511,13 @@
               options[key] = (_action$payload$key = action.payload[key]) != null ? _action$payload$key : state[key];
             }
           });
-          var startDate = options.startDate ? getDateString(options.startDate) : '';
-          var endDate = options.endDate ? getDateString(options.endDate) : '';
+          var startDate = options.startDate ? getDateString(options.startDate) : state.startDate;
+          var endDate = options.endDate ? getDateString(options.endDate) : state.startDate;
           var inputHeight = options.height || state.inputHeight;
           var inputWidth = options.width || state.inputWidth;
           var fixedOrder = Array.isArray(options.fixedOrder) ? [].concat(options.fixedOrder) : state.fixedOrder;
-          var colorMap = Array.isArray(options.colorMap) ? [].concat(options.colorMap) : typeof options.colorMap === 'object' ? _extends({}, options.colorMap) : state.colorMap;
-          var topN = state.topN;
-
-          if (Number(options.topN)) {
-            topN = Number(options.topN);
-          }
-
-          if (fixedOrder.length > 0 && topN > fixedOrder.length) {
-            topN = fixedOrder.length;
-          }
-
+          var colorMap = Array.isArray(options.colorMap) ? [].concat(options.colorMap).map(String) : typeof options.colorMap === 'object' ? _extends({}, options.colorMap) : state.colorMap;
+          var topN = fixedOrder.length || Number(options.topN) || state.topN;
           var tickDuration = Number(options.tickDuration) || state.tickDuration;
           var labelsWidth = Number(options.labelsWidth) || state.labelsWidth;
           var marginTop = Number(options.marginTop) || state.marginTop;
@@ -725,9 +541,6 @@
           });
         }
 
-      case actionTypes$1.changeOptions:
-        return _extends(_extends({}, state), action.payload);
-
       default:
         return state;
     }
@@ -737,14 +550,226 @@
 
   var options = {
     __proto__: null,
-    actionTypes: actionTypes$1,
-    optionsLoaded: optionsLoaded,
+    actionTypes: actionTypes,
+    loadOptions: loadOptions,
     changeOptions: changeOptions,
+    Options: Options,
+    defaultOptions: defaultOptions,
     optionsReducer: optionsReducer
+  };
+
+  var actionTypes$1 = {
+    dataLoaded: 'data/loaded',
+    addFilter: 'data/addFilter',
+    removeFilter: 'data/removeFilter',
+    toggleFilter: 'data/toggleFilter',
+    resetFilters: 'data/resetFilters',
+    allExceptFilter: 'data/allExceptFilter',
+    addSelection: 'data/addSelection',
+    removeSelection: 'data/removeSelection',
+    toggleSelection: 'data/toggleSelection',
+    resetSelections: 'data/resetSelections',
+    addDateSlice: 'data/addDateSlice',
+    clearDateSlices: 'data/clearDateSlices'
+  };
+  var dataLoaded = function dataLoaded(dataCollections) {
+    return {
+      type: actionTypes$1.dataLoaded,
+      payload: dataCollections
+    };
+  };
+  var addFilter = function addFilter(group) {
+    return {
+      type: actionTypes$1.addFilter,
+      payload: group
+    };
+  };
+  var removeFilter = function removeFilter(group) {
+    return {
+      type: actionTypes$1.removeFilter,
+      payload: group
+    };
+  };
+  var toggleFilter = function toggleFilter(group) {
+    return {
+      type: actionTypes$1.toggleFilter,
+      payload: group
+    };
+  };
+  var resetFilters = function resetFilters() {
+    return {
+      type: actionTypes$1.resetFilters
+    };
+  };
+  var allExceptFilter = function allExceptFilter(group) {
+    return {
+      type: actionTypes$1.allExceptFilter,
+      payload: group
+    };
+  };
+  var addSelection = function addSelection(selection) {
+    return {
+      type: actionTypes$1.addSelection,
+      payload: selection
+    };
+  };
+  var removeSelection = function removeSelection(selection) {
+    return {
+      type: actionTypes$1.removeSelection,
+      payload: selection
+    };
+  };
+  var toggleSelection = function toggleSelection(selection) {
+    return {
+      type: actionTypes$1.toggleSelection,
+      payload: selection
+    };
+  };
+  var resetSelections = function resetSelections() {
+    return {
+      type: actionTypes$1.resetSelections
+    };
+  };
+  var addDateSlice = function addDateSlice(date, dateSlice) {
+    var payload = {};
+    payload[date] = dateSlice;
+    return {
+      type: actionTypes$1.addDateSlice,
+      payload: payload,
+      triggerRender: false
+    };
+  };
+  var clearDateSlices = function clearDateSlices() {
+    return {
+      type: actionTypes$1.clearDateSlices
+    };
+  };
+
+  var initialState = {
+    names: [],
+    groups: [],
+    groupFilter: [],
+    selected: [],
+    dateSlices: {}
+  };
+  function dataReducer(state, action) {
+    if (state === void 0) {
+      state = initialState;
+    }
+
+    switch (action.type) {
+      case actionTypes$1.dataLoaded:
+        {
+          var collections = action.payload;
+          return _extends(_extends({}, state), {}, {
+            names: [].concat(collections.names),
+            groups: [].concat(collections.groups)
+          });
+        }
+
+      case actionTypes$1.addFilter:
+        return _extends(_extends({}, state), {}, {
+          groupFilter: addToArray(state.groupFilter, action.payload)
+        });
+
+      case actionTypes$1.removeFilter:
+        return _extends(_extends({}, state), {}, {
+          groupFilter: removeFromArray(state.groupFilter, action.payload)
+        });
+
+      case actionTypes$1.toggleFilter:
+        return _extends(_extends({}, state), {}, {
+          groupFilter: toggleItem(state.groupFilter, action.payload)
+        });
+
+      case actionTypes$1.resetFilters:
+        return _extends(_extends({}, state), {}, {
+          groupFilter: []
+        });
+
+      case actionTypes$1.allExceptFilter:
+        return _extends(_extends({}, state), {}, {
+          groupFilter: removeFromArray(state.groups, action.payload)
+        });
+
+      case actionTypes$1.addSelection:
+        return _extends(_extends({}, state), {}, {
+          selected: addToArray(state.selected, action.payload)
+        });
+
+      case actionTypes$1.removeSelection:
+        return _extends(_extends({}, state), {}, {
+          selected: removeFromArray(state.selected, action.payload)
+        });
+
+      case actionTypes$1.toggleSelection:
+        return _extends(_extends({}, state), {}, {
+          selected: toggleItem(state.selected, action.payload)
+        });
+
+      case actionTypes$1.resetSelections:
+        return _extends(_extends({}, state), {}, {
+          selected: []
+        });
+
+      case actionTypes$1.addDateSlice:
+        return _extends(_extends({}, state), {}, {
+          dateSlices: _extends(_extends({}, state.dateSlices), action.payload)
+        });
+
+      case actionTypes$1.clearDateSlices:
+        return _extends(_extends({}, state), {}, {
+          dateSlices: {}
+        });
+
+      default:
+        return state;
+    }
+  }
+
+  function addToArray(array, item) {
+    var arr = [].concat(array);
+
+    if (!arr.includes(item)) {
+      arr.push(item);
+    }
+
+    return arr;
+  }
+
+  function removeFromArray(array, item) {
+    return array.filter(function (x) {
+      return x !== item;
+    });
+  }
+
+  function toggleItem(array, item) {
+    return array.includes(item) ? removeFromArray(array, item) : addToArray(array, item);
+  }
+
+
+
+  var data = {
+    __proto__: null,
+    actionTypes: actionTypes$1,
+    dataLoaded: dataLoaded,
+    addFilter: addFilter,
+    removeFilter: removeFilter,
+    toggleFilter: toggleFilter,
+    resetFilters: resetFilters,
+    allExceptFilter: allExceptFilter,
+    addSelection: addSelection,
+    removeSelection: removeSelection,
+    toggleSelection: toggleSelection,
+    resetSelections: resetSelections,
+    addDateSlice: addDateSlice,
+    clearDateSlices: clearDateSlices,
+    dataReducer: dataReducer
   };
 
   var actionTypes$2 = {
     initialize: 'ticker/initialize',
+    changeDates: 'ticker/changeDates',
     updateDate: 'ticker/updateDate',
     setRunning: 'ticker/setRunning',
     setFirst: 'ticker/setFirst',
@@ -757,6 +782,13 @@
       type: actionTypes$2.initialize,
       payload: dates,
       event: 'initial'
+    };
+  };
+  var changeDates = function changeDates(dates) {
+    return {
+      type: actionTypes$2.changeDates,
+      payload: dates,
+      event: 'optionsChanged'
     };
   };
   var updateDate = function updateDate(currentDate, event) {
@@ -808,7 +840,7 @@
     };
   };
 
-  var initialState$2 = {
+  var initialState$1 = {
     event: 'initial',
     isRunning: false,
     currentDate: '',
@@ -818,7 +850,7 @@
   };
   function tickerReducer(state, action) {
     if (state === void 0) {
-      state = initialState$2;
+      state = initialState$1;
     }
 
     switch (action.type) {
@@ -835,18 +867,31 @@
           });
         }
 
+      case actionTypes$2.changeDates:
+        {
+          var _dates = action.payload;
+          var currentDate = _dates.indexOf(state.currentDate) !== -1 ? state.currentDate : state.currentDate < _dates[0] ? _dates[0] : state.currentDate > _dates[_dates.length - 1] ? _dates[_dates.length - 1] : _dates[[].concat(_dates, [state.currentDate]).sort().indexOf(state.currentDate)];
+          return _extends(_extends({}, state), {}, {
+            currentDate: currentDate,
+            isFirstDate: currentDate === _dates[0],
+            isLastDate: currentDate === _dates[state.dates.length - 1],
+            dates: _dates,
+            event: action.event
+          });
+        }
+
       case actionTypes$2.updateDate:
         {
-          var currentDate = action.payload;
+          var _currentDate = action.payload;
 
-          if (state.dates.indexOf(currentDate) === -1) {
+          if (state.dates.indexOf(_currentDate) === -1) {
             return _extends({}, state);
           }
 
           return _extends(_extends({}, state), {}, {
-            currentDate: currentDate,
-            isFirstDate: currentDate === state.dates[0],
-            isLastDate: currentDate === state.dates[state.dates.length - 1],
+            currentDate: _currentDate,
+            isFirstDate: _currentDate === state.dates[0],
+            isLastDate: _currentDate === state.dates[state.dates.length - 1],
             event: action.event
           });
         }
@@ -989,6 +1034,7 @@
     __proto__: null,
     actionTypes: actionTypes$2,
     initialize: initialize,
+    changeDates: changeDates,
     updateDate: updateDate,
     setRunning: setRunning,
     setFirst: setFirst,
@@ -1067,7 +1113,11 @@
     };
   }
 
-  function prepareData(rawData, store) {
+  function prepareData(rawData, store, changingOptions) {
+    if (changingOptions === void 0) {
+      changingOptions = false;
+    }
+
     var options = store.getState().options;
     var data = rawData;
 
@@ -1115,11 +1165,11 @@
     }
 
     data = calculateLastValues(data);
-    storeDataCollections(data, store);
+    storeDataCollections(data, store, changingOptions);
     return data;
   }
 
-  function storeDataCollections(data, store) {
+  function storeDataCollections(data, store, changingOptions) {
     var names = Array.from(new Set(data.map(function (d) {
       return d.name;
     }))).sort();
@@ -1131,7 +1181,12 @@
       names: names,
       groups: groups
     }));
-    store.dispatch(actions.ticker.initialize(dates));
+
+    if (!changingOptions) {
+      store.dispatch(actions.ticker.initialize(dates));
+    } else {
+      store.dispatch(actions.ticker.changeDates(dates));
+    }
   }
 
   function calculateLastValues(data) {
@@ -1608,12 +1663,13 @@
         fixedScale = _store$getState$optio.fixedScale,
         fixedOrder = _store$getState$optio.fixedOrder;
     var dates = store.getState().ticker.dates;
-    renderOptions.lastDate = dates[0];
     var root = renderOptions.root = document.querySelector(selector);
     var topN = fixedOrder.length > 0 ? fixedOrder.length : store.getState().options.topN;
     var currentDate = store.getState().ticker.currentDate;
     var CompleteDateSlice = getDateSlice(currentDate, data, store);
     var dateSlice = CompleteDateSlice.slice(0, topN);
+    var lastDateIndex = dates.indexOf(currentDate) > 0 ? dates.indexOf(currentDate) - 1 : 0;
+    renderOptions.lastDate = dates[lastDateIndex];
     if (!root || dateSlice.length === 0) return;
     root.innerHTML = '';
     renderInitialFrame();
@@ -1953,6 +2009,7 @@
     css = css.split('__selector__').join(selector);
     var head = document.head || document.getElementsByTagName('head')[0];
     var style = document.createElement('style');
+    style.id = generateId('styles');
     style.type = 'text/css';
 
     if (insertAt === 'top') {
@@ -1970,14 +2027,18 @@
     } else {
       style.appendChild(document.createTextNode(css));
     }
+
+    return style.id;
   }
 
   function registerEvents(store, ticker) {
     var root = document.querySelector(store.getState().options.selector);
+    var events = [];
     registerControlButtonEvents();
     registerOverlayEvents();
     registerClickEvents();
     registerKeyboardEvents();
+    return unRegisterEvents;
 
     function registerControlButtonEvents() {
       addEventHandler(root, elements.skipBack, 'click', function () {
@@ -2029,43 +2090,62 @@
 
     function registerKeyboardEvents() {
       if (store.getState().options.keyboardControls) {
-        document.addEventListener('keypress', function (e) {
-          var target = document.activeElement;
-          if (target && ['input', 'textarea'].includes(target.tagName.toLowerCase())) return;
-          var keyCodes = {
-            spacebar: 32,
-            A: 97,
-            S: 115,
-            D: 100
-          };
-
-          switch (e.keyCode) {
-            case keyCodes.spacebar:
-              ticker.toggle('keyboardToggle');
-              e.preventDefault();
-              break;
-
-            case keyCodes.A:
-              ticker.skipBack('keyboardSkipBack');
-              break;
-
-            case keyCodes.S:
-              ticker.toggle('keyboardToggle');
-              break;
-
-            case keyCodes.D:
-              ticker.skipForward('keyboardSkipForward');
-              break;
-          }
+        document.addEventListener('keyup', handleKeyboardEvents);
+        events.push({
+          element: document,
+          event: 'keyup',
+          handler: handleKeyboardEvents
         });
       }
     }
-  }
-  function addEventHandler(root, className, event, handler) {
-    var element = getElement(root, className);
 
-    if (element) {
-      element.addEventListener(event, handler);
+    function handleKeyboardEvents(e) {
+      var target = document.activeElement;
+      if (target && ['input', 'textarea'].includes(target.tagName.toLowerCase())) return;
+      var keys = {
+        spacebar: ' ',
+        A: 'a',
+        S: 's',
+        D: 'd'
+      };
+
+      switch (e.key) {
+        case keys.spacebar:
+          ticker.toggle('keyboardToggle');
+          e.preventDefault();
+          break;
+
+        case keys.A:
+          ticker.skipBack('keyboardSkipBack');
+          break;
+
+        case keys.S:
+          ticker.toggle('keyboardToggle');
+          break;
+
+        case keys.D:
+          ticker.skipForward('keyboardSkipForward');
+          break;
+      }
+    }
+
+    function unRegisterEvents() {
+      events.forEach(function (event) {
+        event.element.removeEventListener(event.event, event.handler);
+      });
+    }
+
+    function addEventHandler(root, className, event, handler) {
+      var element = getElement(root, className);
+
+      if (element) {
+        element.addEventListener(event, handler);
+        events.push({
+          element: element,
+          event: event,
+          handler: handler
+        });
+      }
     }
   }
 
@@ -2099,8 +2179,15 @@
       options = {};
     }
 
+    if (!data || !Array.isArray(data) || data.length === 0) {
+      throw new Error('No valid data supplied.');
+    }
+
     var store = createStore(rootReducer);
-    store.dispatch(actions.options.optionsLoaded(options));
+    store.dispatch(actions.options.loadOptions(options));
+    var ticker = createTicker(store);
+    var preparedData = prepareData(data, store);
+    var renderer = createRenderer(preparedData, store);
     var _store$getState$optio = store.getState().options,
         selector = _store$getState$optio.selector,
         injectStyles = _store$getState$optio.injectStyles,
@@ -2109,41 +2196,96 @@
     var root = document.querySelector(selector);
 
     if (!root) {
-      return undefined;
+      throw new Error('No element found with the selector: ' + selector);
     }
+
+    subscribeToStore(store, renderer, preparedData);
+    var stylesId;
 
     if (injectStyles) {
-      styleInject(selector, theme, 'top');
+      stylesId = styleInject(selector, theme);
     }
 
-    var preparedData = prepareData(data, store);
-    var ticker = createTicker(store);
-    var renderer = createRenderer(preparedData, store);
     renderer.renderInitalView();
-    store.subscribe(rendererSubscriber(store, renderer));
-    store.subscribe(computeNextDateSubscriber(preparedData, store));
-    store.subscribe(DOMEventSubscriber(store));
     ticker.start('loaded');
 
     if (!autorun) {
       ticker.stop('loaded');
     }
 
-    registerEvents(store, ticker);
+    var unRegisterEvents = registerEvents(store, ticker);
     window.addEventListener('resize', resize);
 
     function resize() {
       renderer.resize();
-      registerEvents(store, ticker);
+      unRegisterEvents();
+      unRegisterEvents = registerEvents(store, ticker);
+    }
+
+    function changeOptions(newOptions) {
+      var unAllowedOptions = ['selector', 'dataShape'];
+      unAllowedOptions.forEach(function (key) {
+        if (newOptions[key] && newOptions[key] !== store.getState().options[key]) {
+          throw new Error("The option \"" + key + "\" cannot be changed.");
+        }
+      });
+      var dataOptions = ['dataTransform', 'fillDateGapsInterval', 'fillDateGapsValue', 'startDate', 'endDate', 'fixedOrder'];
+      var dataOptionsChanged = false;
+      dataOptions.forEach(function (key) {
+        if (newOptions[key] && newOptions[key] !== store.getState().options[key]) {
+          dataOptionsChanged = true;
+        }
+      });
+      store.dispatch(actions.options.changeOptions(newOptions));
+      var _store$getState$optio2 = store.getState().options,
+          injectStyles = _store$getState$optio2.injectStyles,
+          theme = _store$getState$optio2.theme,
+          autorun = _store$getState$optio2.autorun;
+
+      if (dataOptionsChanged) {
+        store.unubscribeAll();
+        store.dispatch(actions.data.clearDateSlices());
+        preparedData = prepareData(data, store, true);
+        renderer = createRenderer(preparedData, store);
+        subscribeToStore(store, renderer, preparedData);
+      }
+
+      if ('injectStyles' in newOptions || 'theme' in newOptions) {
+        var _document$getElementB;
+
+        (_document$getElementB = document.getElementById(stylesId)) == null ? void 0 : _document$getElementB.remove();
+
+        if (injectStyles) {
+          stylesId = styleInject(selector, theme);
+        }
+      }
+
+      renderer.renderInitalView();
+      unRegisterEvents();
+      unRegisterEvents = registerEvents(store, ticker);
+
+      if (autorun) {
+        var _store$getState$ticke = store.getState().ticker,
+            isFirstDate = _store$getState$ticke.isFirstDate,
+            isRunning = _store$getState$ticke.isRunning;
+
+        if (isFirstDate && !isRunning) {
+          ticker.start('optionsChanged');
+        }
+      }
     }
 
     var destroyed = false;
 
     function _destroy() {
+      var _document$getElementB2;
+
       ticker.stop('destroy');
       store.unubscribeAll();
+      unRegisterEvents();
       window.removeEventListener('resize', resize);
       root.innerHTML = '';
+      (_document$getElementB2 = document.getElementById(stylesId)) == null ? void 0 : _document$getElementB2.remove();
       destroyed = true;
     }
 
@@ -2231,6 +2373,7 @@
         if (destroyed) return;
         store.dispatch(actions.data.resetFilters());
       },
+      changeOptions: changeOptions,
       destroy: function destroy() {
         if (destroyed) return;
 
@@ -2239,7 +2382,35 @@
     };
   }
 
+  function subscribeToStore(store, renderer, data) {
+    store.subscribe(rendererSubscriber(store, renderer));
+    store.subscribe(computeNextDateSubscriber(data, store));
+    store.subscribe(DOMEventSubscriber(store));
+  }
+
+  var Props = /*#__PURE__*/function (_Options) {
+    _inheritsLoose(Props, _Options);
+
+    function Props() {
+      return _Options.apply(this, arguments) || this;
+    }
+
+    return Props;
+  }(Options);
+  var defaultProps = _extends(_extends({}, defaultOptions), {}, {
+    data: undefined,
+    dataUrl: undefined,
+    dataType: undefined,
+    elementId: undefined,
+    loadingContent: 'Loading...',
+    callback: undefined
+  });
+
+  exports.Options = Options;
+  exports.Props = Props;
   exports.d3 = d3;
+  exports.defaultOptions = defaultOptions;
+  exports.generateId = generateId;
   exports.loadData = loadData;
   exports.race = race;
 

@@ -2,6 +2,7 @@ import { TickerAction, TickerEvent } from './ticker.models';
 
 export const actionTypes = {
   initialize: 'ticker/initialize',
+  changeDates: 'ticker/changeDates',
   updateDate: 'ticker/updateDate',
   setRunning: 'ticker/setRunning',
   setFirst: 'ticker/setFirst',
@@ -14,6 +15,12 @@ export const initialize = (dates: string[]): TickerAction => ({
   type: actionTypes.initialize,
   payload: dates,
   event: 'initial',
+});
+
+export const changeDates = (dates: string[]): TickerAction => ({
+  type: actionTypes.changeDates,
+  payload: dates,
+  event: 'optionsChanged',
 });
 
 export const updateDate = (currentDate: string, event: TickerEvent): TickerAction => ({

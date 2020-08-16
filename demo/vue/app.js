@@ -7,13 +7,14 @@ const callback = function (racer, data) {
   // setTimeout(racer.pause, 3000);
   setTimeout(() => {
     this.name = 'Hatem';
+    this.topN = 5;
   }, 1000);
 };
 
 export default {
   name: 'app',
   components: { RacingBars },
-  props: ['name'],
+  props: ['name', 'topN'],
   created() {
     // this.name = 'Bob';
   },
@@ -28,9 +29,10 @@ export default {
     data-url="../data/population.csv"
     data-type="csv"
     :title="name"
-    height="600"
+    height="400"
     width="600"
     :autorun="false"
     :callback="this.callback"
+    :top-n="topN"
   />`,
 };

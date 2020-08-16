@@ -2,61 +2,118 @@ import * as d3 from './d3';
 import { prepareData, computeNextDateSubscriber } from './data-utils';
 import { getDateString } from './dates';
 import { Data, WideData } from './data';
-import { createRenderer, rendererSubscriber } from './renderer';
+import { createRenderer, rendererSubscriber, Renderer } from './renderer';
 import { createTicker } from './ticker';
 import { styleInject } from './styles';
-import { actions, createStore, rootReducer } from './store';
+import { actions, createStore, rootReducer, Store } from './store';
 import { Options } from './options';
 import { registerEvents, DOMEventSubscriber } from './events';
 import { safeName } from './utils';
 import { Race } from './models';
 
 export function race(data: Data[] | WideData[], options: Partial<Options> = {}): Race {
-  const store = createStore(rootReducer);
+  if (!data || !Array.isArray(data) || data.length === 0) {
+    throw new Error('No valid data supplied.');
+  }
 
-  store.dispatch(actions.options.optionsLoaded(options));
+  const store = createStore(rootReducer);
+  store.dispatch(actions.options.loadOptions(options));
+
+  const ticker = createTicker(store);
+
+  let preparedData = prepareData(data as Data[], store);
+  let renderer = createRenderer(preparedData, store);
+
   const { selector, injectStyles, theme, autorun } = store.getState().options;
 
   const root = document.querySelector(selector) as HTMLElement;
   if (!root) {
-    return (undefined as unknown) as Race;
+    throw new Error('No element found with the selector: ' + selector);
   }
 
+  subscribeToStore(store, renderer, preparedData);
+
+  let stylesId: string;
   if (injectStyles) {
-    styleInject(selector, theme, 'top');
+    stylesId = styleInject(selector, theme);
   }
 
-  const preparedData = prepareData(data as Data[], store);
-
-  const ticker = createTicker(store);
-
-  const renderer = createRenderer(preparedData, store);
   renderer.renderInitalView();
-
-  store.subscribe(rendererSubscriber(store, renderer));
-  store.subscribe(computeNextDateSubscriber(preparedData, store)); // compute and cache next date
-  store.subscribe(DOMEventSubscriber(store));
-
   ticker.start('loaded');
-
   if (!autorun) {
     ticker.stop('loaded');
   }
 
-  registerEvents(store, ticker);
+  let unRegisterEvents = registerEvents(store, ticker);
   window.addEventListener('resize', resize);
 
   function resize() {
     renderer.resize();
-    registerEvents(store, ticker);
+    unRegisterEvents();
+    unRegisterEvents = registerEvents(store, ticker);
+  }
+
+  function changeOptions(newOptions: Partial<Options>) {
+    const unAllowedOptions: Array<keyof Options> = ['selector', 'dataShape'];
+    unAllowedOptions.forEach((key) => {
+      if (newOptions[key] && newOptions[key] !== store.getState().options[key]) {
+        throw new Error(`The option "${key}" cannot be changed.`);
+      }
+    });
+
+    const dataOptions: Array<keyof Options> = [
+      'dataTransform',
+      'fillDateGapsInterval',
+      'fillDateGapsValue',
+      'startDate',
+      'endDate',
+      'fixedOrder',
+    ];
+    let dataOptionsChanged = false;
+    dataOptions.forEach((key) => {
+      if (newOptions[key] && newOptions[key] !== store.getState().options[key]) {
+        dataOptionsChanged = true;
+      }
+    });
+
+    store.dispatch(actions.options.changeOptions(newOptions));
+    const { injectStyles, theme, autorun } = store.getState().options;
+
+    if (dataOptionsChanged) {
+      store.unubscribeAll();
+      store.dispatch(actions.data.clearDateSlices());
+      preparedData = prepareData(data as Data[], store, true);
+      renderer = createRenderer(preparedData, store);
+      subscribeToStore(store, renderer, preparedData);
+    }
+
+    if ('injectStyles' in newOptions || 'theme' in newOptions) {
+      document.getElementById(stylesId)?.remove();
+      if (injectStyles) {
+        stylesId = styleInject(selector, theme);
+      }
+    }
+
+    renderer.renderInitalView();
+    unRegisterEvents();
+    unRegisterEvents = registerEvents(store, ticker);
+
+    if (autorun) {
+      const { isFirstDate, isRunning } = store.getState().ticker;
+      if (isFirstDate && !isRunning) {
+        ticker.start('optionsChanged');
+      }
+    }
   }
 
   let destroyed = false;
   function destroy() {
     ticker.stop('destroy');
     store.unubscribeAll();
+    unRegisterEvents();
     window.removeEventListener('resize', resize);
     root.innerHTML = '';
+    document.getElementById(stylesId)?.remove();
     destroyed = true;
   }
 
@@ -134,13 +191,19 @@ export function race(data: Data[] | WideData[], options: Partial<Options> = {}):
       if (destroyed) return;
       store.dispatch(actions.data.resetFilters());
     },
-    updateOptions: (newOptions: Partial<Options>) => {
-      // eslint-disable-next-line no-console
-      console.log(newOptions);
+    changeOptions: (newOptions: Partial<Options>) => {
+      if (destroyed) return;
+      changeOptions(newOptions);
     },
     destroy: () => {
       if (destroyed) return;
       destroy();
     },
   };
+}
+
+function subscribeToStore(store: Store, renderer: Renderer, data: Data[]) {
+  store.subscribe(rendererSubscriber(store, renderer));
+  store.subscribe(computeNextDateSubscriber(data, store));
+  store.subscribe(DOMEventSubscriber(store));
 }

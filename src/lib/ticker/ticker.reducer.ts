@@ -25,6 +25,26 @@ export function tickerReducer(state = initialState, action: TickerAction): Ticke
       };
     }
 
+    case actionTypes.changeDates: {
+      const dates = action.payload as string[];
+      const currentDate =
+        dates.indexOf(state.currentDate) !== -1
+          ? state.currentDate
+          : state.currentDate < dates[0]
+          ? dates[0]
+          : state.currentDate > dates[dates.length - 1]
+          ? dates[dates.length - 1]
+          : dates[[...dates, state.currentDate].sort().indexOf(state.currentDate)];
+      return {
+        ...state,
+        currentDate,
+        isFirstDate: currentDate === dates[0],
+        isLastDate: currentDate === dates[state.dates.length - 1],
+        dates,
+        event: action.event,
+      };
+    }
+
     case actionTypes.updateDate: {
       const currentDate = action.payload as string;
       if (state.dates.indexOf(currentDate) === -1) {

@@ -2,6 +2,7 @@ export {
   DOMCustomEvent,
   loadData,
   race,
+  generateId,
   Race,
   Data,
   WideData,
