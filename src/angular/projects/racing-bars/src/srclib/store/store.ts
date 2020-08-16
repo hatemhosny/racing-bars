@@ -1,7 +1,10 @@
-import { Action, Reducer, State, Subscriber } from './models';
+import { Action, Reducer, State, Subscriber, Store } from './models';
 import { rootReducer } from './reducer';
 
-export function createStore(reducer: Reducer = rootReducer, preloadedState?: State) {
+export function createStore(
+  reducer: Reducer<State, Action> = rootReducer,
+  preloadedState?: State,
+): Store {
   let state = {} as State;
 
   if (preloadedState) {
@@ -37,7 +40,7 @@ export function createStore(reducer: Reducer = rootReducer, preloadedState?: Sta
     });
   }
 
-  function unubscribeAll() {
+  function unsubscribeAll() {
     subscribers.length = 0;
   }
 
@@ -45,6 +48,6 @@ export function createStore(reducer: Reducer = rootReducer, preloadedState?: Sta
     getState,
     dispatch,
     subscribe,
-    unubscribeAll,
+    unsubscribeAll,
   };
 }

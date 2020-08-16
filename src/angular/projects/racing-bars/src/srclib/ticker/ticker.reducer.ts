@@ -1,3 +1,4 @@
+import { Reducer } from '../store';
 import { TickerState, TickerAction } from './ticker.models';
 import { actionTypes } from './ticker.actions';
 
@@ -10,7 +11,7 @@ const initialState: TickerState = {
   dates: [],
 };
 
-export function tickerReducer(state = initialState, action: TickerAction): TickerState {
+export const tickerReducer: Reducer<TickerState, TickerAction> = (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.initialize: {
       const dates = action.payload as string[];
@@ -121,4 +122,4 @@ export function tickerReducer(state = initialState, action: TickerAction): Ticke
     default:
       return state;
   }
-}
+};

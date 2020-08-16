@@ -16,7 +16,7 @@ export function registerEvents(store: Store, ticker: Ticker) {
   registerOverlayEvents();
   registerClickEvents();
   registerKeyboardEvents();
-  return unRegisterEvents;
+  return { unregister };
 
   function registerControlButtonEvents() {
     addEventHandler(root, elements.skipBack, 'click', () => {
@@ -107,7 +107,7 @@ export function registerEvents(store: Store, ticker: Ticker) {
     }
   }
 
-  function unRegisterEvents() {
+  function unregister() {
     events.forEach((event) => {
       event.element.removeEventListener(event.event, event.handler);
     });

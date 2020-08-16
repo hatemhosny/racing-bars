@@ -9,8 +9,6 @@ export interface Action {
   triggerRender?: boolean;
 }
 
-export type Reducer = (state: any, action: Action) => any;
-
 export interface State {
   data: DataState;
   options: Options;
@@ -18,10 +16,15 @@ export interface State {
   triggerRender: boolean;
 }
 
+type StateOrSlice = State | DataState | Options | TickerState;
+
+export type Reducer<T extends StateOrSlice, U extends Action> = (state: T, action: U) => T;
+
 export interface Store {
   getState: () => State;
   dispatch: (action: Action) => void;
   subscribe: (fn: Subscriber) => { unsubscribe: () => void };
+  unsubscribeAll: () => void;
 }
 
 export type Subscriber = () => void;

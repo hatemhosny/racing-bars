@@ -49,10 +49,10 @@ export function prepareData(rawData: Data[], store: Store, changingOptions = fal
 }
 
 function storeDataCollections(data: Data[], store: Store, changingOptions: boolean) {
-  const names = Array.from(new Set(data.map((d) => d.name))).sort() as string[];
-  const groups = Array.from(new Set(data.map((d) => d.group)))
+  const names = Array.from(new Set(data.map((d) => String(d.name)))).sort();
+  const groups = Array.from(new Set(data.map((d) => String(d.group))))
     .filter(Boolean)
-    .sort() as string[];
+    .sort();
   const dates = getDates(data);
 
   store.dispatch(actions.data.dataLoaded({ names, groups }));

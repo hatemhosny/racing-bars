@@ -493,7 +493,7 @@
     highlightBars: false,
     selectBars: false
   };
-  function optionsReducer(state, action) {
+  var optionsReducer = function optionsReducer(state, action) {
     if (state === void 0) {
       state = defaultOptions;
     }
@@ -544,7 +544,7 @@
       default:
         return state;
     }
-  }
+  };
 
 
 
@@ -652,20 +652,17 @@
     selected: [],
     dateSlices: {}
   };
-  function dataReducer(state, action) {
+  var dataReducer = function dataReducer(state, action) {
     if (state === void 0) {
       state = initialState;
     }
 
     switch (action.type) {
       case actionTypes$1.dataLoaded:
-        {
-          var collections = action.payload;
-          return _extends(_extends({}, state), {}, {
-            names: [].concat(collections.names),
-            groups: [].concat(collections.groups)
-          });
-        }
+        return _extends(_extends({}, state), {}, {
+          names: [].concat(action.payload.names),
+          groups: [].concat(action.payload.groups)
+        });
 
       case actionTypes$1.addFilter:
         return _extends(_extends({}, state), {}, {
@@ -725,7 +722,7 @@
       default:
         return state;
     }
-  }
+  };
 
   function addToArray(array, item) {
     var arr = [].concat(array);
@@ -848,7 +845,7 @@
     isLastDate: false,
     dates: []
   };
-  function tickerReducer(state, action) {
+  var tickerReducer = function tickerReducer(state, action) {
     if (state === void 0) {
       state = initialState$1;
     }
@@ -957,7 +954,7 @@
       default:
         return state;
     }
-  }
+  };
 
   function createTicker(store) {
     var ticker;
@@ -1051,7 +1048,7 @@
     ticker: ticker
   };
 
-  function rootReducer(state, action) {
+  var rootReducer = function rootReducer(state, action) {
     var _action$triggerRender;
 
     return {
@@ -1060,7 +1057,7 @@
       ticker: tickerReducer(state.ticker, action),
       triggerRender: (_action$triggerRender = action.triggerRender) != null ? _action$triggerRender : true
     };
-  }
+  };
 
   function createStore(reducer, preloadedState) {
     if (reducer === void 0) {
@@ -1101,7 +1098,7 @@
       });
     }
 
-    function unubscribeAll() {
+    function unsubscribeAll() {
       subscribers.length = 0;
     }
 
@@ -1109,7 +1106,7 @@
       getState: getState,
       dispatch: dispatch,
       subscribe: subscribe,
-      unubscribeAll: unubscribeAll
+      unsubscribeAll: unsubscribeAll
     };
   }
 
@@ -1171,10 +1168,10 @@
 
   function storeDataCollections(data, store, changingOptions) {
     var names = Array.from(new Set(data.map(function (d) {
-      return d.name;
+      return String(d.name);
     }))).sort();
     var groups = Array.from(new Set(data.map(function (d) {
-      return d.group;
+      return String(d.group);
     }))).filter(Boolean).sort();
     var dates = getDates(data);
     store.dispatch(actions.data.dataLoaded({
@@ -2038,7 +2035,9 @@
     registerOverlayEvents();
     registerClickEvents();
     registerKeyboardEvents();
-    return unRegisterEvents;
+    return {
+      unregister: unregister
+    };
 
     function registerControlButtonEvents() {
       addEventHandler(root, elements.skipBack, 'click', function () {
@@ -2129,7 +2128,7 @@
       }
     }
 
-    function unRegisterEvents() {
+    function unregister() {
       events.forEach(function (event) {
         event.element.removeEventListener(event.event, event.handler);
       });
@@ -2194,11 +2193,7 @@
         theme = _store$getState$optio.theme,
         autorun = _store$getState$optio.autorun;
     var root = document.querySelector(selector);
-
-    if (!root) {
-      throw new Error('No element found with the selector: ' + selector);
-    }
-
+    if (!root) throw new Error('No element found with the selector: ' + selector);
     subscribeToStore(store, renderer, preparedData);
     var stylesId;
 
@@ -2213,13 +2208,19 @@
       ticker.stop('loaded');
     }
 
-    var unRegisterEvents = registerEvents(store, ticker);
+    var events = registerEvents(store, ticker);
     window.addEventListener('resize', resize);
+
+    function subscribeToStore(store, renderer, data) {
+      store.subscribe(rendererSubscriber(store, renderer));
+      store.subscribe(computeNextDateSubscriber(data, store));
+      store.subscribe(DOMEventSubscriber(store));
+    }
 
     function resize() {
       renderer.resize();
-      unRegisterEvents();
-      unRegisterEvents = registerEvents(store, ticker);
+      events.unregister();
+      events = registerEvents(store, ticker);
     }
 
     function changeOptions(newOptions) {
@@ -2243,7 +2244,7 @@
           autorun = _store$getState$optio2.autorun;
 
       if (dataOptionsChanged) {
-        store.unubscribeAll();
+        store.unsubscribeAll();
         store.dispatch(actions.data.clearDateSlices());
         preparedData = prepareData(data, store, true);
         renderer = createRenderer(preparedData, store);
@@ -2261,8 +2262,8 @@
       }
 
       renderer.renderInitalView();
-      unRegisterEvents();
-      unRegisterEvents = registerEvents(store, ticker);
+      events.unregister();
+      events = registerEvents(store, ticker);
 
       if (autorun) {
         var _store$getState$ticke = store.getState().ticker,
@@ -2275,117 +2276,95 @@
       }
     }
 
-    var destroyed = false;
-
-    function _destroy() {
+    function destroy() {
       var _document$getElementB2;
 
       ticker.stop('destroy');
-      store.unubscribeAll();
-      unRegisterEvents();
+      store.unsubscribeAll();
+      events.unregister();
       window.removeEventListener('resize', resize);
       root.innerHTML = '';
       (_document$getElementB2 = document.getElementById(stylesId)) == null ? void 0 : _document$getElementB2.remove();
-      destroyed = true;
+
+      for (var _i = 0, _Object$keys = Object.keys(API); _i < _Object$keys.length; _i++) {
+        var method = _Object$keys[_i];
+
+        API[method] = function () {
+          throw new Error('Cannot perform this operation after calling destroy()');
+        };
+      }
     }
 
-    return {
+    var API = {
       play: function play() {
-        if (destroyed) return;
-
-        if (!store.getState().ticker.isRunning) {
-          ticker.start('apiStart');
-        }
+        return !store.getState().ticker.isRunning ? ticker.start('apiStart') : undefined;
       },
       pause: function pause() {
-        if (destroyed) return;
-        ticker.stop('apiStop');
+        return ticker.stop('apiStop');
       },
       toggle: function toggle() {
-        if (destroyed) return;
-        ticker.toggle('apiToggle');
+        return ticker.toggle('apiToggle');
       },
       skipBack: function skipBack() {
-        if (destroyed) return;
-        ticker.skipBack('apiSkipBack');
+        return ticker.skipBack('apiSkipBack');
       },
       skipForward: function skipForward() {
-        if (destroyed) return;
-        ticker.skipForward('apiSkipForward');
+        return ticker.skipForward('apiSkipForward');
       },
       inc: function inc(value) {
         if (value === void 0) {
           value = 1;
         }
 
-        if (destroyed) return;
-        store.dispatch(actions.ticker.inc('apiInc', value));
+        return store.dispatch(actions.ticker.inc('apiInc', +value));
       },
       dec: function dec(value) {
         if (value === void 0) {
           value = 1;
         }
 
-        if (destroyed) return;
-        store.dispatch(actions.ticker.dec('apiDec', value));
+        return store.dispatch(actions.ticker.dec('apiDec', +value));
       },
       getDate: function getDate() {
-        return destroyed ? '' : store.getState().ticker.currentDate;
+        return store.getState().ticker.currentDate;
       },
       setDate: function setDate(inputDate) {
-        if (destroyed) return;
-        store.dispatch(actions.ticker.updateDate(getDateString(inputDate), 'apiSetDate'));
+        return store.dispatch(actions.ticker.updateDate(getDateString(inputDate), 'apiSetDate'));
       },
       getAllDates: function getAllDates() {
-        return destroyed ? [] : [].concat(store.getState().ticker.dates);
+        return [].concat(store.getState().ticker.dates);
       },
       isRunning: function isRunning() {
         return store.getState().ticker.isRunning;
       },
       select: function select(name) {
-        if (destroyed) return;
         d3$1.select(root).select('rect.' + safeName(name)).classed('selected', true);
         store.dispatch(actions.data.addSelection(name));
       },
       unselect: function unselect(name) {
-        if (destroyed) return;
         d3$1.select(root).select('rect.' + safeName(name)).classed('selected', false);
         store.dispatch(actions.data.removeSelection(name));
       },
       unselectAll: function unselectAll() {
-        if (destroyed) return;
         d3$1.select(root).selectAll('rect').classed('selected', false);
         store.dispatch(actions.data.resetSelections());
       },
       hideGroup: function hideGroup(group) {
-        if (destroyed) return;
-        store.dispatch(actions.data.addFilter(group));
+        return store.dispatch(actions.data.addFilter(String(group)));
       },
       showGroup: function showGroup(group) {
-        if (destroyed) return;
-        store.dispatch(actions.data.removeFilter(group));
+        return store.dispatch(actions.data.removeFilter(String(group)));
       },
       showOnlyGroup: function showOnlyGroup(group) {
-        if (destroyed) return;
-        store.dispatch(actions.data.allExceptFilter(group));
+        return store.dispatch(actions.data.allExceptFilter(String(group)));
       },
       showAllGroups: function showAllGroups() {
-        if (destroyed) return;
-        store.dispatch(actions.data.resetFilters());
+        return store.dispatch(actions.data.resetFilters());
       },
       changeOptions: changeOptions,
-      destroy: function destroy() {
-        if (destroyed) return;
-
-        _destroy();
-      }
+      destroy: destroy
     };
-  }
-
-  function subscribeToStore(store, renderer, data) {
-    store.subscribe(rendererSubscriber(store, renderer));
-    store.subscribe(computeNextDateSubscriber(data, store));
-    store.subscribe(DOMEventSubscriber(store));
+    return API;
   }
 
   var Props = /*#__PURE__*/function (_Options) {

@@ -1,4 +1,5 @@
 import { getDateString } from '../dates';
+import { Reducer } from '../store';
 import { Options, OptionsAction } from './options.models';
 import { actionTypes } from './options.actions';
 
@@ -46,7 +47,7 @@ export const defaultOptions: Options = {
   selectBars: false,
 };
 
-export function optionsReducer(state = defaultOptions, action: OptionsAction): Options {
+export const optionsReducer: Reducer<Options, OptionsAction> = (state = defaultOptions, action) => {
   switch (action.type) {
     case actionTypes.loadOptions:
     case actionTypes.changeOptions: {
@@ -107,4 +108,4 @@ export function optionsReducer(state = defaultOptions, action: OptionsAction): O
     default:
       return state;
   }
-}
+};
