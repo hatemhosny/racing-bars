@@ -1,3 +1,4 @@
+import { Reducer } from '../store';
 import { actionTypes } from './data.actions';
 import { DataState, DataAction, DataCollections, DateSlice } from './data.models';
 
@@ -9,16 +10,14 @@ const initialState: DataState = {
   dateSlices: {},
 };
 
-export function dataReducer(state = initialState, action: DataAction): DataState {
+export const dataReducer: Reducer<DataState, DataAction> = (state = initialState, action) => {
   switch (action.type) {
-    case actionTypes.dataLoaded: {
-      const collections = action.payload as DataCollections;
+    case actionTypes.dataLoaded:
       return {
         ...state,
-        names: [...collections.names],
-        groups: [...collections.groups],
+        names: [...(action.payload as DataCollections).names],
+        groups: [...(action.payload as DataCollections).groups],
       };
-    }
 
     case actionTypes.addFilter:
       return {
@@ -83,10 +82,16 @@ export function dataReducer(state = initialState, action: DataAction): DataState
         },
       };
 
+    case actionTypes.clearDateSlices:
+      return {
+        ...state,
+        dateSlices: {},
+      };
+
     default:
       return state;
   }
-}
+};
 
 function addToArray(array: string[], item: string) {
   const arr = [...array];

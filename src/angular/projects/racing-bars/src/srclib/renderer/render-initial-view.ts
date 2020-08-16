@@ -20,15 +20,15 @@ export function renderInitalView(data: Data[], store: Store, renderOptions: Rend
     fixedScale,
     fixedOrder,
   } = store.getState().options;
+
   const dates = store.getState().ticker.dates;
-  renderOptions.lastDate = dates[0];
-
   const root = (renderOptions.root = document.querySelector(selector) as HTMLElement);
-
   const topN = fixedOrder.length > 0 ? fixedOrder.length : store.getState().options.topN;
   const currentDate = store.getState().ticker.currentDate;
   const CompleteDateSlice = getDateSlice(currentDate, data, store);
   const dateSlice = CompleteDateSlice.slice(0, topN);
+  const lastDateIndex = dates.indexOf(currentDate) > 0 ? dates.indexOf(currentDate) - 1 : 0;
+  renderOptions.lastDate = dates[lastDateIndex];
 
   if (!root || dateSlice.length === 0) return;
 

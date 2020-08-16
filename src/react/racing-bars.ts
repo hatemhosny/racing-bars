@@ -1,9 +1,9 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import React from 'react';
-import { race, Race } from '..';
-import { generateId, processProps, Props } from '../shared';
+import { race, generateId, Race } from '..';
+import { processProps, Props } from '../shared';
 
-class RacingBarsComponent extends React.PureComponent {
+class RacingBarsComponent extends React.Component {
   public elementId: string;
   public loadingContent: string;
   public racer: Race | undefined;
@@ -24,10 +24,13 @@ class RacingBarsComponent extends React.PureComponent {
     });
   }
 
-  public componentDidUpdate() {
-    setTimeout(() => {
-      this.runRace();
-    });
+  public shouldComponentUpdate(nextProps: Props) {
+    if (this.racer) {
+      // TODO: do not download data
+      const { options } = processProps(nextProps, this.elementId);
+      this.racer.changeOptions(options);
+    }
+    return false;
   }
 
   public componentWillUnmount() {

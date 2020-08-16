@@ -1,3 +1,3 @@
 // required for ./shared
 
-export { loadData, Data, WideData, Options, Race } from '../srclib';
+export { loadData, Race, Data, WideData, Options, defaultOptions } from '../srclib';

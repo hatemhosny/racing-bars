@@ -1,3 +1,4 @@
+import { generateId } from '../utils';
 import { styles, themes } from './generated-styles';
 
 // modifed from https://github.com/egoist/style-inject
@@ -13,6 +14,7 @@ export function styleInject(selector: string, theme: string, insertAt = 'top') {
 
   const head = document.head || document.getElementsByTagName('head')[0];
   const style = document.createElement('style') as HTMLStyleElement | any;
+  style.id = generateId('styles');
   style.type = 'text/css';
 
   if (insertAt === 'top') {
@@ -30,4 +32,6 @@ export function styleInject(selector: string, theme: string, insertAt = 'top') {
   } else {
     style.appendChild(document.createTextNode(css));
   }
+
+  return style.id;
 }

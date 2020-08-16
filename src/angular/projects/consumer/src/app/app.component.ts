@@ -7,9 +7,10 @@ import { Race, Data, WideData } from 'dist/racing-bars/srclib';
   template: `<racing-bars
     dataUrl="assets/data/population.csv"
     dataType="csv"
-    title="World Population"
-    [autorun]="false"
-    [callback]="callback"
+    [title]="title"
+    [theme]="theme"
+    [topN]="topN"
+    myname="hatem"
   >
   </racing-bars>`,
   styles: [
@@ -22,8 +23,17 @@ import { Race, Data, WideData } from 'dist/racing-bars/srclib';
   ],
 })
 export class AppComponent implements OnInit {
+
+  public title = 'initial title';
+  public theme = 'light';
+  public topN = 10;
+
   public ngOnInit() {
-    //
+    setTimeout(() => {
+      this.title = 'hi there';
+      this.theme = 'dark';
+      this.topN = 5;
+    }, 2000);
   }
 
   public callback(racer: Race, data: Data[] | WideData[]) {

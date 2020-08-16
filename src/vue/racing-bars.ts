@@ -1,24 +1,24 @@
-import { race } from '..';
-import { generateId, processProps, Props } from '../shared';
+import { race, generateId } from '..';
+import { processProps, defaultProps } from '../shared';
 
 const RacingBarsComponent = {
   name: 'racing-bars',
+  template: '<div :id="elementId" v-once>{{loadingContent}}</div>',
+  props: [...Object.keys(defaultProps)],
   inheritAttrs: false,
   created() {
-    this.elementId = this.$attrs['element-id'] || generateId();
-    this.loadingContent = this.$attrs['loading-content'] ?? 'Loading...';
-  },
-  render(createElement: any) {
-    return createElement('div', { domProps: { id: this.elementId } }, this.loadingContent);
+    this.elementId = this.elementId || generateId();
+    this.loadingContent = this.loadingContent ?? 'Loading...';
   },
   mounted() {
     this.$nextTick(() => {
       this.runRace();
-    });
-  },
-  updated() {
-    this.$nextTick(() => {
-      this.runRace();
+
+      Object.keys(this.$props).forEach((key) => {
+        this.$watch(key, (newVal: any) => {
+          this.racer.changeOptions({ [key]: newVal });
+        });
+      });
     });
   },
   destroyed() {
@@ -26,16 +26,8 @@ const RacingBarsComponent = {
   },
   methods: {
     async runRace() {
-      function toCamelCase(attrs: any) {
-        const camelize = (s: string) => s.replace(/-./g, (x) => x.toUpperCase()[1]);
-        return Object.assign(
-          {},
-          ...Object.keys(attrs).map((key) => ({ [camelize(key)]: attrs[key] })),
-        );
-      }
       this.cleanUp();
-      const attrs: Props = toCamelCase(this.$attrs);
-      const { dataPromise, options, callback } = processProps(attrs, this.elementId);
+      const { dataPromise, options, callback } = processProps(this.$props, this.elementId);
       const data = await dataPromise;
       this.racer = race(data, options);
       callback(this.racer, data);

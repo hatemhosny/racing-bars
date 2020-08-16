@@ -1,7 +1,8 @@
-import { TickerAction, TickerEvent } from './ticker.models';
+import { TickerAction } from './ticker.models';
 
 export const actionTypes = {
   initialize: 'ticker/initialize',
+  changeDates: 'ticker/changeDates',
   updateDate: 'ticker/updateDate',
   setRunning: 'ticker/setRunning',
   setFirst: 'ticker/setFirst',
@@ -13,39 +14,37 @@ export const actionTypes = {
 export const initialize = (dates: string[]): TickerAction => ({
   type: actionTypes.initialize,
   payload: dates,
-  event: 'initial',
 });
 
-export const updateDate = (currentDate: string, event: TickerEvent): TickerAction => ({
+export const changeDates = (dates: string[]): TickerAction => ({
+  type: actionTypes.changeDates,
+  payload: dates,
+});
+
+export const updateDate = (currentDate: string): TickerAction => ({
   type: actionTypes.updateDate,
   payload: currentDate,
-  event,
 });
 
-export const setRunning = (running: boolean, event: TickerEvent): TickerAction => ({
+export const setRunning = (running: boolean): TickerAction => ({
   type: actionTypes.setRunning,
   payload: running,
-  event,
 });
 
-export const setFirst = (event: TickerEvent): TickerAction => ({
+export const setFirst = (): TickerAction => ({
   type: actionTypes.setFirst,
-  event,
 });
 
-export const setLast = (event: TickerEvent): TickerAction => ({
+export const setLast = (): TickerAction => ({
   type: actionTypes.setLast,
-  event,
 });
 
-export const inc = (event: TickerEvent, value = 1): TickerAction => ({
+export const inc = (value = 1): TickerAction => ({
   type: actionTypes.inc,
   payload: value,
-  event,
 });
 
-export const dec = (event: TickerEvent, value = 1): TickerAction => ({
+export const dec = (value = 1): TickerAction => ({
   type: actionTypes.dec,
   payload: value,
-  event,
 });

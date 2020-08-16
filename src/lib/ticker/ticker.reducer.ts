@@ -1,8 +1,8 @@
+import { Reducer } from '../store';
 import { TickerState, TickerAction } from './ticker.models';
 import { actionTypes } from './ticker.actions';
 
 const initialState: TickerState = {
-  event: 'initial',
   isRunning: false,
   currentDate: '',
   isFirstDate: true,
@@ -10,7 +10,7 @@ const initialState: TickerState = {
   dates: [],
 };
 
-export function tickerReducer(state = initialState, action: TickerAction): TickerState {
+export const tickerReducer: Reducer<TickerState, TickerAction> = (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.initialize: {
       const dates = action.payload as string[];
@@ -21,7 +21,25 @@ export function tickerReducer(state = initialState, action: TickerAction): Ticke
         isFirstDate: true,
         isLastDate: false,
         dates,
-        event: action.event,
+      };
+    }
+
+    case actionTypes.changeDates: {
+      const dates = action.payload as string[];
+      const currentDate =
+        dates.indexOf(state.currentDate) !== -1
+          ? state.currentDate
+          : state.currentDate < dates[0]
+          ? dates[0]
+          : state.currentDate > dates[dates.length - 1]
+          ? dates[dates.length - 1]
+          : dates[[...dates, state.currentDate].sort().indexOf(state.currentDate)];
+      return {
+        ...state,
+        currentDate,
+        isFirstDate: currentDate === dates[0],
+        isLastDate: currentDate === dates[state.dates.length - 1],
+        dates,
       };
     }
 
@@ -35,7 +53,6 @@ export function tickerReducer(state = initialState, action: TickerAction): Ticke
         currentDate,
         isFirstDate: currentDate === state.dates[0],
         isLastDate: currentDate === state.dates[state.dates.length - 1],
-        event: action.event,
       };
     }
 
@@ -43,7 +60,6 @@ export function tickerReducer(state = initialState, action: TickerAction): Ticke
       return {
         ...state,
         isRunning: action.payload as boolean,
-        event: action.event,
       };
     }
 
@@ -53,7 +69,6 @@ export function tickerReducer(state = initialState, action: TickerAction): Ticke
         currentDate: state.dates[0],
         isFirstDate: true,
         isLastDate: false,
-        event: action.event,
       };
     }
 
@@ -63,7 +78,6 @@ export function tickerReducer(state = initialState, action: TickerAction): Ticke
         currentDate: state.dates[state.dates.length - 1],
         isFirstDate: false,
         isLastDate: true,
-        event: action.event,
       };
     }
 
@@ -80,7 +94,6 @@ export function tickerReducer(state = initialState, action: TickerAction): Ticke
         currentDate: newDate,
         isFirstDate: newDate === state.dates[0],
         isLastDate: newDate === state.dates[lastIndex],
-        event: action.event,
       };
     }
 
@@ -94,11 +107,10 @@ export function tickerReducer(state = initialState, action: TickerAction): Ticke
         currentDate: newDate,
         isFirstDate: newDate === state.dates[0],
         isLastDate: newDate === state.dates[state.dates.length - 1],
-        event: action.event,
       };
     }
 
     default:
       return state;
   }
-}
+};

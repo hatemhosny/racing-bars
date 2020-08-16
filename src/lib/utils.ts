@@ -84,6 +84,14 @@ export function shuffle(arr: string[], seed: number) {
   return array;
 }
 
+export function generateId(prefix = 'racingbars', n = 8) {
+  const rnd = Array(3)
+    .fill(null)
+    .map(() => Math.random().toString(36).substr(2))
+    .join('');
+  return prefix + rnd.slice(-n);
+}
+
 export function getHeight(element: HTMLElement, minHeight: number, height?: string) {
   let newHeight: number;
   if (!height) {
@@ -197,3 +205,6 @@ function debounce(func: any, wait: number, immediate = false) {
 export const getClicks = debounce(function (event: any, Fn: (event: any) => void) {
   Fn(event);
 }, 250);
+
+// eslint-disable-next-line @typescript-eslint/ban-types
+export const pipe = (...fns: Function[]) => fns.reduce((f, g) => (...args: any) => g(f(...args)));

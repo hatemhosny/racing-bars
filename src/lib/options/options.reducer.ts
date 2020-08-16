@@ -1,8 +1,9 @@
 import { getDateString } from '../dates';
+import { Reducer } from '../store';
 import { Options, OptionsAction } from './options.models';
 import { actionTypes } from './options.actions';
 
-const initialState: Options = {
+export const defaultOptions: Options = {
   selector: '#race',
   dataShape: 'long',
   dataTransform: null,
@@ -46,9 +47,10 @@ const initialState: Options = {
   selectBars: false,
 };
 
-export function optionsReducer(state = initialState, action: OptionsAction): Options {
+export const optionsReducer: Reducer<Options, OptionsAction> = (state = defaultOptions, action) => {
   switch (action.type) {
-    case actionTypes.optionsLoaded: {
+    case actionTypes.loadOptions:
+    case actionTypes.changeOptions: {
       const excludedKeys = ['inputHeight', 'inputWidth', 'minHeight', 'minWidth'];
       const options: Partial<Options> = {};
 
@@ -59,8 +61,8 @@ export function optionsReducer(state = initialState, action: OptionsAction): Opt
         }
       });
 
-      const startDate = options.startDate ? getDateString(options.startDate) : '';
-      const endDate = options.endDate ? getDateString(options.endDate) : '';
+      const startDate = options.startDate ? getDateString(options.startDate) : state.startDate;
+      const endDate = options.endDate ? getDateString(options.endDate) : state.startDate;
 
       const inputHeight = options.height || state.inputHeight;
       const inputWidth = options.width || state.inputWidth;
@@ -70,18 +72,12 @@ export function optionsReducer(state = initialState, action: OptionsAction): Opt
         : state.fixedOrder;
 
       const colorMap = Array.isArray(options.colorMap)
-        ? ([...options.colorMap] as string[])
+        ? [...options.colorMap].map(String)
         : typeof options.colorMap === 'object'
         ? { ...options.colorMap }
         : state.colorMap;
 
-      let topN = state.topN;
-      if (Number(options.topN)) {
-        topN = Number(options.topN);
-      }
-      if (fixedOrder.length > 0 && topN > fixedOrder.length) {
-        topN = fixedOrder.length;
-      }
+      const topN = fixedOrder.length || Number(options.topN) || state.topN;
 
       const tickDuration = Number(options.tickDuration) || state.tickDuration;
       const labelsWidth = Number(options.labelsWidth) || state.labelsWidth;
@@ -89,6 +85,7 @@ export function optionsReducer(state = initialState, action: OptionsAction): Opt
       const marginRight = Number(options.marginRight) || state.marginRight;
       const marginBottom = Number(options.marginBottom) || state.marginBottom;
       const marginLeft = Number(options.marginLeft) || state.marginLeft;
+
       return {
         ...state,
         ...options,
@@ -107,13 +104,8 @@ export function optionsReducer(state = initialState, action: OptionsAction): Opt
         marginLeft,
       };
     }
-    case actionTypes.changeOptions:
-      return {
-        ...state,
-        ...action.payload,
-      };
 
     default:
       return state;
   }
-}
+};
