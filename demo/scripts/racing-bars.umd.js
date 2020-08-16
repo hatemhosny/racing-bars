@@ -325,6 +325,13 @@
   var getClicks = debounce(function (event, Fn) {
     Fn(event);
   }, 250);
+  var pipe = function pipe() {
+    return [].slice.call(arguments).reduce(function (f, g) {
+      return function () {
+        return g(f.apply(void 0, [].slice.call(arguments)));
+      };
+    });
+  };
 
   var getDates = function getDates(data) {
     return Array.from(new Set(data.map(function (d) {
@@ -1096,43 +1103,49 @@
     };
   }
 
-  function prepareData(rawData, store, changingOptions) {
+  function prepareData(data, store, changingOptions) {
     if (changingOptions === void 0) {
       changingOptions = false;
     }
 
     var options = store.getState().options;
-    var data = rawData;
+    return pipe(customDataTransform(options.dataTransform), filterByDate(options.startDate, options.endDate), wideDataToLong(options.dataShape), processFixedOrder(options.fixedOrder), validateAndSort, fillDateGaps(options.fillDateGapsInterval, options.fillDateGapsValue, options.topN), calculateLastValues, storeDataCollections(store, changingOptions))(data);
+  }
 
-    if (options.dataTransform && typeof options.dataTransform === 'function') {
-      data = options.dataTransform(data);
-    }
+  function customDataTransform(transformFn) {
+    return function (data) {
+      return transformFn && typeof transformFn === 'function' ? transformFn(data) : data;
+    };
+  }
 
-    data = data.map(function (d) {
-      return _extends(_extends({}, d), {}, {
-        date: getDateString(d.date)
+  function filterByDate(startDate, endDate) {
+    return function (data) {
+      return data.map(function (d) {
+        return _extends(_extends({}, d), {}, {
+          date: getDateString(d.date)
+        });
+      }).filter(function (d) {
+        return startDate ? d.date >= startDate : true;
+      }).filter(function (d) {
+        return endDate ? d.date <= endDate : true;
       });
-    }).filter(function (d) {
-      return options.startDate ? d.date >= options.startDate : true;
-    }).filter(function (d) {
-      return options.endDate ? d.date <= options.endDate : true;
-    });
+    };
+  }
 
-    if (options.dataShape === 'wide') {
-      data = wideDataToLong(data);
-    }
-
-    if (options.fixedOrder.length > 0) {
-      data = data.filter(function (d) {
-        return options.fixedOrder.includes(d.name);
+  function processFixedOrder(fixedOrder) {
+    return function (data) {
+      return fixedOrder.length === 0 ? data : data.filter(function (d) {
+        return fixedOrder.includes(d.name);
       }).map(function (d) {
         return _extends(_extends({}, d), {}, {
-          rank: options.fixedOrder.indexOf(d.name)
+          rank: fixedOrder.indexOf(d.name)
         });
       });
-    }
+    };
+  }
 
-    data = data.map(function (d) {
+  function validateAndSort(data) {
+    return data.map(function (d) {
       var name = d.name ? d.name : '';
       var value = isNaN(+d.value) ? 0 : +d.value;
       return _extends(_extends({}, d), {}, {
@@ -1142,34 +1155,36 @@
     }).sort(function (a, b) {
       return a.date.localeCompare(b.date) || a.name.localeCompare(b.name);
     });
-
-    if (options.fillDateGapsInterval) {
-      data = fillGaps(data, options.fillDateGapsInterval, options.fillDateGapsValue, options.topN);
-    }
-
-    data = calculateLastValues(data);
-    storeDataCollections(data, store, changingOptions);
-    return data;
   }
 
-  function storeDataCollections(data, store, changingOptions) {
-    var names = Array.from(new Set(data.map(function (d) {
-      return String(d.name);
-    }))).sort();
-    var groups = Array.from(new Set(data.map(function (d) {
-      return String(d.group);
-    }))).filter(Boolean).sort();
-    var dates = getDates(data);
-    store.dispatch(actions.data.dataLoaded({
-      names: names,
-      groups: groups
-    }));
+  function fillDateGaps(fillDateGapsInterval, fillDateGapsValue, topN) {
+    return function (data) {
+      return fillDateGapsInterval ? fillGaps(data, fillDateGapsInterval, fillDateGapsValue, topN) : data;
+    };
+  }
 
-    if (!changingOptions) {
-      store.dispatch(actions.ticker.initialize(dates));
-    } else {
-      store.dispatch(actions.ticker.changeDates(dates));
-    }
+  function storeDataCollections(store, changingOptions) {
+    return function (data) {
+      var names = Array.from(new Set(data.map(function (d) {
+        return String(d.name);
+      }))).sort();
+      var groups = Array.from(new Set(data.map(function (d) {
+        return String(d.group);
+      }))).filter(Boolean).sort();
+      var dates = getDates(data);
+      store.dispatch(actions.data.dataLoaded({
+        names: names,
+        groups: groups
+      }));
+
+      if (!changingOptions) {
+        store.dispatch(actions.ticker.initialize(dates));
+      } else {
+        store.dispatch(actions.ticker.changeDates(dates));
+      }
+
+      return data;
+    };
   }
 
   function calculateLastValues(data) {
@@ -1192,39 +1207,42 @@
     }, []);
   }
 
-  function wideDataToLong(wide, nested) {
+  function wideDataToLong(dataShape, nested) {
     if (nested === void 0) {
       nested = false;
     }
 
-    var _long = [];
-    wide.forEach(function (row) {
-      for (var _i = 0, _Object$entries = Object.entries(row); _i < _Object$entries.length; _i++) {
-        var _Object$entries$_i = _Object$entries[_i],
-            key = _Object$entries$_i[0],
-            value = _Object$entries$_i[1];
+    return function (data) {
+      if (dataShape === 'long') return data;
+      var _long = [];
+      data.forEach(function (row) {
+        for (var _i = 0, _Object$entries = Object.entries(row); _i < _Object$entries.length; _i++) {
+          var _Object$entries$_i = _Object$entries[_i],
+              key = _Object$entries$_i[0],
+              value = _Object$entries$_i[1];
 
-        if (key === 'date') {
-          continue;
+          if (key === 'date') {
+            continue;
+          }
+
+          var item = {
+            date: row.date,
+            name: key
+          };
+
+          if (nested) {
+            item = _extends(_extends({}, item), value);
+          } else {
+            item = _extends(_extends({}, item), {}, {
+              value: value
+            });
+          }
+
+          _long.push(item);
         }
-
-        var item = {
-          date: row.date,
-          name: key
-        };
-
-        if (nested) {
-          item = _extends(_extends({}, item), value);
-        } else {
-          item = _extends(_extends({}, item), {}, {
-            value: value
-          });
-        }
-
-        _long.push(item);
-      }
-    });
-    return _long;
+      });
+      return _long;
+    };
   }
 
   function longDataToWide(_long2) {
@@ -1294,7 +1312,7 @@
         date: getDateString(d.date)
       });
     });
-    return wideDataToLong(allData, true);
+    return wideDataToLong('wide', true)(allData);
   }
 
   function interpolateTopN(data1, data2, topN) {
@@ -1379,7 +1397,7 @@
 
   function computeNextDateSubscriber(data, store) {
     return function () {
-      if (store.getState().ticker.event === 'running') {
+      if (store.getState().ticker.isRunning) {
         var nextDate = getNextDate(store.getState().ticker.dates, store.getState().ticker.currentDate);
         getDateSlice(nextDate, data, store);
       }

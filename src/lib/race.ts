@@ -19,7 +19,7 @@ export function race(data: Data[] | WideData[], options: Partial<Options> = {}):
   const store = createStore(rootReducer);
   store.dispatch(actions.options.loadOptions(options));
   const ticker = createTicker(store);
-  let preparedData = prepareData(data as Data[], store);
+  let preparedData = prepareData(data, store);
   let renderer = createRenderer(preparedData, store);
 
   const { selector, injectStyles, theme, autorun } = store.getState().options;

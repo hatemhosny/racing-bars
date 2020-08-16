@@ -8,7 +8,7 @@ export interface OptionsAction extends Action {
 export class Options {
   public selector!: string;
   public dataShape!: 'long' | 'wide';
-  public dataTransform!: null | ((data: Data[] | WideData[]) => Data[] | WideData[]);
+  public dataTransform!: null | TransformFn;
   public fillDateGapsInterval!: null | 'year' | 'month' | 'day';
   public fillDateGapsValue!: 'last' | 'interpolate';
   public title!: string;
@@ -48,5 +48,7 @@ export class Options {
   public highlightBars!: boolean;
   public selectBars!: boolean;
 }
+
+export type TransformFn = (data: Data[] | WideData[]) => Data[] | WideData[];
 
 export type ParamFunction = (currentDate: string, dateSlice: Data[], allDates: string[]) => string;

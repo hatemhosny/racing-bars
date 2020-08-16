@@ -3,64 +3,90 @@ import * as d3 from './d3';
 import { getDateString, getDates, getDateRange, getNextDate } from './dates';
 import { Data, WideData } from './data';
 import { actions, Store } from './store';
-import { Options } from './options';
+import { Options, TransformFn } from './options';
+import { pipe } from './utils';
 
-export function prepareData(rawData: Data[], store: Store, changingOptions = false) {
+export function prepareData(
+  data: Data[] | WideData[],
+  store: Store,
+  changingOptions = false,
+): Data[] {
   const options = store.getState().options;
+  return pipe(
+    customDataTransform(options.dataTransform),
+    filterByDate(options.startDate, options.endDate),
+    wideDataToLong(options.dataShape),
+    processFixedOrder(options.fixedOrder),
+    validateAndSort,
+    fillDateGaps(options.fillDateGapsInterval, options.fillDateGapsValue, options.topN),
+    calculateLastValues,
+    storeDataCollections(store, changingOptions),
+  )(data);
+}
 
-  let data = rawData;
+function customDataTransform(transformFn: TransformFn | null) {
+  return function (data: Data[] | WideData[]): Data[] | WideData[] {
+    return transformFn && typeof transformFn === 'function' ? transformFn(data) : data;
+  };
+}
 
-  if (options.dataTransform && typeof options.dataTransform === 'function') {
-    data = options.dataTransform(data) as Data[];
-  }
+function filterByDate(startDate: string, endDate: string) {
+  return function (data: Data[]): Data[] {
+    return data
+      .map((d) => ({ ...d, date: getDateString(d.date) }))
+      .filter((d) => (startDate ? d.date >= startDate : true))
+      .filter((d) => (endDate ? d.date <= endDate : true));
+  };
+}
 
-  data = data
-    .map((d) => ({ ...d, date: getDateString(d.date) }))
-    .filter((d) => (options.startDate ? d.date >= options.startDate : true))
-    .filter((d) => (options.endDate ? d.date <= options.endDate : true));
+function processFixedOrder(fixedOrder: string[]) {
+  return function (data: Data[]) {
+    return fixedOrder.length === 0
+      ? data
+      : data
+          .filter((d) => fixedOrder.includes(d.name))
+          .map((d) => ({ ...d, rank: fixedOrder.indexOf(d.name) }));
+  };
+}
 
-  if (options.dataShape === 'wide') {
-    data = wideDataToLong(data);
-  }
-
-  if (options.fixedOrder.length > 0) {
-    data = data
-      .filter((d) => options.fixedOrder.includes(d.name))
-      .map((d) => ({ ...d, rank: options.fixedOrder.indexOf(d.name) }));
-  }
-
-  data = data
+function validateAndSort(data: Data[]): Data[] {
+  return data
     .map((d) => {
       const name = d.name ? d.name : '';
       const value = isNaN(+d.value) ? 0 : +d.value;
       return { ...d, name, value };
     })
     .sort((a, b) => a.date.localeCompare(b.date) || a.name.localeCompare(b.name));
-
-  if (options.fillDateGapsInterval) {
-    data = fillGaps(data, options.fillDateGapsInterval, options.fillDateGapsValue, options.topN);
-  }
-
-  data = calculateLastValues(data);
-
-  storeDataCollections(data, store, changingOptions);
-
-  return data;
 }
 
-function storeDataCollections(data: Data[], store: Store, changingOptions: boolean) {
-  const names = Array.from(new Set(data.map((d) => String(d.name)))).sort();
-  const groups = Array.from(new Set(data.map((d) => String(d.group))))
-    .filter(Boolean)
-    .sort();
-  const dates = getDates(data);
+function fillDateGaps(
+  fillDateGapsInterval: Options['fillDateGapsInterval'],
+  fillDateGapsValue: Options['fillDateGapsValue'],
+  topN: number,
+) {
+  return function (data: Data[]) {
+    return fillDateGapsInterval
+      ? fillGaps(data, fillDateGapsInterval, fillDateGapsValue, topN)
+      : data;
+  };
+}
 
-  store.dispatch(actions.data.dataLoaded({ names, groups }));
-  if (!changingOptions) {
-    store.dispatch(actions.ticker.initialize(dates));
-  } else {
-    store.dispatch(actions.ticker.changeDates(dates));
-  }
+function storeDataCollections(store: Store, changingOptions: boolean) {
+  return function (data: Data[]) {
+    const names = Array.from(new Set(data.map((d) => String(d.name)))).sort();
+    const groups = Array.from(new Set(data.map((d) => String(d.group))))
+      .filter(Boolean)
+      .sort();
+    const dates = getDates(data);
+
+    store.dispatch(actions.data.dataLoaded({ names, groups }));
+    if (!changingOptions) {
+      store.dispatch(actions.ticker.initialize(dates));
+    } else {
+      store.dispatch(actions.ticker.changeDates(dates));
+    }
+    return data;
+  };
 }
 
 function calculateLastValues(data: Data[]) {
@@ -81,40 +107,44 @@ function calculateLastValues(data: Data[]) {
     }, []);
 }
 
-function wideDataToLong(wide: WideData[], nested = false) {
-  const long = [] as Data[];
-  wide.forEach((row) => {
-    for (const [key, value] of Object.entries(row)) {
-      if (key === 'date') {
-        continue;
-      }
+function wideDataToLong(dataShape: Options['dataShape'], nested = false) {
+  return function (data: WideData[]) {
+    if (dataShape === 'long') return data as Data[];
 
-      let item: any = {
-        date: row.date,
-        name: key,
-      };
-      if (nested) {
-        item = {
-          ...item,
-          ...value,
+    const long = [] as Data[];
+    data.forEach((row) => {
+      for (const [key, value] of Object.entries(row)) {
+        if (key === 'date') {
+          continue;
+        }
+
+        let item: any = {
+          date: row.date,
+          name: key,
         };
-      } else {
-        item = {
-          ...item,
-          value,
-        };
+        if (nested) {
+          item = {
+            ...item,
+            ...value,
+          };
+        } else {
+          item = {
+            ...item,
+            value,
+          };
+        }
+        long.push(item);
       }
-      long.push(item);
-    }
-  });
-  return long;
+    });
+    return long;
+  };
 }
 
 function longDataToWide(long: Data[]) {
-  const wide = [] as any[];
+  const wide = [] as WideData[];
   long.forEach((item) => {
     const dateRow = wide.filter((r) => r.date === item.date);
-    const row = dateRow.length > 0 ? dateRow[0] : {};
+    const row = dateRow.length > 0 ? dateRow[0] : ({} as WideData);
     const { date, ...details } = item;
     row[item.name] = details;
     if (dateRow.length === 0) {
@@ -166,15 +196,11 @@ function fillGaps(
     )
     .map((d) => ({ ...d, date: getDateString(d.date) }));
 
-  return wideDataToLong(allData, true);
+  return wideDataToLong('wide', true)(allData);
 }
 
 /** Interpolate only topN before and after the date range to improve performace */
-function interpolateTopN(
-  data1: Partial<WideData> = {},
-  data2: Partial<WideData> = {},
-  topN: number,
-) {
+function interpolateTopN(data1: any = {}, data2: any = {}, topN: number) {
   const topData1 = getTopN(data1, topN);
   const topData2 = getTopN(data2, topN);
   const topNames = Array.from(new Set([...topData1, ...topData2]));
@@ -232,7 +258,7 @@ function filterGroups(data: Data[], store: Store) {
 
 export function computeNextDateSubscriber(data: Data[], store: Store) {
   return function () {
-    if (store.getState().ticker.event === 'running') {
+    if (store.getState().ticker.isRunning) {
       const nextDate = getNextDate(
         store.getState().ticker.dates,
         store.getState().ticker.currentDate,
