@@ -205,15 +205,15 @@ function interpolateTopN(data1: any = {}, data2: any = {}, topN: number) {
   const topData2 = getTopN(data2, topN);
   const topNames = Array.from(new Set([...topData1, ...topData2]));
 
-  const filteredData1 = topNames.reduce((obj, curr) => {
-    obj[curr] = data1[curr];
-    return obj;
-  }, {} as WideData);
+  const filteredData1 = topNames.reduce(
+    (acc, curr) => ({ ...acc, [curr]: data1[curr] }),
+    {} as WideData,
+  );
 
-  const filteredData2 = topNames.reduce((obj, curr) => {
-    obj[curr] = data2[curr];
-    return obj;
-  }, {} as WideData);
+  const filteredData2 = topNames.reduce(
+    (acc, curr) => ({ ...acc, [curr]: data2[curr] }),
+    {} as WideData,
+  );
 
   return d3.interpolate(filteredData1, filteredData2);
 
