@@ -42,6 +42,7 @@ module.exports = {
         'guides/groups',
         'guides/dynamic-values',
         'guides/chart-controls',
+        'guides/changing-options',
         'guides/fill-date-gaps',
         'guides/multiple-charts',
         'guides/slider',

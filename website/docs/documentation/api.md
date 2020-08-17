@@ -131,6 +131,15 @@ See the option [`showGroups`](./options.md#showgroups)
 Shows all groups.
 See the option [`showGroups`](./options.md#showgroups)
 
+##### changeOptions(options: Options) : void
+
+Changes [chart options](./options.md) during runtime.
+The method accepts a configuration object for chart options with the same properties as the original [options object](./options.md).
+Properties in the new options object will override the current options.
+
+The options [`selector`](./options.md#selector) and [`dataShape`](./options.md#datashape) cannot be changed.
+Trying to change these will result in throwing an error.
+
 ##### destroy() : void
 
 This destroys the chart and cleans up associated event listeners.
@@ -141,6 +150,7 @@ After calling this method, any calls to the chart object methods are ignored.
 ```js
 const options = {
   selector: '#race',
+  title: 'Chart title',
 };
 racingBars.loadData('/data/population.csv', 'csv').then((data) => {
   const racer = racingBars.race(data, options);
@@ -165,10 +175,10 @@ racingBars.loadData('/data/population.csv', 'csv').then((data) => {
 
   console.log(racer.getAllDates()); // ["1960-01-01", ..., "2018-01-01"]
 
+  racer.changeOptions({ title: 'Updated title!' });
+
   racer.destroy();
-  console.log(racer.getDate()); // ""
-  console.log(racer.getAllDates()); // []
-  console.log(document.querySelector('#race').innerHTML); // ""
+  racer.play(); // Error: Cannot perform this operation after calling destroy()
 });
 ```
 

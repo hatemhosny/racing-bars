@@ -1327,13 +1327,15 @@
     var topData1 = getTopN(data1, topN);
     var topData2 = getTopN(data2, topN);
     var topNames = Array.from(new Set([].concat(topData1, topData2)));
-    var filteredData1 = topNames.reduce(function (obj, curr) {
-      obj[curr] = data1[curr];
-      return obj;
+    var filteredData1 = topNames.reduce(function (acc, curr) {
+      var _extends2;
+
+      return _extends(_extends({}, acc), {}, (_extends2 = {}, _extends2[curr] = data1[curr], _extends2));
     }, {});
-    var filteredData2 = topNames.reduce(function (obj, curr) {
-      obj[curr] = data2[curr];
-      return obj;
+    var filteredData2 = topNames.reduce(function (acc, curr) {
+      var _extends3;
+
+      return _extends(_extends({}, acc), {}, (_extends3 = {}, _extends3[curr] = data2[curr], _extends3));
     }, {});
     return d3$1.interpolate(filteredData1, filteredData2);
 
