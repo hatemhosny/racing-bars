@@ -8,7 +8,7 @@ Bar labels are populated from the [data item](../documentation/data.md#long-data
 
 ## Position
 
-By default, the bar labels are positioned on the bars.
+By default, the bar labels are positioned inside the bars.
 
 Example:
 
