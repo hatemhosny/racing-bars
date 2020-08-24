@@ -129,4 +129,5 @@ module.exports = {
     ],
     [path.resolve(__dirname, '../node_modules/docusaurus-lunr-search/')],
   ],
+  stylesheets: ['/css/form.css'],
 };

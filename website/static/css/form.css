@@ -1,0 +1,139 @@
+.form label {
+  display: block;
+  margin: 0.5rem 0;
+  font-weight: 700;
+}
+
+.form input[type='color'],
+.form input[type='date'],
+.form input[type='datetime'],
+.form input[type='datetime-local'],
+.form input[type='email'],
+.form input[type='month'],
+.form input[type='number'],
+.form input[type='password'],
+.form input[type='search'],
+.form input[type='tel'],
+.form input[type='text'],
+.form input[type='url'],
+.form input[type='week'],
+.form input:not([type]),
+.form textarea,
+.form select {
+  -webkit-appearance: none;
+  background-color: transparent;
+  border: 0.1rem solid #d1d1d1;
+  border-radius: 0.4rem;
+  box-shadow: none;
+  box-sizing: inherit;
+  height: 2.8rem;
+  padding: 0.6rem 1rem 0.7rem;
+  width: 100%;
+}
+
+.form input[type='color']:focus,
+.form input[type='date']:focus,
+.form input[type='datetime']:focus,
+.form input[type='datetime-local']:focus,
+.form input[type='email']:focus,
+.form input[type='month']:focus,
+.form input[type='number']:focus,
+.form input[type='password']:focus,
+.form input[type='search']:focus,
+.form input[type='tel']:focus,
+.form input[type='text']:focus,
+.form input[type='url']:focus,
+.form input[type='week']:focus,
+.form input:not([type]):focus,
+.form textarea:focus,
+.form select:focus {
+  border-color: #25c2a0;
+  outline: 0;
+}
+
+.form select {
+  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 8" width="30"><path fill="%23d1d1d1" d="M0,0l6,8l6-8"/></svg>')
+    center right no-repeat;
+  padding-right: 3rem;
+}
+
+.form select:focus {
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 8" width="30"><path fill="%2325c2a0" d="M0,0l6,8l6-8"/></svg>');
+}
+
+.form select[multiple] {
+  background: none;
+  height: auto;
+}
+
+.form textarea {
+  min-height: 6.5rem;
+}
+
+.form label,
+.form legend {
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.form fieldset {
+  border-width: 0;
+  padding: 0;
+}
+
+.form .label-inline {
+  display: inline-block;
+  font-weight: normal;
+  margin-left: 0.5rem;
+}
+
+input[type='radio'],
+input[type='checkbox'] {
+  display: none;
+}
+label.radio,
+label.checkbox {
+  position: relative;
+  display: inline-block;
+  margin: 5px 20px 15px 0;
+  padding-left: 30px;
+  cursor: pointer;
+}
+
+label.radio:before,
+label.checkbox:before {
+  content: '';
+  position: absolute;
+  left: 0;
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  border: 2px solid #ccc;
+}
+label.checkbox:before {
+  border-radius: 5px;
+}
+input[type='radio']:checked + label:before,
+label.radio:hover:before,
+input[type='checkbox']:checked + label:before,
+label.chekbox:hover:before {
+  border: 2px solid #25c2a0;
+}
+label.radio:after,
+label.checkbox:after {
+  content: '';
+  position: absolute;
+  top: 6px;
+  left: 5px;
+  width: 8px;
+  height: 4px;
+  border: 3px solid #25c2a0;
+  border-top: none;
+  border-right: none;
+  transform: rotate(-45deg);
+  opacity: 0;
+}
+input[type='radio']:checked + label:after,
+input[type='checkbox']:checked + label:after {
+  opacity: 1;
+}

@@ -62,3 +62,9 @@ a.external::after {
 .custom-labels text.label {
   fill: red !important;
 }
+
+.sticky {
+  position: -webkit-sticky; /* Safari */
+  position: sticky;
+  top: 70px;
+}
