@@ -1,4 +1,5 @@
 import { Options } from './options';
+import { Data } from './data';
 
 export interface Race {
   play: () => void;
@@ -21,6 +22,15 @@ export interface Race {
   showAllGroups: () => void;
   changeOptions: (newOptions: Partial<Options>) => void;
   destroy: () => void;
+}
+
+export type RaceMethod = (...args: unknown[]) => Race | void;
+
+export interface RaceMethodArgs {
+  currentDate: string;
+  allDates: string[];
+  isRunning: boolean;
+  data: Data[];
 }
 
 export interface DOMCustomEvent {

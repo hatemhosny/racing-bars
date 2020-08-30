@@ -208,3 +208,7 @@ export const getClicks = debounce(function (event: any, Fn: (event: any) => void
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 export const pipe = (...fns: Function[]) => fns.reduce((f, g) => (...args: any) => g(f(...args)));
+
+export function destroyed() {
+  throw new Error('Cannot perform this operation after calling destroy()');
+}

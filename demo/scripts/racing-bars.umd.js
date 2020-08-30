@@ -332,6 +332,9 @@
       };
     });
   };
+  function destroyed() {
+    throw new Error('Cannot perform this operation after calling destroy()');
+  }
 
   var getDates = function getDates(data) {
     return Array.from(new Set(data.map(function (d) {
@@ -2229,113 +2232,52 @@
       events = registerEvents(store, ticker);
     }
 
-    function changeOptions(newOptions) {
-      var unAllowedOptions = ['selector', 'dataShape'];
-      unAllowedOptions.forEach(function (key) {
-        if (newOptions[key] && newOptions[key] !== store.getState().options[key]) {
-          throw new Error("The option \"" + key + "\" cannot be changed.");
-        }
-      });
-      var dataOptions = ['dataTransform', 'fillDateGapsInterval', 'fillDateGapsValue', 'startDate', 'endDate', 'fixedOrder'];
-      var dataOptionsChanged = false;
-      dataOptions.forEach(function (key) {
-        if (newOptions[key] && newOptions[key] !== store.getState().options[key]) {
-          dataOptionsChanged = true;
-        }
-      });
-      store.dispatch(actions.options.changeOptions(newOptions));
-      var _store$getState$optio2 = store.getState().options,
-          injectStyles = _store$getState$optio2.injectStyles,
-          theme = _store$getState$optio2.theme,
-          autorun = _store$getState$optio2.autorun;
-
-      if (dataOptionsChanged) {
-        store.unsubscribeAll();
-        store.dispatch(actions.data.clearDateSlices());
-        preparedData = prepareData(data, store, true);
-        renderer = createRenderer(preparedData, store);
-        subscribeToStore(store, renderer, preparedData);
-      }
-
-      if ('injectStyles' in newOptions || 'theme' in newOptions) {
-        var _document$getElementB;
-
-        (_document$getElementB = document.getElementById(stylesId)) == null ? void 0 : _document$getElementB.remove();
-
-        if (injectStyles) {
-          stylesId = styleInject(selector, theme);
-        }
-      }
-
-      renderer.renderInitalView();
-      events.unregister();
-      events = registerEvents(store, ticker);
-
-      if (autorun) {
-        var _store$getState$ticke = store.getState().ticker,
-            isFirstDate = _store$getState$ticke.isFirstDate,
-            isRunning = _store$getState$ticke.isRunning;
-
-        if (isFirstDate && !isRunning) {
-          ticker.start();
-        }
-      }
-    }
-
-    function destroy() {
-      var _document$getElementB2;
-
-      ticker.stop();
-      store.unsubscribeAll();
-      events.unregister();
-      window.removeEventListener('resize', resize);
-      root.innerHTML = '';
-      (_document$getElementB2 = document.getElementById(stylesId)) == null ? void 0 : _document$getElementB2.remove();
-
-      for (var _i = 0, _Object$keys = Object.keys(API); _i < _Object$keys.length; _i++) {
-        var method = _Object$keys[_i];
-
-        API[method] = function () {
-          throw new Error('Cannot perform this operation after calling destroy()');
-        };
-      }
-    }
-
     var API = {
       play: function play() {
-        return !store.getState().ticker.isRunning ? ticker.start() : undefined;
+        if (!store.getState().ticker.isRunning) {
+          ticker.start();
+        }
+
+        return this;
       },
       pause: function pause() {
-        return ticker.stop();
+        ticker.stop();
+        return this;
       },
       toggle: function toggle() {
-        return ticker.toggle();
+        ticker.toggle();
+        return this;
       },
       skipBack: function skipBack() {
-        return ticker.skipBack();
+        ticker.skipBack();
+        return this;
       },
       skipForward: function skipForward() {
-        return ticker.skipForward();
+        ticker.skipForward();
+        return this;
       },
       inc: function inc(value) {
         if (value === void 0) {
           value = 1;
         }
 
-        return store.dispatch(actions.ticker.inc(+value));
+        store.dispatch(actions.ticker.inc(+value));
+        return this;
       },
       dec: function dec(value) {
         if (value === void 0) {
           value = 1;
         }
 
-        return store.dispatch(actions.ticker.dec(+value));
+        store.dispatch(actions.ticker.dec(+value));
+        return this;
+      },
+      setDate: function setDate(inputDate) {
+        store.dispatch(actions.ticker.updateDate(getDateString(inputDate)));
+        return this;
       },
       getDate: function getDate() {
         return store.getState().ticker.currentDate;
-      },
-      setDate: function setDate(inputDate) {
-        return store.dispatch(actions.ticker.updateDate(getDateString(inputDate)));
       },
       getAllDates: function getAllDates() {
         return [].concat(store.getState().ticker.dates);
@@ -2346,29 +2288,203 @@
       select: function select(name) {
         d3$1.select(root).select('rect.' + safeName(name)).classed('selected', true);
         store.dispatch(actions.data.addSelection(name));
+        return this;
       },
       unselect: function unselect(name) {
         d3$1.select(root).select('rect.' + safeName(name)).classed('selected', false);
         store.dispatch(actions.data.removeSelection(name));
+        return this;
       },
       unselectAll: function unselectAll() {
         d3$1.select(root).selectAll('rect').classed('selected', false);
         store.dispatch(actions.data.resetSelections());
+        return this;
       },
       hideGroup: function hideGroup(group) {
-        return store.dispatch(actions.data.addFilter(String(group)));
+        store.dispatch(actions.data.addFilter(String(group)));
+        return this;
       },
       showGroup: function showGroup(group) {
-        return store.dispatch(actions.data.removeFilter(String(group)));
+        store.dispatch(actions.data.removeFilter(String(group)));
+        return this;
       },
       showOnlyGroup: function showOnlyGroup(group) {
-        return store.dispatch(actions.data.allExceptFilter(String(group)));
+        store.dispatch(actions.data.allExceptFilter(String(group)));
+        return this;
       },
       showAllGroups: function showAllGroups() {
-        return store.dispatch(actions.data.resetFilters());
+        store.dispatch(actions.data.resetFilters());
+        return this;
       },
-      changeOptions: changeOptions,
-      destroy: destroy
+      changeOptions: function changeOptions(newOptions) {
+        var unAllowedOptions = ['selector', 'dataShape'];
+        unAllowedOptions.forEach(function (key) {
+          if (newOptions[key] && newOptions[key] !== store.getState().options[key]) {
+            throw new Error("The option \"" + key + "\" cannot be changed.");
+          }
+        });
+        var dataOptions = ['dataTransform', 'fillDateGapsInterval', 'fillDateGapsValue', 'startDate', 'endDate', 'fixedOrder'];
+        var dataOptionsChanged = false;
+        dataOptions.forEach(function (key) {
+          if (newOptions[key] && newOptions[key] !== store.getState().options[key]) {
+            dataOptionsChanged = true;
+          }
+        });
+        store.dispatch(actions.options.changeOptions(newOptions));
+        var _store$getState$optio2 = store.getState().options,
+            injectStyles = _store$getState$optio2.injectStyles,
+            theme = _store$getState$optio2.theme,
+            autorun = _store$getState$optio2.autorun;
+
+        if (dataOptionsChanged) {
+          store.unsubscribeAll();
+          store.dispatch(actions.data.clearDateSlices());
+          preparedData = prepareData(data, store, true);
+          renderer = createRenderer(preparedData, store);
+          subscribeToStore(store, renderer, preparedData);
+        }
+
+        if ('injectStyles' in newOptions || 'theme' in newOptions) {
+          var _document$getElementB;
+
+          (_document$getElementB = document.getElementById(stylesId)) == null ? void 0 : _document$getElementB.remove();
+
+          if (injectStyles) {
+            stylesId = styleInject(selector, theme);
+          }
+        }
+
+        renderer.renderInitalView();
+        events.unregister();
+        events = registerEvents(store, ticker);
+
+        if (autorun) {
+          var _store$getState$ticke = store.getState().ticker,
+              isFirstDate = _store$getState$ticke.isFirstDate,
+              isRunning = _store$getState$ticke.isRunning;
+
+          if (isFirstDate && !isRunning) {
+            ticker.start();
+          }
+        }
+
+        return this;
+      },
+      call: function call(fn) {
+        fn.call(API, {
+          currentDate: store.getState().ticker.currentDate,
+          allDates: [].concat(store.getState().ticker.dates),
+          isRunning: store.getState().ticker.isRunning,
+          data: preparedData
+        });
+        return this;
+      },
+      delay: function delay(duration) {
+        var _this2 = this;
+
+        var _this = this;
+
+        if (duration === void 0) {
+          duration = 0;
+        }
+
+        var queue = [];
+        var newQueue = [];
+        var originalMethods = {};
+        var destroyCalled = false;
+
+        var _loop = function _loop() {
+          var method = _Object$keys[_i];
+          if (typeof _this2[method] !== 'function') return "continue";
+          originalMethods[method] = _this2[method];
+
+          _this2[method] = function () {
+            addToQueue(originalMethods[method], [].slice.call(arguments));
+            return _this;
+          };
+        };
+
+        for (var _i = 0, _Object$keys = Object.keys(this); _i < _Object$keys.length; _i++) {
+          var _ret = _loop();
+
+          if (_ret === "continue") continue;
+        }
+
+        function addToQueue(fn, args) {
+          if (!destroyCalled) {
+            queue.push({
+              fn: fn,
+              args: args
+            });
+          } else {
+            queue.push({
+              fn: destroyed,
+              args: []
+            });
+          }
+
+          if (fn.name === 'destroy') {
+            destroyCalled = true;
+          }
+        }
+
+        function asValidNumber(duration) {
+          return isNaN(Number(duration)) || Number(duration) < 0 ? 0 : Number(duration);
+        }
+
+        (function runQueue(dur) {
+          var _this3 = this;
+
+          setTimeout(function () {
+            var queueItem = queue.shift();
+            var newDuration = 0;
+
+            while (queueItem) {
+              if (queueItem.fn.name !== 'delay') {
+                var _queueItem;
+
+                (_queueItem = queueItem).fn.apply(_queueItem, queueItem.args);
+              } else {
+                newQueue = [].concat(queue);
+                queue = [];
+                newDuration = asValidNumber(queueItem.args[0]);
+              }
+
+              queueItem = queue.shift();
+            }
+
+            if (newQueue.length > 0) {
+              queue = [].concat(newQueue);
+              newQueue = [];
+              runQueue(newDuration);
+            } else {
+              for (var _i2 = 0, _Object$keys2 = Object.keys(originalMethods); _i2 < _Object$keys2.length; _i2++) {
+                var method = _Object$keys2[_i2];
+                _this3[method] = originalMethods[method];
+              }
+            }
+          }, dur);
+        })(asValidNumber(duration));
+
+        return this;
+      },
+      destroy: function destroy() {
+        var _document$getElementB2;
+
+        ticker.stop();
+        store.unsubscribeAll();
+        events.unregister();
+        window.removeEventListener('resize', resize);
+        root.innerHTML = '';
+        (_document$getElementB2 = document.getElementById(stylesId)) == null ? void 0 : _document$getElementB2.remove();
+
+        for (var _i3 = 0, _Object$keys3 = Object.keys(this); _i3 < _Object$keys3.length; _i3++) {
+          var method = _Object$keys3[_i3];
+          this[method] = destroyed;
+        }
+
+        return this;
+      }
     };
     return API;
   }
