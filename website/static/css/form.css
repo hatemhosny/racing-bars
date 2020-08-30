@@ -87,12 +87,12 @@
   margin-left: 0.5rem;
 }
 
-input[type='radio'],
-input[type='checkbox'] {
+.form input[type='radio'],
+.form input[type='checkbox'] {
   display: none;
 }
-label.radio,
-label.checkbox {
+.form label.radio,
+.form label.checkbox {
   position: relative;
   display: inline-block;
   margin: 5px 20px 15px 0;
@@ -100,8 +100,8 @@ label.checkbox {
   cursor: pointer;
 }
 
-label.radio:before,
-label.checkbox:before {
+.form label.radio:before,
+.form label.checkbox:before {
   content: '';
   position: absolute;
   left: 0;
@@ -110,17 +110,17 @@ label.checkbox:before {
   border-radius: 50%;
   border: 2px solid #ccc;
 }
-label.checkbox:before {
+.form label.checkbox:before {
   border-radius: 5px;
 }
-input[type='radio']:checked + label:before,
-label.radio:hover:before,
-input[type='checkbox']:checked + label:before,
-label.chekbox:hover:before {
+.form input[type='radio']:checked + label:before,
+.form label.radio:hover:before,
+.form input[type='checkbox']:checked + label:before,
+.form label.chekbox:hover:before {
   border: 2px solid #25c2a0;
 }
-label.radio:after,
-label.checkbox:after {
+.form label.radio:after,
+.form label.checkbox:after {
   content: '';
   position: absolute;
   top: 6px;
@@ -133,7 +133,20 @@ label.checkbox:after {
   transform: rotate(-45deg);
   opacity: 0;
 }
-input[type='radio']:checked + label:after,
-input[type='checkbox']:checked + label:after {
+.form input[type='radio']:checked + label:after,
+.form input[type='checkbox']:checked + label:after {
   opacity: 1;
+}
+
+.form input[type='range'] {
+  margin: 0;
+  width: 80%;
+  cursor: ew-resize;
+}
+
+.form .field-value {
+  display: inline-block;
+  margin: 0;
+  width: 20%;
+  text-align: center;
 }

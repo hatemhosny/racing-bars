@@ -3,6 +3,7 @@ import Tabs from '@theme/Tabs';
 
 export default function CodeTabs(props) {
   const AllTabs = [
+    { label: 'Chart', value: 'chart' },
     { label: 'JavaScript', value: 'js' },
     { label: 'ES Modules', value: 'esm' },
     { label: 'TypeScript', value: 'ts' },

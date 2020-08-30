@@ -17,7 +17,7 @@ module.exports = {
       },
       links: [
         {
-          to: 'docs/',
+          to: 'docs',
           activeBasePath: 'docs',
           label: 'Docs',
           position: 'left',
@@ -30,7 +30,9 @@ module.exports = {
           position: 'left',
         },
         {
-          href: 'https://jsbin.com/kesapad/edit?html,output',
+          // href: 'https://jsbin.com/kesapad/edit?html,output',
+          to: 'playground',
+          activeBasePath: 'playground',
           label: 'Playground',
           position: 'left',
         },
