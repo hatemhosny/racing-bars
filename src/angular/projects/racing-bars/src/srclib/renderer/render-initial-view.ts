@@ -2,8 +2,7 @@ import * as d3 from '../d3';
 
 import { Store } from '../store';
 import { Data } from '../data';
-import { getDateSlice } from '../data-utils';
-import { getText, getColor, safeName, getIconID } from '../utils';
+import { getDateSlice, getText, getColor, safeName, getIconID } from '../utils';
 import { RenderOptions } from './render-options';
 import { calculateDimensions } from './calculate-dimensions';
 import { renderHeader } from './render-header';

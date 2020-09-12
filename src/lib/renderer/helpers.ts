@@ -1,8 +1,8 @@
 import * as d3 from '../d3';
 
-import { safeName, toggleClass, getClicks } from '../utils';
-import { Store, actions } from '../store';
 import { Data } from '../data';
+import { Store, actions } from '../store';
+import { safeName, toggleClass, getClicks } from '../utils';
 import { RenderOptions } from './render-options';
 
 export function halo(text: any, renderOptions: RenderOptions) {

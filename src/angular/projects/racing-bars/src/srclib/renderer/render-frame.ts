@@ -2,8 +2,7 @@ import * as d3 from '../d3';
 
 import { Data } from '../data';
 import { Store } from '../store';
-import { getDateSlice } from '../data-utils';
-import { safeName, getColor, getIconID, getText } from '../utils';
+import { getDateSlice, safeName, getColor, getIconID, getText } from '../utils';
 import { RenderOptions } from './render-options';
 import { selectFn, highlightFn, halo } from './helpers';
 import { updateControls } from './controls';
