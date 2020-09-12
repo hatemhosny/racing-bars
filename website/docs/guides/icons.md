@@ -2,7 +2,9 @@
 title: Icons
 ---
 
-Bars can have icons, like in [this example](/gallery/icons).
+import RacingBars from '../../racing-bars.js';
+
+Bars can have icons.
 
 To achieve this:
 
@@ -13,7 +15,23 @@ Example:
 
 This example uses the `code` field, in the [population dataset](../sample-datasets.md#population), to create a new `icon` field containing a valid URL.
 
-[view in gallery](/gallery/icons)
+export const transformFn = (data) => data.map((d) => ({
+...d,
+icon: `https://www.countryflags.io/${d.code.toLowerCase()}/flat/64.png`,
+}));
+
+<div className="gallery">
+  <RacingBars
+    dataUrl="/data/population.csv"
+    dataType="csv"
+    dataTransform={transformFn}
+    title="World Population in 60 Years"
+    subTitle="Country Population in millions"
+    caption="Source: World Bank"
+    showIcons={true}
+    labelsPosition="outside"
+  />
+</div>
 
 ```js {6,13}
 const options = {
