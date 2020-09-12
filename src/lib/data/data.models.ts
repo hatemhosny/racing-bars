@@ -14,6 +14,7 @@ export interface DataState extends DataCollections {
 export interface DataCollections {
   names: string[];
   groups: string[];
+  datesCache: string[];
 }
 
 export interface Data {

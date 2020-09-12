@@ -79,7 +79,7 @@ function storeDataCollections(store: Store, changingOptions: boolean) {
       .sort();
     const dates = getDates(data);
 
-    store.dispatch(actions.data.dataLoaded({ names, groups }));
+    store.dispatch(actions.data.dataLoaded({ names, groups, datesCache: dates }));
     if (!changingOptions) {
       store.dispatch(actions.ticker.initialize(dates));
     } else {
