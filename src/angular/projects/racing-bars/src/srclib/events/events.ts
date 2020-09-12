@@ -1,7 +1,7 @@
-import { elements } from './renderer';
-import { Store } from './store';
-import { Ticker } from './ticker';
-import { hideElement, getElement, getClicks } from './utils';
+import { elements } from '../renderer';
+import { Store } from '../store';
+import { Ticker } from '../ticker';
+import { hideElement, getElement, getClicks } from '../utils';
 import { DOMCustomEvent, EventType, Event, TickDetails } from './models';
 
 export function registerEvents(store: Store, ticker: Ticker) {

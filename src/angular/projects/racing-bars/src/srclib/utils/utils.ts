@@ -1,9 +1,9 @@
-import * as d3 from './d3';
+import * as d3 from '../d3';
 
-import { Data } from './data';
-import { Store } from './store';
+import { Data } from '../data';
+import { ParamFunction } from '../options';
+import { Store } from '../store';
 import { formatDate } from './dates';
-import { ParamFunction } from './options';
 
 export function getColor(d: Data, store: Store) {
   const { names, groups } = store.getState().data;
@@ -119,7 +119,7 @@ export function getWidth(element: HTMLElement, minWidth: number, width?: string)
 }
 
 export function getElement(root: HTMLElement | HTMLDocument, className: string) {
-  if (!root) return;
+  if (!root) return undefined;
   return (className ? root.querySelector('.' + className) : root) as HTMLElement;
 }
 

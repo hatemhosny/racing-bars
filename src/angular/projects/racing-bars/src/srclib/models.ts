@@ -1,50 +1,33 @@
 import { Options } from './options';
+import { TickDetails, EventType } from './events';
 
 export interface Race {
-  play: () => void;
-  pause: () => void;
-  toggle: () => void;
-  skipBack: () => void;
-  skipForward: () => void;
-  inc: (value: number) => void;
-  dec: (value: number) => void;
+  play: () => Race;
+  pause: () => Race;
+  toggle: () => Race;
+  skipBack: () => Race;
+  skipForward: () => Race;
+  inc: (value: number) => Race;
+  dec: (value: number) => Race;
+  setDate: (inputDate: string | Date) => Race;
   getDate: () => string;
-  setDate: (inputDate: string | Date) => void;
   getAllDates: () => string[];
   isRunning: () => boolean;
-  select: (name: string) => void;
-  unselect: (name: string) => void;
-  unselectAll: () => void;
-  hideGroup: (group: string) => void;
-  showGroup: (group: string) => void;
-  showOnlyGroup: (group: string) => void;
-  showAllGroups: () => void;
-  changeOptions: (newOptions: Partial<Options>) => void;
-  destroy: () => void;
+  select: (name: string) => Race;
+  unselect: (name: string) => Race;
+  unselectAll: () => Race;
+  hideGroup: (group: string) => Race;
+  showGroup: (group: string) => Race;
+  showOnlyGroup: (group: string) => Race;
+  showAllGroups: () => Race;
+  changeOptions: (newOptions: Partial<Options>) => Race;
+  call: (fn: ApiCallback) => Race;
+  delay: (duration: number) => Race;
+  onDate: (date: string | Date, fn: ApiCallback) => Race;
+  on: (event: EventType, fn: ApiCallback) => Race;
+  destroy: () => Race;
 }
 
-export type RaceMethod = (...args: unknown[]) => Race | void;
-
-export interface TickDetails {
-  date: string;
-  isFirstDate: boolean;
-  isLastDate: boolean;
-  isRunning: boolean;
-  allDates: string[];
-}
+export type ApiMethod = (...args: unknown[]) => Race | string | string[] | boolean | void;
 
 export type ApiCallback = (tickDetails: TickDetails) => void;
-
-export interface DOMCustomEvent {
-  bubbles: boolean;
-  detail: TickDetails;
-}
-
-export type EventType = 'dateChange' | 'firstDate' | 'lastDate' | 'play' | 'pause';
-
-export interface Event {
-  element: HTMLElement | Document;
-  userDefined: boolean;
-  eventType: EventType | 'click' | 'keyup';
-  handler: EventListener;
-}
