@@ -6,8 +6,8 @@ import { createTicker } from './ticker';
 import { styleInject } from './styles';
 import { actions, createStore, rootReducer, Store } from './store';
 import { Options } from './options';
-import { registerEvents, DOMEventSubscriber, getTickDetails } from './events';
-import { Race, RaceMethod, EventType, ApiCallback } from './models';
+import { registerEvents, DOMEventSubscriber, getTickDetails, EventType } from './events';
+import { Race, ApiMethod, ApiCallback } from './models';
 
 export function race(data: Data[] | WideData[], options: Partial<Options> = {}): Race {
   if (!data || !Array.isArray(data) || data.length === 0) {
@@ -205,8 +205,8 @@ export function race(data: Data[] | WideData[], options: Partial<Options> = {}):
       return this;
     },
     delay(duration = 0) {
-      let queue: Array<{ fn: RaceMethod; args: unknown[] }> = [];
-      let newQueue: Array<{ fn: RaceMethod; args: unknown[] }> = [];
+      let queue: Array<{ fn: ApiMethod; args: unknown[] }> = [];
+      let newQueue: Array<{ fn: ApiMethod; args: unknown[] }> = [];
       const originalMethods: any = {};
       let destroyCalled = false;
 
@@ -219,7 +219,7 @@ export function race(data: Data[] | WideData[], options: Partial<Options> = {}):
         };
       }
 
-      function addToQueue(fn: RaceMethod, args: unknown[]) {
+      function addToQueue(fn: ApiMethod, args: unknown[]) {
         if (!destroyCalled) {
           queue.push({ fn, args });
         } else {
