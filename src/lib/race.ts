@@ -7,9 +7,9 @@ import { createTicker } from './ticker';
 import { styleInject } from './styles';
 import { actions, createStore, rootReducer, Store } from './store';
 import { Options } from './options';
-import { registerEvents, DOMEventSubscriber } from './events';
-import { safeName, destroyed } from './utils';
-import { Race, RaceMethod, RaceMethodArgs } from './models';
+import { registerEvents, DOMEventSubscriber, getTickDetails } from './events';
+import { safeName } from './utils';
+import { Race, RaceMethod, EventType, ApiCallback } from './models';
 
 export function race(data: Data[] | WideData[], options: Partial<Options> = {}): Race {
   if (!data || !Array.isArray(data) || data.length === 0) {
@@ -27,6 +27,7 @@ export function race(data: Data[] | WideData[], options: Partial<Options> = {}):
   const root = document.querySelector(selector) as HTMLElement;
   if (!root) throw new Error('No element found with the selector: ' + selector);
 
+  const apiSubscriptions: Array<() => void> = [];
   subscribeToStore(store, renderer, preparedData);
 
   let stylesId: string;
@@ -40,19 +41,32 @@ export function race(data: Data[] | WideData[], options: Partial<Options> = {}):
     ticker.stop();
   }
 
-  let events = registerEvents(store, ticker);
+  const events = registerEvents(store, ticker);
   window.addEventListener('resize', resize);
 
   function subscribeToStore(store: Store, renderer: Renderer, data: Data[]) {
-    store.subscribe(rendererSubscriber(store, renderer));
-    store.subscribe(computeNextDateSubscriber(data, store));
-    store.subscribe(DOMEventSubscriber(store));
+    const subscriptions = [
+      rendererSubscriber(store, renderer),
+      computeNextDateSubscriber(data, store),
+      DOMEventSubscriber(store),
+    ];
+    [...subscriptions, ...apiSubscriptions].forEach((subcsription) => {
+      store.subscribe(subcsription);
+    });
+  }
+
+  function addApiSubscription(fn: () => void) {
+    apiSubscriptions.push(fn);
+    store.subscribe(fn);
   }
 
   function resize() {
     renderer.resize();
-    events.unregister();
-    events = registerEvents(store, ticker);
+    events.reregister();
+  }
+
+  function destroyed() {
+    throw new Error('Cannot perform this operation after calling destroy()');
   }
 
   const API = {
@@ -177,8 +191,7 @@ export function race(data: Data[] | WideData[], options: Partial<Options> = {}):
       }
 
       renderer.renderInitalView();
-      events.unregister();
-      events = registerEvents(store, ticker);
+      events.reregister();
 
       if (autorun) {
         const { isFirstDate, isRunning } = store.getState().ticker;
@@ -189,13 +202,8 @@ export function race(data: Data[] | WideData[], options: Partial<Options> = {}):
 
       return this;
     },
-    call(fn: (args: RaceMethodArgs) => void) {
-      fn.call(API, {
-        currentDate: store.getState().ticker.currentDate,
-        allDates: [...store.getState().ticker.dates],
-        isRunning: store.getState().ticker.isRunning,
-        data: preparedData,
-      });
+    call(fn: ApiCallback) {
+      fn.call(API, getTickDetails(store));
       return this;
     },
     delay(duration = 0) {
@@ -206,7 +214,6 @@ export function race(data: Data[] | WideData[], options: Partial<Options> = {}):
 
       for (const method of Object.keys(this)) {
         if (typeof this[method] !== 'function') continue;
-
         originalMethods[method] = this[method];
         this[method] = (...args: unknown[]) => {
           addToQueue(originalMethods[method], args);
@@ -220,7 +227,6 @@ export function race(data: Data[] | WideData[], options: Partial<Options> = {}):
         } else {
           queue.push({ fn: destroyed, args: [] });
         }
-
         if (fn.name === 'destroy') {
           destroyCalled = true;
         }
@@ -259,8 +265,24 @@ export function race(data: Data[] | WideData[], options: Partial<Options> = {}):
 
       return this;
     },
-    // onDate(date: string, fn: (args: RaceMethodArgs) => void) {},
-    // on(event: string, fn: (args: RaceMethodArgs) => void) {},
+    onDate(date: string | Date, fn: ApiCallback) {
+      const dateString = getDateString(date);
+      let lastDate = '';
+      addApiSubscription(() => {
+        if (store.getState().ticker.currentDate === dateString && dateString !== lastDate) {
+          lastDate = store.getState().ticker.currentDate; // avoid infinite loop if fn dispatches action
+          fn.call(API, getTickDetails(store));
+        }
+        lastDate = store.getState().ticker.currentDate;
+      });
+      return this;
+    },
+    on(event: EventType, fn: ApiCallback) {
+      events.addApiEventHandler(event, () => {
+        fn.call(API, getTickDetails(store));
+      });
+      return this;
+    },
     destroy() {
       ticker.stop();
       store.unsubscribeAll();

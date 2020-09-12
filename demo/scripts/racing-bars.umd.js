@@ -238,7 +238,8 @@
     return newWidth > minWidth ? newWidth : minWidth;
   }
   function getElement(root, className) {
-    return root.querySelector('.' + className);
+    if (!root) return;
+    return className ? root.querySelector('.' + className) : root;
   }
   function showElement(root, className, useVisibility) {
     if (useVisibility === void 0) {
@@ -332,9 +333,6 @@
       };
     });
   };
-  function destroyed() {
-    throw new Error('Cannot perform this operation after calling destroy()');
-  }
 
   var getDates = function getDates(data) {
     return Array.from(new Set(data.map(function (d) {
@@ -658,6 +656,7 @@
   var initialState = {
     names: [],
     groups: [],
+    datesCache: [],
     groupFilter: [],
     selected: [],
     dateSlices: {}
@@ -671,7 +670,8 @@
       case actionTypes$1.dataLoaded:
         return _extends(_extends({}, state), {}, {
           names: [].concat(action.payload.names),
-          groups: [].concat(action.payload.groups)
+          groups: [].concat(action.payload.groups),
+          datesCache: [].concat(action.payload.datesCache)
         });
 
       case actionTypes$1.addFilter:
@@ -1177,7 +1177,8 @@
       var dates = getDates(data);
       store.dispatch(actions.data.dataLoaded({
         names: names,
-        groups: groups
+        groups: groups,
+        datesCache: dates
       }));
 
       if (!changingOptions) {
@@ -2040,13 +2041,24 @@
   function registerEvents(store, ticker) {
     var root = document.querySelector(store.getState().options.selector);
     var events = [];
-    registerControlButtonEvents();
-    registerOverlayEvents();
-    registerClickEvents();
-    registerKeyboardEvents();
+    register();
     return {
-      unregister: unregister
+      reregister: reregister,
+      unregister: unregister,
+      addApiEventHandler: addApiEventHandler
     };
+
+    function register() {
+      registerControlButtonEvents();
+      registerOverlayEvents();
+      registerClickEvents();
+      registerKeyboardEvents();
+    }
+
+    function reregister() {
+      unregister(false);
+      register();
+    }
 
     function registerControlButtonEvents() {
       addEventHandler(root, elements.skipBack, 'click', function () {
@@ -2098,12 +2110,7 @@
 
     function registerKeyboardEvents() {
       if (store.getState().options.keyboardControls) {
-        document.addEventListener('keyup', handleKeyboardEvents);
-        events.push({
-          element: document,
-          event: 'keyup',
-          handler: handleKeyboardEvents
-        });
+        addEventHandler(document, '', 'keyup', handleKeyboardEvents);
       }
     }
 
@@ -2137,48 +2144,96 @@
       }
     }
 
-    function unregister() {
-      events.forEach(function (event) {
-        event.element.removeEventListener(event.event, event.handler);
+    function unregister(removeUserDefined) {
+      if (removeUserDefined === void 0) {
+        removeUserDefined = true;
+      }
+
+      events.filter(function (event) {
+        return removeUserDefined ? true : !event.userDefined;
+      }).forEach(function (event) {
+        event.element.removeEventListener(event.eventType, event.handler);
+        events.splice(events.indexOf(event), 1);
       });
     }
 
-    function addEventHandler(root, className, event, handler) {
+    function addEventHandler(root, className, eventType, handler) {
       var element = getElement(root, className);
 
       if (element) {
-        element.addEventListener(event, handler);
+        element.addEventListener(eventType, handler);
         events.push({
           element: element,
-          event: event,
+          userDefined: false,
+          eventType: eventType,
           handler: handler
         });
       }
     }
+
+    function addApiEventHandler(eventType, handler) {
+      root.addEventListener(eventType, handler);
+      events.push({
+        element: root,
+        userDefined: true,
+        eventType: eventType,
+        handler: handler
+      });
+    }
+  }
+  function getTickDetails(store) {
+    var _store$getState = store.getState(),
+        ticker = _store$getState.ticker,
+        data = _store$getState.data;
+
+    return {
+      date: ticker.currentDate,
+      isFirstDate: ticker.isFirstDate,
+      isLastDate: ticker.isLastDate,
+      isRunning: ticker.isRunning,
+      allDates: data.datesCache
+    };
   }
 
-  function dispatchDOMEvent(store) {
+  function dispatchDOMEvent(store, eventType) {
     var element = document.querySelector(store.getState().options.selector);
     if (!element) return;
-    element.dispatchEvent(new CustomEvent('racingBars/dateChange', {
+    element.dispatchEvent(new CustomEvent(eventType, {
       bubbles: true,
-      detail: {
-        date: store.getState().ticker.currentDate,
-        isFirst: store.getState().ticker.isFirstDate,
-        isLast: store.getState().ticker.isLastDate
-      }
+      detail: getTickDetails(store)
     }));
   }
 
   function DOMEventSubscriber(store) {
     var lastDate = '';
+    var wasRunning;
     return function () {
       var currentDate = store.getState().ticker.currentDate;
+      var isRunning = store.getState().ticker.isRunning;
 
       if (currentDate !== lastDate) {
-        dispatchDOMEvent(store);
+        dispatchDOMEvent(store, 'dateChange');
+
+        if (store.getState().ticker.isFirstDate) {
+          dispatchDOMEvent(store, 'firstDate');
+        }
+
+        if (store.getState().ticker.isLastDate) {
+          dispatchDOMEvent(store, 'lastDate');
+        }
+
         lastDate = currentDate;
       }
+
+      if (!wasRunning && isRunning) {
+        dispatchDOMEvent(store, 'play');
+      }
+
+      if (wasRunning && !isRunning) {
+        dispatchDOMEvent(store, 'pause');
+      }
+
+      wasRunning = isRunning;
     };
   }
 
@@ -2203,6 +2258,7 @@
         autorun = _store$getState$optio.autorun;
     var root = document.querySelector(selector);
     if (!root) throw new Error('No element found with the selector: ' + selector);
+    var apiSubscriptions = [];
     subscribeToStore(store, renderer, preparedData);
     var stylesId;
 
@@ -2221,15 +2277,24 @@
     window.addEventListener('resize', resize);
 
     function subscribeToStore(store, renderer, data) {
-      store.subscribe(rendererSubscriber(store, renderer));
-      store.subscribe(computeNextDateSubscriber(data, store));
-      store.subscribe(DOMEventSubscriber(store));
+      var subscriptions = [rendererSubscriber(store, renderer), computeNextDateSubscriber(data, store), DOMEventSubscriber(store)];
+      [].concat(subscriptions, apiSubscriptions).forEach(function (subcsription) {
+        store.subscribe(subcsription);
+      });
+    }
+
+    function addApiSubscription(fn) {
+      apiSubscriptions.push(fn);
+      store.subscribe(fn);
     }
 
     function resize() {
       renderer.resize();
-      events.unregister();
-      events = registerEvents(store, ticker);
+      events.reregister();
+    }
+
+    function destroyed() {
+      throw new Error('Cannot perform this operation after calling destroy()');
     }
 
     var API = {
@@ -2355,8 +2420,7 @@
         }
 
         renderer.renderInitalView();
-        events.unregister();
-        events = registerEvents(store, ticker);
+        events.reregister();
 
         if (autorun) {
           var _store$getState$ticke = store.getState().ticker,
@@ -2371,12 +2435,7 @@
         return this;
       },
       call: function call(fn) {
-        fn.call(API, {
-          currentDate: store.getState().ticker.currentDate,
-          allDates: [].concat(store.getState().ticker.dates),
-          isRunning: store.getState().ticker.isRunning,
-          data: preparedData
-        });
+        fn.call(API, getTickDetails(store));
         return this;
       },
       delay: function delay(duration) {
@@ -2466,6 +2525,25 @@
           }, dur);
         })(asValidNumber(duration));
 
+        return this;
+      },
+      onDate: function onDate(date, fn) {
+        var dateString = getDateString(date);
+        var lastDate = '';
+        addApiSubscription(function () {
+          if (store.getState().ticker.currentDate === dateString && dateString !== lastDate) {
+            lastDate = store.getState().ticker.currentDate;
+            fn.call(API, getTickDetails(store));
+          }
+
+          lastDate = store.getState().ticker.currentDate;
+        });
+        return this;
+      },
+      on: function on(event, fn) {
+        events.addApiEventHandler(event, function () {
+          fn.call(API, getTickDetails(store));
+        });
         return this;
       },
       destroy: function destroy() {

@@ -5,6 +5,7 @@ import { DataState, DataAction, DataCollections, DateSlice } from './data.models
 const initialState: DataState = {
   names: [],
   groups: [],
+  datesCache: [],
   groupFilter: [],
   selected: [],
   dateSlices: {},
@@ -17,6 +18,7 @@ export const dataReducer: Reducer<DataState, DataAction> = (state = initialState
         ...state,
         names: [...(action.payload as DataCollections).names],
         groups: [...(action.payload as DataCollections).groups],
+        datesCache: [...(action.payload as DataCollections).datesCache],
       };
 
     case actionTypes.addFilter:

@@ -21,7 +21,7 @@
 
 <body>
   <div id="container">
-    <div id="race" class="race">Loading...</div>
+    <div id="race">Loading...</div>
   </div>
 
   <script src="scripts/d3.min.js"></script>
@@ -56,7 +56,7 @@
       overlays: 'none',
       showGroups: true,
       // showIcons: true,
-      autorun: false,
+      autorun: true,
       // colorSeed: "asdfs",
       // labelsPosition: 'outside',
       // labelsWidth: 250,
@@ -67,30 +67,46 @@
       // selectBars: true,
     };
 
+    // document.getElementById('race').addEventListener('firstDate', () => console.log('event fired'));
+
     racingBars.loadData('/data/population.csv', 'csv').then((data) => {
       const racer = racingBars.race(data, options);
 
       racer
+        .on('firstDate', () => console.log('firstDate'))
+        .on('dateChange', ({ date }) => console.log('date change', date))
+        .on('lastDate', () => console.log('lastDate'))
+        .on('play', () => console.log('play'))
+        .on('pause', () => console.log('pause'))
+        .onDate('1960-01-01', function () {
+          console.log('Well, YES!', this);
+          // this.pause();
+        })
+        .onDate('1961-01-01', function () {
+          console.log('YES!', this);
+          // this.pause();
+        })
+
         .play()
-        .call(({ isRunning }) => console.log(isRunning)) // true
+        .call(({ isRunning }) => console.log('isRunning', isRunning)) // true
 
         .pause()
-        .call(({ currentDate }) => console.log(currentDate)) // "1960-01-01"
+        .call(({ date }) => console.log(date)) // "1960-01-01"
 
         .inc()
-        .call(({ currentDate }) => console.log(currentDate)) // "1961-01-01"
+        .call(({ date }) => console.log(date)) // "1961-01-01"
 
         .inc(10)
-        .call(({ currentDate }) => console.log(currentDate)) // "1971-01-01"
+        .call(({ date }) => console.log(date)) // "1971-01-01"
 
         .dec(5)
-        .call(({ currentDate }) => console.log(currentDate)) // "1966-01-01"
+        .call(({ date }) => console.log(date)) // "1966-01-01"
 
         .skipForward()
-        .call(({ currentDate }) => console.log(currentDate)) // "2018-01-01"
+        .call(({ date }) => console.log(date)) // "2018-01-01"
 
         .skipBack()
-        .call(({ currentDate }) => console.log(currentDate)) // "1960-01-01"
+        .call(({ date }) => console.log(date)) // "1960-01-01"
 
         .play()
         .call(function () {
@@ -100,19 +116,21 @@
         .call(function () {
           console.log(this);
         })
-        .call(({ currentDate }) => console.log(currentDate)) // "1960-01-01"
+        .call(({ date }) => console.log(date)) // "1960-01-01"
 
         .call(({ allDates }) => console.log(allDates)) // ["1960-01-01", ..., "2018-01-01"]
-        .call(({ isRunning }) => console.log(isRunning)) // false
-        .call(({ data }) => console.log(data)) // false
+        .call(({ isRunning }) => console.log('isRunning', isRunning)) // false
+        .call(({ date }) => console.log(date)) // false
         .call(function () {
           console.log(this);
         }) // racer object
 
+        .call(() => console.log('change options'))
         .changeOptions({ title: 'Updated title!' })
 
         .pause()
         .delay(2000)
+        .call(() => console.log('destroy'))
         .destroy()
         .play(); // Error: Cannot perform this operation after calling destroy()
     });

@@ -1,5 +1,4 @@
 import { Options } from './options';
-import { Data } from './data';
 
 export interface Race {
   play: () => void;
@@ -26,19 +25,26 @@ export interface Race {
 
 export type RaceMethod = (...args: unknown[]) => Race | void;
 
-export interface RaceMethodArgs {
-  currentDate: string;
-  allDates: string[];
+export interface TickDetails {
+  date: string;
+  isFirstDate: boolean;
+  isLastDate: boolean;
   isRunning: boolean;
-  data: Data[];
+  allDates: string[];
 }
+
+export type ApiCallback = (tickDetails: TickDetails) => void;
 
 export interface DOMCustomEvent {
   bubbles: boolean;
-  detail: {
-    date: string;
-    isFirst: boolean;
-    isLast: boolean;
-    src: string;
-  };
+  detail: TickDetails;
+}
+
+export type EventType = 'dateChange' | 'firstDate' | 'lastDate' | 'play' | 'pause';
+
+export interface Event {
+  element: HTMLElement | Document;
+  userDefined: boolean;
+  eventType: EventType | 'click' | 'keyup';
+  handler: EventListener;
 }

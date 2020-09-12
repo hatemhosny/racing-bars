@@ -118,9 +118,9 @@ export function getWidth(element: HTMLElement, minWidth: number, width?: string)
   return newWidth > minWidth ? newWidth : minWidth;
 }
 
-export function getElement(root: HTMLElement, className: string) {
-  // TODO: fix Cannot read property 'querySelector' of null
-  return root.querySelector('.' + className) as HTMLElement;
+export function getElement(root: HTMLElement | HTMLDocument, className: string) {
+  if (!root) return;
+  return (className ? root.querySelector('.' + className) : root) as HTMLElement;
 }
 
 export function showElement(root: HTMLElement, className: string, useVisibility = false) {
@@ -208,7 +208,3 @@ export const getClicks = debounce(function (event: any, Fn: (event: any) => void
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 export const pipe = (...fns: Function[]) => fns.reduce((f, g) => (...args: any) => g(f(...args)));
-
-export function destroyed() {
-  throw new Error('Cannot perform this operation after calling destroy()');
-}
