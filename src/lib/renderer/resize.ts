@@ -1,6 +1,6 @@
-import { getHeight, getWidth } from '../utils';
-import { Store } from '../store';
 import { Data } from '../data';
+import { Store } from '../store';
+import { getHeight, getWidth } from '../utils';
 import { RenderOptions } from './render-options';
 import { renderInitalView } from './render-initial-view';
 import { renderFrame } from './render-frame';

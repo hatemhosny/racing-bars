@@ -1,5 +1,5 @@
-import * as d3 from './d3';
-import { Data } from './data';
+import * as d3 from '../d3';
+import { Data } from '../data';
 import { zeroPad } from './utils';
 
 export const getDates = (data: Data[]) => Array.from(new Set(data.map((d) => d.date))).sort();

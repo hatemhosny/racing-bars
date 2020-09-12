@@ -1,9 +1,9 @@
-import * as d3 from './d3';
+import * as d3 from '../d3';
 
+import { Data, WideData } from '../data';
+import { actions, Store } from '../store';
+import { Options, TransformFn } from '../options';
 import { getDateString, getDates, getDateRange, getNextDate } from './dates';
-import { Data, WideData } from './data';
-import { actions, Store } from './store';
-import { Options, TransformFn } from './options';
 import { pipe } from './utils';
 
 export function prepareData(

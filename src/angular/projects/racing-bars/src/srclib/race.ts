@@ -1,6 +1,5 @@
 import * as d3 from './d3';
-import { prepareData, computeNextDateSubscriber } from './data-utils';
-import { getDateString } from './dates';
+import { getDateString, prepareData, computeNextDateSubscriber, safeName } from './utils';
 import { Data, WideData } from './data';
 import { createRenderer, rendererSubscriber, Renderer } from './renderer';
 import { createTicker } from './ticker';
@@ -8,7 +7,6 @@ import { styleInject } from './styles';
 import { actions, createStore, rootReducer, Store } from './store';
 import { Options } from './options';
 import { registerEvents, DOMEventSubscriber, getTickDetails } from './events';
-import { safeName } from './utils';
 import { Race, RaceMethod, EventType, ApiCallback } from './models';
 
 export function race(data: Data[] | WideData[], options: Partial<Options> = {}): Race {
