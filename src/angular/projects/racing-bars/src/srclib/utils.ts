@@ -118,9 +118,9 @@ export function getWidth(element: HTMLElement, minWidth: number, width?: string)
   return newWidth > minWidth ? newWidth : minWidth;
 }
 
-export function getElement(root: HTMLElement, className: string) {
-  // TODO: fix Cannot read property 'querySelector' of null
-  return root.querySelector('.' + className) as HTMLElement;
+export function getElement(root: HTMLElement | HTMLDocument, className: string) {
+  if (!root) return;
+  return (className ? root.querySelector('.' + className) : root) as HTMLElement;
 }
 
 export function showElement(root: HTMLElement, className: string, useVisibility = false) {

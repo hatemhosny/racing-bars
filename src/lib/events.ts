@@ -2,21 +2,26 @@ import { elements } from './renderer';
 import { Store } from './store';
 import { Ticker } from './ticker';
 import { hideElement, getElement, getClicks } from './utils';
-import { DOMCustomEvent } from './models';
+import { DOMCustomEvent, EventType, Event, TickDetails } from './models';
 
 export function registerEvents(store: Store, ticker: Ticker) {
   const root = document.querySelector(store.getState().options.selector) as HTMLElement;
-  const events: Array<{
-    element: HTMLElement | Document;
-    event: string;
-    handler: EventListener;
-  }> = [];
+  const events: Event[] = [];
+  register();
 
-  registerControlButtonEvents();
-  registerOverlayEvents();
-  registerClickEvents();
-  registerKeyboardEvents();
-  return { unregister };
+  return { reregister, unregister, addApiEventHandler };
+
+  function register() {
+    registerControlButtonEvents();
+    registerOverlayEvents();
+    registerClickEvents();
+    registerKeyboardEvents();
+  }
+
+  function reregister() {
+    unregister(false);
+    register();
+  }
 
   function registerControlButtonEvents() {
     addEventHandler(root, elements.skipBack, 'click', () => ticker.skipBack());
@@ -61,12 +66,7 @@ export function registerEvents(store: Store, ticker: Ticker) {
 
   function registerKeyboardEvents() {
     if (store.getState().options.keyboardControls) {
-      document.addEventListener('keyup', handleKeyboardEvents);
-      events.push({
-        element: document,
-        event: 'keyup',
-        handler: handleKeyboardEvents as EventListener,
-      });
+      addEventHandler(document, '', 'keyup', handleKeyboardEvents);
     }
   }
 
@@ -99,53 +99,88 @@ export function registerEvents(store: Store, ticker: Ticker) {
     }
   }
 
-  function unregister() {
-    events.forEach((event) => {
-      event.element.removeEventListener(event.event, event.handler);
-    });
+  function unregister(removeUserDefined = true) {
+    events
+      .filter((event) => (removeUserDefined ? true : !event.userDefined))
+      .forEach((event) => {
+        event.element.removeEventListener(event.eventType, event.handler);
+        events.splice(events.indexOf(event), 1);
+      });
   }
 
   function addEventHandler(
-    root: HTMLElement,
+    root: HTMLElement | HTMLDocument,
     className: string,
-    event: string,
-    handler: () => void,
+    eventType: Event['eventType'],
+    handler: (e?: any) => void,
   ) {
     const element = getElement(root, className);
     if (element) {
-      element.addEventListener(event, handler);
+      element.addEventListener(eventType, handler);
       events.push({
         element,
-        event,
+        userDefined: false,
+        eventType,
         handler,
       });
     }
   }
+
+  function addApiEventHandler(eventType: EventType, handler: () => void) {
+    root.addEventListener(eventType, handler);
+    events.push({
+      element: root,
+      userDefined: true,
+      eventType,
+      handler,
+    });
+  }
 }
 
-function dispatchDOMEvent(store: Store) {
+export function getTickDetails(store: Store): TickDetails {
+  const { ticker, data } = store.getState();
+  return {
+    date: ticker.currentDate,
+    isFirstDate: ticker.isFirstDate,
+    isLastDate: ticker.isLastDate,
+    isRunning: ticker.isRunning,
+    allDates: data.datesCache,
+  };
+}
+
+function dispatchDOMEvent(store: Store, eventType: EventType) {
   const element = document.querySelector(store.getState().options.selector) as HTMLElement;
   if (!element) return;
-
   element.dispatchEvent(
-    new CustomEvent('racingBars/dateChange', {
+    new CustomEvent(eventType, {
       bubbles: true,
-      detail: {
-        date: store.getState().ticker.currentDate,
-        isFirst: store.getState().ticker.isFirstDate,
-        isLast: store.getState().ticker.isLastDate,
-      },
+      detail: getTickDetails(store),
     } as DOMCustomEvent),
   );
 }
 
 export function DOMEventSubscriber(store: Store) {
   let lastDate = '';
+  let wasRunning: boolean;
   return function () {
     const currentDate = store.getState().ticker.currentDate;
+    const isRunning = store.getState().ticker.isRunning;
     if (currentDate !== lastDate) {
-      dispatchDOMEvent(store);
+      dispatchDOMEvent(store, 'dateChange');
+      if (store.getState().ticker.isFirstDate) {
+        dispatchDOMEvent(store, 'firstDate');
+      }
+      if (store.getState().ticker.isLastDate) {
+        dispatchDOMEvent(store, 'lastDate');
+      }
       lastDate = currentDate;
     }
+    if (!wasRunning && isRunning) {
+      dispatchDOMEvent(store, 'play');
+    }
+    if (wasRunning && !isRunning) {
+      dispatchDOMEvent(store, 'pause');
+    }
+    wasRunning = isRunning;
   };
 }
