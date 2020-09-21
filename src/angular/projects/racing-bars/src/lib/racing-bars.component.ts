@@ -13,7 +13,7 @@ import { ComponentProps } from './component-props';
 
 @Component({
   selector: 'racing-bars',
-  template: `<div id="{{ elementId }}">{{ loadingContent }}</div>`,
+  template: `<div id="{{ elementId }}"><ng-content></ng-content></div>`,
   styles: [
     `
       :host {
@@ -47,7 +47,6 @@ export class RacingBarsComponent extends ComponentProps
 
   public ngOnInit() {
     this.elementId = this.elementId || generateId();
-    this.loadingContent = this.loadingContent ?? 'Loading...';
     this.runRace();
   }
 
