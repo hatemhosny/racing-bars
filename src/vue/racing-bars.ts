@@ -3,17 +3,15 @@ import { processProps, defaultProps } from '../shared';
 
 const RacingBarsComponent = {
   name: 'racing-bars',
-  template: '<div :id="elementId" v-once>{{loadingContent}}</div>',
+  template: '<div :id="elementId" v-once><slot /></div>',
   props: [...Object.keys(defaultProps)],
   inheritAttrs: false,
   created() {
     this.elementId = this.elementId || generateId();
-    this.loadingContent = this.loadingContent ?? 'Loading...';
   },
   mounted() {
     this.$nextTick(() => {
       this.runRace();
-
       Object.keys(this.$props).forEach((key) => {
         this.$watch(key, (newVal: any) => {
           this.racer.changeOptions({ [key]: newVal });

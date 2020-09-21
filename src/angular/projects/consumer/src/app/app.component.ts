@@ -11,8 +11,7 @@ import { Race, Data, WideData } from 'dist/racing-bars/srclib';
     [theme]="theme"
     [topN]="topN"
     myname="hatem"
-  >Loading...
-  </racing-bars>`,
+  />`,
   styles: [
     `
       racing-bars {

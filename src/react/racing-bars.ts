@@ -5,17 +5,15 @@ import { processProps, Props } from '../shared';
 
 class RacingBarsComponent extends React.Component {
   public elementId: string;
-  public loadingContent: string;
   public racer: Race | undefined;
 
   public constructor(props: Props) {
     super(props);
     this.elementId = props.elementId || generateId();
-    this.loadingContent = props.loadingContent ?? 'Loading...';
   }
 
   public render() {
-    return React.createElement('div', { id: this.elementId }, this.loadingContent);
+    return React.createElement('div', { id: this.elementId }, this.props.children);
   }
 
   public componentDidMount() {

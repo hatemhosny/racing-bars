@@ -25,7 +25,6 @@ export default {
   template: `
   <racing-bars
     element-id="hi-vue"
-    loading-content="Loading (from vue!)..."
     data-url="../data/population.csv"
     data-type="csv"
     :title="name"
