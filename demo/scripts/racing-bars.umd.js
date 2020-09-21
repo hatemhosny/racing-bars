@@ -3,6 +3,16 @@
   typeof define === 'function' && define.amd ? define(['exports', 'd3'], factory) :
   (global = global || self, factory(global.racingBars = {}, global.d3));
 }(this, (function (exports, d3$1) {
+  var options = {
+    __proto__: null,
+    get actionTypes () { return actionTypes; },
+    get loadOptions () { return loadOptions; },
+    get changeOptions () { return changeOptions; },
+    get Options () { return Options; },
+    get defaultOptions () { return defaultOptions; },
+    get optionsReducer () { return optionsReducer; }
+  };
+
 
 
   var d3 = {
@@ -108,463 +118,6 @@
 
     return target;
   }
-
-  function getColor(d, store) {
-    var _store$getState$data = store.getState().data,
-        names = _store$getState$data.names,
-        groups = _store$getState$data.groups;
-    var _store$getState$optio = store.getState().options,
-        showGroups = _store$getState$optio.showGroups,
-        colorSeed = _store$getState$optio.colorSeed,
-        colorMap = _store$getState$optio.colorMap;
-
-    if (d.color) {
-      return d.color;
-    }
-
-    var useGroup = Boolean(d.group) && showGroups && groups.length > 0;
-    var values = useGroup ? groups : names;
-
-    if (colorSeed) {
-      values = shuffle(values, toNumber(colorSeed));
-    }
-
-    var currentValue = useGroup ? d.group : d.name;
-    var index = values.indexOf(currentValue);
-
-    if (colorMap) {
-      if (Array.isArray(colorMap)) {
-        while (index > colorMap.length - 1) {
-          index = index - colorMap.length;
-        }
-
-        return colorMap[index];
-      } else {
-        if (colorMap[currentValue]) {
-          return colorMap[currentValue];
-        }
-      }
-    }
-
-    var negativeIfOdd = index % 2 === 0 ? 1 : -1;
-    var lumVariation = random(currentValue) / 10 * negativeIfOdd;
-    var HueSpacing = 360 / (values.length + 1);
-    var hue = (values.indexOf(currentValue) + 1) * HueSpacing;
-    return d3$1.hsl(hue, 0.75, 0.75 + lumVariation);
-  }
-  function getIconID(d) {
-    return 'icon-' + safeName(d.name);
-  }
-  function zeroPad(n, w) {
-    while (n.toString().length < w) {
-      n = '0' + n;
-    }
-
-    return n;
-  }
-
-  function toNumber(s) {
-    s = String(s);
-    var nums = '';
-
-    for (var i = 0; i < s.length; i++) {
-      nums += zeroPad(String(s.charCodeAt(i)), 3);
-    }
-
-    return +nums;
-  }
-
-  function random(InputSeed) {
-    var seed = toNumber(InputSeed);
-    var x = Math.sin(seed) * 10000;
-    return x - Math.floor(x);
-  }
-  function shuffle(arr, seed) {
-    var array = [].concat(arr);
-    var m = array.length;
-    var t;
-    var i;
-
-    while (m) {
-      i = Math.floor(random(seed) * m--);
-      t = array[m];
-      array[m] = array[i];
-      array[i] = t;
-      ++seed;
-    }
-
-    return array;
-  }
-  function generateId(prefix, n) {
-    if (prefix === void 0) {
-      prefix = 'racingbars';
-    }
-
-    if (n === void 0) {
-      n = 8;
-    }
-
-    var rnd = Array(3).fill(null).map(function () {
-      return Math.random().toString(36).substr(2);
-    }).join('');
-    return prefix + rnd.slice(-n);
-  }
-  function getHeight(element, minHeight, height) {
-    var newHeight;
-
-    if (!height) {
-      newHeight = element.getBoundingClientRect().height;
-    } else if (String(height).startsWith('window')) {
-      var scale = +height.split('*')[1] || 1;
-      newHeight = window.innerHeight * scale;
-    } else {
-      newHeight = +height;
-    }
-
-    return newHeight > minHeight ? newHeight : minHeight;
-  }
-  function getWidth(element, minWidth, width) {
-    var newWidth;
-
-    if (!width) {
-      newWidth = element.getBoundingClientRect().width;
-    } else if (String(width).startsWith('window')) {
-      var scale = +width.split('*')[1] || 1;
-      newWidth = window.innerWidth * scale;
-    } else {
-      newWidth = +width;
-    }
-
-    return newWidth > minWidth ? newWidth : minWidth;
-  }
-  function getElement(root, className) {
-    if (!root) return;
-    return className ? root.querySelector('.' + className) : root;
-  }
-  function showElement(root, className, useVisibility) {
-    if (useVisibility === void 0) {
-      useVisibility = false;
-    }
-
-    var element = getElement(root, className);
-
-    if (element) {
-      if (useVisibility) {
-        element.style.visibility = 'unset';
-      } else {
-        element.style.display = 'flex';
-      }
-    }
-  }
-  function hideElement(root, className, useVisibility) {
-    if (useVisibility === void 0) {
-      useVisibility = false;
-    }
-
-    var element = getElement(root, className);
-
-    if (element) {
-      if (useVisibility) {
-        element.style.visibility = 'hidden';
-      } else {
-        element.style.display = 'none';
-      }
-    }
-  }
-  function getText(param, currentDate, dateSlice, dates, isDate) {
-    if (isDate === void 0) {
-      isDate = false;
-    }
-
-    if (typeof param === 'function') {
-      return param(currentDate, dateSlice, dates);
-    }
-
-    if (isDate) {
-      return formatDate(currentDate, param);
-    }
-
-    return param;
-  }
-  function safeName(name) {
-    return name.replace(/[\W]+/g, '_');
-  }
-  function toggleClass(root, selector, className) {
-    d3$1.select(root).select(selector).classed(className, function () {
-      return !d3$1.select(this).classed(className);
-    });
-  }
-
-  function debounce(func, wait, immediate) {
-    if (immediate === void 0) {
-      immediate = false;
-    }
-
-    var timeout;
-    return function (_clicks, _Fn) {
-      var context = this;
-      var args = arguments;
-
-      var later = function later() {
-        timeout = null;
-
-        if (!immediate) {
-          func.apply(context, args);
-        }
-      };
-
-      var callNow = immediate && !timeout;
-      clearTimeout(timeout);
-      timeout = setTimeout(later, wait);
-
-      if (callNow) {
-        func.apply(context, args);
-      }
-    };
-  }
-
-  var getClicks = debounce(function (event, Fn) {
-    Fn(event);
-  }, 250);
-  var pipe = function pipe() {
-    return [].slice.call(arguments).reduce(function (f, g) {
-      return function () {
-        return g(f.apply(void 0, [].slice.call(arguments)));
-      };
-    });
-  };
-
-  var getDates = function getDates(data) {
-    return Array.from(new Set(data.map(function (d) {
-      return d.date;
-    }))).sort();
-  };
-  function getDateString(inputDate) {
-    var date = new Date(inputDate);
-
-    if (isNaN(+date)) {
-      throw new Error("\"" + inputDate + "\" is not a valid date");
-    }
-
-    var year = date.getFullYear().toString();
-    var month = zeroPad((1 + date.getMonth()).toString(), 2);
-    var day = zeroPad(date.getDate().toString(), 2);
-    return year + "-" + month + "-" + day;
-  }
-  function formatDate(dateStr, format) {
-    if (format === void 0) {
-      format = 'YYYY-MM-DD';
-    }
-
-    var year = dateStr.slice(0, 4);
-    var month = dateStr.slice(5, 7);
-    var day = dateStr.slice(8, 10);
-    var date = new Date(dateStr);
-    var weekDayIndex = String(date.getDay());
-    var monthNames = {
-      '01': 'Jan',
-      '02': 'Feb',
-      '03': 'Mar',
-      '04': 'Apr',
-      '05': 'May',
-      '06': 'Jun',
-      '07': 'Jul',
-      '08': 'Aug',
-      '09': 'Sep',
-      '10': 'Oct',
-      '11': 'Nov',
-      '12': 'Dec'
-    };
-    var weekDays = {
-      '0': 'Sun',
-      '1': 'Mon',
-      '2': 'Tue',
-      '3': 'Wed',
-      '4': 'Thu',
-      '5': 'Fri',
-      '6': 'Sat'
-    };
-    return format.replace('MMM', monthNames[month]).replace('DDD', weekDays[weekDayIndex]).replace('YYYY', year).replace('MM', month).replace('DD', day);
-  }
-  function getDateRange(date1, date2, interval) {
-    var range = [date1].concat(d3$1.timeDay.range(date1, date2));
-
-    var daysInMonth = function daysInMonth(date) {
-      return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
-    };
-
-    var sameDay = date1.getDate() === date2.getDate();
-    var sameMonth = date1.getMonth() === date2.getMonth();
-    var numberOfMonths = d3$1.timeMonth.count(date1, date2);
-    var numberOfYears = d3$1.timeYear.count(date1, date2);
-    var outputRange = [];
-
-    if (interval === 'year') {
-      if (sameMonth && sameDay) {
-        outputRange = range.filter(function (date) {
-          if (date.getMonth() === date1.getMonth()) {
-            if (date.getDate() === date1.getDate()) return true;
-
-            if (date1.getDate() > daysInMonth(date)) {
-              return date.getDate() === daysInMonth(date);
-            }
-          }
-
-          return false;
-        });
-      } else {
-        outputRange = range.filter(function (date) {
-          return range.indexOf(date) % Math.round(range.length / numberOfYears) === 0;
-        });
-      }
-    } else if (interval === 'month') {
-      if (sameDay) {
-        outputRange = range.filter(function (date) {
-          if (date.getDate() === date1.getDate()) return true;
-
-          if (date1.getDate() > daysInMonth(date)) {
-            return date.getDate() === daysInMonth(date);
-          }
-
-          return false;
-        });
-      } else {
-        outputRange = range.filter(function (date) {
-          return range.indexOf(date) % Math.round(range.length / numberOfMonths) === 0;
-        });
-      }
-    } else if (interval === 'day') {
-      outputRange = range;
-    }
-
-    if (outputRange.length === 0) {
-      outputRange = [date1, date2];
-    }
-
-    if (getDateString(date1) !== getDateString(outputRange[0])) {
-      outputRange = [date1].concat(outputRange);
-    }
-
-    if (getDateString(date2) !== getDateString(outputRange[outputRange.length - 1])) {
-      outputRange = [].concat(outputRange, [date2]);
-    }
-
-    return outputRange;
-  }
-  function getNextDate(dates, currentDate) {
-    var currentIndex = dates.indexOf(currentDate);
-    if (currentIndex === -1) return dates[0];
-    var lastIndex = dates.length - 1;
-    return currentIndex === lastIndex ? dates[0] : dates[currentIndex + 1];
-  }
-
-  var defaultOptions = {
-    selector: '#race',
-    dataShape: 'long',
-    dataTransform: null,
-    fillDateGapsInterval: null,
-    fillDateGapsValue: 'interpolate',
-    startDate: '',
-    endDate: '',
-    colorSeed: '',
-    showGroups: false,
-    tickDuration: 500,
-    topN: 10,
-    mouseControls: false,
-    keyboardControls: false,
-    autorun: true,
-    loop: false,
-    injectStyles: true,
-    title: '',
-    subTitle: '',
-    caption: '',
-    dateCounter: 'MM/YYYY',
-    labelsPosition: 'inside',
-    labelsWidth: 150,
-    showIcons: false,
-    controlButtons: 'all',
-    overlays: 'none',
-    inputHeight: '',
-    inputWidth: '',
-    minHeight: 300,
-    minWidth: 500,
-    height: '',
-    width: '',
-    marginTop: 0,
-    marginRight: 20,
-    marginBottom: 5,
-    marginLeft: 0,
-    theme: 'light',
-    colorMap: {},
-    fixedScale: false,
-    fixedOrder: [],
-    highlightBars: false,
-    selectBars: false
-  };
-  var optionsReducer = function optionsReducer(state, action) {
-    if (state === void 0) {
-      state = defaultOptions;
-    }
-
-    switch (action.type) {
-      case actionTypes.loadOptions:
-      case actionTypes.changeOptions:
-        {
-          var excludedKeys = ['inputHeight', 'inputWidth', 'minHeight', 'minWidth'];
-          var options = {};
-          Object.keys(action.payload).forEach(function (key) {
-            if (!excludedKeys.includes(key)) {
-              var _action$payload$key;
-
-              options[key] = (_action$payload$key = action.payload[key]) != null ? _action$payload$key : state[key];
-            }
-          });
-          var startDate = options.startDate ? getDateString(options.startDate) : state.startDate;
-          var endDate = options.endDate ? getDateString(options.endDate) : state.startDate;
-          var inputHeight = options.height || state.inputHeight;
-          var inputWidth = options.width || state.inputWidth;
-          var fixedOrder = Array.isArray(options.fixedOrder) ? [].concat(options.fixedOrder) : state.fixedOrder;
-          var colorMap = Array.isArray(options.colorMap) ? [].concat(options.colorMap).map(String) : typeof options.colorMap === 'object' ? _extends({}, options.colorMap) : state.colorMap;
-          var topN = fixedOrder.length || Number(options.topN) || state.topN;
-          var tickDuration = Number(options.tickDuration) || state.tickDuration;
-          var labelsWidth = Number(options.labelsWidth) || state.labelsWidth;
-          var marginTop = Number(options.marginTop) || state.marginTop;
-          var marginRight = Number(options.marginRight) || state.marginRight;
-          var marginBottom = Number(options.marginBottom) || state.marginBottom;
-          var marginLeft = Number(options.marginLeft) || state.marginLeft;
-          return _extends(_extends(_extends({}, state), options), {}, {
-            startDate: startDate,
-            endDate: endDate,
-            inputHeight: inputHeight,
-            inputWidth: inputWidth,
-            fixedOrder: fixedOrder,
-            colorMap: colorMap,
-            topN: topN,
-            tickDuration: tickDuration,
-            labelsWidth: labelsWidth,
-            marginTop: marginTop,
-            marginRight: marginRight,
-            marginBottom: marginBottom,
-            marginLeft: marginLeft
-          });
-        }
-
-      default:
-        return state;
-    }
-  };
-
-
-
-  var options = {
-    __proto__: null,
-    actionTypes: actionTypes,
-    loadOptions: loadOptions,
-    changeOptions: changeOptions,
-    Options: Options,
-    defaultOptions: defaultOptions,
-    optionsReducer: optionsReducer
-  };
 
   var actionTypes$1 = {
     dataLoaded: 'data/loaded',
@@ -1106,6 +659,355 @@
     };
   }
 
+  function getColor(d, store) {
+    var _store$getState$data = store.getState().data,
+        names = _store$getState$data.names,
+        groups = _store$getState$data.groups;
+    var _store$getState$optio = store.getState().options,
+        showGroups = _store$getState$optio.showGroups,
+        colorSeed = _store$getState$optio.colorSeed,
+        colorMap = _store$getState$optio.colorMap;
+
+    if (d.color) {
+      return d.color;
+    }
+
+    var useGroup = Boolean(d.group) && showGroups && groups.length > 0;
+    var values = useGroup ? groups : names;
+
+    if (colorSeed) {
+      values = shuffle(values, toNumber(colorSeed));
+    }
+
+    var currentValue = useGroup ? d.group : d.name;
+    var index = values.indexOf(currentValue);
+
+    if (colorMap) {
+      if (Array.isArray(colorMap)) {
+        while (index > colorMap.length - 1) {
+          index = index - colorMap.length;
+        }
+
+        return colorMap[index];
+      } else {
+        if (colorMap[currentValue]) {
+          return colorMap[currentValue];
+        }
+      }
+    }
+
+    var negativeIfOdd = index % 2 === 0 ? 1 : -1;
+    var lumVariation = random(currentValue) / 10 * negativeIfOdd;
+    var HueSpacing = 360 / (values.length + 1);
+    var hue = (values.indexOf(currentValue) + 1) * HueSpacing;
+    return d3$1.hsl(hue, 0.75, 0.75 + lumVariation);
+  }
+  function getIconID(d) {
+    return 'icon-' + safeName(d.name);
+  }
+  function zeroPad(n, w) {
+    while (n.toString().length < w) {
+      n = '0' + n;
+    }
+
+    return n;
+  }
+
+  function toNumber(s) {
+    s = String(s);
+    var nums = '';
+
+    for (var i = 0; i < s.length; i++) {
+      nums += zeroPad(String(s.charCodeAt(i)), 3);
+    }
+
+    return +nums;
+  }
+
+  function random(InputSeed) {
+    var seed = toNumber(InputSeed);
+    var x = Math.sin(seed) * 10000;
+    return x - Math.floor(x);
+  }
+  function shuffle(arr, seed) {
+    var array = [].concat(arr);
+    var m = array.length;
+    var t;
+    var i;
+
+    while (m) {
+      i = Math.floor(random(seed) * m--);
+      t = array[m];
+      array[m] = array[i];
+      array[i] = t;
+      ++seed;
+    }
+
+    return array;
+  }
+  function generateId(prefix, n) {
+    if (prefix === void 0) {
+      prefix = 'racingbars';
+    }
+
+    if (n === void 0) {
+      n = 8;
+    }
+
+    var rnd = Array(3).fill(null).map(function () {
+      return Math.random().toString(36).substr(2);
+    }).join('');
+    return prefix + rnd.slice(-n);
+  }
+  function getHeight(element, minHeight, height) {
+    var newHeight;
+
+    if (!height) {
+      newHeight = element.getBoundingClientRect().height;
+    } else if (String(height).startsWith('window')) {
+      var scale = +height.split('*')[1] || 1;
+      newHeight = window.innerHeight * scale;
+    } else {
+      newHeight = +height;
+    }
+
+    return newHeight > minHeight ? newHeight : minHeight;
+  }
+  function getWidth(element, minWidth, width) {
+    var newWidth;
+
+    if (!width) {
+      newWidth = element.getBoundingClientRect().width;
+    } else if (String(width).startsWith('window')) {
+      var scale = +width.split('*')[1] || 1;
+      newWidth = window.innerWidth * scale;
+    } else {
+      newWidth = +width;
+    }
+
+    return newWidth > minWidth ? newWidth : minWidth;
+  }
+  function getElement(root, className) {
+    if (!root) return undefined;
+    return className ? root.querySelector('.' + className) : root;
+  }
+  function showElement(root, className, useVisibility) {
+    if (useVisibility === void 0) {
+      useVisibility = false;
+    }
+
+    var element = getElement(root, className);
+
+    if (element) {
+      if (useVisibility) {
+        element.style.visibility = 'unset';
+      } else {
+        element.style.display = 'flex';
+      }
+    }
+  }
+  function hideElement(root, className, useVisibility) {
+    if (useVisibility === void 0) {
+      useVisibility = false;
+    }
+
+    var element = getElement(root, className);
+
+    if (element) {
+      if (useVisibility) {
+        element.style.visibility = 'hidden';
+      } else {
+        element.style.display = 'none';
+      }
+    }
+  }
+  function getText(param, currentDate, dateSlice, dates, isDate) {
+    if (isDate === void 0) {
+      isDate = false;
+    }
+
+    if (typeof param === 'function') {
+      return param(currentDate, dateSlice, dates);
+    }
+
+    if (isDate) {
+      return formatDate(currentDate, param);
+    }
+
+    return param;
+  }
+  function safeName(name) {
+    return name.replace(/[\W]+/g, '_');
+  }
+  function toggleClass(root, selector, className) {
+    d3$1.select(root).select(selector).classed(className, function () {
+      return !d3$1.select(this).classed(className);
+    });
+  }
+
+  function debounce(func, wait, immediate) {
+    if (immediate === void 0) {
+      immediate = false;
+    }
+
+    var timeout;
+    return function (_clicks, _Fn) {
+      var context = this;
+      var args = arguments;
+
+      var later = function later() {
+        timeout = null;
+
+        if (!immediate) {
+          func.apply(context, args);
+        }
+      };
+
+      var callNow = immediate && !timeout;
+      clearTimeout(timeout);
+      timeout = setTimeout(later, wait);
+
+      if (callNow) {
+        func.apply(context, args);
+      }
+    };
+  }
+
+  var getClicks = debounce(function (event, Fn) {
+    Fn(event);
+  }, 250);
+  var pipe = function pipe() {
+    return [].slice.call(arguments).reduce(function (f, g) {
+      return function () {
+        return g(f.apply(void 0, [].slice.call(arguments)));
+      };
+    });
+  };
+
+  var getDates = function getDates(data) {
+    return Array.from(new Set(data.map(function (d) {
+      return d.date;
+    }))).sort();
+  };
+  function getDateString(inputDate) {
+    var date = new Date(inputDate);
+
+    if (isNaN(+date)) {
+      throw new Error("\"" + inputDate + "\" is not a valid date");
+    }
+
+    var year = date.getFullYear().toString();
+    var month = zeroPad((1 + date.getMonth()).toString(), 2);
+    var day = zeroPad(date.getDate().toString(), 2);
+    return year + "-" + month + "-" + day;
+  }
+  function formatDate(dateStr, format) {
+    if (format === void 0) {
+      format = 'YYYY-MM-DD';
+    }
+
+    var year = dateStr.slice(0, 4);
+    var month = dateStr.slice(5, 7);
+    var day = dateStr.slice(8, 10);
+    var date = new Date(dateStr);
+    var weekDayIndex = String(date.getDay());
+    var monthNames = {
+      '01': 'Jan',
+      '02': 'Feb',
+      '03': 'Mar',
+      '04': 'Apr',
+      '05': 'May',
+      '06': 'Jun',
+      '07': 'Jul',
+      '08': 'Aug',
+      '09': 'Sep',
+      '10': 'Oct',
+      '11': 'Nov',
+      '12': 'Dec'
+    };
+    var weekDays = {
+      '0': 'Sun',
+      '1': 'Mon',
+      '2': 'Tue',
+      '3': 'Wed',
+      '4': 'Thu',
+      '5': 'Fri',
+      '6': 'Sat'
+    };
+    return format.replace('MMM', monthNames[month]).replace('DDD', weekDays[weekDayIndex]).replace('YYYY', year).replace('MM', month).replace('DD', day);
+  }
+  function getDateRange(date1, date2, interval) {
+    var range = [date1].concat(d3$1.timeDay.range(date1, date2));
+
+    var daysInMonth = function daysInMonth(date) {
+      return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
+    };
+
+    var sameDay = date1.getDate() === date2.getDate();
+    var sameMonth = date1.getMonth() === date2.getMonth();
+    var numberOfMonths = d3$1.timeMonth.count(date1, date2);
+    var numberOfYears = d3$1.timeYear.count(date1, date2);
+    var outputRange = [];
+
+    if (interval === 'year') {
+      if (sameMonth && sameDay) {
+        outputRange = range.filter(function (date) {
+          if (date.getMonth() === date1.getMonth()) {
+            if (date.getDate() === date1.getDate()) return true;
+
+            if (date1.getDate() > daysInMonth(date)) {
+              return date.getDate() === daysInMonth(date);
+            }
+          }
+
+          return false;
+        });
+      } else {
+        outputRange = range.filter(function (date) {
+          return range.indexOf(date) % Math.round(range.length / numberOfYears) === 0;
+        });
+      }
+    } else if (interval === 'month') {
+      if (sameDay) {
+        outputRange = range.filter(function (date) {
+          if (date.getDate() === date1.getDate()) return true;
+
+          if (date1.getDate() > daysInMonth(date)) {
+            return date.getDate() === daysInMonth(date);
+          }
+
+          return false;
+        });
+      } else {
+        outputRange = range.filter(function (date) {
+          return range.indexOf(date) % Math.round(range.length / numberOfMonths) === 0;
+        });
+      }
+    } else if (interval === 'day') {
+      outputRange = range;
+    }
+
+    if (outputRange.length === 0) {
+      outputRange = [date1, date2];
+    }
+
+    if (getDateString(date1) !== getDateString(outputRange[0])) {
+      outputRange = [date1].concat(outputRange);
+    }
+
+    if (getDateString(date2) !== getDateString(outputRange[outputRange.length - 1])) {
+      outputRange = [].concat(outputRange, [date2]);
+    }
+
+    return outputRange;
+  }
+  function getNextDate(dates, currentDate) {
+    var currentIndex = dates.indexOf(currentDate);
+    if (currentIndex === -1) return dates[0];
+    var lastIndex = dates.length - 1;
+    return currentIndex === lastIndex ? dates[0] : dates[currentIndex + 1];
+  }
+
   function prepareData(data, store, changingOptions) {
     if (changingOptions === void 0) {
       changingOptions = false;
@@ -1414,6 +1316,104 @@
     var fixedOrder = store.getState().options.fixedOrder;
     return fixedOrder.length > 0 ? d.rank : i;
   }
+
+  var defaultOptions = {
+    selector: '#race',
+    dataShape: 'long',
+    dataTransform: null,
+    fillDateGapsInterval: null,
+    fillDateGapsValue: 'interpolate',
+    startDate: '',
+    endDate: '',
+    colorSeed: '',
+    showGroups: false,
+    tickDuration: 500,
+    topN: 10,
+    mouseControls: false,
+    keyboardControls: false,
+    autorun: true,
+    loop: false,
+    injectStyles: true,
+    title: '',
+    subTitle: '',
+    caption: '',
+    dateCounter: 'MM/YYYY',
+    labelsPosition: 'inside',
+    labelsWidth: 150,
+    showIcons: false,
+    controlButtons: 'all',
+    overlays: 'none',
+    inputHeight: '',
+    inputWidth: '',
+    minHeight: 300,
+    minWidth: 500,
+    height: '',
+    width: '',
+    marginTop: 0,
+    marginRight: 20,
+    marginBottom: 5,
+    marginLeft: 0,
+    theme: 'light',
+    colorMap: {},
+    fixedScale: false,
+    fixedOrder: [],
+    highlightBars: false,
+    selectBars: false
+  };
+  var optionsReducer = function optionsReducer(state, action) {
+    if (state === void 0) {
+      state = defaultOptions;
+    }
+
+    switch (action.type) {
+      case actionTypes.loadOptions:
+      case actionTypes.changeOptions:
+        {
+          var excludedKeys = ['inputHeight', 'inputWidth', 'minHeight', 'minWidth'];
+          var options = {};
+          Object.keys(action.payload).forEach(function (key) {
+            if (!excludedKeys.includes(key)) {
+              var _action$payload$key;
+
+              options[key] = (_action$payload$key = action.payload[key]) != null ? _action$payload$key : state[key];
+            }
+          });
+          var startDate = options.startDate ? getDateString(options.startDate) : state.startDate;
+          var endDate = options.endDate ? getDateString(options.endDate) : state.startDate;
+          var inputHeight = options.height || state.inputHeight;
+          var inputWidth = options.width || state.inputWidth;
+          var fixedOrder = Array.isArray(options.fixedOrder) ? [].concat(options.fixedOrder) : state.fixedOrder;
+          var colorMap = Array.isArray(options.colorMap) ? [].concat(options.colorMap).map(String) : typeof options.colorMap === 'object' ? _extends({}, options.colorMap) : state.colorMap;
+          var topN = fixedOrder.length || Number(options.topN) || state.topN;
+          var tickDuration = Number(options.tickDuration) || state.tickDuration;
+          var labelsWidth = Number(options.labelsWidth) || state.labelsWidth;
+          var marginTop = Number(options.marginTop) || state.marginTop;
+          var marginRight = Number(options.marginRight) || state.marginRight;
+          var marginBottom = Number(options.marginBottom) || state.marginBottom;
+          var marginLeft = Number(options.marginLeft) || state.marginLeft;
+          return _extends(_extends(_extends({}, state), options), {}, {
+            startDate: startDate,
+            endDate: endDate,
+            inputHeight: inputHeight,
+            inputWidth: inputWidth,
+            fixedOrder: fixedOrder,
+            colorMap: colorMap,
+            topN: topN,
+            tickDuration: tickDuration,
+            labelsWidth: labelsWidth,
+            marginTop: marginTop,
+            marginRight: marginRight,
+            marginBottom: marginBottom,
+            marginLeft: marginLeft
+          });
+        }
+
+      default:
+        return state;
+    }
+  };
+
+
 
   function calculateDimensions(store, renderOptions) {
     var _store$getState$optio = store.getState().options,

@@ -6,7 +6,6 @@ export class ComponentProps {
   @Input() public dataUrl: string;
   @Input() public dataType: 'json' | 'csv' | 'tsv' | 'xml' | undefined;
   @Input() public elementId: string;
-  @Input() public loadingContent: string;
   @Input() public callback: (racer: Race, data: Data[] | WideData[]) => void;
   @Input() public dataShape: 'long' | 'wide';
   @Input() public dataTransform: null | ((data: Data[] | WideData[]) => Data[] | WideData[]);

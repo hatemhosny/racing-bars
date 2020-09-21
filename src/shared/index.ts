@@ -47,9 +47,6 @@ export class Props extends Options {
   /** An `id` to assign to the generated DOM element */
   public elementId!: string;
 
-  /** Content to show till the chart loads. This can accept HTML. */
-  public loadingContent!: string;
-
   /** Callback function that is executed after the chart loads.
    *
    * @param racer chart object ([[Race]]). Exposes the chart API.
@@ -64,6 +61,5 @@ export const defaultProps: Props = {
   dataUrl: (undefined as unknown) as string,
   dataType: (undefined as unknown) as 'json',
   elementId: (undefined as unknown) as string,
-  loadingContent: 'Loading...',
   callback: (undefined as unknown) as () => {},
 };
