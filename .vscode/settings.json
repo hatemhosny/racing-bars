@@ -30,6 +30,7 @@ Happy linting! 💖
     "data",
     "api",
     "ticker",
-    "utils"
+    "utils",
+    "store"
   ]
 }
