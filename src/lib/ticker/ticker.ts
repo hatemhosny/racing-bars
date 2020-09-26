@@ -6,7 +6,7 @@ export function createTicker(store: Store): Ticker {
   let ticker: d3.Timer;
 
   function start() {
-    let justStarted = true;
+    let justStarted = arguments[0] ?? true; // allow overriding in tests
     ticker = d3.interval(showRace, store.getState().options.tickDuration);
     store.dispatch(actions.ticker.setRunning(true));
 

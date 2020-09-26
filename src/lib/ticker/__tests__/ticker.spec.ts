@@ -5,7 +5,6 @@ import { Store, actions } from '../../store';
 jest.mock('d3', () => ({
   interval: jest.fn().mockImplementation((fn: any, _: number) => {
     fn();
-    fn(); // to set justStarted (in showRace) to false
   }),
 }));
 
@@ -74,7 +73,8 @@ describe('ticker', () => {
   test('reaching last date should stop if loop is disabled', (done) => {
     store = mockStore({ isLastDate: true, loop: false });
     ticker = createTicker(store);
-    ticker.start();
+    // @ts-ignore (ignore extra argument)
+    ticker.start(false);
     expect(mockDispatch).toHaveBeenCalledWith(actions.ticker.setRunning(false));
     done();
   });
