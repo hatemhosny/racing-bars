@@ -5,7 +5,7 @@ import { Store, actions } from '../../store';
 jest.mock('d3', () => ({
   interval: jest.fn().mockImplementation((fn: any, _: number) => {
     fn();
-    fn();
+    fn(); // to set justStarted (in showRace) to false
   }),
 }));
 
