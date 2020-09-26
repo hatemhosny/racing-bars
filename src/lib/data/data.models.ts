@@ -23,7 +23,7 @@ export interface Data {
   value: number;
   lastValue?: number;
   group?: string;
-  color?: HSLColor;
+  color?: HSLColor | string;
   icon?: string;
   rank?: number;
 }
