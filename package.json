@@ -127,6 +127,12 @@
   "jest": {
     "preset": "ts-jest",
     "testEnvironment": "jsdom",
+    "collectCoverageFrom": [
+      "src/**/*.ts",
+      "!**/__test-utils/*.ts",
+      "!src/angular/**",
+      "src/angular/projects/racing-bars/src/lib/**/*.ts"
+    ],
     "coverageReporters": [
       "json",
       "html",
