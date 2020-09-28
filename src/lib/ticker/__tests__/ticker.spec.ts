@@ -2,9 +2,13 @@ import { createTicker } from '../ticker';
 import { Ticker } from '../ticker.models';
 import { Store, actions } from '../../store';
 
+let justStarted = true;
 jest.mock('d3', () => ({
   interval: jest.fn().mockImplementation((fn: any, _: number) => {
     fn();
+    if (!justStarted) {
+      fn(); // to set `justStarted` in start() to false
+    }
   }),
 }));
 
@@ -28,6 +32,7 @@ describe('ticker', () => {
     } as unknown) as Store);
 
   beforeEach(() => {
+    justStarted = true;
     mockDispatch = jest.fn();
     store = mockStore();
     ticker = createTicker(store);
@@ -73,8 +78,8 @@ describe('ticker', () => {
   test('reaching last date should stop if loop is disabled', (done) => {
     store = mockStore({ isLastDate: true, loop: false });
     ticker = createTicker(store);
-    // @ts-ignore (ignore extra argument)
-    ticker.start(false);
+    justStarted = false;
+    ticker.start();
     expect(mockDispatch).toHaveBeenCalledWith(actions.ticker.setRunning(false));
     done();
   });
