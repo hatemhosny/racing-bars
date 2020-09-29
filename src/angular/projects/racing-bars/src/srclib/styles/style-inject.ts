@@ -1,12 +1,18 @@
 import { generateId } from '../utils';
-import { styles, themes } from './generated-styles';
+import { styles as _styles, themes as _themes } from './generated-styles';
 
 // modifed from https://github.com/egoist/style-inject
-export function styleInject(selector: string, theme: string, insertAt = 'top') {
+export function styleInject(
+  selector: string,
+  theme: string,
+  insertAt = 'top',
+  styles = _styles,
+  themes = _themes,
+): string {
   let css = styles + (themes as any)[theme];
 
-  if (!css || typeof document === 'undefined') {
-    return;
+  if (!css || !selector || typeof document === 'undefined') {
+    return '';
   }
 
   // replace with selector

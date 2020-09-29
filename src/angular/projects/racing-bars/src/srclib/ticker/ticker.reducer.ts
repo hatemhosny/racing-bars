@@ -38,7 +38,7 @@ export const tickerReducer: Reducer<TickerState, TickerAction> = (state = initia
         ...state,
         currentDate,
         isFirstDate: currentDate === dates[0],
-        isLastDate: currentDate === dates[state.dates.length - 1],
+        isLastDate: currentDate === dates[dates.length - 1],
         dates,
       };
     }

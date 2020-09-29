@@ -25,11 +25,9 @@ export function createStore(
 
   function subscribe(fn: Subscriber) {
     subscribers.push(fn);
-    const index = subscribers.length - 1;
-
     return {
       unsubscribe: () => {
-        subscribers.splice(index, 1);
+        subscribers.splice(subscribers.indexOf(fn), 1);
       },
     };
   }
