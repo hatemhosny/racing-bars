@@ -32,6 +32,6 @@ function css2ts() {
 
 css2ts();
 
-if (process.argv[2] == '-w' || process.argv[2] == '--watch') {
+if (process.argv[2] === '-w' || process.argv[2] === '--watch') {
   fs.watch(cssDir, css2ts);
 }

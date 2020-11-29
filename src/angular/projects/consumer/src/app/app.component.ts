@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+// eslint-disable-next-line import/no-unresolved
 import { Race, Data, WideData } from 'dist/racing-bars/srclib';
 
 // prettier-ignore

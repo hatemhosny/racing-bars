@@ -61,5 +61,5 @@ export const defaultProps: Props = {
   dataUrl: (undefined as unknown) as string,
   dataType: (undefined as unknown) as 'json',
   elementId: (undefined as unknown) as string,
-  callback: (undefined as unknown) as () => {},
+  callback: (undefined as unknown) as () => unknown,
 };
