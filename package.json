@@ -36,7 +36,7 @@
     "fix:lint": "eslint --ext .ts .",
     "test": "run-s test:*",
     "test:lint": "eslint --ext .ts . && prettier \"src/**/*.ts\" --list-different",
-    "test:unit": "jest",
+    "test:unit": "jest src",
     "watch": "run-s clean build:lib && run-p \"build:lib -- -w\" \"test:unit -- --watch\"",
     "cov": "run-s \"test:unit -- --coverage\"",
     "cov:send": "run-s cov && codecov",
