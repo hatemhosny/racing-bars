@@ -2,4 +2,4 @@
 dist
 src/**/*.js
 website/**/*.js
-src/angular
+node_modules
