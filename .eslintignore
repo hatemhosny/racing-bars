@@ -1,8 +1,9 @@
-.eslintrc.js
+node_modules
 dist
 build
 coverage
-node_modules
+generated-styles.ts
+.eslintrc.js
 demo
 static
 website/.docusaurus
