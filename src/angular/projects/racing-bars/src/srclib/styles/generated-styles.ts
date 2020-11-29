@@ -110,7 +110,7 @@ __selector__ .overlay svg {
 `;
 
 export const themes = {
-  dark: `
+"dark": `
 __selector__ {
   background-color: #313639;
 }
@@ -198,7 +198,7 @@ __selector__ .selected {
   stroke-width: 1 !important;
 }
 `,
-  light: `
+"light": `
 /* __selector__ {
   background-color: #ffffff;
 }
