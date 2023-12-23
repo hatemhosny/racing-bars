@@ -23,9 +23,11 @@
   <div id="container">
     <div id="race" class="race">Loading...</div>
   </div>
-
+  <!--
   <script src="scripts/d3.min.js"></script>
   <script src="scripts/racing-bars.umd.js"></script>
+-->
+  <script src="../build/racing-bars.umd.js"></script>
   <script>
     const options = {
       selector: '#race',
@@ -68,9 +70,9 @@
     };
 
     let racer;
-    racingBars.loadData('data/population.csv', 'csv').then((data) => {
-      // racingBars.loadData('data/procedures.json').then((data) => {
-      // racingBars.loadData('data/procedures_wide.csv', 'csv').then((data) => {
+    racingBars.loadData('../data/population.csv', 'csv').then((data) => {
+      // racingBars.loadData('../data/procedures.json').then((data) => {
+      // racingBars.loadData('../data/procedures_wide.csv', 'csv').then((data) => {
       data = data.map((d) => ({
         ...d,
         value: Number(d.value) * 1000,

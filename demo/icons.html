@@ -58,7 +58,7 @@
       highlightBars: true,
       selectBars: true,
     };
-    racingBars.loadData('data/population.csv', 'csv').then((data) => {
+    racingBars.loadData('../data/population.csv', 'csv').then((data) => {
       const processed = data.map((d) => ({
         ...d,
         icon: `https://www.countryflags.io/${d.code.toLowerCase()}/flat/64.png`,

@@ -62,10 +62,10 @@
       highlightBars: true,
       selectBars: true,
     };
-    racingBars.loadData('data/population.csv', 'csv').then((data) => {
+    racingBars.loadData('../data/population.csv', 'csv').then((data) => {
       racingBars.race(data, { ...options, selector: '#race1' });
     });
-    racingBars.loadData('data/population.csv', 'csv').then((data) => {
+    racingBars.loadData('../data/population.csv', 'csv').then((data) => {
       racingBars.race(data, {
         ...options,
         selector: '#race2',
@@ -73,7 +73,7 @@
         labelsPosition: 'inside',
       });
     });
-    racingBars.loadData('data/population.csv', 'csv').then((data) => {
+    racingBars.loadData('../data/population.csv', 'csv').then((data) => {
       racingBars.race(data, { ...options, selector: '#race3', startDate: '2010-12-31' });
     });
   </script>

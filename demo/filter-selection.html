@@ -33,7 +33,7 @@
       showOverlays: 'none',
     };
     let racer;
-    racingBars.loadData('data/population.csv', 'csv').then((data) => {
+    racingBars.loadData('../data/population.csv', 'csv').then((data) => {
       racer = racingBars.race(data, options);
 
       racer.selections.select('China');

@@ -60,7 +60,7 @@
       autorun: false,
     };
 
-    racingBars.loadData('data/procedures.json').then((data) => {
+    racingBars.loadData('../data/population.json').then((data) => {
       let racer = racingBars.race(data, options);
       racer.createScroller();
     });
