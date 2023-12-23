@@ -5,18 +5,14 @@ module.exports = {
   },
   parser: '@typescript-eslint/parser',
   parserOptions: {
-    project: ['./tsconfig.json'],
-    sourceType: 'module',
-    createDefaultProgram: true,
+    project: ['./tsconfig.eslint.json'],
   },
-  plugins: ['@typescript-eslint', 'jest', 'jsdoc'],
+  plugins: ['@typescript-eslint', 'jsdoc', 'no-only-tests'],
   extends: [
-    'plugin:jest/recommended',
     'plugin:import/errors',
     'plugin:import/warnings',
     'plugin:import/typescript',
     'prettier',
-    'prettier/@typescript-eslint',
   ],
   rules: {
     '@typescript-eslint/adjacent-overload-signatures': 'error',
@@ -54,6 +50,8 @@ module.exports = {
     ],
     '@typescript-eslint/consistent-type-assertions': 'error',
     '@typescript-eslint/consistent-type-definitions': 'error',
+    '@typescript-eslint/consistent-type-exports': 'error',
+    '@typescript-eslint/consistent-type-imports': ['error', { disallowTypeAnnotations: false }],
     '@typescript-eslint/dot-notation': 'error',
     '@typescript-eslint/explicit-member-accessibility': [
       'error',
@@ -133,6 +131,7 @@ module.exports = {
     ],
     'import/no-internal-modules': 'error',
     'import/order': 'error',
+    'import/named': 'off',
     'jsdoc/check-alignment': 'error',
     'jsdoc/check-indentation': 'error',
     'jsdoc/newline-after-description': 'error',
@@ -158,7 +157,9 @@ module.exports = {
     'no-multiple-empty-lines': 'off',
     'no-new-func': 'error',
     'no-new-wrappers': 'error',
+    'no-only-tests/no-only-tests': 'error',
     'no-redeclare': 'error',
+    'no-restricted-imports': ['error', { patterns: ['**/_modules'] }],
     'no-return-await': 'error',
     'no-sequences': 'error',
     'no-shadow': [

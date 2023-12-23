@@ -1,0 +1,22 @@
+{
+  "extends": "./tsconfig.json",
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "src/**/*.js",
+    "src/**/*.jsx",
+    "docs/**/*.ts",
+    "docs/**/*.tsx",
+    "docs/**/*.js",
+    "docs/**/*.jsx",
+    "storybook/**/*.ts",
+    "storybook/**/*.tsx",
+    "storybook/**/*.js",
+    "storybook/**/*.jsx",
+    "e2e/**/*.ts",
+    "functions/**/*.js",
+    "functions/**/*.ts",
+    "playwright.config.ts"
+  ],
+  "exclude": ["**/node_modules/**"]
+}

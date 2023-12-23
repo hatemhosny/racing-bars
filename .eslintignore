@@ -2,10 +2,8 @@ node_modules
 dist
 build
 coverage
-generated-styles.ts
 .eslintrc.js
-demo
-static
-website/.docusaurus
-# src/**/*.js
-# website/**/*.js
+vendor
+vendor_modules
+**/*.json
+scripts

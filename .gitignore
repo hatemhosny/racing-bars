@@ -1,27 +1,11 @@
-# Dependencies
 node_modules
-node_modules2
-
-# build files
-/build
+build
 dist
-/website/static/api
-
-# Generated files
-coverage
-.rts2_cache*
-.docusaurus
-.cache-loader
-__pycache__
-
-# Misc
-.DS_Store
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-
 .vscode
-*.log
-npm-debug.log*
-.idea/*
+.cache
+**/*.log
+.env
+docs/docs/api
+/test-results/
+/playwright-report/
+/playwright/.cache/

@@ -1,16 +1,19 @@
 {
   "compilerOptions": {
-    "target": "es5",
-    "outDir": "build/main",
     "rootDir": "src",
+    "outDir": "build",
     "moduleResolution": "node",
-    "module": "ES2015",
+    "target": "es6",
+    "module": "esnext",
     "declaration": true,
     "inlineSourceMap": true,
     "esModuleInterop": true /* Enables emit interoperability between CommonJS and ES Modules via creation of namespace objects for all imports. Implies 'allowSyntheticDefaultImports'. */,
     "noImplicitThis": false,
     "strict": true /* Enable all strict type-checking options. */,
     "allowUmdGlobalAccess": true,
+    "forceConsistentCasingInFileNames": true,
+    "importHelpers": true,
+    "removeComments": true,
 
     /* Strict Type-Checking Options */
     // "noImplicitAny": true /* Raise error on expressions and declarations with an implied 'any' type. */,
@@ -36,11 +39,11 @@
     // "experimentalDecorators": true /* Enables experimental support for ES7 decorators. */,
     // "emitDecoratorMetadata": true /* Enables experimental support for emitting type metadata for decorators. */,
 
-    "lib": ["es2017", "dom"],
+    "lib": ["es2020", "dom", "dom.iterable"],
     "types": ["node", "jest"],
-    "typeRoots": ["node_modules/@types", "src/types"]
+    "typeRoots": ["node_modules/@types"]
   },
   "compileOnSave": true,
   "include": ["src/**/*.ts"],
-  "exclude": ["node_modules/**", "src/angular/**"]
+  "exclude": ["**/node_modules/**"]
 }
