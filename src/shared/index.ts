@@ -2,7 +2,7 @@ import { loadData, Data, WideData, Options, defaultOptions, Race } from '..';
 
 export function processProps(props: any, elementId: string) {
   const selector = '#' + elementId;
-  const { data, dataUrl, dataType, callback, ...attr } = props;
+  const { data, dataUrl, dataType, callback, className = '', ...attr } = props;
   const options: Partial<Options> = { ...attr, selector };
 
   let dataPromise: Promise<Data[]> | Promise<WideData[]>;
@@ -21,6 +21,7 @@ export function processProps(props: any, elementId: string) {
     dataPromise,
     options,
     callback: cb,
+    className,
   };
 }
 
@@ -47,6 +48,9 @@ export class Props extends Options {
   /** An `id` to assign to the generated DOM element */
   public elementId!: string;
 
+  /** A `class` to assign to the generated DOM element */
+  public className!: string;
+
   /** Callback function that is executed after the chart loads.
    *
    * @param racer chart object ([[Race]]). Exposes the chart API.
@@ -57,9 +61,10 @@ export class Props extends Options {
 
 export const defaultProps: Props = {
   ...defaultOptions,
-  data: (undefined as unknown) as Data[],
-  dataUrl: (undefined as unknown) as string,
-  dataType: (undefined as unknown) as 'json',
-  elementId: (undefined as unknown) as string,
-  callback: (undefined as unknown) as () => unknown,
+  data: undefined as unknown as Data[],
+  dataUrl: undefined as unknown as string,
+  dataType: undefined as unknown as 'json',
+  elementId: undefined as unknown as string,
+  className: undefined as unknown as string,
+  callback: undefined as unknown as () => unknown,
 };
