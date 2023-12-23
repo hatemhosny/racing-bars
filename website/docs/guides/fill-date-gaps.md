@@ -1,3 +1,0 @@
----
-title: Filling Date Gaps
----
