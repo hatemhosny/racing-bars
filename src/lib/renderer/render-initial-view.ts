@@ -10,15 +10,8 @@ import { renderControls, renderOverlays, updateControls } from './controls';
 import { selectFn, highlightFn, halo } from './helpers';
 
 export function renderInitalView(data: Data[], store: Store, renderOptions: RenderOptions) {
-  const {
-    selector,
-    caption,
-    dateCounter,
-    labelsPosition,
-    showIcons,
-    fixedScale,
-    fixedOrder,
-  } = store.getState().options;
+  const { selector, caption, dateCounter, labelsPosition, showIcons, fixedScale, fixedOrder } =
+    store.getState().options;
 
   const dates = store.getState().ticker.dates;
   const root = (renderOptions.root = document.querySelector(selector) as HTMLElement);
@@ -94,9 +87,9 @@ export function renderInitalView(data: Data[], store: Store, renderOptions: Rend
       .attr('y', barY)
       .attr('height', barHeight)
       .style('fill', (d: Data) => getColor(d, store))
-      .on('click', (d: Data) => selectFn(d, store, renderOptions))
-      .on('mouseover', (d: Data) => highlightFn(d, store, renderOptions))
-      .on('mouseout', (d: Data) => highlightFn(d, store, renderOptions));
+      .on('click', (_ev: Event, d: Data) => selectFn(d, store, renderOptions))
+      .on('mouseover', (_ev: Event, d: Data) => highlightFn(d, store, renderOptions))
+      .on('mouseout', (_ev: Event, d: Data) => highlightFn(d, store, renderOptions));
 
     svg
       .selectAll('text.label')
@@ -109,9 +102,9 @@ export function renderInitalView(data: Data[], store: Store, renderOptions: Rend
       .attr('y', (d: Data) => barY(d) + barHalfHeight)
       .style('text-anchor', 'end')
       .html((d: Data) => d.name)
-      .on('click', (d: Data) => selectFn(d, store, renderOptions))
-      .on('mouseover', (d: Data) => highlightFn(d, store, renderOptions))
-      .on('mouseout', (d: Data) => highlightFn(d, store, renderOptions));
+      .on('click', (_ev: Event, d: Data) => selectFn(d, store, renderOptions))
+      .on('mouseover', (_ev: Event, d: Data) => highlightFn(d, store, renderOptions))
+      .on('mouseout', (_ev: Event, d: Data) => highlightFn(d, store, renderOptions));
 
     svg
       .selectAll('text.valueLabel')

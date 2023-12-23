@@ -41,7 +41,7 @@ export function renderHeader(
       .attr('class', 'legend legend-wrapper')
       .style('cursor', 'pointer')
       .style('opacity', (d: string) => (store.getState().data.groupFilter.includes(d) ? 0.3 : 1))
-      .on('click', (d: string) => legendClick(d, store));
+      .on('click', (ev: PointerEvent, d: string) => legendClick(ev, d, store));
 
     legends
       .append('rect')

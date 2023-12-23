@@ -1,4 +1,4 @@
-import { actions, Store } from './store';
+import { /* actions, */ Store } from './store';
 
 export function createScroller(store: Store) {
   const root = document.querySelector(store.getState().options.selector) as HTMLElement;

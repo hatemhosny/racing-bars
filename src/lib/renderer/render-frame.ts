@@ -58,7 +58,7 @@ export function renderFrame(data: Data[], store: Store, renderOptions: RenderOpt
   }
 
   if (!fixedScale) {
-    x.domain([0, d3.max(dateSlice, (d: Data) => d.value) as number]);
+    x.domain([0, (d3.max(dateSlice, (d: Data) => d.value) || 0) as number]);
 
     svg //
       .select('.xAxis')
@@ -82,9 +82,9 @@ export function renderFrame(data: Data[], store: Store, renderOptions: RenderOpt
     .attr('y', () => y(topN + 1) + marginBottom + 5)
     .attr('height', barHeight)
     .style('fill', (d: Data) => getColor(d, store))
-    .on('click', (d: Data) => selectFn(d, store, renderOptions))
-    .on('mouseover', (d: Data) => highlightFn(d, store, renderOptions))
-    .on('mouseout', (d: Data) => highlightFn(d, store, renderOptions))
+    .on('click', (_ev: Event, d: Data) => selectFn(d, store, renderOptions))
+    .on('mouseover', (_ev: Event, d: Data) => highlightFn(d, store, renderOptions))
+    .on('mouseout', (_ev: Event, d: Data) => highlightFn(d, store, renderOptions))
     .transition()
     .duration(tickDuration)
     .ease(d3.easeLinear)
@@ -119,9 +119,9 @@ export function renderFrame(data: Data[], store: Store, renderOptions: RenderOpt
     .attr('y', () => y(topN + 1) + marginBottom + 5 + barHalfHeight)
     .style('text-anchor', 'end')
     .html((d: Data) => d.name)
-    .on('click', (d: Data) => selectFn(d, store, renderOptions))
-    .on('mouseover', (d: Data) => highlightFn(d, store, renderOptions))
-    .on('mouseout', (d: Data) => highlightFn(d, store, renderOptions))
+    .on('click', (_ev: Event, d: Data) => selectFn(d, store, renderOptions))
+    .on('mouseover', (_ev: Event, d: Data) => highlightFn(d, store, renderOptions))
+    .on('mouseout', (_ev: Event, d: Data) => highlightFn(d, store, renderOptions))
     .transition()
     .duration(tickDuration)
     .ease(d3.easeLinear)

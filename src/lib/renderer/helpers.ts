@@ -1,5 +1,3 @@
-import * as d3 from '../d3';
-
 import { Data } from '../data';
 import { Store, actions } from '../store';
 import { safeName, toggleClass, getClicks } from '../utils';
@@ -17,8 +15,8 @@ export function halo(text: any, renderOptions: RenderOptions) {
     .classed('halo', true);
 }
 
-export function legendClick(d: string, store: Store) {
-  getClicks(d3.event, function (event: any) {
+export function legendClick(ev: MouseEvent, d: string, store: Store) {
+  getClicks(ev, function (event: MouseEvent) {
     const clicks = event.detail;
     if (clicks === 3) {
       store.dispatch(actions.data.resetFilters());

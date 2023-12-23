@@ -183,7 +183,7 @@ export function toggleClass(root: HTMLElement, selector: string, className: stri
 
 function debounce(func: any, wait: number, immediate = false) {
   let timeout: any;
-  return function (_clicks: any, _Fn: (clicks: number) => void) {
+  return function (_clicks: MouseEvent, _Fn: (clicks: MouseEvent) => void) {
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     const context = this;
     const args = arguments;
@@ -202,9 +202,14 @@ function debounce(func: any, wait: number, immediate = false) {
   };
 }
 
-export const getClicks = debounce(function (event: any, Fn: (event: any) => void) {
+export const getClicks = debounce(function (event: MouseEvent, Fn: (event: MouseEvent) => void) {
   Fn(event);
 }, 250);
 
 // eslint-disable-next-line @typescript-eslint/ban-types
-export const pipe = (...fns: Function[]) => fns.reduce((f, g) => (...args: any) => g(f(...args)));
+export const pipe = (...fns: Function[]) =>
+  fns.reduce(
+    (f, g) =>
+      (...args: any) =>
+        g(f(...args)),
+  );
