@@ -19,7 +19,7 @@ The [`colorSeed`](../documentation/options.md#colorseed) option can be used to c
 This causes shuffling the names/groups before being assigned to colors.
 The same seed guarantees the assignment to same color.
 
-Example: [view in gallery](/gallery/color-seed)
+Example: [view in gallery](../gallery/color-seed)
 
 ```js {3}
 const options = {
@@ -36,7 +36,7 @@ racingBars.loadData('/data/population.csv', 'csv').then((data) => {
 
 To set bar colors randomly, assign [`colorSeed`](../documentation/options.md#colorseed) option to a random value (e.g. `Math.round(Math.random() * 100)`).
 
-Example: [view in gallery](/gallery/color-seed-random)
+Example: [view in gallery](../gallery/color-seed-random)
 
 ```js {3}
 const options = {
@@ -56,7 +56,7 @@ Note that if the number of data item names/groups are larger than the array leng
 
 The colors can be color names (e.g 'red'), hex codes (e.g. '#FF0000') or RGB codes (e.g. 'rgb(255, 0, 0)').
 
-Example: [view in gallery](/gallery/color-palette)
+Example: [view in gallery](../gallery/color-palette)
 
 ```js {16}
 const palette = [
@@ -88,7 +88,7 @@ If an object is passed to the [`colorMap`](../documentation/options.md#colormap)
 The object does not have to include all names. The other bars will get the default colors.
 Note that names are case-sensitive.
 
-This example uses an object to map specific names to colors: [view in gallery](/gallery/color-map)
+This example uses an object to map specific names to colors: [view in gallery](../gallery/color-map)
 
 ```js {7}
 const countryColors = {
@@ -105,7 +105,7 @@ racingBars.loadData('/data/population.csv', 'csv').then((data) => {
 });
 ```
 
-This example uses an object to map group colors: [view in gallery](/gallery/color-map-groups)
+This example uses an object to map group colors: [view in gallery](../gallery/color-map-groups)
 
 ```js {7}
 const continentColors = {

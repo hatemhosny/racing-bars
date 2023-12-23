@@ -18,7 +18,7 @@ The configuration object may contain any of the following fields:
 ### autorun
 
 If `true`, the bar chart race runs automatically on load.
-If set to `false`, make sure you provide a way to run the chart using one of the methods described [here](../guides/chart-control).
+If set to `false`, make sure you provide a way to run the chart using one of the methods described [here](../guides/chart-controls.md).
 
 - Type: `boolean`
 - Default: true
@@ -29,7 +29,7 @@ If provided, displays below the date counter on the right lower corner of the ch
 
 - Type: `string | [data function](#data-function)`
 - Default: ""
-- Example: [view in gallery](/gallery/caption-string)
+- Example: [view in gallery](../gallery/caption-string)
 
 ```js
 const options = {
@@ -39,7 +39,7 @@ const options = {
 
 The following example uses a [data function](#data-function) to display the sum of data values for the current date in the `caption`
 
-[view in gallery](/gallery/caption-data-function)
+[view in gallery](../gallery/caption-data-function)
 
 ```js
 const options = {
@@ -69,7 +69,7 @@ color names (e.g 'red'), hex codes (e.g. '#FF0000') or RGB codes (e.g. 'rgb(255,
 
 This example uses an array as color palette.
 
-[view in gallery](/gallery/color-palette)
+[view in gallery](../gallery/color-palette)
 
 ```js
 const palette = [
@@ -92,7 +92,7 @@ const options = {
 
 This example uses an object to map specific items to colors.
 
-[view in gallery](/gallery/color-map)
+[view in gallery](../gallery/color-map)
 
 ```js
 const countryColors = {
@@ -108,7 +108,7 @@ const options = {
 
 This example uses an object to map groups to colors.
 
-[view in gallery](/gallery/color-map-groups)
+[view in gallery](../gallery/color-map-groups)
 
 ```js
 const continentColors = {
@@ -140,7 +140,7 @@ or by [`colorMap`](#colormap) object that maps the item name/group.
 
 This example changes bar colors using `colorSeed`
 
-[view in gallery](/gallery/color-seed)
+[view in gallery](../gallery/color-seed)
 
 ```js
 const options = {
@@ -162,7 +162,7 @@ The value "none" hides all buttons.
 
 This example shows all control buttons
 
-[view in gallery](/gallery/control-buttons)
+[view in gallery](../gallery/control-buttons)
 
 ```js
 const options = {
@@ -205,13 +205,13 @@ This example transforms the data array. Each data item has the following fields:
 The function adds a new field "icon", based on the "code" field.
 The "icon" field is used to [show icons](../guides/icons.md) on the bars.
 
-[view in gallery](/gallery/data-transform)
+[view in gallery](../gallery/data-transform)
 
 ```js {9}
 const transformFn = (data) =>
   data.map((d) => ({
     ...d,
-    icon: `https://www.countryflags.io/${d.code.toLowerCase()}/flat/64.png`,
+    icon: `https://flagsapi.com/${d.code}/flat/64.png`,
   }));
 
 const options = {
@@ -230,14 +230,14 @@ Note that the transformation could have been done after loading the data with [`
 racingBars.loadData('/data/population.json').then((data) => {
   const dataWithIcons = data.map((d) => ({
     ...d,
-    icon: `https://www.countryflags.io/${d.code.toLowerCase()}/flat/64.png`,
+    icon: `https://flagsapi.com/${d.code}/flat/64.png`,
   }));
 
   racingBars.race(dataWithIcons, options);
 });
 ```
 
-But the `dataTransform` option was added to facilitate the use in the provided [Angular](../frameworks/angular.md), [React](../frameworks/react.md), [Vue](../frameworks/vue.md) and [Python](../frameworks/python.md) implementations where the component may load the data from url.
+But the `dataTransform` option was added to facilitate the use in the provided [Angular](../packages/angular.md), [React](../packages/react.md), [Vue](../packages/vue.md) and [Python](../packages/python.md) implementations where the component may load the data from url.
 So it would be more convenient to be able to also pass a transformation function that would run before creating the chart.
 
 ### dateCounter
@@ -253,7 +253,7 @@ If a string is used, the following will be replaced:
 
 This example displays formatted date
 
-[view in gallery](/gallery/date-counter-format)
+[view in gallery](../gallery/date-counter-format)
 
 ```js
 const options = {
@@ -263,7 +263,7 @@ const options = {
 
 This example uses [data function](#data-function) to display the `dateCounter` as '[count] of [total]' instead of date
 
-[view in gallery](/gallery/date-counter)
+[view in gallery](../gallery/date-counter)
 
 ```js
 const options = {
@@ -280,7 +280,7 @@ If it cannot be parsed as date, an error will be thrown.
 
 - Type: `string`
 - Default: ""
-- Example: [view in gallery](/gallery/start-end-dates)
+- Example: [view in gallery](../gallery/start-end-dates)
 
 ```js
 const options = {
@@ -308,7 +308,7 @@ The values computed for the data items in the missing dates are determined by [`
 - Type: `string | null`
 - Valid values: ["year", "month", "day"]
 - Default: null
-- Example: [view in gallery](/gallery/fill-date-gaps)
+- Example: [view in gallery](../gallery/fill-date-gaps)
 
 ```js
 const options = {
@@ -344,7 +344,7 @@ This is only effective if [`fillDateGapsInterval`](#filldategapsinterval) is set
 - Type: `string`
 - Valid values: ["interpolate", "last"]
 - Default: "interpolate"
-- Example: [view in gallery](/gallery/fill-date-gaps)
+- Example: [view in gallery](../gallery/fill-date-gaps)
 
 ```js
 const options = {
@@ -366,7 +366,7 @@ Also note that with this setting it is more likely that the date counter will ov
 
 - Type: `string[]`
 - Default: []
-- Example: [view in gallery](/gallery/fixed-order)
+- Example: [view in gallery](../gallery/fixed-order)
 
 ```js
 const options = {
@@ -380,13 +380,13 @@ If `true`, the scale of the chart will be fixed all through the whole date range
 The maximum value for the chart scale will not be changed between dates.
 
 Note that if initial values are much smaller that later values,
-bar labels may not initially be visible ([view in gallery](/gallery/fixed-scale)).
+bar labels may not initially be visible ([view in gallery](../gallery/fixed-scale)).
 You may then want to set [`labelsPosition`](#labelsposition) to `"outside"`
-([view in gallery](/gallery/fixed-scale-labels)).
+([view in gallery](../gallery/fixed-scale-labels)).
 
 - Type: `boolean`
 - Default: false
-- Example: [view in gallery](/gallery/fixed-scale2)
+- Example: [view in gallery](../gallery/fixed-scale2)
 
 ```js
 const options = {
@@ -486,7 +486,7 @@ Note that if there are multiple charts in the page, all the charts with the opti
 
 - Type: `boolean`
 - Default: false
-- Example: [view in gallery](/gallery/keyboard-controls)
+- Example: [view in gallery](../gallery/keyboard-controls)
 
 ```js
 const options = {
@@ -502,12 +502,12 @@ Sets the position of bar labels. If set to `"inside"`, the labels are positioned
 Otherwise, the labels are positioned on the left side of the bars.
 
 Note that if this is set to `"inside"` (default),
-bars with small width (low values) may have their labels partially invisible ([demo](/gallery/fixed-scale)).
+bars with small width (low values) may have their labels partially invisible ([demo](../gallery/fixed-scale)).
 
 - Type: `string`
 - Valid values: ["inside", "outside"]
 - Default: "inside"
-- Example: [view in gallery](/gallery/labelsposition)
+- Example: [view in gallery](../gallery/labels-position.md)
 
 ```js
 const options = {
@@ -537,7 +537,7 @@ If `true`, the race restarts after reaching the last date.
 
 - Type: `boolean`
 - Default: false
-- Example: [view in gallery](/gallery/loop)
+- Example: [view in gallery](../gallery/loop)
 
 ```js
 const options = {
@@ -635,7 +635,7 @@ The value "none" hides both overlays.
 
 This example shows both overlays
 
-[view in gallery](/gallery/overlays)
+[view in gallery](../gallery/overlays)
 
 ```js
 const options = {
@@ -709,7 +709,7 @@ Triple click on any legend will reset the group filter (show all groups).
 
 - Type: `boolean`
 - Default: `false`
-- Example: [view in gallery](/gallery/show-groups)
+- Example: [view in gallery](../gallery/show-groups)
 
 ```js
 const options = {
@@ -726,7 +726,7 @@ This will take some space from the bar, so some labels may not be visible. If so
 
 - Type: `boolean`
 - Default: `false`
-- Example: [view in gallery](/gallery/icons)
+- Example: [view in gallery](../gallery/icons)
 
 ```js {2,8}
 const options = {
@@ -736,7 +736,7 @@ const options = {
 racingBars.loadData('/data/population.csv', 'csv').then((data) => {
   const dataWithIcons = data.map((d) => ({
     ...d,
-    icon: `https://www.countryflags.io/${d.code.toLowerCase()}/flat/64.png`,
+    icon: `https://flagsapi.com/${d.code}/flat/64.png`,
   }));
 
   racingBars.race(dataWithIcons, options);
@@ -751,7 +751,7 @@ If it cannot be parsed as date, an error will be thrown.
 
 - Type: `string`
 - Default: ""
-- Example: [view in gallery](/gallery/start-end-dates)
+- Example: [view in gallery](../gallery/start-end-dates)
 
 ```js
 const options = {
@@ -765,7 +765,7 @@ If provided, displays chart sub-title
 
 - Type: `string | [data function](#data-function)`
 - Default: ""
-- Example: [view in gallery](/gallery/title-string)
+- Example: [view in gallery](../gallery/title-string)
 
 ```js
 const options = {
@@ -780,7 +780,7 @@ Selects the theme to use. See the guide on [`themes and styles`](../guides/theme
 - Type: `string`
 - Valid values: ["light", "dark"]
 - Default: "light"
-- Example: [view in gallery](/gallery/theme-dark)
+- Example: [view in gallery](../gallery/theme-dark)
 
 ```js
 const options = {
@@ -799,7 +799,7 @@ Decreasing the value increases the "speed" at which the chart runs.
 
 This chart runs fast!
 
-[view in gallery](/gallery/tick-duration)
+[view in gallery](../gallery/tick-duration)
 
 ```js
 const options = {
@@ -813,7 +813,7 @@ If provided, displays chart title
 
 - Type: `string | [data function](#data-function)`
 - Default: ""
-- Example: [view in gallery](/gallery/title-string)
+- Example: [view in gallery](../gallery/title-string)
 
 ```js
 const options = {
@@ -827,7 +827,7 @@ Number of bars to show. This represents the number of data items with highest va
 
 - Type: `number`
 - Default: 10
-- Example: [view in gallery](/gallery/top-n)
+- Example: [view in gallery](../gallery/top-n)
 
 ```js
 const options = {
@@ -887,7 +887,7 @@ The function should return a string. This string will be displayed for the used 
 
 - This example displays the `dateCounter` as '[count] of [total]' instead of date
 
-[view in gallery](/gallery/date-counter)
+[view in gallery](../gallery/date-counter)
 
 ```js
 const options = {
@@ -898,7 +898,7 @@ const options = {
 
 - This example displays the total of data values for the current date in the `caption`
 
-[view in gallery](/gallery/caption-data-function)
+[view in gallery](../gallery/caption-data-function)
 
 ```js
 const options = {
@@ -928,7 +928,7 @@ const options = {
 
 - This example displays the `dateCounter` as quarter of year
 
-[view in gallery](/gallery/data-gh-push)
+[view in gallery](../gallery/data-gh-push)
 
 ```js
 const getYearQuarter = (currentDate, dateSlice, allDates) => {

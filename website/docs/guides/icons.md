@@ -17,7 +17,7 @@ This example uses the `code` field, in the [population dataset](../sample-datase
 
 export const transformFn = (data) => data.map((d) => ({
 ...d,
-icon: `https://www.countryflags.io/${d.code.toLowerCase()}/flat/64.png`,
+icon: `https://flagsapi.com/${d.code}/flat/64.png`,
 }));
 
 <div className="gallery">
@@ -46,11 +46,11 @@ const options = {
 racingBars.loadData('/data/population.csv', 'csv').then((data) => {
   const dataWithIcons = data.map((d) => ({
     ...d,
-    icon: `https://www.countryflags.io/${d.code.toLowerCase()}/flat/64.png`,
+    icon: `https://flagsapi.com/${d.code}/flat/64.png`,
   }));
   racingBars.race(dataWithIcons, options);
 });
 ```
 
 You may also use the [`dataTransform`](../documentation/options.md#datatransform) option for data transformation,
-like in [this example](/gallery/data-transform).
+like in [this example](../gallery/data-transform).

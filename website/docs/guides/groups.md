@@ -16,7 +16,7 @@ To display groups:
 - set the [`showGroups`](../documentation/options.md#showgroups) option to `true`.
 - add the field `group`, to the [data items](../documentation/data.md#long-data).
 
-Example: [view in gallery](/gallery/show-groups)
+Example: [view in gallery](../gallery/show-groups)
 
 <div className="gallery">
   <RacingBars

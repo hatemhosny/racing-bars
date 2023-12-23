@@ -17,7 +17,7 @@ Source: <a href="https://github.com/datasets/population" target="_blank" classNa
 
 Data item fields: date, name, code, group, value
 
-[view demo in gallery](/gallery/data-population)
+[view demo in gallery](./gallery/data-population)
 
 #### JSON
 
@@ -37,7 +37,7 @@ Source: <a href="https://github.com/datasets/gdp" target="_blank" className="ext
 
 Data item fields: date, name, code, group, value
 
-[view demo in gallery](/gallery/data-gdp)
+[view demo in gallery](./gallery/data-gdp)
 
 #### JSON
 
@@ -57,7 +57,7 @@ Source: <a href="https://github.com/datasets/covid-19" target="_blank" className
 
 Data item fields: date, name, value
 
-[view demo in gallery](/gallery/data-covid-19)
+[view demo in gallery](./gallery/data-covid-19)
 
 #### JSON
 
@@ -77,7 +77,7 @@ Source: <a href="https://www.interbrand.com/" target="_blank" className="externa
 
 Data item fields: date, name, value
 
-[view demo in gallery](/gallery/data-brand-values)
+[view demo in gallery](./gallery/data-brand-values)
 
 #### JSON
 
@@ -97,7 +97,7 @@ Source: <a href="https://github.com/madnight/githut" target="_blank" className="
 
 Data item fields: date, name, value
 
-[view demo in gallery](/gallery/data-gh-push)
+[view demo in gallery](./gallery/data-gh-push)
 
 #### JSON
 

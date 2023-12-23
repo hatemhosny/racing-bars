@@ -9,7 +9,7 @@ The default is the light theme.
 
 You can switch themes using the [`theme`](../documentation/options.md#theme) option.
 
-Example: [view in gallery](/gallery/theme-dark)
+Example: [view in gallery](../gallery/theme-dark)
 
 ```js {2}
 const options = {

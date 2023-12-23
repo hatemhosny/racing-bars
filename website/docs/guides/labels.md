@@ -42,7 +42,7 @@ Example: `{labelsPosition: 'outside'}`
 
 <br /><br />
 
-You may also adjust the width of the labels area using [`labelsWidth`](<(../documentation/options.md#labelswidth)>) option.
+You may also adjust the width of the labels area using [`labelsWidth`](../documentation/options.md#labelswidth) option.
 It sets the labels area width in pixels (default is 150).
 
 Example: `{labelsPosition: 'outside', labelsWidth: 200}`

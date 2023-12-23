@@ -27,6 +27,6 @@ title: Features
 - Controls for play/pause/skip-back/skip-forward ([chart controls](./guides/chart-controls.md))
 - Overlays for play/repeat ([chart controls](./guides/chart-controls.md))
 - Keyboard and mouse Controls ([chart controls](./guides/chart-controls.md))
-- API to control the chart (e.g [slider](../gallery/slider.md), [scroll](../gallery/scroll.md))
+- API to control the chart (e.g [slider](./gallery/slider.md), [scroll](./gallery/scroll.md))
 - Emits custom DOM [events](./documentation/events.md)
 - open-source ([MIT Licence](./license.md))

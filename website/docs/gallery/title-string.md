@@ -1,0 +1,39 @@
+---
+title: Title and Sub-Title
+toc_min_heading_level: 6
+toc_max_heading_level: 6
+---
+
+import RacingBars from '../../src/components/RacingBars.tsx';
+
+A demo for using string in `title` and `subTitle`.
+
+<!--truncate-->
+
+### Chart
+
+<div className="gallery">
+  <RacingBars
+    dataUrl="/data/population.csv"
+    dataType="csv"
+    title="World Population"
+    subTitle="in millions"
+  />
+</div>
+
+### Code
+
+```html {5,6}
+<div id="race"></div>
+<script>
+  const options = {
+    selector: '#race',
+    title: 'World Population',
+    subTitle: 'in millions',
+  };
+
+  racingBars.loadData('/data/population.csv', 'csv').then((data) => {
+    racingBars.race(data, options);
+  });
+</script>
+```

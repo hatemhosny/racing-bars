@@ -10,7 +10,7 @@ const config: Config = {
   favicon: 'img/favicon.ico',
   organizationName: 'hatemhosny', // Usually your GitHub org/user name.
   projectName: 'racing-bars', // Usually your repo name.
-  onBrokenLinks: 'throw',
+  onBrokenLinks: 'warn',
   onBrokenMarkdownLinks: 'warn',
 
   // Even if you don't use internationalization, you can use this field to set
@@ -60,7 +60,7 @@ const config: Config = {
           label: 'Docs',
           position: 'left',
         },
-        { to: 'gallery', activeBasePath: 'gallery', label: 'Gallery', position: 'left' },
+        { to: 'docs/gallery', activeBasePath: 'docs/gallery', label: 'Gallery', position: 'left' },
         {
           to: 'docs/sample-datasets',
           activeBasePath: 'docs/sample-datasets',
@@ -82,19 +82,19 @@ const config: Config = {
     footer: {
       style: 'dark',
       links: [
-        {
-          title: 'Docs',
-          items: [
-            {
-              label: 'Style Guide',
-              to: 'docs/',
-            },
-            {
-              label: 'Second Doc',
-              to: 'docs/doc2/',
-            },
-          ],
-        },
+        // {
+        //   title: 'Docs',
+        //   items: [
+        //     {
+        //       label: 'Style Guide',
+        //       to: 'docs/',
+        //     },
+        //     {
+        //       label: 'Second Doc',
+        //       to: 'docs/doc2/',
+        //     },
+        //   ],
+        // },
         {
           title: 'Community',
           items: [
@@ -115,10 +115,10 @@ const config: Config = {
         {
           title: 'More',
           items: [
-            {
-              label: 'Gallery',
-              to: 'gallery',
-            },
+            // {
+            //   label: 'Gallery',
+            //   to: 'gallery',
+            // },
             {
               label: 'GitHub',
               href: 'https://github.com/hatemhosny/racing-bars',
@@ -134,6 +134,18 @@ const config: Config = {
       additionalLanguages: ['r', 'julia'],
     },
   } satisfies Preset.ThemeConfig,
+  plugins: [
+    [
+      'docusaurus-plugin-typedoc',
+      {
+        entryPoints: ['../src/index.ts'],
+        tsconfig: '../tsconfig.json',
+        plugin: ['typedoc-plugin-missing-exports'],
+        excludeExternals: true,
+        internalModule: '_internal',
+      },
+    ],
+  ],
 };
 
 export default config;

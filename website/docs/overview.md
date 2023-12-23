@@ -40,31 +40,29 @@ This chart:
 
 export const transformFn = (data) => data.map((d) => ({
 ...d,
-icon: `https://www.countryflags.io/${d.code.toLowerCase()}/flat/64.png`,
+icon: `https://flagsapi.com/${d.code}/flat/64.png`,
 }));
 
-<div style={{width: 800, height: 450}}>
-  <div className="gallery">
-    <RacingBars
-      dataUrl="/data/population.csv"
-      dataType="csv"
-      dataTransform={transformFn}
-      title="World Population in 60 Years"
-      subTitle="Country Population in millions"
-      caption="Source: World Bank"
-      dateCounter= "YYYY"
-      showGroups={true}
-      showIcons={true}
-      labelsPosition="outside"
-      labelsWidth="160"
-      autorun={false}
-      overlays="all"
-      controlButtons="all"
-      highlightBars={true}
-      selectBars={true}
-      theme="dark"
-    />
-  </div>
+<div className="gallery" style={{width: 800, height: 450}}>
+  <RacingBars
+    dataUrl="/data/population.csv"
+    dataType="csv"
+    dataTransform={transformFn}
+    title="World Population in 60 Years"
+    subTitle="Country Population in millions"
+    caption="Source: World Bank"
+    dateCounter= "YYYY"
+    showGroups={true}
+    showIcons={true}
+    labelsPosition="outside"
+    labelsWidth="160"
+    autorun={false}
+    overlays="all"
+    controlButtons="all"
+    highlightBars={true}
+    selectBars={true}
+    theme="dark"
+  />
 </div>
 
 <p>... is produced by that code:</p>
@@ -99,7 +97,7 @@ icon: `https://www.countryflags.io/${d.code.toLowerCase()}/flat/64.png`,
   racingBars.loadData('/data/population.json').then((data) => {
     const dataWithIcons = data.map((d) => ({
       ...d,
-      icon: `https://www.countryflags.io/${d.code.toLowerCase()}/flat/64.png`,
+      icon: `https://flagsapi.com/${d.code}/flat/64.png`,
     }));
 
     racingBars.race(dataWithIcons, options);
