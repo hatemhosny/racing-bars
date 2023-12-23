@@ -5,7 +5,9 @@ dist
 .cache
 **/*.log
 .env
-docs/docs/api
+website/docs/api
+website/static/api
+website/static/data
 /test-results/
 /playwright-report/
 /playwright/.cache/

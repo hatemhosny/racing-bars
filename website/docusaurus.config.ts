@@ -1,23 +1,15 @@
-import {themes as prismThemes} from 'prism-react-renderer';
-import type {Config} from '@docusaurus/types';
+import { themes as prismThemes } from 'prism-react-renderer';
+import type { Config } from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
 
 const config: Config = {
-  title: 'My Site',
-  tagline: 'Dinosaurs are cool',
-  favicon: 'img/favicon.ico',
-
-  // Set the production url of your site here
-  url: 'https://your-docusaurus-site.example.com',
-  // Set the /<baseUrl>/ pathname under which your site is served
-  // For GitHub pages deployment, it is often '/<projectName>/'
+  title: 'Racing Bars',
+  tagline: 'Bar chart race made easy 🎉',
+  url: 'https://your-docusaurus-test-site.com',
   baseUrl: '/',
-
-  // GitHub pages deployment config.
-  // If you aren't using GitHub pages, you don't need these.
-  organizationName: 'facebook', // Usually your GitHub org/user name.
-  projectName: 'docusaurus', // Usually your repo name.
-
+  favicon: 'img/favicon.ico',
+  organizationName: 'hatemhosny', // Usually your GitHub org/user name.
+  projectName: 'racing-bars', // Usually your repo name.
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
 
@@ -37,15 +29,13 @@ const config: Config = {
           sidebarPath: './sidebars.ts',
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
-          editUrl:
-            'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
+          editUrl: 'https://github.com/hatemhosny/racing-bars/tree/main/website/',
         },
         blog: {
           showReadingTime: true,
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
-          editUrl:
-            'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
+          editUrl: 'https://github.com/hatemhosny/racing-bars/tree/main/website/',
         },
         theme: {
           customCss: './src/css/custom.css',
@@ -58,21 +48,32 @@ const config: Config = {
     // Replace with your project's social card
     image: 'img/docusaurus-social-card.jpg',
     navbar: {
-      title: 'My Site',
+      title: 'Racing Bars',
       logo: {
-        alt: 'My Site Logo',
-        src: 'img/logo.svg',
+        alt: 'Racing Bars',
+        src: 'img/logo.png',
       },
       items: [
         {
-          type: 'docSidebar',
-          sidebarId: 'tutorialSidebar',
+          to: 'docs/overview',
+          activeBasePath: 'docs',
+          label: 'Docs',
           position: 'left',
-          label: 'Tutorial',
         },
-        {to: '/blog', label: 'Blog', position: 'left'},
+        { to: 'gallery', activeBasePath: 'gallery', label: 'Gallery', position: 'left' },
         {
-          href: 'https://github.com/facebook/docusaurus',
+          to: 'docs/sample-datasets',
+          activeBasePath: 'docs/sample-datasets',
+          label: 'Sample Datasets',
+          position: 'left',
+        },
+        {
+          href: 'https://jsbin.com/kesapad/edit?html,output',
+          label: 'Playground',
+          position: 'left',
+        },
+        {
+          href: 'https://github.com/hatemhosny/racing-bars',
           label: 'GitHub',
           position: 'right',
         },
@@ -85,8 +86,12 @@ const config: Config = {
           title: 'Docs',
           items: [
             {
-              label: 'Tutorial',
-              to: '/docs/intro',
+              label: 'Style Guide',
+              to: 'docs/',
+            },
+            {
+              label: 'Second Doc',
+              to: 'docs/doc2/',
             },
           ],
         },
@@ -111,21 +116,22 @@ const config: Config = {
           title: 'More',
           items: [
             {
-              label: 'Blog',
-              to: '/blog',
+              label: 'Gallery',
+              to: 'gallery',
             },
             {
               label: 'GitHub',
-              href: 'https://github.com/facebook/docusaurus',
+              href: 'https://github.com/hatemhosny/racing-bars',
             },
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} My Project, Inc. Built with Docusaurus.`,
+      copyright: `Copyright © ${new Date().getFullYear()} Hatem Hosny. <br /> Made with ❤ and typescript.`,
     },
     prism: {
       theme: prismThemes.github,
       darkTheme: prismThemes.dracula,
+      additionalLanguages: ['r', 'julia'],
     },
   } satisfies Preset.ThemeConfig,
 };
