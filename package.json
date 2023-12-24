@@ -35,8 +35,9 @@
     "lint:eslint": "eslint --ext js,jsx,ts,tsx . ",
     "lint:stylelint": "stylelint \"src/*\"",
     "lint:stylelint-website": "stylelint \"website/**/*.{css,scss}\"",
-    "copy:data": "recursive-copy \"data\" \"website/static/data\"",
-    "postinstall": "run-s copy:data && cd website && npm install",
+    "copy:data": "recursive-copy data website/static/data",
+    "website-npm-install": "cd website && npm install",
+    "postinstall": "run-p copy:data website-npm-install",
     "reset": "git clean -dfx && git reset --hard && npm i",
     "clean": "recursive-delete build && recursive-delete website/build && recursive-delete website/static/data && recursive-delete website/docs/api"
   },
