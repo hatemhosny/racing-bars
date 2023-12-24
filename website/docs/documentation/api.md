@@ -8,7 +8,7 @@ This page is an overview and a guide for usage.
 
 ## Methods:
 
-### [loadData](/api/modules/_index_.html#loaddata)
+### [loadData](/api/modules.md#loaddata)
 
 This method loads data from url.
 
@@ -34,7 +34,7 @@ racingBars.loadData('/data/population.csv', 'csv').then((data) => {
 });
 ```
 
-### [race](/api/modules/_index_.html#race-1)
+### [race](/api/modules.md#race)
 
 This is the main method that generates the racing bar chart.
 
@@ -185,26 +185,16 @@ racingBars.loadData('/data/population.csv', 'csv').then((data) => {
 See the guide on [Chart Controls](../guides/chart-controls.md) for other alternatives of controlling charts.
 See the guides on [Slider](../guides/slider.md) and [Scroller](../guides/scroller.md) for usage examples.
 
-## Modules
+## Classes
 
-### [d3](/api/modules/_index_._lib_d3_.html)
-
-The methods used from <a href="https://d3js.org" target="_blank" className="external">d3 library</a> are re-exported under the property `d3`.
-This is not the complete library. These are just the methods used internally by the library.
-They are re-exported in case you want to use just this small subset, without having to use the full d3 library.
-
-The re-exported methods are listed [here](/api/modules/_index_._lib_d3_.html).
+### [Options](/api/classes/Options.md)
 
 ## Interfaces
 
-These are typescript interfaces.
+### [DOMCustomEvent](/api/interfaces/DOMCustomEvent.md)
 
-### [DOMCustomEvent](/api/interfaces/_index_.domcustomevent.html)
+### [Data](/api/interfaces/Data.md)
 
-### [Data](/api/interfaces/_index_.data.html)
+### [Race](/api/interfaces/Race.md)
 
-### [Options](/api/interfaces/_index_.options.html)
-
-### [Race](/api/interfaces/_index_.race.html)
-
-### [WideData](/api/interfaces/_index_.widedata.html)
+### [WideData](/api/interfaces/WideData.md)
