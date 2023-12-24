@@ -10,7 +10,7 @@ Note that these datasets are already included in the [Python package](./packages
 
 ### Population
 
-The population count (in millions) for all countries over the years 1960-2018.
+The population count (in millions) for all countries over the years 1960-2021.
 Each country is counted once a year.
 
 Source: <a href="https://github.com/datasets/population" target="_blank" className="external"><span>https</span>://github.com/datasets/population</a>
@@ -51,7 +51,7 @@ Data item fields: date, name, code, group, value
 
 ### Covid-19
 
-Number of confirmed cases of Covid-19 in different countries.
+Number of confirmed cases of Covid-19 per day in different countries, in the period Jan-May 2020.
 
 Source: <a href="https://github.com/datasets/covid-19" target="_blank" className="external"><span>https</span>://github.com/datasets/covid-19</a>
 
@@ -71,7 +71,7 @@ Data item fields: date, name, value
 
 ### Brand Values
 
-Best global brands.
+Best global brands in the period 2000-2018.
 
 Source: <a href="https://www.interbrand.com/" target="_blank" className="external">Interbrand</a>
 
@@ -89,9 +89,9 @@ Data item fields: date, name, value
 - <a href="/data/brands.csv" target="_blank" className="external">long</a>
 - <a href="/data/brands-wide.csv" target="_blank" className="external">wide</a>
 
-### Github Push Events
+### GitHub Push Events
 
-Number of push events to github for each programming language over the period 2012-2020.
+Number of new push events to GitHub for each programming language over the period 2012-2023.
 
 Source: <a href="https://github.com/madnight/githut" target="_blank" className="external"><span>https</span>://github.com/madnight/githut</a>
 
@@ -108,3 +108,23 @@ Data item fields: date, name, value
 
 - <a href="/data/gh-push.csv" target="_blank" className="external">long</a>
 - <a href="/data/gh-push-wide.csv" target="_blank" className="external">wide</a>
+
+### GitHub Stars
+
+Number of new GitHub stars for each programming language over the period 2012-2023.
+
+Source: <a href="https://github.com/madnight/githut" target="_blank" className="external"><span>https</span>://github.com/madnight/githut</a>
+
+Data item fields: date, name, value
+
+[view demo in gallery](./gallery/data-gh-star)
+
+#### JSON
+
+- <a href="/data/gh-star.json" target="_blank" className="external">long</a>
+- <a href="/data/gh-star-wide.json" target="_blank" className="external">wide</a>
+
+#### CSV
+
+- <a href="/data/gh-star.csv" target="_blank" className="external">long</a>
+- <a href="/data/gh-star-wide.csv" target="_blank" className="external">wide</a>

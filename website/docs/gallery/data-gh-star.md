@@ -1,12 +1,12 @@
 ---
-title: GitHub Push Events Dataset
+title: GitHub Stars Dataset
 toc_min_heading_level: 6
 toc_max_heading_level: 6
 ---
 
 import RacingBars from '../../src/components/RacingBars.tsx';
 
-A demo showing the use of [Github Push Events dataset](/docs/sample-datasets#github-push-events).
+A demo showing the use of [Github Stars dataset](/docs/sample-datasets#github-stars).
 
 <!--truncate-->
 
@@ -24,10 +24,10 @@ return `Q${quarter} ${year}`
 
 <div className="gallery">
   <RacingBars
-    dataUrl="/data/gh-push.csv"
+    dataUrl="/data/gh-star.csv"
     dataType="csv"
     title="Top Programming Languages"
-    subTitle="Github Push Events"
+    subTitle="Github Stars"
     dateCounter={options.dateCounter}
   />
 </div>
@@ -48,11 +48,11 @@ return `Q${quarter} ${year}`
   const options = {
     selector: '#race',
     title: 'Top Programming Languages',
-    subTitle: 'Github Push Events',
+    subTitle: 'Github Stars',
     dateCounter: getYearQuarter,
   };
 
-  racingBars.loadData('/data/gh-push.csv', 'csv').then((data) => {
+  racingBars.loadData('/data/gh-star.csv', 'csv').then((data) => {
     racingBars.race(data, options);
   });
 </script>
