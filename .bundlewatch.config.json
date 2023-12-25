@@ -1,0 +1,13 @@
+{
+  "files": [
+    {
+      "path": "./build/*.js",
+      "maxSize": "35kB"
+    }
+  ],
+  "defaultCompression": "gzip",
+  "ci": {
+    "repoBranchBase": "develop",
+    "trackBranches": ["main", "develop"]
+  }
+}

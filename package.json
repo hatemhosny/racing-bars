@@ -31,7 +31,7 @@
     "test": "run-s test:*",
     "test:unit": "jest src",
     "test:lint": "run-s lint:*",
-    "// test:bundlewatch": "bundlewatch --config .bundlewatch.config.js",
+    "test:bundlewatch": "bundlewatch --config .bundlewatch.config.json",
     "lint:prettier": "prettier src --ignore-path .eslintignore --list-different",
     "lint:eslint": "eslint --ext js,jsx,ts,tsx . ",
     "lint:stylelint": "stylelint \"src/*\"",
