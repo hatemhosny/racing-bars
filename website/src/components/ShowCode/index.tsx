@@ -7,6 +7,7 @@ import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import styles from './styles.module.css';
+import OpenInPlayground from '../OpenInPlayground';
 
 export default function ShowCode(props: {
   js: string;
@@ -91,18 +92,23 @@ export default function ShowCode(props: {
           <Tabs groupId="sdk-code">
             <TabItem value="js" label="JS" attributes={{ onMouseDown: resize }}>
               <CodeBlock language="js">{jsCode}</CodeBlock>
+              <OpenInPlayground language="js" code={jsCode} />
             </TabItem>
             <TabItem value="ts" label="TS" attributes={{ onMouseDown: resize }}>
               <CodeBlock language="ts">{tsCode}</CodeBlock>
+              <OpenInPlayground language="ts" code={tsCode} />
             </TabItem>
             <TabItem value="react" label="React" attributes={{ onMouseDown: resize }}>
               <CodeBlock language="jsx">{reactCode}</CodeBlock>
+              <OpenInPlayground language="jsx" code={reactCode} />
             </TabItem>
             <TabItem value="vue" label="Vue" attributes={{ onMouseDown: resize }}>
               <CodeBlock language="html">{vueCode}</CodeBlock>
+              <OpenInPlayground language="vue" code={vueCode} />
             </TabItem>
             <TabItem value="svelte" label="Svelte" attributes={{ onMouseDown: resize }}>
               <CodeBlock language="html">{svelteCode}</CodeBlock>
+              <OpenInPlayground language="svelte" code={svelteCode} />
             </TabItem>
           </Tabs>
         </div>

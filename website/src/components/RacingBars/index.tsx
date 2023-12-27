@@ -89,7 +89,7 @@ onMount(() => {
           react={reactCode}
           vue={vueCode}
           svelte={svelteCode}
-          open={props.showCode === 'open'}
+          open={props.showCode !== 'closed'}
         ></ShowCode>
       )}
     </div>
