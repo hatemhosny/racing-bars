@@ -2,7 +2,7 @@
 title: Chart Controls
 ---
 
-import RacingBars from '../../src/components/RacingBars.tsx';
+import RacingBars from '../../src/components/RacingBars';
 
 The chart behaviour can be contolled by:
 

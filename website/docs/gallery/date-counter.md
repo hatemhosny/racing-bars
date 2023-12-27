@@ -4,7 +4,7 @@ toc_min_heading_level: 6
 toc_max_heading_level: 6
 ---
 
-import RacingBars from '../../src/components/RacingBars.tsx';
+import RacingBars from '../../src/components/RacingBars';
 
 This example shows the use of [data functions](#).
 The `dateCounter` uses a function to show '[count] of [total]'

@@ -2,7 +2,7 @@
 title: Groups
 ---
 
-import RacingBars from '../../src/components/RacingBars.tsx';
+import RacingBars from '../../src/components/RacingBars';
 
 Bars can have groups (e.g. countries grouped by continents).
 Bars in the same group have the same color.

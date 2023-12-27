@@ -2,7 +2,7 @@
 title: Icons
 ---
 
-import RacingBars from '../../src/components/RacingBars.tsx';
+import RacingBars from '../../src/components/RacingBars';
 
 Bars can have icons.
 

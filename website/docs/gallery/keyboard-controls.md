@@ -4,7 +4,7 @@ toc_min_heading_level: 6
 toc_max_heading_level: 6
 ---
 
-import RacingBars from '../../src/components/RacingBars.tsx';
+import RacingBars from '../../src/components/RacingBars';
 
 A demo for using [`keyboardControls`](/docs/documentation/options#keyboardControls).
 See the guide on [`chart controls`](/docs/guides/chart-controls).

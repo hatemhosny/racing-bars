@@ -4,7 +4,7 @@ toc_min_heading_level: 6
 toc_max_heading_level: 6
 ---
 
-import RacingBars from '../../src/components/RacingBars.tsx';
+import RacingBars from '../../src/components/RacingBars';
 
 A demo for using `topN` to choose the number of bars to display.
 

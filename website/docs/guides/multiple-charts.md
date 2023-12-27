@@ -2,7 +2,7 @@
 title: Multiple Charts
 ---
 
-import RacingBars from '../../src/components/RacingBars.tsx';
+import RacingBars from '../../src/components/RacingBars';
 
 Multiple charts can be added to the same page.
 They work independently with each chart having its own data, options, state, API and events.

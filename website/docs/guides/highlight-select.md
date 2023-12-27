@@ -2,7 +2,7 @@
 title: Hightlight/Select Bars
 ---
 
-import RacingBars from '../../src/components/RacingBars.tsx';
+import RacingBars from '../../src/components/RacingBars';
 
 Bars can be hightlighted (on mouse hover) or selected (on click),
 by enabling the options [`highlightBars`](../documentation/options.md#highlightbars) and [`selectBars`](../documentation/options.md#selectbars), respectively.

@@ -2,7 +2,7 @@
 title: Bar Labels
 ---
 
-import RacingBars from '../../src/components/RacingBars.tsx';
+import RacingBars from '../../src/components/RacingBars';
 
 Bar labels are populated from the [data item](../documentation/data.md#long-data) `name` field.
 

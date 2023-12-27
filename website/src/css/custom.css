@@ -26,14 +26,12 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 80vh;
-  min-height: 400px;
-  font-size: 20px;
 }
 
-.gallery > div {
+.gallery .racing-bars {
+  min-height: 400px;
   width: 100%;
-  height: 100%;
+  height: 80vh;
 }
 
 summary {

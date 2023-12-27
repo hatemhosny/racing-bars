@@ -12,14 +12,14 @@ Available for [vanilla javascript](./getting-started/installation.md),
 [vue](./packages/vue.md)
 and [python](./packages/python.md).
 
-import RacingBars from '../src/components/RacingBars.tsx';
+import RacingBars from '../src/components/RacingBars';
 
 This chart:
 
 <div className="gallery">
   <RacingBars
-    dataUrl="/data/brands.csv"
-    dataType="csv"
+    dataUrl="/data/brands.json"
+    showCode="open"
   />
 </div>
 <p> </p>
@@ -43,8 +43,10 @@ export const transformFn = (data) => data.map((d) => ({
 icon: `https://flagsapi.com/${d.code}/flat/64.png`,
 }));
 
-<div className="gallery" style={{width: 800, height: 450}}>
+<div className="gallery">
   <RacingBars
+    style={{width: 800, height: 450}}
+
     dataUrl="/data/population.csv"
     dataType="csv"
     dataTransform={transformFn}
@@ -62,7 +64,9 @@ icon: `https://flagsapi.com/${d.code}/flat/64.png`,
     highlightBars={true}
     selectBars={true}
     theme="dark"
-  />
+
+/>
+
 </div>
 
 <p>... is produced by that code:</p>

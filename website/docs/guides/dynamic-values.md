@@ -2,7 +2,7 @@
 title: Dynamic Values
 ---
 
-import RacingBars from '../../src/components/RacingBars.tsx';
+import RacingBars from '../../src/components/RacingBars';
 
 Dynamic values can be displayed in the [`title`](../documentation/options.md#title), [`subTitle`](../documentation/options.md#subtitle), [`DateCounter`](../documentation/options.md#datecounter) and [`caption`](../documentation/options.md#caption),
 based on the data and the currently displayed date.

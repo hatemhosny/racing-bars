@@ -66,6 +66,7 @@ const props = {
   dataType: String,
   elementId: String,
   className: String,
+  style: Object,
   callback: Function,
 } satisfies { [key in keyof Required<Omit<Props, 'selector'>>]: any };
 
@@ -86,6 +87,7 @@ const RacingBars: RacingBarsComponent = {
     const containerRef = ref<HTMLElement>();
     let racer: Race | undefined;
     const className = ref('');
+    const style = ref({});
     let prevOptions = {};
 
     onMounted(() => {
@@ -95,9 +97,11 @@ const RacingBars: RacingBarsComponent = {
         dataPromise,
         options,
         callback,
+        style: _style,
         className: _className,
       } = processProps(fixProps(props), containerRef.value.id);
       className.value = _className;
+      style.value = _style;
       prevOptions = options;
       dataPromise.then((data: Data[] | WideData[]) => {
         racer = race(data, options);
@@ -121,6 +125,7 @@ const RacingBars: RacingBarsComponent = {
       h('div', {
         ref: containerRef,
         class: className.value,
+        style: style.value,
       });
   },
 };

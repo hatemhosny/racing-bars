@@ -3,7 +3,7 @@ title: Changing Options
 ---
 
 import { useState } from 'react';
-import RacingBars from '../../src/components/RacingBars.tsx';
+import RacingBars from '../../src/components/RacingBars';
 
 Chart options can be changed during runtime using the API method [`changeOptions()`](../documentation/api.md#changeoptionsoptions-options--void).
 
