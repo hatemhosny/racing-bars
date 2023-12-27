@@ -185,15 +185,13 @@ racingBars.loadData('/data/population.csv', 'csv').then((data) => {
 See the guide on [Chart Controls](../guides/chart-controls.md) for other alternatives of controlling charts.
 See the guides on [Slider](../guides/slider.md) and [Scroller](../guides/scroller.md) for usage examples.
 
-## Classes
-
-### [Options](/api/classes/Options.md)
-
 ## Interfaces
 
 ### [DOMCustomEvent](/api/interfaces/DOMCustomEvent.md)
 
 ### [Data](/api/interfaces/Data.md)
+
+### [Options](/api/interfaces/Options.md)
 
 ### [Race](/api/interfaces/Race.md)
 
