@@ -12,61 +12,63 @@ export default function RacingBars(
   },
 ): JSX.Element {
   const { className, style, showCode, ...options } = props;
+  const { data, dataUrl, dataType = 'json', ...codeOptions } = options;
+  const loadDataParams = dataType === 'json' ? `"${dataUrl}"` : `"${dataUrl}", "${dataType}"`;
 
   const stringify = (obj: Partial<Options>) => JSON.stringify(obj, null, 2);
 
   const jsCode = `
-import { createPlayground } from 'livecodes';
+import { loadData, race } from "racing-bars";
 
-const options = ${stringify(options)};
-createPlayground('#container', options);
-
+const options = ${stringify({ selector: '#race', ...codeOptions })};
+loadData(${loadDataParams}).then((data) => {
+  race(data, options);
+});
 `.trimStart();
 
   const tsCode = `
-import { createPlayground, type EmbedOptions } from 'livecodes';
+import { loadData, race, type Options } from "racing-bars";
 
-const options: EmbedOptions = ${stringify(options)};
-createPlayground('#container', options);
-
+const options: Options = ${stringify({ selector: '#race', ...codeOptions })};
+loadData(${loadDataParams}).then((data) => {
+  race(data, options);
+});
 `.trimStart();
 
   const reactCode = `
-import LiveCodes from 'livecodes/react';
+import RacingBars from "racing-bars/react";
 
 export default function App() {
   const options = ${stringify(options)};
-  return (<LiveCodes {...options}></LiveCodes>);
+  return (<RacingBars {...options}></RacingBars>);
 }
-
 `.trimStart();
 
   const vueCode = `
 <script setup>
-import LiveCodes from "livecodes/vue";
+import RacingBars from "racing-bars/vue";
 
 const options = ${stringify(options)};
 </script>
 <template>
-  <LiveCodes v-bind="options" />
+  <RacingBars v-bind="options" />
 </template>
-
-`;
+`.trimStart();
 
   const svelteCode = `
 <script>
-import { onMount } from 'svelte';
-import { createPlayground } from 'livecodes';
+import { onMount } from "svelte";
+import { loadData, race } from "racing-bars";
 
-const options = ${stringify(options)};
-let container;
+const options = ${stringify({ selector: '#race', ...codeOptions })};
 onMount(() => {
-  createPlayground(container, options);
+  loadData(${loadDataParams}).then((data) => {
+    race(data, options);
+  });
 });
 </script>
 
-<div bind:this="{container}"></div>
-
+<div id="race"></div>
 `.trimStart();
 
   const RacingBarsComp = RacingBarsReact as React.ComponentType<Props>;

@@ -134,6 +134,20 @@ const config: Config = {
       additionalLanguages: ['r', 'julia'],
     },
   } satisfies Preset.ThemeConfig,
+  scripts: [
+    {
+      src: 'https://unpkg.com/prettier@2.4.1/standalone.js',
+      async: true,
+    },
+    {
+      src: 'https://unpkg.com/prettier@2.4.1/parser-babel.js',
+      async: true,
+    },
+    {
+      src: 'https://unpkg.com/prettier@2.4.1/parser-html.js',
+      async: true,
+    },
+  ],
   plugins: [
     [
       'docusaurus-plugin-typedoc',
