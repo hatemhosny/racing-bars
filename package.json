@@ -11,10 +11,10 @@
     "url": "https://github.com/hatemhosny/racing-bars"
   },
   "scripts": {
-    "start": "run-p watch serve",
+    "start": "run-p watch serve website",
     "website": "cd website && npm run start",
     "serve": "live-server . --open=demo/index.html --watch=build,demo --cors --quiet",
-    "watch": "nodemon --watch src -e \"*\" --ignore \"**/generated-styles.ts\" ./scripts/build.js --dev",
+    "watch": "nodemon --watch src -e \"*\" ./scripts/build.js --dev",
     "build": "run-s clean copy:data build:*",
     "build:css": "postcss src/lib/css --dir tmp",
     "build:lib": "node ./scripts/build.js",

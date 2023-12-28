@@ -21,7 +21,6 @@ export async function prepareData(
     }
     data = dataTransform(await data);
   }
-  console.log(removeFnOptions(store.getState().options));
   worker.postMessage({
     type: 'prepare-data',
     data,

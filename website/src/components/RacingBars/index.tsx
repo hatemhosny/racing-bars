@@ -1,6 +1,5 @@
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 import type { Options, Props } from '../../../../src/index';
-import RacingBarsReact from '../../../../build/react';
 import ShowCode from '../ShowCode';
 import styles from './styles.module.css';
 import BrowserOnly from '@docusaurus/BrowserOnly';
@@ -74,24 +73,28 @@ onMount(() => {
 <div id="race">Loading...</div>
 `.trimStart();
 
+  const RacingBarsReact: React.ComponentType<Props & { children?: React.ReactNode }> = lazy(
+    // @ts-ignore
+    () => import('/lib/react.js'),
+  );
+
   return (
     <BrowserOnly>
       {() => {
-        const RacingBarsComp = RacingBarsReact as React.ComponentType<
-          Props & { children?: React.ReactNode }
-        >;
         return (
           <div className={styles.container}>
-            <RacingBarsComp
-              className={`${props.className} racing-bars`}
-              style={{
-                height: options.height || '80vh',
-                ...props.style,
-              }}
-              {...options}
-            >
-              Loading ...
-            </RacingBarsComp>
+            <Suspense fallback={<div>Loading...</div>}>
+              <RacingBarsReact
+                className={`${props.className} racing-bars`}
+                style={{
+                  height: options.height || '80vh',
+                  ...props.style,
+                }}
+                {...options}
+              >
+                Loading ...
+              </RacingBarsReact>
+            </Suspense>
             {props.showCode !== false && (
               <ShowCode
                 js={jsCode}

@@ -9,6 +9,7 @@ tmp
 website/build
 website/docs/api
 website/static/data
+website/static/lib
 /test-results/
 /playwright-report/
 /playwright/.cache/

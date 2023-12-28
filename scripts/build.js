@@ -1,3 +1,5 @@
+import path from 'path';
+import rfs from 'recursive-fs';
 import * as esbuild from 'esbuild';
 
 const args = process.argv.slice(2);
@@ -60,9 +62,12 @@ const vueBuild = () =>
     },
   });
 
-workerBuild().then(() => {
-  iifeBuild();
-  esmBuild();
-  reactBuild();
-  vueBuild();
-});
+const copyLibToWebsite = async () => {
+  var source = path.resolve('build');
+  var destination = path.resolve('website/static/lib');
+  await rfs.copy(source, destination);
+};
+
+workerBuild()
+  .then(() => Promise.all([iifeBuild(), esmBuild(), reactBuild(), vueBuild()]))
+  .then(() => copyLibToWebsite());
