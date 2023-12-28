@@ -1,5 +1,15 @@
 import { generateId } from '../utils';
-import { styles as _styles, themes as _themes } from './generated-styles';
+// @ts-ignore
+import _styles from '../css/styles.css?raw';
+// @ts-ignore
+import lightTheme from '../css/light.theme.css?raw';
+// @ts-ignore
+import darkTheme from '../css/dark.theme.css?raw';
+
+const _themes = {
+  light: lightTheme,
+  dark: darkTheme,
+};
 
 // modifed from https://github.com/egoist/style-inject
 export function styleInject(

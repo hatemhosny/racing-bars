@@ -224,3 +224,14 @@ export function getBaseUrl() {
 
 export const getWorkerDataURL = (url: string) =>
   `data:text/javascript;charset=UTF-8;base64,` + btoa(`importScripts("${url}");`);
+
+export const toDataUrl = (content: string, type = 'text/javascript') =>
+  `data:${type};charset=UTF-8;base64,` + btoa(content);
+
+export const createWorkerFromContent = (content: string) => {
+  try {
+    return new Worker(toDataUrl(content));
+  } catch (e) {
+    return new Worker(URL.createObjectURL(new Blob([content], { type: 'application/javascript' })));
+  }
+};

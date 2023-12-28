@@ -1,7 +1,7 @@
 import { interpolate } from 'd3';
 
 import type { Data, WideData } from '../data';
-import type { Options, TransformFn } from '../options';
+import type { Options } from '../options';
 import { loadData } from '../load-data';
 import { getDateString, getDateRange } from '../utils/dates';
 
@@ -10,7 +10,6 @@ export function prepareData(
   options: Options,
 ): Promise<Data[]> {
   return fetchData(data, options.dataType)
-    .then(customDataTransform(options.dataTransform))
     .then(filterByDate(options.startDate, options.endDate))
     .then(wideDataToLong(options.dataShape))
     .then(processFixedOrder(options.fixedOrder))
@@ -27,12 +26,6 @@ function fetchData(
     return loadData(data, dataType);
   }
   return Promise.resolve(data);
-}
-
-function customDataTransform(transformFn: TransformFn | null) {
-  return function (data: Data[] | WideData[]): Data[] | WideData[] {
-    return transformFn && typeof transformFn === 'function' ? transformFn(data) : data;
-  };
 }
 
 function filterByDate(startDate: string, endDate: string) {

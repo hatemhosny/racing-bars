@@ -1,16 +1,32 @@
 import type { Data, WideData } from '../data';
+import type { Options } from '../options';
 import { actions, type Store } from '../store';
+import { loadData } from '../load-data';
 import { getDates, getNextDate } from './dates';
-import { getBaseUrl, getWorkerDataURL } from './utils';
+import { createWorkerFromContent } from './utils';
+// @ts-ignore
+import workerSrc from '../../../build/racing-bars.worker.js';
 
-const worker = new Worker(getWorkerDataURL(getBaseUrl() + '/racing-bars.worker.js'));
+const worker = createWorkerFromContent(workerSrc);
 
 export async function prepareData(
   data: Data[] | WideData[] | Promise<Data[]> | Promise<WideData[]> | string,
   store: Store,
   changingOptions = false,
 ): Promise<Data[]> {
-  worker.postMessage({ type: 'prepare-data', data, options: store.getState().options });
+  const { dataTransform, dataType } = store.getState().options;
+  if (typeof dataTransform === 'function') {
+    if (typeof data === 'string') {
+      data = await loadData(data, dataType);
+    }
+    data = dataTransform(await data);
+  }
+  console.log(removeFnOptions(store.getState().options));
+  worker.postMessage({
+    type: 'prepare-data',
+    data,
+    options: removeFnOptions(store.getState().options),
+  });
   const preparedData = await new Promise<Data[]>((resolve) => {
     worker.addEventListener(
       'message',
@@ -24,6 +40,16 @@ export async function prepareData(
   });
   storeDataCollections(preparedData, store, changingOptions);
   return preparedData;
+}
+
+function removeFnOptions(options: Options) {
+  // functions cannot be cloned to web workers
+  return Object.keys(options).reduce((acc, key) => {
+    if (typeof (options as any)[key] !== 'function') {
+      (acc as any)[key] = (options as any)[key];
+    }
+    return acc;
+  }, {} as Options);
 }
 
 function storeDataCollections(data: Data[], store: Store, changingOptions: boolean) {

@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { race, generateId, type Race, type Data, type WideData } from '.';
 import { processProps, type Props } from './shared';
 
-export default function RacingBars(props: Props) {
+export default function RacingBars(props: Props & { children?: React.ReactNode }) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [racer, setRacer] = useState<Race | undefined>(undefined);
   const [className, setClassName] = useState<string>('');
@@ -37,5 +37,9 @@ export default function RacingBars(props: Props) {
     };
   }, [props]);
 
-  return <div ref={containerRef} className={className}></div>;
+  return (
+    <div ref={containerRef} className={className}>
+      {props.children || ''}
+    </div>
+  );
 }

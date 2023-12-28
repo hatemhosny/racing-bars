@@ -12,70 +12,74 @@ export default function RacingBars(
     showCode?: 'open' | 'closed' | false;
   },
 ): JSX.Element {
-  const { className, style, showCode, ...options } = props;
-  const { data, dataUrl, dataType = 'json', ...codeOptions } = options;
-  const loadDataParams = dataType === 'json' ? `"${dataUrl}"` : `"${dataUrl}", "${dataType}"`;
-
   const stringify = (obj: Partial<Options>) => JSON.stringify(obj, null, 2);
+  const { className, style, showCode, ...options } = props;
+  const dataUrl = options.dataUrl || '';
+
+  const getOptionsCode = (options: any, lang: 'js' | 'ts' | 'react' | 'vue' | 'svelte') => {
+    const { data, dataUrl, ...codeOptions } = options;
+    if (lang === 'ts') {
+      return `\nconst options: Options = ${stringify(codeOptions)};`;
+    }
+    if (lang === 'react') {
+      return `const options = ${stringify({ dataUrl, ...codeOptions })};`;
+    }
+    if (lang === 'vue') {
+      return `\nconst options = ${stringify({ dataUrl, ...codeOptions })};`;
+    }
+    return `\nconst options = ${stringify(codeOptions)};`;
+  };
 
   const jsCode = `
-import { loadData, race } from "racing-bars";
-
-const options = ${stringify({ selector: '#race', ...codeOptions })};
-loadData(${loadDataParams}).then((data) => {
-  race(data, options);
-});
+import { race } from "racing-bars";
+${getOptionsCode(options, 'js')}
+race("${dataUrl}", "#race", options);
 `.trimStart();
 
   const tsCode = `
-import { loadData, race, type Options } from "racing-bars";
-
-const options: Options = ${stringify({ selector: '#race', ...codeOptions })};
-loadData(${loadDataParams}).then((data) => {
-  race(data, options);
-});
+import { race, type Options } from "racing-bars";
+${getOptionsCode(options, 'ts')}
+race("${dataUrl}", "#race", options);
 `.trimStart();
 
   const reactCode = `
 import RacingBars from "racing-bars/react";
 
 export default function App() {
-  const options = ${stringify(options)};
-  return (<RacingBars {...options}></RacingBars>);
+  ${getOptionsCode(options, 'react')}
+  return (<RacingBars {...options}>Loading...</RacingBars>);
 }
 `.trimStart();
 
   const vueCode = `
 <script setup>
 import RacingBars from "racing-bars/vue";
-
-const options = ${stringify(options)};
+${getOptionsCode(options, 'vue')}
 </script>
 <template>
-  <RacingBars v-bind="options" />
+  <RacingBars v-bind="options">Loading...</RacingBars>
 </template>
 `.trimStart();
 
   const svelteCode = `
 <script>
 import { onMount } from "svelte";
-import { loadData, race } from "racing-bars";
-
-const options = ${stringify({ selector: '#race', ...codeOptions })};
+import { race } from "racing-bars";
+${getOptionsCode(options, 'svelte')}
 onMount(() => {
-  loadData(${loadDataParams}).then((data) => {
-    race(data, options);
-  });
+  race("${dataUrl}", "#race", options);
 });
 </script>
 
-<div id="race"></div>
+<div id="race">Loading...</div>
 `.trimStart();
 
   return (
     <BrowserOnly>
       {() => {
-        const RacingBarsComp = RacingBarsReact as React.ComponentType<Props>;
+        const RacingBarsComp = RacingBarsReact as React.ComponentType<
+          Props & { children?: React.ReactNode }
+        >;
         return (
           <div className={styles.container}>
             <RacingBarsComp
@@ -85,7 +89,9 @@ onMount(() => {
                 ...props.style,
               }}
               {...options}
-            ></RacingBarsComp>
+            >
+              Loading ...
+            </RacingBarsComp>
             {props.showCode !== false && (
               <ShowCode
                 js={jsCode}

@@ -14,9 +14,9 @@ export default function OpenInPlayground(props: { language: Language; code: stri
     markup: {
       language: 'html',
       content: ['js', 'ts'].includes(props.language)
-        ? '<div id="race"></div>'
+        ? '<div id="race">Loading...</div>'
         : props.language === 'jsx'
-        ? '<div id="root"></div>'
+        ? '<div id="root">Loading...</div>'
         : '',
     },
     style: {
