@@ -1,3 +1,3 @@
 ---
-title: Vanilla JS
+title: JavaScript
 ---

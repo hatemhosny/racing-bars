@@ -68,7 +68,7 @@ const config: Config = {
           position: 'left',
         },
         {
-          href: 'https://jsbin.com/kesapad/edit?html,output',
+          to: 'playground',
           label: 'Playground',
           position: 'left',
         },

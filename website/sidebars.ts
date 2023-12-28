@@ -35,9 +35,9 @@ const sidebars: SidebarsConfig = {
       items: [
         'packages/js',
         'packages/typescript',
-        'packages/angular',
         'packages/react',
         'packages/vue',
+        'packages/svelte',
         'packages/python',
       ],
     },

@@ -237,7 +237,7 @@ racingBars.loadData('/data/population.json').then((data) => {
 });
 ```
 
-But the `dataTransform` option was added to facilitate the use in the provided [Angular](../packages/angular.md), [React](../packages/react.md), [Vue](../packages/vue.md) and [Python](../packages/python.md) implementations where the component may load the data from url.
+But the `dataTransform` option was added to facilitate the use in the provided [React](../packages/react.md), [Vue](../packages/vue.md) and [Python](../packages/python.md) implementations where the component may load the data from url.
 So it would be more convenient to be able to also pass a transformation function that would run before creating the chart.
 
 ### dateCounter
