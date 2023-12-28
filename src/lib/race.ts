@@ -14,10 +14,6 @@ export async function race(
   container: string | HTMLElement = 'body',
   options: Partial<Options> = {},
 ): Promise<Race> {
-  if (!data || !Array.isArray(data) || data.length === 0) {
-    throw new Error('No valid data supplied.');
-  }
-
   // for backward compatibility
   if (
     typeof container === 'object' &&
@@ -28,17 +24,17 @@ export async function race(
     container = (options as any).selector || 'body';
   }
 
+  const root =
+    typeof container === 'string' ? document.querySelector<HTMLElement>(container) : container;
+  if (!root) throw new Error('Container element is not found.');
+
   const store = createStore(rootReducer);
   store.dispatch(actions.options.loadOptions(options));
   const ticker = createTicker(store);
   let preparedData = await prepareData(data, store);
-  let renderer = createRenderer(preparedData, store);
+  let renderer = createRenderer(preparedData, store, root);
 
   const { injectStyles, theme, autorun } = store.getState().options;
-
-  const root =
-    typeof container === 'string' ? document.querySelector<HTMLElement>(container) : container;
-  if (!root) throw new Error('Container element is not found.');
 
   const apiSubscriptions: Array<() => void> = [];
   subscribeToStore(store, renderer, preparedData);
@@ -192,7 +188,7 @@ export async function race(
         store.unsubscribeAll();
         store.dispatch(actions.data.clearDateSlices());
         preparedData = await prepareData(data, store, true);
-        renderer = createRenderer(preparedData, store);
+        renderer = createRenderer(preparedData, store, root);
         subscribeToStore(store, renderer, preparedData);
       }
 
