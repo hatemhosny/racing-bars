@@ -14,7 +14,18 @@ const baseOptions = {
   sourcemap: devMode ? 'external' : false,
   loader: { '.html': 'text', '.ttf': 'file' },
   // logLevel: 'error',
+  define: {
+    'process.env.SCRIPT_URL': `import.meta.url`,
+  },
 };
+
+const workerBuild = () =>
+  esbuild.build({
+    ...baseOptions,
+    entryPoints: ['src/lib/worker/index.ts'],
+    outfile: 'build/racing-bars.worker.js',
+    format: 'iife',
+  });
 
 const iifeBuild = () =>
   esbuild.build({
@@ -23,6 +34,9 @@ const iifeBuild = () =>
     outfile: 'build/racing-bars.umd.js',
     format: 'iife',
     globalName: 'racingBars',
+    define: {
+      'process.env.SCRIPT_URL': `document.currentScript.src`,
+    },
   });
 
 const esmBuild = () =>
@@ -80,6 +94,7 @@ export function css2ts() {
 }
 
 css2ts();
+workerBuild();
 iifeBuild();
 esmBuild();
 reactBuild();

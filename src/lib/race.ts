@@ -9,28 +9,43 @@ import { Options } from './options';
 import { registerEvents, DOMEventSubscriber, getTickDetails, EventType } from './events';
 import { Race, ApiMethod, ApiCallback } from './models';
 
-export function race(data: Data[] | WideData[], options: Partial<Options> = {}): Race {
+export async function race(
+  data: Data[] | WideData[] | Promise<Data[]> | Promise<WideData[]> | string,
+  container: string | HTMLElement = 'body',
+  options: Partial<Options> = {},
+): Promise<Race> {
   if (!data || !Array.isArray(data) || data.length === 0) {
     throw new Error('No valid data supplied.');
+  }
+
+  // for backward compatibility
+  if (
+    typeof container === 'object' &&
+    !(container instanceof HTMLElement) &&
+    (!options || Object.keys(options).length === 0)
+  ) {
+    options = container;
+    container = (options as any).selector || 'body';
   }
 
   const store = createStore(rootReducer);
   store.dispatch(actions.options.loadOptions(options));
   const ticker = createTicker(store);
-  let preparedData = prepareData(data, store);
+  let preparedData = await prepareData(data, store);
   let renderer = createRenderer(preparedData, store);
 
-  const { selector, injectStyles, theme, autorun } = store.getState().options;
+  const { injectStyles, theme, autorun } = store.getState().options;
 
-  const root = document.querySelector(selector) as HTMLElement;
-  if (!root) throw new Error('No element found with the selector: ' + selector);
+  const root =
+    typeof container === 'string' ? document.querySelector<HTMLElement>(container) : container;
+  if (!root) throw new Error('Container element is not found.');
 
   const apiSubscriptions: Array<() => void> = [];
   subscribeToStore(store, renderer, preparedData);
 
   let stylesId: string;
   if (injectStyles) {
-    stylesId = styleInject(selector, theme);
+    stylesId = styleInject(root, theme);
   }
 
   renderer.renderInitalView();
@@ -73,35 +88,35 @@ export function race(data: Data[] | WideData[], options: Partial<Options> = {}):
       if (!store.getState().ticker.isRunning) {
         ticker.start();
       }
-      return this;
+      return API;
     },
     pause() {
       ticker.stop();
-      return this;
+      return API;
     },
     toggle() {
       ticker.toggle();
-      return this;
+      return API;
     },
     skipBack() {
       ticker.skipBack();
-      return this;
+      return API;
     },
     skipForward() {
       ticker.skipForward();
-      return this;
+      return API;
     },
     inc(value = 1) {
       store.dispatch(actions.ticker.inc(+value));
-      return this;
+      return API;
     },
     dec(value = 1) {
       store.dispatch(actions.ticker.dec(+value));
-      return this;
+      return API;
     },
     setDate(inputDate: string | Date) {
       store.dispatch(actions.ticker.updateDate(getDateString(inputDate)));
-      return this;
+      return API;
     },
     getDate() {
       return store.getState().ticker.currentDate;
@@ -117,38 +132,38 @@ export function race(data: Data[] | WideData[], options: Partial<Options> = {}):
         .select('rect.' + safeName(name))
         .classed('selected', true);
       store.dispatch(actions.data.addSelection(name));
-      return this;
+      return API;
     },
     unselect(name: string) {
       d3.select(root)
         .select('rect.' + safeName(name))
         .classed('selected', false);
       store.dispatch(actions.data.removeSelection(name));
-      return this;
+      return API;
     },
     unselectAll() {
       d3.select(root).selectAll('rect').classed('selected', false);
       store.dispatch(actions.data.resetSelections());
-      return this;
+      return API;
     },
     hideGroup(group: string) {
       store.dispatch(actions.data.addFilter(String(group)));
-      return this;
+      return API;
     },
     showGroup(group: string) {
       store.dispatch(actions.data.removeFilter(String(group)));
-      return this;
+      return API;
     },
     showOnlyGroup(group: string) {
       store.dispatch(actions.data.allExceptFilter(String(group)));
-      return this;
+      return API;
     },
     showAllGroups() {
       store.dispatch(actions.data.resetFilters());
-      return this;
+      return API;
     },
-    changeOptions(newOptions: Partial<Options>) {
-      const unAllowedOptions: Array<keyof Options> = ['selector', 'dataShape'];
+    async changeOptions(newOptions: Partial<Options>) {
+      const unAllowedOptions: Array<keyof Options> = ['dataShape'];
       unAllowedOptions.forEach((key) => {
         if (newOptions[key] && newOptions[key] !== store.getState().options[key]) {
           throw new Error(`The option "${key}" cannot be changed.`);
@@ -176,7 +191,7 @@ export function race(data: Data[] | WideData[], options: Partial<Options> = {}):
       if (dataOptionsChanged) {
         store.unsubscribeAll();
         store.dispatch(actions.data.clearDateSlices());
-        preparedData = prepareData(data as Data[], store, true);
+        preparedData = await prepareData(data, store, true);
         renderer = createRenderer(preparedData, store);
         subscribeToStore(store, renderer, preparedData);
       }
@@ -184,7 +199,7 @@ export function race(data: Data[] | WideData[], options: Partial<Options> = {}):
       if ('injectStyles' in newOptions || 'theme' in newOptions) {
         document.getElementById(stylesId)?.remove();
         if (injectStyles) {
-          stylesId = styleInject(selector, theme);
+          stylesId = styleInject(root, theme);
         }
       }
 
@@ -198,11 +213,11 @@ export function race(data: Data[] | WideData[], options: Partial<Options> = {}):
         }
       }
 
-      return this;
+      return API;
     },
     call(fn: ApiCallback) {
       fn.call(API, getTickDetails(store));
-      return this;
+      return API;
     },
     delay(duration = 0) {
       let queue: Array<{ fn: ApiMethod; args: unknown[] }> = [];
@@ -215,7 +230,7 @@ export function race(data: Data[] | WideData[], options: Partial<Options> = {}):
         originalMethods[method] = this[method];
         this[method] = (...args: unknown[]) => {
           addToQueue(originalMethods[method], args);
-          return this;
+          return API;
         };
       }
 
@@ -261,7 +276,7 @@ export function race(data: Data[] | WideData[], options: Partial<Options> = {}):
         }, dur);
       })(asValidNumber(duration));
 
-      return this;
+      return API;
     },
     onDate(date: string | Date, fn: ApiCallback) {
       const dateString = getDateString(date);
@@ -273,13 +288,13 @@ export function race(data: Data[] | WideData[], options: Partial<Options> = {}):
         }
         lastDate = store.getState().ticker.currentDate;
       });
-      return this;
+      return API;
     },
     on(event: EventType, fn: ApiCallback) {
       events.addApiEventHandler(event, () => {
         fn.call(API, getTickDetails(store));
       });
-      return this;
+      return API;
     },
     destroy() {
       ticker.stop();
@@ -291,7 +306,7 @@ export function race(data: Data[] | WideData[], options: Partial<Options> = {}):
       for (const method of Object.keys(this)) {
         this[method] = destroyed;
       }
-      return this;
+      return API;
     },
   };
 

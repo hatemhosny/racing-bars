@@ -16,7 +16,7 @@
     "serve": "live-server . --open=demo/index.html --watch=build,demo --cors --quiet",
     "watch": "nodemon --watch src -e \"*\" --ignore \"**/generated-styles.ts\" ./scripts/build.js --dev",
     "build": "run-s clean copy:data build:*",
-    "build:app": "node ./scripts/build.js",
+    "build:lib": "node ./scripts/build.js",
     "build:website": "cd website && npm run build",
     "build:ts": "tsc --emitDeclarationOnly --outFile build/racing-bars.d.ts",
     "build:ts-website": "cd website && npm run typecheck",

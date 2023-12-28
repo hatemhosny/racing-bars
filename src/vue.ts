@@ -104,8 +104,9 @@ const RacingBars: RacingBarsComponent = {
       style.value = _style;
       prevOptions = options;
       dataPromise.then((data: Data[] | WideData[]) => {
-        racer = race(data, options);
-        callback(racer, data);
+        race(data, containerRef.value, options).then((racer) => {
+          callback(racer, data);
+        });
       });
     });
 

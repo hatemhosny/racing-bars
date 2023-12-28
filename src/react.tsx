@@ -21,9 +21,10 @@ export default function RacingBars(props: Props) {
       } = processProps(props, containerRef.current.id);
       setClassName(_className);
       dataPromise.then((data: Data[] | WideData[]) => {
-        const api = race(data, options);
-        setRacer(api);
-        callback(api, data);
+        race(data, containerRef.current!, options).then((api: Race) => {
+          setRacer(api);
+          callback(api, data);
+        });
       });
     } else {
       // TODO: do not download data

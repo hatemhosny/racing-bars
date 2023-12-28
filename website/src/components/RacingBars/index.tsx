@@ -3,6 +3,7 @@ import type { Options, Props } from '../../../../src/index';
 import RacingBarsReact from '../../../../build/react';
 import ShowCode from '../ShowCode';
 import styles from './styles.module.css';
+import BrowserOnly from '@docusaurus/BrowserOnly';
 
 export default function RacingBars(
   props: Props & {
@@ -71,27 +72,33 @@ onMount(() => {
 <div id="race"></div>
 `.trimStart();
 
-  const RacingBarsComp = RacingBarsReact as React.ComponentType<Props>;
   return (
-    <div className={styles.container}>
-      <RacingBarsComp
-        className={`${props.className} racing-bars`}
-        style={{
-          height: options.height || '80vh',
-          ...props.style,
-        }}
-        {...options}
-      ></RacingBarsComp>
-      {props.showCode !== false && (
-        <ShowCode
-          js={jsCode}
-          ts={tsCode}
-          react={reactCode}
-          vue={vueCode}
-          svelte={svelteCode}
-          open={props.showCode !== 'closed'}
-        ></ShowCode>
-      )}
-    </div>
+    <BrowserOnly>
+      {() => {
+        const RacingBarsComp = RacingBarsReact as React.ComponentType<Props>;
+        return (
+          <div className={styles.container}>
+            <RacingBarsComp
+              className={`${props.className} racing-bars`}
+              style={{
+                height: options.height || '80vh',
+                ...props.style,
+              }}
+              {...options}
+            ></RacingBarsComp>
+            {props.showCode !== false && (
+              <ShowCode
+                js={jsCode}
+                ts={tsCode}
+                react={reactCode}
+                vue={vueCode}
+                svelte={svelteCode}
+                open={props.showCode !== 'closed'}
+              ></ShowCode>
+            )}
+          </div>
+        );
+      }}
+    </BrowserOnly>
   );
 }

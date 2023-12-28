@@ -3,7 +3,7 @@ import { styles as _styles, themes as _themes } from './generated-styles';
 
 // modifed from https://github.com/egoist/style-inject
 export function styleInject(
-  selector: string,
+  container: HTMLElement,
   theme: string,
   insertAt = 'top',
   styles = _styles,
@@ -11,12 +11,12 @@ export function styleInject(
 ): string {
   let css = styles + (themes as any)[theme];
 
-  if (!css || !selector || typeof document === 'undefined') {
+  if (!css || !container || typeof document === 'undefined') {
     return '';
   }
 
-  // replace with selector
-  css = css.split('__selector__').join(selector);
+  container.id = container.id || generateId();
+  css = css.replace(/__selector__/g, '#' + container.id);
 
   const head = document.head || document.getElementsByTagName('head')[0];
   const style = document.createElement('style') as HTMLStyleElement | any;

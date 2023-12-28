@@ -213,3 +213,14 @@ export const pipe = (...fns: Function[]) =>
       (...args: any) =>
         g(f(...args)),
   );
+
+export function getBaseUrl() {
+  const scriptUrl = process.env.SCRIPT_URL;
+  if (scriptUrl) {
+    return scriptUrl.split('/').slice(0, -1).join('/');
+  }
+  return '';
+}
+
+export const getWorkerDataURL = (url: string) =>
+  `data:text/javascript;charset=UTF-8;base64,` + btoa(`importScripts("${url}");`);
