@@ -5,7 +5,7 @@ import { loadData } from '../load-data';
 import { getDates, getNextDate } from './dates';
 import { createWorkerFromContent } from './utils';
 // @ts-ignore
-import workerSrc from '../../../build/racing-bars.worker.js';
+import workerSrc from '../../../tmp/racing-bars.worker.js';
 
 const worker = createWorkerFromContent(workerSrc);
 

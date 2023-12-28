@@ -1,10 +1,10 @@
 import { generateId } from '../utils';
 // @ts-ignore
-import _styles from '../css/styles.css?raw';
+import _styles from '../../../tmp/styles.css?raw';
 // @ts-ignore
-import lightTheme from '../css/light.theme.css?raw';
+import lightTheme from '../../../tmp/light.theme.css?raw';
 // @ts-ignore
-import darkTheme from '../css/dark.theme.css?raw';
+import darkTheme from '../../../tmp/dark.theme.css?raw';
 
 const _themes = {
   light: lightTheme,

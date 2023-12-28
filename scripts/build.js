@@ -18,7 +18,7 @@ const workerBuild = () =>
   esbuild.build({
     ...baseOptions,
     entryPoints: ['src/lib/worker/index.ts'],
-    outfile: 'build/racing-bars.worker.js',
+    outfile: 'tmp/racing-bars.worker.js',
     format: 'iife',
   });
 
