@@ -1,6 +1,9 @@
+import fs from 'fs/promises';
 import path from 'path';
 import rfs from 'recursive-fs';
 import * as esbuild from 'esbuild';
+import postcss from 'postcss';
+import cssnanoPlugin from 'cssnano';
 
 const args = process.argv.slice(2);
 const devMode = args.includes('--dev');
@@ -14,6 +17,28 @@ const baseOptions = {
   sourcemap: devMode ? 'external' : false,
   loader: { '.worker.js': 'text', '.css': 'text' },
   // logLevel: 'error',
+};
+
+const cssBuild = async () => {
+  const source = path.resolve('src/lib/css');
+  const destination = path.resolve('tmp');
+
+  if (devMode) {
+    return rfs.copy(source, destination);
+  }
+
+  const cssnano = cssnanoPlugin({ preset: 'default' });
+  const files = await fs.readdir(source);
+  return Promise.all(
+    files.map(async (file) => {
+      const css = await fs.readFile(path.join(source, file));
+      const result = await postcss([cssnano]).process(css, {
+        from: path.join(source, file),
+        to: path.join(destination, file),
+      });
+      await fs.writeFile(path.join(destination, file), result.css);
+    }),
+  );
 };
 
 const workerBuild = () =>
@@ -63,11 +88,11 @@ const vueBuild = () =>
   });
 
 const copyLibToWebsite = async () => {
-  var source = path.resolve('build');
-  var destination = path.resolve('website/static/lib');
-  await rfs.copy(source, destination);
+  const source = path.resolve('build');
+  const destination = path.resolve('website/static/lib');
+  return rfs.copy(source, destination);
 };
 
-workerBuild()
+Promise.all([cssBuild(), workerBuild()])
   .then(() => Promise.all([iifeBuild(), esmBuild(), reactBuild(), vueBuild()]))
   .then(() => copyLibToWebsite());
