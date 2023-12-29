@@ -22,6 +22,8 @@ caption: (currentDate, dateSlice, allDates) =>
     dataUrl="/data/population.csv"
     dataType="csv"
     caption={options.caption}
+    dynamicProps={{caption: `(currentDate, dateSlice, allDates) =>
+\`Total: \${Math.round(dateSlice.reduce((acc, curr) => acc + curr.value, 0))}\``}}
   />
 </div>
 

@@ -1,5 +1,5 @@
 ---
-title: Icons
+title: Show Icons
 toc_min_heading_level: 6
 toc_max_heading_level: 6
 ---
@@ -26,6 +26,10 @@ icon: `https://flagsapi.com/${d.code}/flat/64.png`,
     showIcons={true}
     labelsPosition="outside"
     showGroups={false}
+    dynamicProps={{dataTransform: `(data) => data.map((d) => ({
+...d,
+icon: \`https://flagsapi.com/\${d.code}/flat/64.png\`,
+}))`}}
   />
 </div>
 

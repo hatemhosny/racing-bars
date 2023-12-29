@@ -23,6 +23,8 @@ dateCounter: (currentDate, dateSlice, allDates) =>
     dataUrl="/data/population.csv"
     dataType="csv"
     dateCounter={options.dateCounter}
+    dynamicProps={{dateCounter: `(currentDate, dateSlice, allDates) =>
+\`\${allDates.indexOf(currentDate) + 1} of \${allDates.length}\``}}
   />
 </div>
 

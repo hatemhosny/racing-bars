@@ -10,10 +10,14 @@ export default function RacingBars(
     style?: Record<string, string>;
     className?: string;
     showCode?: 'open' | 'closed' | false;
+    dynamicProps?: Record<keyof Props, string>;
   },
 ): JSX.Element {
-  const { className, style, showCode, ...options } = props;
-  const { jsCode, tsCode, reactCode, vueCode, svelteCode } = getFrameworkCode(options);
+  const { className, style, showCode, dynamicProps, ...options } = props;
+  const { jsCode, tsCode, reactCode, vueCode, svelteCode } = getFrameworkCode(
+    options,
+    dynamicProps,
+  );
 
   const RacingBarsReact: React.ComponentType<Props & { children?: React.ReactNode }> = lazy(
     // @ts-ignore

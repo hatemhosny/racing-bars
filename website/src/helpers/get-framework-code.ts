@@ -1,11 +1,21 @@
 import type { Props } from '../../../src';
 
-export const getFrameworkCode = (options: Props) => {
+export const getFrameworkCode = (
+  options: any,
+  dynamicProps: Partial<Record<keyof Props, string>> = {},
+) => {
   const dataUrl = options.dataUrl || '';
 
   const stringify = (obj: Partial<Props>) => JSON.stringify(obj, null, 2);
 
-  const getOptionsCode = (options: any, lang: 'js' | 'ts' | 'react' | 'vue' | 'svelte') => {
+  const dynamicPropsTokens = Object.keys(dynamicProps).reduce(
+    (acc, key) => ({ ...acc, [key]: `___${key}___` }),
+    {},
+  );
+
+  options = { ...options, ...dynamicPropsTokens };
+
+  const getOptions = (options: any, lang: 'js' | 'ts' | 'react' | 'vue' | 'svelte') => {
     const { data, dataUrl, ...codeOptions } = options;
     if (lang === 'react') {
       return `const options = ${stringify({ dataUrl, ...codeOptions })};`;
@@ -18,6 +28,17 @@ export const getFrameworkCode = (options: Props) => {
       return `\nconst options: Options = ${stringify(codeOptions)};`;
     }
     return `\nconst options = ${stringify(codeOptions)};`;
+  };
+
+  const getOptionsCode = (options: any, lang: 'js' | 'ts' | 'react' | 'vue' | 'svelte') => {
+    let code = getOptions(options, lang);
+    Object.keys(dynamicProps).forEach((key) => {
+      code = code
+        .replace(`"___${key}___"`, dynamicProps[key])
+        .replace(`'___${key}___'`, dynamicProps[key])
+        .replace(`\`___${key}___\``, dynamicProps[key]);
+    });
+    return code;
   };
   const getOptionsParam = (options: any, lang: 'js' | 'ts' | 'react' | 'vue' | 'svelte') => {
     if (getOptionsCode(options, lang) === '\n') return '';

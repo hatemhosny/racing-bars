@@ -28,6 +28,7 @@ icon: `https://flagsapi.com/${d.code}/flat/64.png`,
     dateCounter="YYYY"
     showIcons={true}
     labelsPosition="outside"
+    dynamicProps={{dataTransform: `(data) => data.map((d) => ({ ...d, icon: \`https://flagsapi.com/\${d.code}/flat/64.png\`}))`}}
   />
 </div>
 

@@ -25,7 +25,7 @@ value: Number(d.value)*1000,
 
 ### Chart
 
-<div>
+<div className="gallery">
   <RacingBars
     dataUrl="/data/population.csv"
     dataType="csv"
@@ -33,7 +33,13 @@ value: Number(d.value)*1000,
     fillDateGapsInterval={null}
     dataTransform={multiplyBy1000}
     controlButtons="all"
-/>
+    dynamicProps={{dataTransform: `function multiplyBy1000(data) {
+  return data.map((d) => ({
+    ...d,
+    value: Number(d.value) * 1000,
+  }));
+}`}}
+  />
 </div>
 
 ### Code
@@ -68,7 +74,7 @@ value: Number(d.value)*1000,
 
 ### Chart
 
-<div>
+<div className="gallery">
   <RacingBars
     dataUrl="/data/population.csv"
     dataType="csv"
@@ -77,7 +83,13 @@ value: Number(d.value)*1000,
     fillDateGapsValue="interpolate"
     dataTransform={multiplyBy1000}
     controlButtons="all"
-/>
+    dynamicProps={{dataTransform: `function multiplyBy1000(data) {
+  return data.map((d) => ({
+    ...d,
+    value: Number(d.value) * 1000,
+  }));
+}`}}
+  />
 </div>
 
 ### Code
@@ -112,7 +124,7 @@ value: Number(d.value)*1000,
 
 ### Chart
 
-<div>
+<div className="gallery">
   <RacingBars
     dataUrl="/data/population.csv"
     dataType="csv"
@@ -121,7 +133,13 @@ value: Number(d.value)*1000,
     fillDateGapsValue="last"
     dataTransform={multiplyBy1000}
     controlButtons="all"
-/>
+    dynamicProps={{dataTransform: `function multiplyBy1000(data) {
+  return data.map((d) => ({
+    ...d,
+    value: Number(d.value) * 1000,
+  }));
+}`}}
+  />
 </div>
 
 ### Code

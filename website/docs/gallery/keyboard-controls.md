@@ -17,7 +17,7 @@ Notice that both charts are affected. Also notice that typing in the `input` and
 
 ### Charts
 
-<div>
+<div className="gallery">
   <RacingBars
     dataUrl="/data/population.csv"
     dataType="csv"
@@ -29,7 +29,7 @@ Notice that both charts are affected. Also notice that typing in the `input` and
 />
 </div>
 
-<div>
+<div className="gallery">
 <RacingBars
     dataUrl="/data/population.csv"
     dataType="csv"
