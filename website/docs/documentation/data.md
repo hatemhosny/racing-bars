@@ -12,15 +12,15 @@ Also known as <a href="https://vita.had.co.nz/papers/tidy-data.pdf" target="_bla
 
 Each data item has the following fields:
 
-- `date`: `string` (required) a string representation of a valid date (preferrably in 'YYYY-MM-DD' format).
+- `date`: `string` (**required**) a string representation of a valid date (preferrably in 'YYYY-MM-DD' format).
   Passing this string to `new Date()` should return a date. If an entry cannot be parsed as date an error will be thrown.
-- `name`: `string` (required) a string holding the name of each item (bar label). e.g. country name
-- `value`: `number` (required) the value of the name in that date.
-- `color`: `string` (optional) the color to use for the bar.
+- `name`: `string` (**required**) a string holding the name of each item (bar label). e.g. country name
+- `value`: `number` (**required**) the value of the name in that date.
+- `color`: `string` (**optional**) the color to use for the bar.
   can be color name (e.g 'red'), hex code (e.g. '#FF0000') or RGB code (e.g. 'rgb(255, 0, 0)').
-- `group`: `string` (optional) a string representing a group for a number of names.
+- `group`: `string` (**optional**) a string representing a group for a number of names.
   This has One-to-Many relation with `name` A group can have many names, but each name can be in one group. e.g. continent
-- `icon`: `string` (optional) a string holding the url of an icon that would be displayed in bars.
+- `icon`: `string` (**optional**) a string holding the url of an icon that would be displayed in bars.
   This has One-to-One relation to `name`. e.g. country flag
 
 ### Example
@@ -249,7 +249,7 @@ racingBars.loadData('wide.csv', 'csv').then((data) => {
 
 ## Optional fields
 
-Example for long data with optional fields:
+Example for long data with [optional fields](#long-data):
 
 ```json
 [

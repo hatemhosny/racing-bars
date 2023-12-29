@@ -8,7 +8,7 @@ import RacingBars from '../../src/components/RacingBars';
 
 A demo showing the use of icons ([`showIcons`](/docs/documentation/options#showicons)).
 
-<!--truncate-->
+<!-- truncate -->
 
 ### Chart
 
