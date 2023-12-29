@@ -29,6 +29,7 @@ export async function race(
   if (!root) throw new Error('Container element is not found.');
 
   const store = createStore(rootReducer);
+  store.dispatch(actions.container.setContainer({ container: root }));
   store.dispatch(actions.options.loadOptions(options));
   const ticker = createTicker(store);
   let preparedData = await prepareData(data, store);
