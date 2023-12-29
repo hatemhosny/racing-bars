@@ -1,9 +1,9 @@
 import { Action } from '../store';
 
 export interface ContainerAction extends Action {
-  payload: HTMLElement | string;
+  payload: HTMLElement;
 }
 
 export interface ContainerState {
-  container: HTMLElement | string;
+  element: HTMLElement;
 }

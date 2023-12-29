@@ -3,7 +3,7 @@ import { actionTypes } from './container.actions';
 import type { ContainerAction, ContainerState } from './container.models';
 
 const initialState: ContainerState = {
-  container: 'body',
+  element: document.body,
 };
 
 export const containerReducer: Reducer<ContainerState, ContainerAction> = (
@@ -14,7 +14,7 @@ export const containerReducer: Reducer<ContainerState, ContainerAction> = (
     case actionTypes.setContainer: {
       return {
         ...state,
-        container: action.payload,
+        element: action.payload,
       };
     }
 

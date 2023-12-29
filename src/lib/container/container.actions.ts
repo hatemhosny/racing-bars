@@ -6,5 +6,5 @@ export const actionTypes = {
 
 export const setContainer = (containerState: ContainerState): ContainerAction => ({
   type: actionTypes.setContainer,
-  payload: containerState.container,
+  payload: containerState.element,
 });
