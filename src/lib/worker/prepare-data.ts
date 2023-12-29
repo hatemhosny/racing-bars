@@ -1,4 +1,4 @@
-import { interpolate } from 'd3';
+import { interpolate } from '../d3';
 
 import type { Data, WideData } from '../data';
 import type { Options } from '../options';

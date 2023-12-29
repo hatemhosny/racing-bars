@@ -1,8 +1,8 @@
-import * as d3 from '../d3';
+import { hsl, select } from '../d3';
 
-import { Data } from '../data';
-import { ParamFunction } from '../options';
-import { Store } from '../store';
+import type { Data } from '../data';
+import type { ParamFunction } from '../options';
+import type { Store } from '../store';
 import { formatDate } from './dates';
 
 export function getColor(d: Data, store: Store) {
@@ -38,7 +38,7 @@ export function getColor(d: Data, store: Store) {
   const lumVariation = (random(currentValue) / 10) * negativeIfOdd;
   const HueSpacing = 360 / (values.length + 1);
   const hue = (values.indexOf(currentValue) + 1) * HueSpacing;
-  return d3.hsl(hue, 0.75, 0.75 + lumVariation);
+  return hsl(hue, 0.75, 0.75 + lumVariation);
 }
 
 export function getIconID(d: Data) {
@@ -174,10 +174,10 @@ export function safeName(name: string) {
 }
 
 export function toggleClass(root: HTMLElement, selector: string, className: string) {
-  d3.select(root)
+  select(root)
     .select(selector)
     .classed(className, function () {
-      return !d3.select(this).classed(className);
+      return !select(this).classed(className);
     });
 }
 
