@@ -1,0 +1,30 @@
+{
+  "name": "racing-bars",
+  "version": "0.1.0",
+  "description": "Bar chart race made easy 📶",
+  "author": "Hatem Hosny",
+  "license": "MIT",
+  "keywords": ["Bar chart race", "Bar chart", "Chart race", "Bar", "Chart", "Race"],
+  "private": false,
+  "repository": {
+    "url": "https://github.com/hatemhosny/racing-bars"
+  },
+  "type": "module",
+  "main": "./racing-bars.js",
+  "module": "./racing-bars.js",
+  "browser": "./racing-bars.js",
+  "types": "./racing-bars.d.ts",
+  "exports": {
+    ".": {
+      "import": "./racing-bars.js",
+      "default": "./racing-bars.js"
+    },
+    "./react": {
+      "import": "./react.js"
+    },
+    "./vue": {
+      "import": "./vue.js"
+    },
+    "./package.json": "./package.json"
+  }
+}
