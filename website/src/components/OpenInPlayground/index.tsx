@@ -28,6 +28,9 @@ export default function OpenInPlayground(props: { language: Language; code: stri
       'racing-bars/react': 'http://127.0.0.1:8080/build/react.js',
       'racing-bars/vue': 'http://127.0.0.1:8080/build/vue.js',
     },
+    types: {
+      'racing-bars': 'http://127.0.0.1:8080/build/racing-bars.d.ts',
+    },
   };
 
   return (
