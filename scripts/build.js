@@ -98,8 +98,7 @@ const copyPackageJson = async () => {
   return fs.copyFile(source, destination);
 };
 
-cssBuild()
-  .then(() => workerBuild())
+Promise.all([cssBuild(), workerBuild()])
   .then(() => Promise.all([iifeBuild(), esmBuild(), reactBuild(), vueBuild()]))
   .then(() => copyPackageJson())
   .then(() => copyLibToWebsite());
