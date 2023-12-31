@@ -1,3 +1,4 @@
+export { Props } from './shared';
 export {
   DOMCustomEvent,
   loadData,
@@ -6,8 +7,7 @@ export {
   Race,
   Data,
   WideData,
-  Options,
   defaultOptions,
 } from './lib';
-export { Props } from './shared';
-export * as d3 from './lib/d3';
+import { Options as AllOptions } from './lib';
+export interface Options extends Partial<AllOptions> {}

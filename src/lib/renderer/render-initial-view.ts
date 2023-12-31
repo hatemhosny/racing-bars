@@ -10,11 +10,11 @@ import { renderControls, renderOverlays, updateControls } from './controls';
 import { selectFn, highlightFn, halo } from './helpers';
 
 export function renderInitalView(data: Data[], store: Store, renderOptions: RenderOptions) {
-  const { selector, caption, dateCounter, labelsPosition, showIcons, fixedScale, fixedOrder } =
+  const { caption, dateCounter, labelsPosition, showIcons, fixedScale, fixedOrder } =
     store.getState().options;
 
   const dates = store.getState().ticker.dates;
-  const root = (renderOptions.root = document.querySelector(selector) as HTMLElement);
+  const root = renderOptions.root;
   const topN = fixedOrder.length > 0 ? fixedOrder.length : store.getState().options.topN;
   const currentDate = store.getState().ticker.currentDate;
   const CompleteDateSlice = getDateSlice(currentDate, data, store);

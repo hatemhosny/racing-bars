@@ -6,14 +6,14 @@ export interface OptionsAction extends Action {
 }
 
 export interface Options {
-  selector: string;
   dataShape: 'long' | 'wide';
-  dataTransform: null | TransformFn;
+  dataType: 'json' | 'csv' | 'tsv' | 'xml';
+  dataTransform: null | ((data: Data[] | WideData[]) => Data[] | WideData[]);
   fillDateGapsInterval: null | 'year' | 'month' | 'day';
   fillDateGapsValue: 'last' | 'interpolate';
   title: string;
   subTitle: string;
-  dateCounter: string | ParamFunction;
+  dateCounter: string | ((currentDate: string, dateSlice: Data[], allDates: string[]) => string);
   startDate: string;
   endDate: string;
   loop: boolean;

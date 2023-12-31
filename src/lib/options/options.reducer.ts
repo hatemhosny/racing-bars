@@ -4,8 +4,8 @@ import { Options, OptionsAction } from './options.models';
 import { actionTypes } from './options.actions';
 
 export const defaultOptions: Options = {
-  selector: '#race',
   dataShape: 'long',
+  dataType: 'json',
   dataTransform: null,
   fillDateGapsInterval: null,
   fillDateGapsValue: 'interpolate',

@@ -5,7 +5,7 @@ import { hideElement, getElement, getClicks } from '../utils';
 import { DOMCustomEvent, EventType, Event, TickDetails } from './models';
 
 export function registerEvents(store: Store, ticker: Ticker) {
-  const root = document.querySelector(store.getState().options.selector) as HTMLElement;
+  const root = store.getState().container.element;
   const events: Event[] = [];
   register();
 
@@ -149,7 +149,7 @@ export function getTickDetails(store: Store): TickDetails {
 }
 
 function dispatchDOMEvent(store: Store, eventType: EventType) {
-  const element = document.querySelector(store.getState().options.selector) as HTMLElement;
+  const element = store.getState().container.element;
   if (!element) return;
   element.dispatchEvent(
     new CustomEvent(eventType, {

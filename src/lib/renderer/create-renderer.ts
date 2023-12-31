@@ -6,8 +6,8 @@ import { renderFrame } from './render-frame';
 import { resize } from './resize';
 import { RenderOptions } from './render-options';
 
-export function createRenderer(data: Data[], store: Store): Renderer {
-  const renderOptions = {} as RenderOptions;
+export function createRenderer(data: Data[], store: Store, root: HTMLElement): Renderer {
+  const renderOptions = { root } as RenderOptions;
 
   return {
     renderInitalView: () => renderInitalView(data, store, renderOptions),

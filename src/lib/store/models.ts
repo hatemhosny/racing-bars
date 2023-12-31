@@ -1,6 +1,7 @@
-import { Options } from '../options';
-import { TickerState } from '../ticker';
-import { DataState } from '../data';
+import type { Options } from '../options';
+import type { TickerState } from '../ticker';
+import type { DataState } from '../data';
+import type { ContainerState } from '../container';
 
 export interface Action {
   type: string;
@@ -10,13 +11,14 @@ export interface Action {
 }
 
 export interface State {
+  container: ContainerState;
   data: DataState;
   options: Options;
   ticker: TickerState;
   triggerRender: boolean;
 }
 
-type StateOrSlice = State | DataState | Options | TickerState;
+type StateOrSlice = State | ContainerState | DataState | Options | TickerState;
 
 export type Reducer<T extends StateOrSlice, U extends Action> = (state: T, action: U) => T;
 

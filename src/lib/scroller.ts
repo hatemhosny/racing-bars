@@ -1,7 +1,7 @@
 import { /* actions, */ Store } from './store';
 
 export function createScroller(store: Store) {
-  const root = document.querySelector(store.getState().options.selector) as HTMLElement;
+  const root = store.getState().container.element;
   if (!root) return;
 
   const dates = store.getState().ticker.dates;

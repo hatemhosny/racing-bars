@@ -1,6 +1,7 @@
 node_modules
 build
 dist
+tmp
 .vscode
 .cache
 **/*.log
@@ -8,6 +9,7 @@ dist
 website/build
 website/docs/api
 website/static/data
+website/static/lib
 /test-results/
 /playwright-report/
 /playwright/.cache/

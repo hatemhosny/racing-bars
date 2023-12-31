@@ -20,6 +20,7 @@ Refresh the page to get different bar colors.
     dataType="csv"
     title="World Population"
     colorSeed={Math.round(Math.random() * 100)}
+    dynamicProps={{colorSeed: 'Math.round(Math.random() * 100)'}}
   />
 </div>
 

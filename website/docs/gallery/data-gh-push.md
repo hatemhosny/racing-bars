@@ -29,6 +29,13 @@ return `Q${quarter} ${year}`
     title="Top Programming Languages"
     subTitle="Github Push Events"
     dateCounter={options.dateCounter}
+    dynamicProps={{dateCounter: `(currentDate, dateSlice, allDates) => {
+    const month = Number(currentDate.slice(5, 7));
+    const year = Number(currentDate.slice(0, 4));
+    const q = Math.floor(month / 3) + 1;
+    const quarter = q > 4 ? q - 4 : q;
+    return \`Q\${quarter} \${year}\`;
+  }`}}
   />
 </div>
 

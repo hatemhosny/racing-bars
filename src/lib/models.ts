@@ -20,7 +20,7 @@ export interface Race {
   showGroup: (group: string) => Race;
   showOnlyGroup: (group: string) => Race;
   showAllGroups: () => Race;
-  changeOptions: (newOptions: Partial<Options>) => Race;
+  changeOptions: (newOptions: Partial<Options>) => Promise<Race>;
   call: (fn: ApiCallback) => Race;
   delay: (duration: number) => Race;
   onDate: (date: string | Date, fn: ApiCallback) => Race;

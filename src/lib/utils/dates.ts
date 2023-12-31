@@ -1,5 +1,5 @@
-import * as d3 from '../d3';
-import { Data } from '../data';
+import { timeDay, timeMonth, timeYear } from '../d3';
+import type { Data } from '../data';
 import { zeroPad } from './utils';
 
 export const getDates = (data: Data[]) => Array.from(new Set(data.map((d) => d.date))).sort();
@@ -57,7 +57,7 @@ export function formatDate(dateStr: string, format = 'YYYY-MM-DD') {
 }
 
 export function getDateRange(date1: Date, date2: Date, interval: 'year' | 'month' | 'day') {
-  const range = [date1, ...d3.timeDay.range(date1, date2)];
+  const range = [date1, ...timeDay.range(date1, date2)];
 
   const daysInMonth = (date: Date) =>
     new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
@@ -65,8 +65,8 @@ export function getDateRange(date1: Date, date2: Date, interval: 'year' | 'month
   const sameDay = date1.getDate() === date2.getDate();
   const sameMonth = date1.getMonth() === date2.getMonth();
 
-  const numberOfMonths = d3.timeMonth.count(date1, date2);
-  const numberOfYears = d3.timeYear.count(date1, date2);
+  const numberOfMonths = timeMonth.count(date1, date2);
+  const numberOfYears = timeYear.count(date1, date2);
 
   let outputRange: Date[] = [];
 

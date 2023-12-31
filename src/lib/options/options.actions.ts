@@ -1,4 +1,4 @@
-import { Options, OptionsAction } from './options.models';
+import type { Options, OptionsAction } from './options.models';
 
 export const actionTypes = {
   loadOptions: 'options/load',

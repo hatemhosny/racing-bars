@@ -2,7 +2,7 @@
   "files": [
     {
       "path": "./build/*.js",
-      "maxSize": "35kB"
+      "maxSize": "50kB"
     }
   ],
   "defaultCompression": "gzip",

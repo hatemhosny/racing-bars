@@ -83,7 +83,7 @@ const fixProps = (props: any) => {
 // @ts-ignore
 const RacingBars: RacingBarsComponent = {
   props,
-  setup(props) {
+  setup(props, { slots }) {
     const containerRef = ref<HTMLElement>();
     let racer: Race | undefined;
     const className = ref('');
@@ -104,8 +104,9 @@ const RacingBars: RacingBarsComponent = {
       style.value = _style;
       prevOptions = options;
       dataPromise.then((data: Data[] | WideData[]) => {
-        racer = race(data, options);
-        callback(racer, data);
+        race(data, containerRef.value, options).then((racer) => {
+          callback(racer, data);
+        });
       });
     });
 
@@ -122,11 +123,15 @@ const RacingBars: RacingBarsComponent = {
       racer?.destroy();
     });
     return () =>
-      h('div', {
-        ref: containerRef,
-        class: className.value,
-        style: style.value,
-      });
+      h(
+        'div',
+        {
+          ref: containerRef,
+          class: className.value,
+          style: style.value,
+        },
+        slots.default?.() || '',
+      );
   },
 };
 

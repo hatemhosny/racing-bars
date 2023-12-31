@@ -2,7 +2,7 @@
 title: API
 ---
 
-The detailed API is documented <a href="/api/modules/" target="_blank" className="external">here</a>.
+The detailed API is documented <a href="/docs/api/modules/" target="_blank" className="external">here</a>.
 
 This page is an overview and a guide for usage.
 
