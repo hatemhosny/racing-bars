@@ -23,17 +23,16 @@ const cssBuild = async () => {
   const source = path.resolve('src/lib/css');
   const destination = path.resolve('tmp');
 
-  if (devMode) {
-    return rfs.copy(source, destination);
-  }
+  await rfs.copy(source, destination);
+  if (devMode) return;
 
   const cssnano = cssnanoPlugin({ preset: 'default' });
-  const files = await fs.readdir(source);
+  const files = await fs.readdir(destination);
   return Promise.all(
     files.map(async (file) => {
-      const css = await fs.readFile(path.join(source, file));
+      const css = await fs.readFile(path.join(destination, file));
       const result = await postcss([cssnano]).process(css, {
-        from: path.join(source, file),
+        from: path.join(destination, file),
         to: path.join(destination, file),
       });
       await fs.writeFile(path.join(destination, file), result.css);
@@ -99,7 +98,8 @@ const copyPackageJson = async () => {
   return fs.copyFile(source, destination);
 };
 
-Promise.all([cssBuild(), workerBuild()])
+cssBuild()
+  .then(() => workerBuild())
   .then(() => Promise.all([iifeBuild(), esmBuild(), reactBuild(), vueBuild()]))
   .then(() => copyPackageJson())
   .then(() => copyLibToWebsite());
