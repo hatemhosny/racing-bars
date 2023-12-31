@@ -43,7 +43,7 @@ icon: `https://flagsapi.com/${d.code}/flat/64.png`,
     showGroups={true}
     showIcons={true}
     labelsPosition="outside"
-    labelsWidth="160"
+    labelsWidth={160}
     autorun={false}
     overlays="all"
     controlButtons="all"

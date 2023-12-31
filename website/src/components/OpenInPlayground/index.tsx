@@ -2,6 +2,9 @@ import React from 'react';
 import type { Config, Language } from 'livecodes';
 import LZString from 'lz-string';
 import styles from './styles.module.css';
+import ExecutionEnvironment from '@docusaurus/ExecutionEnvironment';
+
+const baseUrl = ExecutionEnvironment.canUseDOM ? location.origin : 'https://racing-bars.pages.dev';
 
 export default function OpenInPlayground(props: { language: Language; code: string }) {
   const config: Partial<Config> = {
@@ -24,12 +27,12 @@ export default function OpenInPlayground(props: { language: Language; code: stri
       content: (['jsx', 'vue'].includes(props.language) ? '.' : '#') + 'race { height: 80vh; }',
     },
     imports: {
-      'racing-bars': 'http://127.0.0.1:8080/build/racing-bars.js',
-      'racing-bars/react': 'http://127.0.0.1:8080/build/react.js',
-      'racing-bars/vue': 'http://127.0.0.1:8080/build/vue.js',
+      'racing-bars': baseUrl + '/lib/racing-bars.js',
+      'racing-bars/react': baseUrl + '/lib/react.js',
+      'racing-bars/vue': baseUrl + '/lib/vue.js',
     },
     types: {
-      'racing-bars': 'http://127.0.0.1:8080/build/racing-bars.d.ts',
+      'racing-bars': baseUrl + '/lib/racing-bars.d.ts',
     },
   };
 
@@ -48,7 +51,7 @@ export default function OpenInPlayground(props: { language: Language; code: stri
 }
 
 function getCode(language: Language, code: string) {
-  code = code.replace(/\/data\//g, 'http://127.0.0.1:8080/data/');
+  code = code.replace(/\/data\//g, baseUrl + '/data/');
 
   if (language === 'jsx') {
     return `

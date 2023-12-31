@@ -8,12 +8,12 @@ export interface OptionsAction extends Action {
 export interface Options {
   dataShape: 'long' | 'wide';
   dataType: 'json' | 'csv' | 'tsv' | 'xml';
-  dataTransform: null | TransformFn;
+  dataTransform: null | ((data: Data[] | WideData[]) => Data[] | WideData[]);
   fillDateGapsInterval: null | 'year' | 'month' | 'day';
   fillDateGapsValue: 'last' | 'interpolate';
   title: string;
   subTitle: string;
-  dateCounter: string | ParamFunction;
+  dateCounter: string | ((currentDate: string, dateSlice: Data[], allDates: string[]) => string);
   startDate: string;
   endDate: string;
   loop: boolean;
