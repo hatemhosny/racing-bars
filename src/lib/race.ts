@@ -67,7 +67,7 @@ export async function race(
 
   function addApiSubscription(fn: () => void) {
     apiSubscriptions.push(fn);
-    store.subscribe(fn);
+    return store.subscribe(fn);
   }
 
   function resize() {
@@ -85,35 +85,27 @@ export async function race(
       if (!store.getState().ticker.isRunning) {
         ticker.start();
       }
-      return API;
     },
     pause() {
       ticker.stop();
-      return API;
     },
     toggle() {
       ticker.toggle();
-      return API;
     },
     skipBack() {
       ticker.skipBack();
-      return API;
     },
     skipForward() {
       ticker.skipForward();
-      return API;
     },
     inc(value = 1) {
       store.dispatch(actions.ticker.inc(+value));
-      return API;
     },
     dec(value = 1) {
       store.dispatch(actions.ticker.dec(+value));
-      return API;
     },
     setDate(inputDate: string | Date) {
       store.dispatch(actions.ticker.updateDate(getDateString(inputDate)));
-      return API;
     },
     getDate() {
       return store.getState().ticker.currentDate;
@@ -129,38 +121,31 @@ export async function race(
         .select('rect.' + safeName(name))
         .classed('selected', true);
       store.dispatch(actions.data.addSelection(name));
-      return API;
     },
     unselect(name: string) {
       d3.select(root)
         .select('rect.' + safeName(name))
         .classed('selected', false);
       store.dispatch(actions.data.removeSelection(name));
-      return API;
     },
     unselectAll() {
       d3.select(root).selectAll('rect').classed('selected', false);
       store.dispatch(actions.data.resetSelections());
-      return API;
     },
     hideGroup(group: string) {
       store.dispatch(actions.data.addFilter(String(group)));
-      return API;
     },
     showGroup(group: string) {
       store.dispatch(actions.data.removeFilter(String(group)));
-      return API;
     },
     showOnlyGroup(group: string) {
       store.dispatch(actions.data.allExceptFilter(String(group)));
-      return API;
     },
     showAllGroups() {
       store.dispatch(actions.data.resetFilters());
-      return API;
     },
     async changeOptions(newOptions: Partial<Options>) {
-      const unAllowedOptions: Array<keyof Options> = ['dataShape'];
+      const unAllowedOptions: Array<keyof Options> = ['dataShape', 'dataType'];
       unAllowedOptions.forEach((key) => {
         if (newOptions[key] && newOptions[key] !== store.getState().options[key]) {
           throw new Error(`The option "${key}" cannot be changed.`);
@@ -209,89 +194,32 @@ export async function race(
           ticker.start();
         }
       }
-
-      return API;
-    },
-    call(fn: ApiCallback) {
-      fn.call(API, getTickDetails(store));
-      return API;
-    },
-    delay(duration = 0) {
-      let queue: Array<{ fn: ApiMethod; args: unknown[] }> = [];
-      let newQueue: Array<{ fn: ApiMethod; args: unknown[] }> = [];
-      const originalMethods: any = {};
-      let destroyCalled = false;
-
-      for (const method of Object.keys(this)) {
-        if (typeof this[method] !== 'function') continue;
-        originalMethods[method] = this[method];
-        this[method] = (...args: unknown[]) => {
-          addToQueue(originalMethods[method], args);
-          return API;
-        };
-      }
-
-      function addToQueue(fn: ApiMethod, args: unknown[]) {
-        if (!destroyCalled) {
-          queue.push({ fn, args });
-        } else {
-          queue.push({ fn: destroyed, args: [] });
-        }
-        if (fn.name === 'destroy') {
-          destroyCalled = true;
-        }
-      }
-
-      function asValidNumber(duration: unknown) {
-        return isNaN(Number(duration)) || Number(duration) < 0 ? 0 : Number(duration);
-      }
-
-      (function runQueue(dur: number) {
-        setTimeout(() => {
-          let queueItem = queue.shift();
-          let newDuration = 0;
-          while (queueItem) {
-            if (queueItem.fn.name !== 'delay') {
-              queueItem.fn(...queueItem.args);
-            } else {
-              newQueue = [...queue];
-              queue = [];
-              newDuration = asValidNumber(queueItem.args[0]);
-            }
-            queueItem = queue.shift();
-          }
-
-          if (newQueue.length > 0) {
-            queue = [...newQueue];
-            newQueue = [];
-            runQueue(newDuration);
-          } else {
-            for (const method of Object.keys(originalMethods)) {
-              this[method] = originalMethods[method];
-            }
-          }
-        }, dur);
-      })(asValidNumber(duration));
-
-      return API;
     },
     onDate(date: string | Date, fn: ApiCallback) {
       const dateString = getDateString(date);
       let lastDate = '';
-      addApiSubscription(() => {
+      const watcher = addApiSubscription(() => {
         if (store.getState().ticker.currentDate === dateString && dateString !== lastDate) {
           lastDate = store.getState().ticker.currentDate; // avoid infinite loop if fn dispatches action
           fn.call(API, getTickDetails(store));
         }
         lastDate = store.getState().ticker.currentDate;
       });
-      return API;
+      return {
+        remove() {
+          watcher.unsubscribe();
+        },
+      };
     },
     on(event: EventType, fn: ApiCallback) {
-      events.addApiEventHandler(event, () => {
+      const watcher = events.addApiEventHandler(event, () => {
         fn.call(API, getTickDetails(store));
       });
-      return API;
+      return {
+        remove() {
+          watcher.remove();
+        },
+      };
     },
     destroy() {
       ticker.stop();
@@ -303,7 +231,6 @@ export async function race(
       for (const method of Object.keys(this)) {
         this[method] = destroyed;
       }
-      return API;
     },
   };
 

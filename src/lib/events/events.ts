@@ -134,6 +134,11 @@ export function registerEvents(store: Store, ticker: Ticker) {
       eventType,
       handler,
     });
+    return {
+      remove: () => {
+        root.removeEventListener(eventType, handler);
+      },
+    };
   }
 }
 
