@@ -3,16 +3,19 @@ import type { Config, Language } from 'livecodes';
 import LZString from 'lz-string';
 import styles from './styles.module.css';
 import ExecutionEnvironment from '@docusaurus/ExecutionEnvironment';
-
-const baseUrl = ExecutionEnvironment.canUseDOM ? location.origin : 'https://racing-bars.pages.dev';
+import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 
 export default function OpenInPlayground(props: { language: Language; code: string }) {
+  const baseUrl = ExecutionEnvironment.canUseDOM
+    ? location.origin
+    : useDocusaurusContext().siteConfig.url;
+
   const config: Partial<Config> = {
     title: 'Racing Bars',
     activeEditor: 'script',
     script: {
       language: props.language,
-      content: getCode(props.language, props.code),
+      content: getCode(props.language, props.code, baseUrl),
     },
     markup: {
       language: 'html',
@@ -50,7 +53,7 @@ export default function OpenInPlayground(props: { language: Language; code: stri
   );
 }
 
-function getCode(language: Language, code: string) {
+function getCode(language: Language, code: string, baseUrl: string) {
   code = code.replace(/\/data\//g, baseUrl + '/data/');
 
   if (language === 'jsx') {

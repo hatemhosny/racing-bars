@@ -7,7 +7,7 @@ import { styleInject } from './styles';
 import { actions, createStore, rootReducer, Store } from './store';
 import { Options } from './options';
 import { registerEvents, DOMEventSubscriber, getTickDetails, EventType } from './events';
-import { Race, ApiMethod, ApiCallback } from './models';
+import { Race, ApiCallback } from './models';
 
 export async function race(
   data: Data[] | WideData[] | Promise<Data[]> | Promise<WideData[]> | string,

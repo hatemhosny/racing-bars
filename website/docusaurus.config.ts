@@ -5,7 +5,7 @@ import type * as Preset from '@docusaurus/preset-classic';
 const config: Config = {
   title: 'Racing Bars',
   tagline: 'Bar chart race made easy 🎉',
-  url: 'https://racing-bars.pages.dev',
+  url: 'https://racing-bars.hatemhosny.dev',
   baseUrl: '/',
   favicon: 'img/favicon.ico',
   organizationName: 'hatemhosny', // Usually your GitHub org/user name.
