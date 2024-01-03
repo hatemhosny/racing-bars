@@ -2,6 +2,7 @@ import React, { Suspense, lazy } from 'react';
 import type { Props } from '../../../../src/index';
 import ShowCode from '../ShowCode';
 import styles from './styles.module.css';
+import { useColorMode } from '@docusaurus/theme-common';
 import BrowserOnly from '@docusaurus/BrowserOnly';
 import { getFrameworkCode } from '@site/src/helpers/get-framework-code';
 
@@ -18,6 +19,7 @@ export default function RacingBars(
     options,
     dynamicProps,
   );
+  const { colorMode } = useColorMode();
 
   const RacingBarsReact: React.ComponentType<Props & { children?: React.ReactNode }> = lazy(
     // @ts-ignore
@@ -36,7 +38,10 @@ export default function RacingBars(
                   height: options.height || '80vh',
                   ...props.style,
                 }}
-                {...options}
+                {...{
+                  theme: colorMode,
+                  ...options,
+                }}
               >
                 Loading ...
               </RacingBarsReact>

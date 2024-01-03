@@ -31,11 +31,13 @@ export default function RacingBars(props: Props & { children?: React.ReactNode }
       const { options } = processProps(props, containerRef.current.id);
       racer.changeOptions(options);
     }
+  }, [props]);
 
+  useEffect(() => {
     return () => {
       racer?.destroy();
     };
-  }, [props]);
+  }, []);
 
   return (
     <div ref={containerRef} className={className}>
