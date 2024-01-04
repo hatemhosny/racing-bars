@@ -343,6 +343,11 @@ So you decide, based on how large is your data, network constraints and processi
 "Wide" CSV data does not allow the use of optional fields (`group`, `icon`)
 :::
 
+## Cumulative Sum
+
+You may frequently want to present the chart with cumulative sums (running totals), i.e. with each tick, the bar value increases with the new added value.
+If the dataset includes only new values, they can be converted to cumulative sums by setting the option [`makeCumulative`](./options.md#makecumulative) to `true`.
+
 ## Filling gaps in data
 
 Dates that are missing from data will be skipped.

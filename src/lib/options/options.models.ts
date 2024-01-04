@@ -11,6 +11,7 @@ export interface Options {
   dataTransform: null | ((data: Data[] | WideData[]) => Data[] | WideData[]);
   fillDateGapsInterval: null | 'year' | 'month' | 'day';
   fillDateGapsValue: 'last' | 'interpolate';
+  makeCumulative: boolean;
   title: string;
   subTitle: string;
   dateCounter: string | ((currentDate: string, dateSlice: Data[], allDates: string[]) => string);

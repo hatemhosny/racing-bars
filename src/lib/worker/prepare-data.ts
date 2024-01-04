@@ -15,7 +15,7 @@ export function prepareData(
     .then(processFixedOrder(options.fixedOrder))
     .then(validateAndSort)
     .then(fillDateGaps(options.fillDateGapsInterval, options.fillDateGapsValue, options.topN))
-    .then(calculateLastValues);
+    .then(calculateLastValues(options.makeCumulative));
 }
 
 function fetchData(
@@ -69,22 +69,27 @@ function fillDateGaps(
   };
 }
 
-function calculateLastValues(data: Data[]) {
-  return data
-    .sort((a, b) => a.name.localeCompare(b.name) || a.date.localeCompare(b.date))
-    .reduce((acc: Data[], curr) => {
-      if (acc.length === 0) {
-        curr.lastValue = curr.value;
-      } else {
-        const last = acc[acc.length - 1];
-        if (curr.name === last.name) {
-          curr.lastValue = last.value;
-        } else {
+function calculateLastValues(makeCumulative = false) {
+  return function (data: Data[]) {
+    return data
+      .sort((a, b) => a.name.localeCompare(b.name) || a.date.localeCompare(b.date))
+      .reduce((acc: Data[], curr) => {
+        if (acc.length === 0) {
           curr.lastValue = curr.value;
+        } else {
+          const last = acc[acc.length - 1];
+          if (curr.name === last.name) {
+            curr.lastValue = last.value;
+            if (makeCumulative) {
+              curr.value = last.value + curr.value;
+            }
+          } else {
+            curr.lastValue = curr.value;
+          }
         }
-      }
-      return [...acc, curr];
-    }, []);
+        return [...acc, curr];
+      }, []);
+  };
 }
 
 function wideDataToLong(dataShape: Options['dataShape'], nested = false) {

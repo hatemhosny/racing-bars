@@ -9,6 +9,7 @@ export const defaultOptions: Options = {
   dataTransform: null,
   fillDateGapsInterval: null,
   fillDateGapsValue: 'interpolate',
+  makeCumulative: false,
   startDate: '',
   endDate: '',
   colorSeed: '',

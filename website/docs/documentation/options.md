@@ -545,6 +545,20 @@ const options = {
 };
 ```
 
+### makeCumulative
+
+If `true`, the values are converted to [cumulative sums](./data.md#cumulativesum) (running totals).
+
+- Type: `boolean`
+- Default: false
+- Example: [view in gallery](../gallery/cum-sum)
+
+```js
+const options = {
+  makeCumulative: true,
+};
+```
+
 ### marginBottom
 
 The bottom margin of the chart in pixels (still inside the SVG element).
