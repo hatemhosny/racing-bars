@@ -240,6 +240,22 @@ racingBars.loadData('/data/population.json').then((data) => {
 But the `dataTransform` option was added to facilitate the use in the provided [React](../packages/react.md), [Vue](../packages/vue.md) and [Python](../packages/python.md) implementations where the component may load the data from url.
 So it would be more convenient to be able to also pass a transformation function that would run before creating the chart.
 
+### dataType
+
+When a URL to a file containing the data is supplied as the first argument to the [`race`](./api.md#race) function,
+the type of that file can be specified using the `dataType` option.
+
+- Type: `string`
+- Valid values: ["json" | "csv" | "tsv" | "xml"]
+- Default: "json"
+- Example:
+
+This example uses "csv" data type
+
+```js
+race('/data.csv', '#race', { dataType: 'csv' });
+```
+
 ### dateCounter
 
 Displays the date counter on the right lower corner of the chart.
@@ -688,29 +704,6 @@ To change the color of the selected bar use a modification of this css:
   stroke: #777777 !important;
   stroke-width: 1 !important;
 }
-```
-
-### selector
-
-A CSS selector for the element to use as a container for the chart.
-Note that any HTML inside that element will be deleted before embedding the chart.
-If the selector evaluates to multiple elements, the first one will be used.
-If no elements were found with the current selector, an error will be thrown.
-
-- Type: `string`
-- Default: '#race'
-- Example:
-
-```js
-const options = {
-  selector: '#race',
-};
-```
-
-```js
-const options = {
-  selector: '.mydiv',
-};
 ```
 
 ### showGroups

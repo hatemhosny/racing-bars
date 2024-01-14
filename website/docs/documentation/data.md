@@ -351,5 +351,5 @@ If the dataset includes only new values, they can be converted to cumulative sum
 ## Filling gaps in data
 
 Dates that are missing from data will be skipped.
-If you need to fill date gaps, you may use the options [`fillDateGaps`](./options.md) and [`fillDateGapValue`](./options.md).
+If you need to fill date gaps, you may use the options [`fillDateGapsInterval`](./options.md#filldategapsinterval) and [`fillDateGapValue`](./options.md#filldategapsvalue).
 Please check the [guide](../guides/fill-date-gaps.md) about filling date gaps and data interpolation.

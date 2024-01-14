@@ -1,138 +1,156 @@
 <!DOCTYPE html>
-<head>
-  <meta charset="utf-8" />
-  <style>
-    #container {
-      height: 95vh;
-      /* width: 95vw; */
-      width: 100%;
-      margin-top: 15px;
-    }
-    .race {
-      margin: auto;
-      height: 100%;
-      width: 95%;
-      /* width: 80vw;
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      #container {
+        height: 95vh;
+        /* width: 95vw; */
+        width: 100%;
+        margin-top: 15px;
+      }
+      .race {
+        margin: auto;
+        height: 100%;
+        width: 95%;
+        /* width: 80vw;
       position: fixed;
       top: 0; */
-    }
-  </style>
-</head>
+      }
+    </style>
+  </head>
 
-<body>
-  <div id="container">
-    <div id="race">Loading...</div>
-  </div>
+  <body>
+    <div id="container">
+      <div id="race">Loading...</div>
+    </div>
 
-  <script src="scripts/d3.min.js"></script>
-  <script src="scripts/racing-bars.umd.js"></script>
-  <script>
-    const options = {
-      selector: '#race',
-      // dataShape: 'wide',
-      // fillDateGaps: 'months',
-      // fillDateGapsValue: 'last',
-      title: 'World Population',
-      subTitle: 'in millions',
-      // dateCounter: 'MM/YYYY',
-      // dateCounter: (currentDate, dateSlice, dates) =>
-      //   `${dates.indexOf(currentDate) + 1} of ${dates.length}`,
-      caption: 'Source: World Bank',
-      // caption: (date, dateSlice, allDates) =>
-      //   `Total: ${Math.round(dateSlice.reduce((acc, curr) => acc + curr.value, 0))}`,
-      // `Max: ${Math.round(Math.max(...dateSlice.map((d) => d.value)))}`,
-      // startDate: '2009-4-1',
-      // endDate: '1965-12-31',
-      // loop: true,
-      // loopDelay: 5000,
-      tickDuration: 500,
-      // topN: 15,
-      // height: "window*0.85",
-      // width: 'window*0.5',
-      // showGroups: true,
-      mouseControls: true,
-      keyboardControls: true,
-      // controlButtons: 'none',
-      overlays: 'none',
-      showGroups: true,
-      // showIcons: true,
-      autorun: true,
-      // colorSeed: "asdfs",
-      // labelsPosition: 'outside',
-      // labelsWidth: 250,
-      // embedStyles: false,
-      // theme: 'dark',
-      // fixedScale: true,
-      // highlightBars: true,
-      // selectBars: true,
-    };
+    <!-- <script src="scripts/d3.min.js"></script> -->
+    <script src="../build/racing-bars.umd.js"></script>
+    <script>
+      const options = {
+        selector: '#race',
+        // dataShape: 'wide',
+        // fillDateGaps: 'months',
+        // fillDateGapsValue: 'last',
+        title: 'World Population',
+        subTitle: 'in millions',
+        // dateCounter: 'MM/YYYY',
+        // dateCounter: (currentDate, dateSlice, dates) =>
+        //   `${dates.indexOf(currentDate) + 1} of ${dates.length}`,
+        caption: 'Source: World Bank',
+        // caption: (date, dateSlice, allDates) =>
+        //   `Total: ${Math.round(dateSlice.reduce((acc, curr) => acc + curr.value, 0))}`,
+        // `Max: ${Math.round(Math.max(...dateSlice.map((d) => d.value)))}`,
+        // startDate: '2009-4-1',
+        // endDate: '1965-12-31',
+        // loop: true,
+        // loopDelay: 5000,
+        tickDuration: 500,
+        // topN: 15,
+        // height: "window*0.85",
+        // width: 'window*0.5',
+        // showGroups: true,
+        mouseControls: true,
+        keyboardControls: true,
+        // controlButtons: 'none',
+        overlays: 'none',
+        showGroups: true,
+        // showIcons: true,
+        autorun: false,
+        // colorSeed: "asdfs",
+        // labelsPosition: 'outside',
+        // labelsWidth: 250,
+        // embedStyles: false,
+        // theme: 'dark',
+        // fixedScale: true,
+        // highlightBars: true,
+        // selectBars: true,
+      };
 
-    // document.getElementById('race').addEventListener('firstDate', () => console.log('event fired'));
+      // document.getElementById('race').addEventListener('firstDate', () => console.log('event fired'));
 
-    racingBars.loadData('/data/population.csv', 'csv').then((data) => {
-      const racer = racingBars.race(data, options);
+      racingBars.loadData('/data/population.csv', 'csv').then(async (data) => {
+        const racer = await racingBars.race(data, options);
 
-      racer
-        .on('firstDate', () => console.log('firstDate'))
-        .on('dateChange', ({ date }) => console.log('date change', date))
-        .on('lastDate', () => console.log('lastDate'))
-        .on('play', () => console.log('play'))
-        .on('pause', () => console.log('pause'))
-        .onDate('1960-01-01', function () {
+        racer.on('firstDate', () => console.log('firstDate'));
+        const watcher = racer.on('dateChange', ({ date }) => console.log('date change', date));
+        racer.on('lastDate', () => console.log('lastDate'));
+        racer.on('play', () => console.log('play'));
+        racer.on('pause', () => console.log('pause'));
+        racer.onDate('1960-01-01', function () {
           console.log('Well, YES!', this);
-          // this.pause();
-        })
-        .onDate('1961-01-01', function () {
+          // racer.pause();
+        });
+        racer.onDate('1961-01-01', function () {
           console.log('YES!', this);
-          // this.pause();
-        })
+          // racer.pause();
+        });
 
-        .play()
-        .call(({ isRunning }) => console.log('isRunning', isRunning)) // true
+        racer.play();
+        // racer.call(({ isRunning }) => isRunning)); // true
+        console.log('isRunning', racer.isRunning());
 
-        .pause()
-        .call(({ date }) => console.log(date)) // "1960-01-01"
+        racer.pause();
+        // racer.call(({ date }) => console.log(date)); // "1960-01-01"
+        console.log(racer.getDate());
+        console.log('isRunning', racer.isRunning());
 
-        .inc()
-        .call(({ date }) => console.log(date)) // "1961-01-01"
+        // racer.inc();
+        // racer.call(({ date }) => console.log(date)) // "1961-01-01"
+        console.log(racer.getDate());
 
-        .inc(10)
-        .call(({ date }) => console.log(date)) // "1971-01-01"
+        // racer.inc(10);
+        // racer.call(({ date }) => console.log(date)) // "1971-01-01"
+        console.log(racer.getDate());
 
-        .dec(5)
-        .call(({ date }) => console.log(date)) // "1966-01-01"
+        // racer.dec(5);
+        // .call(({ date }) => console.log(date)) // "1966-01-01"
+        console.log(racer.getDate());
 
-        .skipForward()
-        .call(({ date }) => console.log(date)) // "2018-01-01"
+        // racer.skipForward();
+        // .call(({ date }) => console.log(date)) // "2018-01-01"
+        console.log(racer.getDate());
 
-        .skipBack()
-        .call(({ date }) => console.log(date)) // "1960-01-01"
+        // racer.skipBack();
+        // .call(({ date }) => console.log(date)) // "1960-01-01"
+        console.log(racer.getDate());
 
-        .play()
-        .call(function () {
-          console.log(this);
-        })
-        .delay(2000)
-        .call(function () {
-          console.log(this);
-        })
-        .call(({ date }) => console.log(date)) // "1960-01-01"
+        racer.play();
+        // .call(function () {
+        //   console.log(this);
+        // })
+        await delay(2000);
+        // .call(function () {
+        //   console.log(this);
+        // })
+        // .call(({ date }) => console.log(date)) // "1960-01-01"
+        console.log(racer.getDate());
 
-        .call(({ allDates }) => console.log(allDates)) // ["1960-01-01", ..., "2018-01-01"]
-        .call(({ isRunning }) => console.log('isRunning', isRunning)) // false
-        .call(({ date }) => console.log(date)) // false
-        .call(function () {
-          console.log(this);
-        }) // racer object
+        // .call(({ allDates }) => console.log(allDates)) // ["1960-01-01", ..., "2018-01-01"]
+        console.log(racer.getAllDates());
+        // .call(({ isRunning }) => console.log('isRunning', isRunning)) // false
+        console.log('isRunning', racer.isRunning());
 
-        .call(() => console.log('change options'))
-        .changeOptions({ title: 'Updated title!' })
+        // .call(({ date }) => console.log(date)) // false
+        console.log(racer.getDate());
 
-        .pause()
-        .delay(2000)
-        .call(() => console.log('destroy'))
-        .destroy()
-        .play(); // Error: Cannot perform this operation after calling destroy()
-    });
-  </script>
-</body>
+        // .call(function () {
+        //   console.log(this);
+        // }) // racer object
+
+        console.log('change options');
+        await racer.changeOptions({ title: 'Updated title!' });
+
+        racer.pause();
+        await delay(2000);
+        // console.log('destroy');
+        // racer.destroy();
+        watcher.remove();
+        racer.play(); // Error: Cannot perform this operation after calling destroy()
+      });
+
+      const delay = (ms) => new Promise((res) => setTimeout(res, ms));
+    </script>
+  </body>
+</html>
