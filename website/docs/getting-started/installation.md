@@ -4,52 +4,47 @@ title: Installation
 
 Installation options include:
 
-### CDN
+## Option 1: Using a bundler
 
-- Simply, add this script to the page HTML
+Install from npm
 
-```html
-<script src="https://cdn.jsdelivr.net/npm/racing-bars"></script>
-```
-
-This adds the global variable `racingBars`.
-
-- If you are using native ES Modules, you may instead use:
-
-```html
-<script type="module">
-  import { racingBars } from 'https://cdn.jsdelivr.net/npm/racing-bars/dist/racing-bars.esm.js';
-</script>
-```
-
-### NPM
-
-Alternatively, you can get it from npm using the shell command
-
-```sh
+```shell
 npm install racing-bars
 ```
 
 then you can import it:
 
+<!-- prettier-ignore-start -->
+
+```js
+import { race } from "racing-bars";
+
+race("/data.json", "#container", { /* options */ });
+```
+
+
+## Option 2: Load from CDN
+
+### ESM
+
 ```html
+<div id="container"></div>
 <script type="module">
-  import { racingBars } from 'racing-bars';
+  import { race } from "https://jsdelivr.net/npm/racing-bars";
+
+  race("/data.json", "#container", { /* options */ });
 </script>
 ```
 
-### Direct download
-
-The library can alternatively be downloaded directly as:
-
-- UMD module: [download](#)
-- ES module: [download](#)
-
-### Lite bundle
-
-If you are already using d3, you may use the "lite" bundle which does not include d3
+### UMD
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/d3@5.16.0/dist/d3.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/racing-bars/lite/index.umd.js"></script>
+<div id="container"></div>
+<script src="https://https://jsdelivr.net/npm/racing-bars/racing-bars.umd.js"></script>
+<script>
+  // the UMD version provides the global object `racingBars`
+  racingBars.race("/data.json", "#container", { /* options */ });
+</script>
 ```
+
+<!-- prettier-ignore-end -->
