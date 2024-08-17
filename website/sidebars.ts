@@ -29,18 +29,18 @@ const sidebars: SidebarsConfig = {
         'documentation/events',
       ],
     },
-    {
-      type: 'category',
-      label: 'Frameworks and Languages',
-      items: [
-        'packages/js',
-        'packages/typescript',
-        'packages/react',
-        'packages/vue',
-        'packages/svelte',
-        'packages/python',
-      ],
-    },
+    // {
+    //   type: 'category',
+    //   label: 'Frameworks and Languages',
+    //   items: [
+    //     'packages/js',
+    //     'packages/typescript',
+    //     'packages/react',
+    //     'packages/vue',
+    //     'packages/svelte',
+    //     'packages/python',
+    //   ],
+    // },
     {
       type: 'category',
       label: 'Guides',

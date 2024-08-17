@@ -96,19 +96,40 @@ const config: Config = {
         //   ],
         // },
         {
-          title: 'Community',
+          title: 'Docs',
           items: [
             {
-              label: 'Stack Overflow',
-              href: 'https://stackoverflow.com/questions/tagged/docusaurus',
+              label: 'Overview',
+              to: 'docs/overview',
             },
             {
-              label: 'Discord',
-              href: 'https://discordapp.com/invite/docusaurus',
+              label: 'Features',
+              to: 'docs/features',
             },
             {
-              label: 'Twitter',
-              href: 'https://twitter.com/docusaurus',
+              label: 'Getting Started',
+              to: 'docs/getting-started/installation',
+            },
+            {
+              label: 'Playground',
+              to: 'playground',
+            },
+          ],
+        },
+        {
+          title: 'Info',
+          items: [
+            {
+              label: 'Credits',
+              to: 'docs/credits',
+            },
+            {
+              label: 'License',
+              to: 'docs/license',
+            },
+            {
+              label: 'Sponsor 💚',
+              href: 'https://github.com/sponsors/hatemhosny/',
             },
           ],
         },
@@ -123,10 +144,18 @@ const config: Config = {
               label: 'GitHub',
               href: 'https://github.com/hatemhosny/racing-bars',
             },
+            {
+              label: '𝕏 / Twitter',
+              href: 'https://x.com/hatem_hosny_',
+            },
+            {
+              label: 'npm',
+              href: 'https://www.npmjs.com/package/racing-bars',
+            },
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} Hatem Hosny. <br /> Made with ❤ and typescript.`,
+      copyright: `Released under the MIT License.<br />Copyright © ${new Date().getFullYear()} <a href="https://github.com/hatemhosny" target="_blank">Hatem Hosny</a>.`,
     },
     prism: {
       theme: prismThemes.github,

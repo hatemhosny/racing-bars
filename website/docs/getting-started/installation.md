@@ -30,7 +30,7 @@ race("/data.json", "#container", { /* options */ });
 ```html
 <div id="container"></div>
 <script type="module">
-  import { race } from "https://jsdelivr.net/npm/racing-bars";
+  import { race } from "https://cdn.jsdelivr.net/npm/racing-bars";
 
   race("/data.json", "#container", { /* options */ });
 </script>
@@ -40,7 +40,7 @@ race("/data.json", "#container", { /* options */ });
 
 ```html
 <div id="container"></div>
-<script src="https://https://jsdelivr.net/npm/racing-bars/racing-bars.umd.js"></script>
+<script src="https://https://cdn.jsdelivr.net/npm/racing-bars/racing-bars.umd.js"></script>
 <script>
   // the UMD version provides the global object `racingBars`
   racingBars.race("/data.json", "#container", { /* options */ });

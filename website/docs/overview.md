@@ -5,12 +5,7 @@ title: Overview
 Racing Bars is an [open-source](https://github.com/hatemhosny/racing-bars), light-weight (~45kb gzipped),
 easy-to-use, and [feature-rich](./features.md) javascript library for racing bar charts.
 It is based on <a href="https://d3js.org" target="_blank" className="external">D3.js</a>.
-Available for [JavaScript](./getting-started/installation.md),
-[TypeScript](./packages/typescript.md),
-[React](./packages/react.md),
-[Vue](./packages/vue.md),
-[Svelte](./packages/svelte.md)
-and [Python](./packages/python.md).
+Available for JavaScript, TypeScript, React, Vue and Svelte.
 
 import RacingBars from '../src/components/RacingBars';
 
