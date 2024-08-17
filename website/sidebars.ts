@@ -12,16 +12,27 @@ import type { SidebarsConfig } from '@docusaurus/plugin-content-docs';
  */
 const sidebars: SidebarsConfig = {
   docsSidebar: [
-    'overview',
+    {
+      type: 'doc',
+      label: 'Overview',
+      id: 'index',
+    },
     'features',
     {
       type: 'category',
       label: 'Getting Started',
+      link: {
+        type: 'doc',
+        id: 'getting-started/installation',
+      },
       items: ['getting-started/installation', 'getting-started/usage'],
     },
     {
       type: 'category',
       label: 'Documentation',
+      link: {
+        type: 'generated-index',
+      },
       items: [
         'documentation/data',
         'documentation/options',
@@ -44,6 +55,9 @@ const sidebars: SidebarsConfig = {
     {
       type: 'category',
       label: 'Guides',
+      link: {
+        type: 'generated-index',
+      },
       items: [
         'guides/chart-size',
         'guides/bar-colors',
@@ -65,8 +79,7 @@ const sidebars: SidebarsConfig = {
       type: 'category',
       label: 'Gallery',
       link: {
-        type: 'doc',
-        id: 'gallery/index',
+        type: 'generated-index',
       },
       items: [
         {

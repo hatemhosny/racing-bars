@@ -26,6 +26,7 @@ const config: Config = {
       'classic',
       {
         docs: {
+          routeBasePath: '/',
           sidebarPath: './sidebars.ts',
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
@@ -54,16 +55,11 @@ const config: Config = {
         src: 'img/logo.png',
       },
       items: [
+        { label: 'Docs', to: 'category/documentation', position: 'left' },
+        { label: 'Gallery', to: 'category/gallery', position: 'left' },
         {
-          to: 'docs/overview',
-          activeBasePath: 'docs',
-          label: 'Docs',
-          position: 'left',
-        },
-        { to: 'docs/gallery', activeBasePath: 'docs/gallery', label: 'Gallery', position: 'left' },
-        {
-          to: 'docs/sample-datasets',
-          activeBasePath: 'docs/sample-datasets',
+          to: 'sample-datasets',
+          activeBasePath: 'sample-datasets',
           label: 'Sample Datasets',
           position: 'left',
         },
@@ -87,11 +83,11 @@ const config: Config = {
         //   items: [
         //     {
         //       label: 'Style Guide',
-        //       to: 'docs/',
+        //       to: '',
         //     },
         //     {
         //       label: 'Second Doc',
-        //       to: 'docs/doc2/',
+        //       to: 'doc2/',
         //     },
         //   ],
         // },
@@ -100,15 +96,15 @@ const config: Config = {
           items: [
             {
               label: 'Overview',
-              to: 'docs/overview',
+              to: '/',
             },
             {
               label: 'Features',
-              to: 'docs/features',
+              to: 'features',
             },
             {
               label: 'Getting Started',
-              to: 'docs/getting-started/installation',
+              to: 'getting-started/installation',
             },
             {
               label: 'Playground',
@@ -121,11 +117,11 @@ const config: Config = {
           items: [
             {
               label: 'Credits',
-              to: 'docs/credits',
+              to: 'credits',
             },
             {
               label: 'License',
-              to: 'docs/license',
+              to: 'license',
             },
             {
               label: 'Sponsor 💚',
