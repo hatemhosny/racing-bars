@@ -1,6 +1,5 @@
 import React from 'react';
-import type { Config, Language } from 'livecodes';
-import LZString from 'lz-string';
+import { getPlaygroundUrl, type Config, type Language } from 'livecodes';
 import styles from './styles.module.css';
 import ExecutionEnvironment from '@docusaurus/ExecutionEnvironment';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
@@ -39,10 +38,7 @@ export default function OpenInPlayground(props: { language: Language; code: stri
 
   return (
     <a
-      href={
-        'https://livecodes.io?x=code/' +
-        LZString.compressToEncodedURIComponent(JSON.stringify(config))
-      }
+      href={getPlaygroundUrl({ config })}
       target="_blank"
       className={'external ' + styles.externalLink}
     >
