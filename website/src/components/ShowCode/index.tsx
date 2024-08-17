@@ -45,21 +45,6 @@ export default function ShowCode(props: {
 
   useEffect(() => {
     if (ExecutionEnvironment.canUseDOM) {
-      const format = (code: string, language = 'js') => {
-        try {
-          return (window as any).prettier.format(code, {
-            parser: language === 'html' ? 'html' : 'babel',
-            plugins: (window as any).prettierPlugins,
-          });
-        } catch {
-          return code;
-        }
-      };
-      setJsCode(format(jsCode));
-      setTsCode(format(tsCode, 'ts'));
-      setReactCode(format(reactCode, 'jsx'));
-      setVueCode(format(vueCode, 'html'));
-      setSvelteCode(format(svelteCode, 'html'));
       if (props.open) {
         summary.current?.click();
       }

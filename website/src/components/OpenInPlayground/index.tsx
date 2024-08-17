@@ -54,9 +54,23 @@ export default function OpenInPlayground(props: { language: Language; code: stri
 function getCode(language: Language, code: string, baseUrl: string) {
   code = code.replace(/\/data\//g, baseUrl + '/data/');
 
+  if (language === 'js') {
+    return `
+${code.replace(
+  'const options = {',
+  `/** @type {import('racing-bars').Options} */\nconst options = {`,
+)}
+`.trimStart();
+  }
+
   if (language === 'jsx') {
     return `
-${code.replace('<RacingBars ', '<RacingBars className="race" ')}
+${code
+  .replace(
+    '  const options = {',
+    `  /** @type {import('racing-bars').Options} */\n  const options = {`,
+  )
+  .replace('<RacingBars ', '<RacingBars className="race" ')}
 `.trimStart();
   }
 
