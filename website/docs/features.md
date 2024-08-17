@@ -5,8 +5,7 @@ title: Features
 - Easy to use
 - Light-weight (~45kb gzipped)
 - [Highly configurable](./documentation/options.md), with sensible defaults
-- Available for [vanilla JavaScript](./packages/js.md), [TypeScript](./packages/typescript.md),
-  [React](./packages/react.md), [Vue](./packages/vue.md), [Svelte](./packages/svelte.md) and [Python](./packages/python.md).
+- Available for vanilla JavaScript,TypeScript, React, Vue and Svelte.
 - Responsive / configurable [chart size](./guides/chart-size.md)
 - Light and dark [themes](./guides/themes.md)
 - Good looking default [colors](./guides/colors.md), also configurable with color maps or paletts

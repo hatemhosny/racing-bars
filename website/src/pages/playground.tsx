@@ -2,29 +2,42 @@ import React from 'react';
 import type { Config } from 'livecodes';
 import LiveCodes from 'livecodes/react';
 import Layout from '@theme/Layout';
+import ExecutionEnvironment from '@docusaurus/ExecutionEnvironment';
+import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 
 export default function Playground() {
+  const baseUrl = ExecutionEnvironment.canUseDOM
+    ? location.origin
+    : useDocusaurusContext().siteConfig.url;
+
   const config: Partial<Config> = {
     title: 'Racing Bars',
     activeEditor: 'script',
+    fontSize: 14,
     markup: {
       language: 'html',
       content: '<div id="race"></div>',
     },
     style: {
       language: 'css',
-      content: '#race { height: 95vh; }',
+      content: '#race {\n  height: 95vh;\n}\n',
     },
     script: {
       language: 'js',
       content: `
-import { loadData, race } from 'racing-bars';
+import { race } from 'racing-bars';
 
+/** @type {import('racing-bars').Options} */
 const options = {
-  selector: '#race',
-  // dataShape: 'wide',
+  dataType: 'csv',
+  // dataShape: 'long',
   // fillDateGaps: 'months',
   // fillDateGapsValue: 'last',
+  dataTransform: (data) => data.map((d) => ({
+    ...d,
+    value: Number(d.value) * 1000,
+    icon: \`https://flagsapi.com/\${d.code}/flat/64.png\`,
+  })),
   title: 'World Population in 60 Years',
   subTitle: 'Top 10 World Population',
   dateCounter: 'YYYY',
@@ -61,22 +74,17 @@ const options = {
 
 };
 
-loadData('http://127.0.0.1:8080/data/population.csv', 'csv').then((data) => {
-  data = data.map((d) => ({
-    ...d,
-    value: Number(d.value) * 1000,
-    icon: \`https://flagsapi.com/\${d.code}/flat/64.png\`,
-  }));
-  race(data, options);
-});
+race('${baseUrl}/data/population.csv', '#race', options);
 `.trimStart(),
     },
     imports: {
-      'racing-bars': 'http://127.0.0.1:8080/build/racing-bars.js',
-      'racing-bars/react': 'http://127.0.0.1:8080/build/react.js',
-      'racing-bars/vue': 'http://127.0.0.1:8080/build/vue.js',
+      'racing-bars': baseUrl + '/lib/racing-bars.js',
+      'racing-bars/react': baseUrl + '/lib/react.js',
+      'racing-bars/vue': baseUrl + '/lib/vue.js',
     },
-    fontSize: 14,
+    types: {
+      'racing-bars': baseUrl + '/lib/racing-bars.d.ts',
+    },
   };
 
   return (

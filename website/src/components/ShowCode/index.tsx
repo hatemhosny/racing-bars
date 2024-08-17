@@ -17,11 +17,11 @@ export default function ShowCode(props: {
   svelte: string;
   open?: boolean;
 }): JSX.Element {
-  const [jsCode, setJsCode] = useState(props.js);
-  const [tsCode, setTsCode] = useState(props.ts);
-  const [reactCode, setReactCode] = useState(props.react);
-  const [vueCode, setVueCode] = useState(props.vue);
-  const [svelteCode, setSvelteCode] = useState(props.svelte);
+  const [jsCode] = useState(props.js);
+  const [tsCode] = useState(props.ts);
+  const [reactCode] = useState(props.react);
+  const [vueCode] = useState(props.vue);
+  const [svelteCode] = useState(props.svelte);
 
   const codeBlockTitleHeight = '3.7rem';
   const [codeCollapsed, setCodeCollapsed] = useState(true);

@@ -16,7 +16,7 @@ Happy linting! 💖
   "typescript.enablePromptUseWorkspaceTsdk": true,
   "typescript.tsdk": "node_modules/typescript/lib",
   "files.associations": {
-    "*.md": "mdx"
+    "*.md": "markdown"
   },
   "jest.autoEnable": false,
   "python.formatting.provider": "black",
@@ -31,6 +31,7 @@ Happy linting! 💖
     "api",
     "ticker",
     "utils",
-    "store"
+    "store",
+    "styles"
   ]
 }
