@@ -29,6 +29,17 @@ export default function RacingBars(
   return (
     <BrowserOnly>
       {() => {
+        const format = (code: string, language = 'js') => {
+          try {
+            return (window as any).prettier?.format(code, {
+              parser: language === 'html' ? 'html' : 'babel',
+              plugins: (window as any).prettierPlugins,
+            });
+          } catch {
+            return code;
+          }
+        };
+
         return (
           <div className={styles.container}>
             <Suspense fallback={<div>Loading...</div>}>
@@ -48,11 +59,11 @@ export default function RacingBars(
             </Suspense>
             {props.showCode !== false && (
               <ShowCode
-                js={jsCode}
-                ts={tsCode}
-                react={reactCode}
-                vue={vueCode}
-                svelte={svelteCode}
+                js={format(jsCode, 'js')}
+                ts={format(tsCode, 'ts')}
+                react={format(reactCode, 'jsx')}
+                vue={format(vueCode, 'html')}
+                svelte={format(svelteCode, 'html')}
                 open={props.showCode !== 'closed'}
               ></ShowCode>
             )}

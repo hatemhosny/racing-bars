@@ -53,12 +53,14 @@ export const getFrameworkCode = (
   const jsCode = `
 import { race } from "racing-bars";
 ${getOptionsCode(options, 'js')}
+
 race("${dataUrl}", "#race"${getOptionsParam(options, 'js')});
 `.trimStart();
 
   const tsCode = `
 import { race${getOptionsType(options, 'ts')} } from "racing-bars";
 ${getOptionsCode(options, 'ts')}
+
 race("${dataUrl}", "#race"${getOptionsParam(options, 'ts')});
 `.trimStart();
 
@@ -67,6 +69,7 @@ import RacingBars from "racing-bars/react";
 
 export default function App() {
   ${getOptionsCode(options, 'react')}
+
   return (<RacingBars {...options}>Loading...</RacingBars>);
 }
 `.trimStart();
@@ -76,6 +79,7 @@ export default function App() {
 import RacingBars from "racing-bars/vue";
 ${getOptionsCode(options, 'vue')}
 </script>
+
 <template>
   <RacingBars v-bind="options">Loading...</RacingBars>
 </template>
@@ -86,6 +90,7 @@ ${getOptionsCode(options, 'vue')}
 import { onMount } from "svelte";
 import { race } from "racing-bars";
 ${getOptionsCode(options, 'svelte')}
+
 onMount(() => {
   race("${dataUrl}", "#race"${getOptionsParam(options, 'svelte')});
 });

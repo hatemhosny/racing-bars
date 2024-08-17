@@ -19,15 +19,13 @@ export default function OpenInPlayground(props: { language: Language; code: stri
     },
     markup: {
       language: 'html',
-      content: ['js', 'ts'].includes(props.language)
-        ? '<div id="race">Loading...</div>'
-        : props.language === 'jsx'
-        ? '<div id="root">Loading...</div>'
-        : '',
+      content: ['js', 'ts'].includes(props.language) ? '<div id="race">Loading...</div>' : '',
     },
     style: {
       language: 'css',
-      content: (['jsx', 'vue'].includes(props.language) ? '.' : '#') + 'race { height: 80vh; }',
+      content: ['vue', 'svelte'].includes(props.language)
+        ? ''
+        : (props.language === 'jsx' ? '.' : '#') + 'race {\n  height: 80vh;\n}\n',
     },
     imports: {
       'racing-bars': baseUrl + '/lib/racing-bars.js',
@@ -58,16 +56,34 @@ function getCode(language: Language, code: string, baseUrl: string) {
 
   if (language === 'jsx') {
     return `
-import React from "react";
-import { createRoot } from "react-dom/client";
 ${code.replace('<RacingBars ', '<RacingBars className="race" ')}
-const root = createRoot(document.querySelector("#root"));
-root.render(<App />);
 `.trimStart();
   }
 
   if (language === 'vue') {
-    return code.replace('<RacingBars ', '<RacingBars class="race" ');
+    return (
+      code.replace('<RacingBars ', '<RacingBars class="race" ') +
+      `
+<style scoped>
+  .race {
+    height: 80vh;
+  }
+</style>
+`
+    );
+  }
+
+  if (language === 'svelte') {
+    return (
+      code +
+      `
+<style>
+  #race {
+    height: 80vh;
+  }
+</style>
+`
+    );
   }
 
   return code;
