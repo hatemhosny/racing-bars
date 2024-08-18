@@ -95,7 +95,7 @@ const config: Config = {
           title: 'Docs',
           items: [
             {
-              label: 'Overview',
+              label: 'Home',
               to: '/',
             },
             {
@@ -156,7 +156,7 @@ const config: Config = {
     prism: {
       theme: prismThemes.github,
       darkTheme: prismThemes.dracula,
-      additionalLanguages: ['r', 'julia'],
+      additionalLanguages: ['json'],
     },
   } satisfies Preset.ThemeConfig,
   scripts: [

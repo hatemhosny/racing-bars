@@ -15,6 +15,6 @@ A demo for using [`tickDuration`](../documentation/options.md#tickduration) to c
   <RacingBars
     dataUrl="/data/population.csv"
     dataType="csv"
-    tickDuration={200}
+    tickDuration={100}
   />
 </div>

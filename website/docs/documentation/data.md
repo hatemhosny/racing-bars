@@ -16,12 +16,12 @@ Each data item has the following fields:
   Passing this string to `new Date()` should return a date. If an entry cannot be parsed as date an error will be thrown.
 - `name`: `string` (**required**) a string holding the name of each item (bar label). e.g. country name
 - `value`: `number` (**required**) the value of the name in that date.
-- `color`: `string` (**optional**) the color to use for the bar.
-  can be color name (e.g 'red'), hex code (e.g. '#FF0000') or RGB code (e.g. 'rgb(255, 0, 0)').
+- `color`: `string` (**optional**) the color to use for the bar as a CSS color. For example, this
+  can be a color name (e.g 'red'), hex code (e.g. '#ff0000') or RGB color (e.g. 'rgb(255, 0, 0)').
 - `group`: `string` (**optional**) a string representing a group for a number of names.
-  This has One-to-Many relation with `name` A group can have many names, but each name can be in one group. e.g. continent
-- `icon`: `string` (**optional**) a string holding the url of an icon that would be displayed in bars.
-  This has One-to-One relation to `name`. e.g. country flag
+  This has One-to-Many relationship with `name`. A group (e.g. continent) can have many names (e.g. countries), but each name can be in one group.
+- `icon`: `string` (**optional**) a string holding the URL of an icon that would be displayed in bars (e.g. country flag).
+  This has One-to-One relationship to `name`.
 
 ### Example
 
@@ -42,7 +42,7 @@ This is an example:
 
 The order of the items is not important.
 
-this is represented in JSON like that:
+This is represented in JSON like that:
 
 ```json title="long.json"
 [
@@ -117,9 +117,11 @@ date,name,value
 
 ### Usage
 
-#### Plain data object
+#### JS array of objects
 
 ```js
+import { race } from 'racing-bars';
+
 const data = [
   {
     date: '2017-01-01',
@@ -134,27 +136,37 @@ const data = [
   },
 ];
 
-racingBars.race(data);
+race(data, '#race');
 ```
 
 #### Load data from URL
 
-The [`loadData`](./api.md#loaddataurltype) method can be used
-to load `json`, `csv`, `tsv` or `xml` data from URL into a javascript object.
+Data can be loaded from a URL. The following formats are supported:
+`json` (default), `csv`, `tsv` and `xml`.
 
 - Load JSON from URL
 
 ```js
-racingBars.loadData('long.json').then((data) => {
-  racingBars.race(data);
-});
+import { race } from 'racing-bars';
+
+race('long.json', '#race');
 ```
 
 - Load CSV from URL
 
 ```js
-racingBars.loadData('long.csv', 'csv').then((data) => {
-  racingBars.race(data);
+import { race } from 'racing-bars';
+
+race('long.csv', '#race', { dataType: 'csv' });
+```
+
+In addition, the [`loadData`](./api.md#loaddataurltype) function can be used to load data from a URL into a JavaScript array.
+
+```js
+import { loadData, race } from 'racing-bars';
+
+loadData('long.csv', 'csv').then((data) => {
+  race(data);
 });
 ```
 
@@ -162,7 +174,7 @@ racingBars.loadData('long.csv', 'csv').then((data) => {
 
 Alternatively "wide" data can be used. Internally, "wide" data will be transformed to "long" before running.
 
-Each item (row), contains `date` field and other fields with key (column name), value pairs representing `name` and `value` respectively.
+Each item (row), contains a `date` field and other fields with key (column name), value pairs representing `name` and `value` respectively.
 
 ### Example
 
@@ -204,11 +216,13 @@ date,Canada,Egypt,Greece,Panama,Singapore
 
 ### Usage
 
-For wide data to be processed, the [`options`](./options.md) object should have the field [`dataShape`](./options.md#datashape) set to `wide`
+For wide data to be processed, the [`options`](./options.md) object should have the field [`dataShape`](./options.md#datashape) set to `"wide"`
 
-- Plain data object
+- JS array of objects
 
 ```js
+import { race } from 'racing-bars';
+
 const data = [
   {
     date: '2017-01-01',
@@ -228,22 +242,32 @@ const data = [
   },
 ];
 
-racingBars.race(data, { dataShape: 'wide' });
+race(data, '#race', { dataShape: 'wide' });
 ```
 
 - Load JSON from URL
 
 ```js
-racingBars.loadData('wide.json').then((data) => {
-  racingBars.race(data, { dataShape: 'wide' });
-});
+import { race } from 'racing-bars';
+
+race('wide.json', '#race', { dataShape: 'wide' });
 ```
 
 - Load CSV from URL
 
 ```js
-racingBars.loadData('wide.csv', 'csv').then((data) => {
-  racingBars.race(data, { dataShape: 'wide' });
+import { race } from 'racing-bars';
+
+race('wide.csv', '#race', { dataType: 'csv', dataShape: 'wide' });
+```
+
+Additionally, the [`loadData`](./api.md#loaddata) function can be used to load data from a URL into a JavaScript array.
+
+```js
+import { loadData, race } from 'racing-bars';
+
+loadData('wide.csv', 'csv').then((data) => {
+  race(data, { dataShape: 'wide' });
 });
 ```
 
@@ -328,19 +352,19 @@ Example for long data with [optional fields](#long-data):
 
 ## How do I choose?
 
-CSV files have smaller file size but require extra client-side processing than JSON files.
+CSV files have a smaller file size but require extra client-side processing than JSON files.
 
 Also "wide" data has smaller size than "long" data, but also requires extra client-side processing.
 
 :::tip
-"Wide" CSV data has the smallest file size but requires the most processing,
-while "long" JSON data has largest file size but requires least processing.
+**"Wide" CSV** data has the smallest file size but requires the most processing,
+while **"long" JSON** data has largest file size but requires least processing.
 :::
 
 So you decide, based on how large is your data, network constraints and processing power of the browsers of your users.
 
 :::caution
-"Wide" CSV data does not allow the use of optional fields (`group`, `icon`)
+"Wide" data does not allow the use of optional fields (`group` and `icon`)
 :::
 
 ## Cumulative Sum

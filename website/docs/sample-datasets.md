@@ -15,7 +15,7 @@ Each country is counted once a year.
 
 Source: <a href="https://github.com/datasets/population" target="_blank" className="external"><span>https</span>://github.com/datasets/population</a>
 
-Data item fields: date, name, code, group, value
+Data item fields: `date`, `name`, `code`, `group`, `value`
 
 [view demo in gallery](./gallery/data-population)
 
@@ -35,7 +35,7 @@ Gross domestic product (GDP) for countries over the years 1960-2016.
 
 Source: <a href="https://github.com/datasets/gdp" target="_blank" className="external"><span>https</span>://github.com/datasets/gdp</a>
 
-Data item fields: date, name, code, group, value
+Data item fields: `date`, `name`, `code`, `group`, `value`
 
 [view demo in gallery](./gallery/data-gdp)
 
@@ -55,7 +55,7 @@ Number of confirmed cases of Covid-19 per day in different countries, in the per
 
 Source: <a href="https://github.com/datasets/covid-19" target="_blank" className="external"><span>https</span>://github.com/datasets/covid-19</a>
 
-Data item fields: date, name, value
+Data item fields: `date`, `name`, `value`
 
 [view demo in gallery](./gallery/data-covid-19)
 
@@ -75,7 +75,7 @@ Best global brands in the period 2000-2018.
 
 Source: <a href="https://www.interbrand.com/" target="_blank" className="external">Interbrand</a>
 
-Data item fields: date, name, value
+Data item fields: `date`, `name`, `value`
 
 [view demo in gallery](./gallery/data-brand-values)
 
@@ -95,7 +95,7 @@ Number of new push events to GitHub for each programming language over the perio
 
 Source: <a href="https://github.com/madnight/githut" target="_blank" className="external"><span>https</span>://github.com/madnight/githut</a>
 
-Data item fields: date, name, value
+Data item fields: `date`, `name`, `value`
 
 [view demo in gallery](./gallery/data-gh-push)
 
@@ -115,7 +115,7 @@ Number of new GitHub stars for each programming language over the period 2012-20
 
 Source: <a href="https://github.com/madnight/githut" target="_blank" className="external"><span>https</span>://github.com/madnight/githut</a>
 
-Data item fields: date, name, value
+Data item fields: `date`, `name`, `value`
 
 [view demo in gallery](./gallery/data-gh-star)
 

@@ -25,7 +25,7 @@ The function accepts the following parameters:
 
   Type: `HTMLElement` | `string`
 
-  The chart container HTML element or a string representing a CSS selector for it. If not provided, the document `body` element is used.
+  The chart container HTML element or a string representing a CSS selector for it. If not provided, a new `<div>` element is created, added to the document `<body>` and used.
 
 - `options`:
 
@@ -48,8 +48,6 @@ import { race } from 'racing-bars';
 const options = {
   dataType: 'csv',
   title: 'World Population',
-  subTitle: 'in millions',
-  autorun: false,
 };
 race('data/population.csv', '#race', options);
 ```
@@ -108,6 +106,7 @@ import RacingBars from 'racing-bars/react';
 export default function App() {
   const options = {
     dataUrl: '/data/population.json',
+    title: 'World Population',
   };
 
   return <RacingBars {...options}>Loading...</RacingBars>;
