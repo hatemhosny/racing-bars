@@ -28,8 +28,8 @@ export function calculateDimensions(store: Store, renderOptions: RenderOptions) 
 
   const topN = fixedOrder.length > 0 ? fixedOrder.length : store.getState().options.topN;
 
-  const height = (renderOptions.height = getHeight(root, minHeight, inputHeight));
-  const width = (renderOptions.width = getWidth(root, minWidth, inputWidth));
+  const height = (renderOptions.height = getHeight(root, minHeight, String(inputHeight)));
+  const width = (renderOptions.width = getWidth(root, minWidth, String(inputWidth)));
 
   const titlePadding = 5;
   const titleHeight = title ? 55 : 0;

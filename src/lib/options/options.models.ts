@@ -26,12 +26,12 @@ export interface Options {
   showGroups: boolean;
   tickDuration: number;
   topN: number;
-  inputHeight: string;
-  inputWidth: string;
+  inputHeight: number | string;
+  inputWidth: number | string;
   minHeight: number;
   minWidth: number;
-  height: string;
-  width: string;
+  height: number | string;
+  width: number | string;
   marginTop: number;
   marginRight: number;
   marginBottom: number;

@@ -11,7 +11,7 @@ import { Race, ApiCallback } from './models';
 
 export async function race(
   data: Data[] | WideData[] | Promise<Data[]> | Promise<WideData[]> | string,
-  container: string | HTMLElement = 'body',
+  container?: string | HTMLElement,
   options: Partial<Options> = {},
 ): Promise<Race> {
   // for backward compatibility
@@ -21,7 +21,13 @@ export async function race(
     (!options || Object.keys(options).length === 0)
   ) {
     options = container;
-    container = (options as any).selector || 'body';
+    container = (options as any).selector;
+  }
+
+  if (!container) {
+    const div = document.createElement('div');
+    document.body.appendChild(div);
+    container = div;
   }
 
   const root =

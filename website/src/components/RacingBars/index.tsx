@@ -46,7 +46,7 @@ export default function RacingBars(
               <RacingBarsReact
                 className={`${props.className} racing-bars`}
                 style={{
-                  height: options.height || '80vh',
+                  height: String(options.height) || '80vh',
                   ...props.style,
                 }}
                 {...{

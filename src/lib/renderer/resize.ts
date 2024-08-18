@@ -17,8 +17,8 @@ export function resize(data: Data[], store: Store, renderOptions: RenderOptions)
     String(inputHeight).startsWith('window') ||
     String(inputWidth).startsWith('window')
   ) {
-    renderOptions.height = getHeight(root, minHeight, inputHeight);
-    renderOptions.width = getWidth(root, minWidth, inputWidth);
+    renderOptions.height = getHeight(root, minHeight, String(inputHeight));
+    renderOptions.width = getWidth(root, minWidth, String(inputWidth));
 
     const currentPosition = root.style.position; // "fixed" if scrolling
 

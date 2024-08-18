@@ -33,8 +33,8 @@ function isPromise(p: any) {
 /**
  * Type for component props.
  * Extends [[Options]]
- * Defines props passed to components (angular/react/vue).
- * See [options documentations](/docs/documentation/options) for the rest of props.
+ * Defines props passed to components (react/vue).
+ * See [options documentations](https://racing-bars.hatemhosny.dev/documentation/options) for the rest of props.
  */
 export interface Props
   extends Partial<

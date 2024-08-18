@@ -1,10 +1,12 @@
-/* __selector__ {
+/*
+__selector__ {
   background-color: #ffffff;
 }
 
 __selector__ text.title {
   fill: #fafafa;
-} */
+}
+*/
 
 __selector__ text.subTitle {
   fill: #777777;
