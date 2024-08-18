@@ -6,8 +6,8 @@ toc_max_heading_level: 6
 
 import RacingBars from '../../src/components/RacingBars';
 
-This example shows the use of [data functions](#).
-The `dateCounter` uses a function to show '[count] of [total]'
+This example shows the use of [data functions](../documentation/options.md#data-function).  
+The [`dateCounter`](../documentation/options.md#datecounter) uses a function to show "[count] of [total]"
 
 <!--truncate-->
 
@@ -27,20 +27,3 @@ dateCounter: (currentDate, dateSlice, allDates) =>
 \`\${allDates.indexOf(currentDate) + 1} of \${allDates.length}\``}}
   />
 </div>
-
-### Code
-
-```html {5,6}
-<div id="race"></div>
-<script>
-  const options = {
-    selector: '#race',
-    dateCounter: (currentDate, dateSlice, allDates) =>
-      `${allDates.indexOf(currentDate) + 1} of ${allDates.length}`,
-  };
-
-  racingBars.loadData('/data/population.csv', 'csv').then((data) => {
-    racingBars.race(data, options);
-  });
-</script>
-```

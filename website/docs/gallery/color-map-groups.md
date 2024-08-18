@@ -6,7 +6,7 @@ toc_max_heading_level: 6
 
 import RacingBars from '../../src/components/RacingBars';
 
-A demo for using a color map for groups.
+A demo for using a [color map](../documentation/options.md#colormap) for [groups](../documentation/options.md#showgroups).
 
 <!--truncate-->
 
@@ -26,26 +26,3 @@ Europe: 'green',
     showGroups={true}
   />
 </div>
-
-### Code
-
-```html {11}
-<div id="race"></div>
-<script>
-  const continentColors = {
-    Asia: 'yellow',
-    Europe: 'green',
-  };
-
-  const options = {
-    selector: '#race',
-    title: 'World Population',
-    colorMap: continentColors,
-    showGroups: true,
-  };
-
-  racingBars.loadData('/data/population.csv', 'csv').then((data) => {
-    racingBars.race(data, options);
-  });
-</script>
-```

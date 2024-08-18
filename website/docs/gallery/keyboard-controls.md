@@ -6,8 +6,8 @@ toc_max_heading_level: 6
 
 import RacingBars from '../../src/components/RacingBars';
 
-A demo for using [`keyboardControls`](/docs/documentation/options#keyboardControls).
-See the guide on [`chart controls`](/docs/guides/chart-controls).
+A demo for using [`keyboardControls`](../documentation/options.md#keyboardControls).
+See the guide on [`chart controls`](../guides/chart-controls.md).
 
 <!--truncate-->
 
@@ -25,7 +25,6 @@ Notice that both charts are affected. Also notice that typing in the `input` and
     subTitle="in millions"
     keyboardControls={true}
     showGroups={true}
-    height="300"
 />
 </div>
 
@@ -37,44 +36,9 @@ Notice that both charts are affected. Also notice that typing in the `input` and
     subTitle="in millions"
     keyboardControls={true}
     showGroups={false}
-    height="300"
 />
 </div>
   <span>try typing here:</span>
   <div><input type="text" /></div>
   <span>or here:</span>
   <div><textarea></textarea></div>
-
-### Code
-
-```html {20}
-<div>
-  <div id="race"></div>
-</div>
-<div>
-  <div id="race2"></div>
-</div>
-<span>try typing here:</span>
-<div>
-  <input type="text" />
-</div>
-<span>or here:</span>
-<div>
-  <textarea></textarea>
-</div>
-<script>
-  const options = {
-    selector: '#race',
-    title: 'World Population',
-    subTitle: 'in millions',
-    mouseControls: true,
-    showGroups: true,
-    height: 300,
-  };
-
-  racingBars.loadData('/data/population.csv', 'csv').then((data) => {
-    racingBars.race(data, options);
-    racingBars.race(data, { ...options, selector: '#race2', showGroups: false });
-  });
-</script>
-```

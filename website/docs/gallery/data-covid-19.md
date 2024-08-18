@@ -6,7 +6,7 @@ toc_max_heading_level: 6
 
 import RacingBars from '../../src/components/RacingBars';
 
-A demo showing the use of [covid-19 dataset](/docs/sample-datasets#covid-19).
+A demo showing the use of [covid-19 dataset](../sample-datasets#covid-19).
 
 <!--truncate-->
 
@@ -23,22 +23,3 @@ A demo showing the use of [covid-19 dataset](/docs/sample-datasets#covid-19).
 />
 
 </div>
-
-### Code
-
-```html
-<div id="race"></div>
-<script>
-  const options = {
-    selector: '#race',
-    title: 'Covid-19',
-    subTitle: 'Number of confirmed cases',
-    dateCounter: 'MMM DD, YYYY',
-    labelsPosition: 'outside',
-  };
-
-  racingBars.loadData('/data/covid-19.csv', 'csv').then((data) => {
-    racingBars.race(data, options);
-  });
-</script>
-```

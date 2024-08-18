@@ -6,8 +6,8 @@ toc_max_heading_level: 6
 
 import RacingBars from '../../src/components/RacingBars';
 
-A demo for using [`fixedScale`](/docs/documentation/options#fixedscale) with [`labelsPosition`](/docs/documentation/options#labelsposition),
-to avoid [such problem](./fixed-scale).
+A demo for using [`fixedScale`](../documentation/options.md#fixedscale) with [`labelsPosition`](../documentation/options.md#labelsposition),
+to avoid [such problem](./fixed-scale.md).
 
 <!--truncate-->
 
@@ -23,21 +23,3 @@ to avoid [such problem](./fixed-scale).
 />
 
 </div>
-
-### Code
-
-```html {6,7}
-<div id="race"></div>
-<script>
-  const options = {
-    selector: '#race',
-    title: 'Covid-19 Confirmed Cases',
-    fixedScale: true,
-    labelsPosition: 'outside',
-  };
-
-  racingBars.loadData('/data/covid-19.csv', 'csv').then((data) => {
-    racingBars.race(data, options);
-  });
-</script>
-```

@@ -6,7 +6,7 @@ toc_max_heading_level: 6
 
 import RacingBars from '../../src/components/RacingBars';
 
-A demo for using `tickDuration` to control chart "speed".
+A demo for using [`tickDuration`](../documentation/options.md#tickduration) to control chart "speed".
 
 <!--truncate-->
 
@@ -16,26 +16,6 @@ A demo for using `tickDuration` to control chart "speed".
   <RacingBars
     dataUrl="/data/population.csv"
     dataType="csv"
-    title="World Population"
-    subTitle="in millions"
     tickDuration={200}
   />
 </div>
-
-### Code
-
-```html {7}
-<div id="race"></div>
-<script>
-  const options = {
-    selector: '#race',
-    title: 'World Population',
-    subTitle: 'in millions',
-    tickDuration: 200,
-  };
-
-  racingBars.loadData('/data/population.csv', 'csv').then((data) => {
-    racingBars.race(data, options);
-  });
-</script>
-```

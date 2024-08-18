@@ -6,7 +6,7 @@ toc_max_heading_level: 6
 
 import RacingBars from '../../src/components/RacingBars';
 
-This example shows the use of [data function](../documentation/options#data-function) in caption.
+This example shows the use of [data function](../documentation/options#data-function) in [caption](../documentation/options#caption).
 
 <!--truncate-->
 
@@ -26,20 +26,3 @@ caption: (currentDate, dateSlice, allDates) =>
 \`Total: \${Math.round(dateSlice.reduce((acc, curr) => acc + curr.value, 0))}\``}}
   />
 </div>
-
-### Code
-
-```html {5,6}
-<div id="race"></div>
-<script>
-  const options = {
-    selector: '#race',
-    caption: (currentDate, dateSlice, allDates) =>
-      `Total: ${Math.round(dateSlice.reduce((acc, curr) => acc + curr.value, 0))}`,
-  };
-
-  racingBars.loadData('/data/population.csv', 'csv').then((data) => {
-    racingBars.race(data, options);
-  });
-</script>
-```

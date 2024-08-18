@@ -7,8 +7,11 @@ title: Options
 An optional configuration object can be passed to the [`race`](../documentation/api.md#racedata-options) method.
 
 ```js
+import { race } from 'racing-bars';
+
+const selector = '#race';
 const options = {};
-racingBars.race(data, options);
+race(data, selector, options);
 ```
 
 ## Options
@@ -21,14 +24,14 @@ If `true`, the bar chart race runs automatically on load.
 If set to `false`, make sure you provide a way to run the chart using one of the methods described [here](../guides/chart-controls.md).
 
 - Type: `boolean`
-- Default: true
+- Default: `true`
 
 ### caption
 
 If provided, displays below the date counter on the right lower corner of the chart
 
-- Type: `string | [data function](#data-function)`
-- Default: ""
+- Type: `string` | [data function](#data-function)
+- Default: `""`
 - Example: [view in gallery](../gallery/caption-string)
 
 ```js
@@ -60,14 +63,14 @@ On the other hand, an object can be supplied to map specific item names/groups t
 The object does not have to include all bar names. The other bars will get the default colors.
 Note that names are case-sensitive.
 
-The colors specified in the array or object can be
-color names (e.g 'red'), hex codes (e.g. '#FF0000') or RGB codes (e.g. 'rgb(255, 0, 0)').
+The colors specified in the array or object can be any valid CSS colors such as
+color names (e.g `"red"`), hex codes (e.g. `"#ff0000"`) or RGB colors (e.g. `"rgb(255, 0, 0)"`).
 
 - Type: `string[] | {[key: string]: string}`
-- Default: ""
+- Default: `""`
 - Example:
 
-This example uses an array as color palette.
+This example uses an array as a color palette.
 
 [view in gallery](../gallery/color-palette)
 
@@ -123,22 +126,22 @@ const options = {
 ```
 
 :::info
-Notice that if groups are shown ([showGroups](#showgroups) is set to 'true', and the dataset has the field 'group'),
-this setting affects 'group' colors, otherwise it affects 'name' colors, but not both.
+Notice that if groups are shown ([showGroups](#showgroups) is set to `true`, and the dataset has the field `"group"`),
+this setting affects `"group"` colors, otherwise it affects `"name"` colors, but not both.
 :::
 
 ### colorSeed
 
 A seed used to change bar colors. This causes shuffling the names/groups before being assigned to colors.
 The same seed guarantees the assignment to same color.
-This has no effect if the bar color is determined in the data (by the optional field `color`),
+This has no effect if the bar color is determined in the data (by the optional field `"color"`),
 or by [`colorMap`](#colormap) object that maps the item name/group.
 
 - Type: `number | string`
-- Default: ""
+- Default: `""`
 - Example:
 
-This example changes bar colors using `colorSeed`
+This example changes bar colors using `"colorSeed"`
 
 [view in gallery](../gallery/color-seed)
 
@@ -151,13 +154,12 @@ const options = {
 ### controlButtons
 
 Shows/hides buttons that control the chart (play/pause/skip-back/skip-forward).
-The value "all" shows all buttons.
-The value "play" shows one button (play or pause).
-The value "none" hides all buttons.
+The value `"all"` shows all buttons.
+The value `"play"` shows one button (play or pause).
+The value `"none"` hides all buttons.
 
-- Type: `string`
-- Valid values: ["all", "play", "none"]
-- Default: "none"
+- Type: `"all", "play", "none"`
+- Default: `"none"`
 - Example:
 
 This example shows all control buttons
@@ -177,12 +179,11 @@ See the guide on [`chart controls`](../guides/chart-controls.md) for other alter
 Instruction whether the data shape is <a href="https://en.wikipedia.org/wiki/Wide_and_narrow_data" target="_blank">"long" or "wide"</a>.
 See ["Data" section](./data.md) for more details and examples.
 
-- Type: `string`
-- Valid values: ["long", "wide"]
-- Default: "long"
+- Type: `"long" | "wide"`
+- Default: `"long"`
 - Example:
 
-This example uses "wide" data shape
+This example uses `"wide"` data shape
 
 ```js
 const options = {
@@ -197,17 +198,19 @@ This function accepts the loaded data (typically an array of data items).
 It may perform various data transformation operations (e.g map, filter, reshape, ..etc).
 It then returns an array of data items that will be used by the [`race`](../documentation/api.md#racedata-options) method.
 
-- Type: `function `(data: Data[] | any) => Data[] | WideData[]` | null`
-- Default: null
+- Type: `(data: Data[] | any) => Data[] | WideData[]` | `null`
+- Default: `null`
 - Example:
 
-This example transforms the data array. Each data item has the following fields: "date", "name", "code", "group", "value".
-The function adds a new field "icon", based on the "code" field.
-The "icon" field is used to [show icons](../guides/icons.md) on the bars.
+This example transforms the data array. Each data item has the following fields: `"date"`, `"name"`, `"code"`, `"group"`, `"value"`.
+The function adds a new field `"icon"`, based on the `"code"` field.
+The `"icon"` field is used to [show icons](../guides/icons.md) on the bars.
 
 [view in gallery](../gallery/data-transform)
 
-```js {9}
+```js
+import { race } from 'racing-bars';
+
 const transformFn = (data) =>
   data.map((d) => ({
     ...d,
@@ -215,42 +218,40 @@ const transformFn = (data) =>
   }));
 
 const options = {
-  selector: '#race',
   dataTransform: transformFn,
 };
 
-racingBars.loadData('/data/population.json').then((data) => {
-  racingBars.race(data, options);
-});
+race('/data/population.json', '#race', options);
 ```
 
 Note that the transformation could have been done after loading the data with [`loadData`](../documentation/api.md#loaddataurl-type) method and before calling the [`race`](../documentation/api.md#racedata-options) method, as follows:
 
 ```js
-racingBars.loadData('/data/population.json').then((data) => {
+import { loadData, race } from 'racing-bars';
+
+loadData('/data/population.json').then((data) => {
   const dataWithIcons = data.map((d) => ({
     ...d,
     icon: `https://flagsapi.com/${d.code}/flat/64.png`,
   }));
 
-  racingBars.race(dataWithIcons, options);
+  race(dataWithIcons, '#race', options);
 });
 ```
 
-But the `dataTransform` option was added to facilitate the use in the provided [React](../packages/react.md), [Vue](../packages/vue.md) and [Python](../packages/python.md) implementations where the component may load the data from url.
+But the `dataTransform` option was added to facilitate the use in the provided React, Vue and Svelte implementations where the component may load the data from url.
 So it would be more convenient to be able to also pass a transformation function that would run before creating the chart.
 
 ### dataType
 
 When a URL to a file containing the data is supplied as the first argument to the [`race`](./api.md#race) function,
-the type of that file can be specified using the `dataType` option.
+the type of that file can be specified using the `"dataType"` option.
 
-- Type: `string`
-- Valid values: ["json" | "csv" | "tsv" | "xml"]
-- Default: "json"
+- Type: `"json" | "csv" | "tsv" | "xml"`
+- Default: `"json"`
 - Example:
 
-This example uses "csv" data type
+This example uses `"csv"` data type
 
 ```js
 race('/data.csv', '#race', { dataType: 'csv' });
@@ -261,10 +262,10 @@ race('/data.csv', '#race', { dataType: 'csv' });
 Displays the date counter on the right lower corner of the chart.
 If a string is used, the following will be replaced:
 
-"MMM": month name, "DDD": day name, "YYYY": year, "MM": month, "DD": day
+`"MMM"`: month name, `"DDD"`: day name, `"YYYY"`: year, `"MM"`: month, `"DD"`: day
 
-- Type: `string | [data function](#data-function)`
-- Default: "MM/YYYY"
+- Type: `string` | [data function](#data-function)
+- Default: `"MM/YYYY"`
 - Example:
 
 This example displays formatted date
@@ -277,7 +278,7 @@ const options = {
 };
 ```
 
-This example uses [data function](#data-function) to display the `dateCounter` as '[count] of [total]' instead of date
+This example uses [data function](#data-function) to display the `dateCounter` as "[count] of [total]" instead of date:
 
 [view in gallery](../gallery/date-counter)
 
@@ -290,12 +291,12 @@ const options = {
 
 ### endDate
 
-If provided, the data is filtered so that the `date` field of the data item is less than or equal to the given date.
-It should be a string that can be parsed as date by `new Date()`, preferably formatted as 'YYYY-MM-DD'.
+If provided, the data is filtered so that the `"date"` field of the data item is less than or equal to the given date.
+It should be a string that can be parsed as date by `new Date()`, preferably formatted as `"YYYY-MM-DD"`.
 If it cannot be parsed as date, an error will be thrown.
 
 - Type: `string`
-- Default: ""
+- Default: `""`
 - Example: [view in gallery](../gallery/start-end-dates)
 
 ```js
@@ -318,12 +319,11 @@ Missing dates (date gaps) are skipped.
 Setting `fillDateGapsInterval` fills the date gaps between [`startDate`](#startdate) and [`endDate`](#enddate).
 The interval at which the date gaps are filled is determined by the value of this option.
 
-For example, setting it to "year" ensures that every year between `startDate` and `endDate` is represented.
+For example, setting it to `"year"` ensures that every year between `startDate` and `endDate` is represented.
 The values computed for the data items in the missing dates are determined by [`fillDateGapsValue`](#filldategapsvalue).
 
-- Type: `string | null`
-- Valid values: ["year", "month", "day"]
-- Default: null
+- Type: `"year" | "month" | "day" | null`
+- Default: `null`
 - Example: [view in gallery](../gallery/fill-date-gaps)
 
 ```js
@@ -335,7 +335,7 @@ const options = {
 :::caution
 
 Using this feature in large datasets, having to fill large number of missing dates can significantly affect performance.  
-i.e. using the value "day" over a wide range of dates will be significantly slower than "year".
+i.e. using the value `"day"` over a wide range of dates will be significantly slower than `"year"`.
 
 Use with caution!
 
@@ -352,14 +352,13 @@ This option is still experimental.
 :::
 
 Determines the values computed for the data items in the missing dates on filling date gaps.  
-If set to "interpolate", the value of data items in the missing date will be the average between 2 present dates.  
-If set to "last", the value of data items in the missing date will be equal to the values of the last present date.
+If set to `"interpolate"`, the value of data items in the missing date will be the average between 2 present dates.  
+If set to `"last"`, the value of data items in the missing date will be equal to the values of the last present date.
 
 This is only effective if [`fillDateGapsInterval`](#filldategapsinterval) is set.
 
-- Type: `string`
-- Valid values: ["interpolate", "last"]
-- Default: "interpolate"
+- Type: `"interpolate" | "last"`
+- Default: `"interpolate"`
 - Example: [view in gallery](../gallery/fill-date-gaps)
 
 ```js
@@ -381,7 +380,7 @@ Note that if `fixedOrder` is specified, [`topN`](#topn) will be ignored.
 Also note that with this setting it is more likely that the date counter will overlap the lower bars.
 
 - Type: `string[]`
-- Default: []
+- Default: `[]`
 - Example: [view in gallery](../gallery/fixed-order)
 
 ```js
@@ -401,7 +400,7 @@ You may then want to set [`labelsPosition`](#labelsposition) to `"outside"`
 ([view in gallery](../gallery/fixed-scale-labels)).
 
 - Type: `boolean`
-- Default: false
+- Default: `false`
 - Example: [view in gallery](../gallery/fixed-scale2)
 
 ```js
@@ -415,13 +414,13 @@ const options = {
 Specifies the height of the chart.
 If left `undefined`, the chart uses the height of the selected DOM element (specified by [`selector`](#selector)),
 what can be set by css for example.
-The height can be set to a number (in pixels), or can be set to ratio of window `innerHeight`. The string value "window\*0.8" sets the height to 0.8 of the window `innerHeight`.
+The height can be set to a number (in pixels), or can be set to ratio of window `innerHeight`. The string value `"window*0.8"` sets the height to 0.8 of the window `innerHeight`.
 
 Note that the minimum allowed height of the chart is 300px.
 
 If `height` is undefined or specified as ratio to window `innerHeight`, the chart is responsive (will resize on window resize).
 
-- Type: `number | "window\*`number`" | undefined`
+- Type: `number | "window*{number}" | undefined`
 - Default: undefined
 - Example:
 
@@ -464,8 +463,8 @@ const options = {
 To change the color of the bar highlight use a modification of this css:
 
 ```css
-.highlight {
-  fill: #ff2727 !important;
+#race .highlight {
+  fill: #27b7ff !important;
 }
 ```
 
@@ -478,7 +477,7 @@ You may wish to disable this behaviour and have control on CSS.
 To do this set the option `injectStyles` to `false`, and no CSS will be injected
 
 - Type: `boolean`
-- Default: true
+- Default: `true`
 - Example:
 
 ```js
@@ -501,7 +500,7 @@ If the currently active element is an `input` or a `textarea` (i.e. the user is 
 Note that if there are multiple charts in the page, all the charts with the option `keyboardControls` enabled, will be affected.
 
 - Type: `boolean`
-- Default: false
+- Default: `false`
 - Example: [view in gallery](../gallery/keyboard-controls)
 
 ```js
@@ -520,9 +519,8 @@ Otherwise, the labels are positioned on the left side of the bars.
 Note that if this is set to `"inside"` (default),
 bars with small width (low values) may have their labels partially invisible ([demo](../gallery/fixed-scale)).
 
-- Type: `string`
-- Valid values: ["inside", "outside"]
-- Default: "inside"
+- Type: `"inside" | "outside"`
+- Default: `"inside"`
 - Example: [view in gallery](../gallery/labels-position.md)
 
 ```js
@@ -534,10 +532,10 @@ const options = {
 ### labelsWidth
 
 The width (in pixels) of the area for bar labels on the left side of the chart.
-It is ignored if `labelsPosition` is set to "inside" (default).
+It is ignored if `labelsPosition` is set to `"inside"` (default).
 
 - Type: `number`
-- Default: 150
+- Default: `150`
 - Example:
 
 ```js
@@ -552,7 +550,7 @@ const options = {
 If `true`, the race restarts after reaching the last date.
 
 - Type: `boolean`
-- Default: false
+- Default: `false`
 - Example: [view in gallery](../gallery/loop)
 
 ```js
@@ -566,7 +564,7 @@ const options = {
 If `true`, the values are converted to [cumulative sums](./data.md#cumulativesum) (running totals).
 
 - Type: `boolean`
-- Default: false
+- Default: `false`
 - Example: [view in gallery](../gallery/cum-sum)
 
 ```js
@@ -580,7 +578,7 @@ const options = {
 The bottom margin of the chart in pixels (still inside the SVG element).
 
 - Type: `number`
-- Default: 5
+- Default: `5`
 - Example:
 
 ```js
@@ -594,7 +592,7 @@ const options = {
 The left margin of the chart in pixels (still inside the SVG element).
 
 - Type: `number`
-- Default: 0
+- Default: `0`
 - Example:
 
 ```js
@@ -608,7 +606,7 @@ const options = {
 The right margin of the chart in pixels (still inside the SVG element).
 
 - Type: `number`
-- Default: 20
+- Default: `20`
 - Example:
 
 ```js
@@ -622,7 +620,7 @@ const options = {
 The top margin of the chart in pixels (still inside the SVG element).
 
 - Type: `number`
-- Default: 0
+- Default: `0`
 - Example:
 
 ```js
@@ -637,7 +635,7 @@ This allows controlling the chart by mouse clicks.
 If `true`, single-click on the chart toggles play/pause, double-click triggers skip-forward and triple-click triggers skip-back.
 
 - Type: `boolean`
-- Default: false
+- Default: `false`
 - Example:
 
 ```js
@@ -653,14 +651,13 @@ See the guide on [`chart controls`](../guides/chart-controls.md) for other alter
 Shows/hides semi-transparent overlays that cover the chart and show buttons that control it.
 There are 2 overlays: play (at the beginning) and repeat (at the end).
 
-The value "all" shows both overlays.
-The value "play" shows an overlay at the beginning of the race with a play button.
-The value "repeat" shows an overlay at the end of the race with a repeat button.
-The value "none" hides both overlays.
+The value `"all"` shows both overlays.
+The value `"play"` shows an overlay at the beginning of the race with a play button.
+The value `"repeat"` shows an overlay at the end of the race with a repeat button.
+The value `"none"` hides both overlays.
 
-- Type: `string`
-- Valid values: ["all", "play", "repeat", "none"]
-- Default: "none"
+- Type: `"all" | "play" | "repeat" | "none"`
+- Default: `"none"`
 - Example:
 
 This example shows both overlays
@@ -681,7 +678,7 @@ See the guide on [`chart controls`](../guides/chart-controls.md) for other alter
 ### selectBars
 
 If `true`, mouse clicks toggle bar select/unselect.
-This is implemented by toggle of the class `selected` on the html element on click.
+This is implemented by toggle of the class `"selected"` on the html element on click.
 The color of the selected bars is determined by the [`theme`](../guides/themes-styles.md).
 
 - Type: `boolean`
@@ -729,35 +726,37 @@ const options = {
 If `true` and if the dataset has the optional field `icon`, an icon will be shown on bars.
 The `icon` field will be used as the url for the image used.
 
-This will take some space from the bar, so some labels may not be visible. If so, consider setting the option [`labelsPosition`](#labelsposition) to `'outside'`.
+This will take some space from the bar, so some labels may not be visible. If so, consider setting the option [`labelsPosition`](#labelsposition) to `"outside"`.
 
 - Type: `boolean`
 - Default: `false`
 - Example: [view in gallery](../gallery/icons)
 
 ```js {2,8}
+import { loadData, race } from 'racing-bars';
+
 const options = {
   showIcons: true,
 };
 
-racingBars.loadData('/data/population.csv', 'csv').then((data) => {
+loadData('/data/population.csv', 'csv').then((data) => {
   const dataWithIcons = data.map((d) => ({
     ...d,
     icon: `https://flagsapi.com/${d.code}/flat/64.png`,
   }));
 
-  racingBars.race(dataWithIcons, options);
+  race(dataWithIcons, '#race', options);
 });
 ```
 
 ### startDate
 
-If provided, the data is filtered so that the `date` field of the data item is more than or equal to the given date.
-It should be a string that can be parsed as date by `new Date()`, preferably formatted as 'YYYY-MM-DD'.
+If provided, the data is filtered so that the `"date"` field of the data item is more than or equal to the given date.
+It should be a string that can be parsed as date by `new Date()`, preferably formatted as `'YYYY-MM-DD'`.
 If it cannot be parsed as date, an error will be thrown.
 
 - Type: `string`
-- Default: ""
+- Default: `""`
 - Example: [view in gallery](../gallery/start-end-dates)
 
 ```js
@@ -770,8 +769,8 @@ const options = {
 
 If provided, displays chart sub-title
 
-- Type: `string | [data function](#data-function)`
-- Default: ""
+- Type: `string` | [data function](#data-function)
+- Default: `""`
 - Example: [view in gallery](../gallery/title-string)
 
 ```js
@@ -784,9 +783,8 @@ const options = {
 
 Selects the theme to use. See the guide on [`themes and styles`](../guides/themes-styles.md) for details.
 
-- Type: `string`
-- Valid values: ["light", "dark"]
-- Default: "light"
+- Type: `"light" | "dark"`
+- Default: `"light"`
 - Example: [view in gallery](../gallery/theme-dark)
 
 ```js
@@ -798,10 +796,10 @@ const options = {
 ### tickDuration
 
 The duration (in milliseconds) during which each date is displayed.
-Decreasing the value increases the "speed" at which the chart runs.
+Decreasing the value increases the `"speed"` at which the chart runs.
 
 - Type: `number`
-- Default: 500
+- Default: `500`
 - Example:
 
 This chart runs fast!
@@ -818,8 +816,8 @@ const options = {
 
 If provided, displays chart title
 
-- Type: `string | [data function](#data-function)`
-- Default: ""
+- Type: `string` | [data function](#data-function)
+- Default: `""`
 - Example: [view in gallery](../gallery/title-string)
 
 ```js
@@ -833,7 +831,7 @@ const options = {
 Number of bars to show. This represents the number of data items with highest values in each date.
 
 - Type: `number`
-- Default: 10
+- Default: `10`
 - Example: [view in gallery](../gallery/top-n)
 
 ```js
@@ -847,13 +845,13 @@ const options = {
 Specifies the width of the chart.
 If left `undefined`, the chart uses the width of the selected DOM element (specified by [`selector`](#selector)),
 what can be set by css for example.
-The width can be set to a number (in pixels), or can be set to ratio of window `innerWidth`. The string value "window\*0.8" sets the width to 0.8 of the window `innerWidth`.
+The width can be set to a number (in pixels), or can be set to ratio of window `innerWidth`. The string value `"window*0.8"` sets the width to 0.8 of the window `innerWidth`.
 
 Note that the minimum allowed width of the chart is 500px.
 
 If `width` is undefined or specified as ratio to window `innerWidth`, the chart is responsive (will resize on window resize).
 
-- Type: `number | "window\*`number`" | undefined`
+- Type: `number | "window*{number}" | undefined`
 - Default: undefined
 - Example:
 
@@ -882,9 +880,9 @@ The function will be evaluated in every date and the returned string will be dis
 
 ### Arguments
 
-- `currentDate`: `string`. A string representing the current date formatted as 'YYYY-MM-DD'.
+- `currentDate`: `string`. A string representing the current date formatted as `"YYYY-MM-DD"`.
 - `dateSlice`: `Data[]`. An array of data items filtered by the current date. This includes all data items not just those shown in the chart as stated by `topN`.
-- `allDates`: `string[]`. An array of strings representing all dates in the dataset formatted as 'YYYY-MM-DD'.
+- `allDates`: `string[]`. An array of strings representing all dates in the dataset formatted as `"YYYY-MM-DD"`.
 
 ### Return
 

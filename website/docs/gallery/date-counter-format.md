@@ -6,7 +6,7 @@ toc_max_heading_level: 6
 
 import RacingBars from '../../src/components/RacingBars';
 
-This example shows the use of date formatting in `dateCounter`
+This example shows the use of date formatting in [`dateCounter`](../documentation/options#datecounter)
 
 <!--truncate-->
 
@@ -19,19 +19,3 @@ This example shows the use of date formatting in `dateCounter`
     dateCounter="MMM DD, YYYY 🌍"
   />
 </div>
-
-### Code
-
-```html {5}
-<div id="race"></div>
-<script>
-  const options = {
-    selector: '#race',
-    dateCounter: 'MMM DD, YYYY 🌍',
-  };
-
-  racingBars.loadData('/data/population.csv', 'csv').then((data) => {
-    racingBars.race(data, options);
-  });
-</script>
-```

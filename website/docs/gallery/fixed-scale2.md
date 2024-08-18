@@ -6,7 +6,7 @@ toc_max_heading_level: 6
 
 import RacingBars from '../../src/components/RacingBars';
 
-A demo for using [`fixedScale`](/docs/documentation/options#fixedscale).
+A demo for using [`fixedScale`](../documentation/options.md#fixedscale).
 
 <!--truncate-->
 
@@ -22,19 +22,16 @@ A demo for using [`fixedScale`](/docs/documentation/options#fixedscale).
 
 </div>
 
-### Code
+Compare with:
 
-```html {6}
-<div id="race"></div>
-<script>
-  const options = {
-    selector: '#race',
-    title: 'Brand Values',
-    fixedScale: true,
-  };
+### fixedScale: false (default)
 
-  racingBars.loadData('/data/brands.csv', 'csv').then((data) => {
-    racingBars.race(data, options);
-  });
-</script>
-```
+<div className="gallery">
+  <RacingBars
+    dataUrl="/data/brands.csv"
+    dataType="csv"
+    title="Brand Values"
+    fixedScale={false}
+/>
+
+</div>

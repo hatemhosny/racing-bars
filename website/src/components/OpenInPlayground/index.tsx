@@ -48,26 +48,22 @@ export default function OpenInPlayground(props: { language: Language; code: stri
 }
 
 function getCode(language: Language, code: string, baseUrl: string) {
-  code = code.replace(/\/data\//g, baseUrl + '/data/');
+  code = code?.replace(/\/data\//g, baseUrl + '/data/') || '';
 
   if (language === 'js') {
-    return `
-${code.replace(
-  'const options = {',
-  `/** @type {import('racing-bars').Options} */\nconst options = {`,
-)}
-`.trimStart();
+    return code.replace(
+      'const options = {',
+      `/** @type {import('racing-bars').Options} */\nconst options = {`,
+    );
   }
 
   if (language === 'jsx') {
-    return `
-${code
-  .replace(
-    '  const options = {',
-    `  /** @type {import('racing-bars').Options} */\n  const options = {`,
-  )
-  .replace('<RacingBars ', '<RacingBars className="race" ')}
-`.trimStart();
+    return code
+      .replace(
+        '  const options = {',
+        `  /** @type {import('racing-bars').Options} */\n  const options = {`,
+      )
+      .replace('<RacingBars ', '<RacingBars className="race" ');
   }
 
   if (language === 'vue') {

@@ -6,9 +6,9 @@ toc_max_heading_level: 6
 
 import RacingBars from '../../src/components/RacingBars';
 
-A demo for using [`controlButtons`](/docs/documentation/options#controlbuttons).
+A demo for using [`controlButtons`](../documentation/options#controlbuttons).
 
-See the guide on [`chart controls`](/docs/guides/chart-controls).
+See the guide on [`chart controls`](../guides/chart-controls).
 
 <!--truncate-->
 
@@ -27,24 +27,6 @@ See the guide on [`chart controls`](/docs/guides/chart-controls).
 
 </div>
 
-### Code
-
-```html {7}
-<div id="race"></div>
-<script>
-  const options = {
-    selector: '#race',
-    title: 'World Population',
-    subTitle: 'in millions',
-    controlButtons: 'all',
-  };
-
-  racingBars.loadData('/data/population.csv', 'csv').then((data) => {
-    racingBars.race(data, options);
-  });
-</script>
-```
-
 ## controlButtons: 'play'
 
 ### Chart
@@ -60,24 +42,6 @@ See the guide on [`chart controls`](/docs/guides/chart-controls).
 
 </div>
 
-### Code
-
-```html {7}
-<div id="race"></div>
-<script>
-  const options = {
-    selector: '#race',
-    title: 'World Population',
-    subTitle: 'in millions',
-    controlButtons: 'play',
-  };
-
-  racingBars.loadData('/data/population.csv', 'csv').then((data) => {
-    racingBars.race(data, options);
-  });
-</script>
-```
-
 ## controlButtons: 'none' (default)
 
 ### Chart
@@ -92,21 +56,3 @@ See the guide on [`chart controls`](/docs/guides/chart-controls).
 />
 
 </div>
-
-### Code
-
-```html {7}
-<div id="race"></div>
-<script>
-  const options = {
-    selector: '#race',
-    title: 'World Population',
-    subTitle: 'in millions',
-    controlButtons: 'none',
-  };
-
-  racingBars.loadData('/data/population.csv', 'csv').then((data) => {
-    racingBars.race(data, options);
-  });
-</script>
-```

@@ -6,7 +6,7 @@ toc_max_heading_level: 6
 
 import RacingBars from '../../src/components/RacingBars';
 
-A demo showing the use of [population dataset](/docs/sample-datasets#population).
+A demo showing the use of [population dataset](../sample-datasets#population).
 
 <!--truncate-->
 
@@ -30,29 +30,3 @@ icon: `https://flagsapi.com/${d.code}/flat/64.png`,
     labelsPosition="outside"
   />
 </div>
-
-### Code
-
-```html
-<div id="race"></div>
-<script>
-  const options = {
-    selector: '#race',
-    title: 'World Population in 60 Years',
-    subTitle: 'Country Population in millions',
-    caption: 'Source: World Bank',
-    dateCounter: 'YYYY',
-    showIcons: true,
-    labelsPosition: 'outside',
-  };
-
-  racingBars.loadData('/data/population.csv', 'csv').then((data) => {
-    const dataWithIcons = data.map((d) => ({
-      ...d,
-      icon: `https://flagsapi.com/${d.code}/flat/64.png`,
-    }));
-
-    racingBars.race(dataWithIcons, options);
-  });
-</script>
-```

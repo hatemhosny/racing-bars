@@ -6,7 +6,7 @@ toc_max_heading_level: 6
 
 import RacingBars from '../../src/components/RacingBars';
 
-A demo showing the use of [icons](/docs/guides/icons).
+A demo showing the use of [icons](../guides/icons.md).
 
 <!--truncate-->
 
@@ -34,30 +34,7 @@ icon: `https://flagsapi.com/${d.code}/flat/64.png`,
   />
 </div>
 
-### Code
+Notice setting [`labelsPosition`](../documentation/options.md#labelsposition) to `'outside'` to keep the labels visible, since the icons will take some space on the bar.
 
-```html {8,15}
-<div id="race"></div>
-<script>
-  const options = {
-    selector: '#race',
-    title: 'World Population in 60 Years',
-    subTitle: 'Country Population in millions',
-    caption: 'Source: World Bank',
-    showIcons: true,
-    labelsPosition: 'outside',
-  };
-
-  racingBars.loadData('/data/population.csv', 'csv').then((data) => {
-    const dataWithIcons = data.map((d) => ({
-      ...d,
-      icon: `https://flagsapi.com/${d.code}/flat/64.png`,
-    }));
-    racingBars.race(dataWithIcons, options);
-  });
-</script>
-```
-
-You may also use the [`dataTransform`](/docs/documentation/options#datatransform) option for data transformation,
-like in [this example](./data-transform).
-<br />
+You may also use the [`dataTransform`](../documentation/options.md#datatransform) option for data transformation,
+like in [this example](./data-transform.md).

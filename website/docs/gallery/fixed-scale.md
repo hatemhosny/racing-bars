@@ -6,12 +6,12 @@ toc_max_heading_level: 6
 
 import RacingBars from '../../src/components/RacingBars';
 
-A demo for using [`fixedScale`](/docs/documentation/options#fixedscale).
+A demo for using [`fixedScale`](../documentation/options.md#fixedscale).
 
 <!--truncate-->
 
 Notice that initially most of the bar labels are not visible.
-To avoid such problem, consider setting [`labelsPosition`](/docs/documentation/options#labelsposition) to `'outside'` ([demo](./fixed-scale-labels)).
+To avoid such problem, consider setting [`labelsPosition`](../documentation/options.md#labelsposition) to `'outside'` ([demo](./fixed-scale-labels.md)).
 
 ### Chart
 
@@ -24,20 +24,3 @@ To avoid such problem, consider setting [`labelsPosition`](/docs/documentation/o
 />
 
 </div>
-
-### Code
-
-```html {6}
-<div id="race"></div>
-<script>
-  const options = {
-    selector: '#race',
-    title: 'Covid-19 Confirmed Cases',
-    fixedScale: true,
-  };
-
-  racingBars.loadData('/data/covid-19.csv', 'csv').then((data) => {
-    racingBars.race(data, options);
-  });
-</script>
-```
