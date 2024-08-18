@@ -31,8 +31,9 @@ The function accepts the following parameters:
 
   Type: `Partial`&lt;[`Options`](/api/interfaces/Options.md)&gt;
 
-  An optional configuration object.  
-  See [section about options](../documentation/options.md) for details
+  An optional configuration object. See [section about options](../documentation/options.md) for details
+
+The function returns a promise that resolves to an object that allows interaction with the chart. See [API documentation](../documentation/api.md#return-1) for details.
 
 Examples for usage:
 

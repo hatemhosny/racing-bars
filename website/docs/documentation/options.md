@@ -4,7 +4,7 @@ title: Options
 
 ## Usage
 
-An optional configuration object can be passed to the [`race`](../documentation/api.md#racedata-options) method.
+An optional configuration object can be passed to the [`race`](../documentation/api.md#race) method.
 
 ```js
 import { race } from 'racing-bars';
