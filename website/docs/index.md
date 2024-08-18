@@ -1,11 +1,11 @@
 ---
 title: Racing Bars
-toc_max_heading_level: 2
+hide_table_of_contents: true
 ---
 
 ### **Bar Chart Race Made Easy 🎉**
 
-Racing Bars is an [open-source](https://github.com/hatemhosny/racing-bars), light-weight (~45kb gzipped),
+_Racing Bars_ is an [open-source](https://github.com/hatemhosny/racing-bars), light-weight (~45kb gzipped),
 easy-to-use, and [feature-rich](./features.md) javascript library for racing bar charts.
 It is based on <a href="https://d3js.org" target="_blank" className="external">D3.js</a>.
 

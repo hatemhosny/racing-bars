@@ -2,9 +2,11 @@
 title: Usage
 ---
 
+## `race`
+
 The library exports the function [`race`](../documentation/api.md#race), which creates the bar chart race. It has the following signature:
 
-Type: [`function race(data, container?, options?): Promise<Race>`](/api/modules.md#race)
+Type: [`race(data, container?, options?): Promise<Race>`](/api/modules.md#race)
 
 The function accepts the following parameters:
 
@@ -48,7 +50,12 @@ const options = {
 race('data/population.csv', '#race', options);
 ```
 
-For convenience, the library also exports the function [`loadData`](../documentation/api.md) to allow fetching data from URL.
+## `loadData`
+
+For convenience, the library also exports the function [`loadData`](../documentation/api.md#loaddata) to allow fetching data from URL.
+
+Type: [`loadData(URL, type?): Promise<Data[]> | Promise<WideData[]>`](/api/modules.md#loadData)
+
 It supports the following data formats, by specifying the second optional parameter:
 
 - `'json'` (default)
@@ -63,7 +70,7 @@ Examples for usage:
 ```js
 import { loadData, race } from 'racing-bars';
 
-loadData('data/population.json').then((data) => {
+loadData('data/population.csv', 'csv').then((data) => {
   race(data, '#race', { title: 'World Population' });
 });
 ```

@@ -2,15 +2,15 @@
 title: API
 ---
 
-The detailed API is documented <a href="/docs/api/modules/" target="_blank" className="external">here</a>.
-
 This page is an overview and a guide for usage.
 
-## Methods:
+The API TypeScript definitions are documented [here](../api/modules.md).
+
+## Functions:
 
 ### [loadData](/api/modules.md#loaddata)
 
-This method loads data from url.
+This function loads data from url.
 
 #### Parameters
 
@@ -36,7 +36,7 @@ racingBars.loadData('/data/population.csv', 'csv').then((data) => {
 
 ### [race](/api/modules.md#race)
 
-This is the main method that generates the racing bar chart.
+This is the main function that generates the racing bar chart.
 
 #### Parameters
 
@@ -156,38 +156,41 @@ After calling this method, any calls to the chart object methods are ignored.
 #### Example
 
 ```js
+import { race } from 'racing-bars';
+
 const options = {
-  selector: '#race',
+  dataType: 'csv',
   title: 'Chart title',
 };
-racingBars.loadData('/data/population.csv', 'csv').then((data) => {
-  const racer = racingBars.race(data, options);
 
-  racer.pause();
-  console.log(racer.getDate()); // "1960-01-01"
+const racer = await race('/data/population.csv', '#race', options);
 
-  racer.inc();
-  console.log(racer.getDate()); // "1961-01-01"
+racer.pause();
+console.log(racer.getDate()); // "1960-01-01"
 
-  racer.inc(10);
-  console.log(racer.getDate()); // "1971-01-01"
+racer.inc();
+console.log(racer.getDate()); // "1961-01-01"
 
-  racer.dec(5);
-  console.log(racer.getDate()); // "1966-01-01"
+racer.inc(10);
+console.log(racer.getDate()); // "1971-01-01"
 
-  racer.skipForward();
-  console.log(racer.getDate()); // "2018-01-01"
+racer.dec(5);
+console.log(racer.getDate()); // "1966-01-01"
 
-  racer.skipBack();
-  console.log(racer.getDate()); // "1960-01-01"
+racer.skipForward();
+console.log(racer.getDate()); // "2021-01-01"
 
-  console.log(racer.getAllDates()); // ["1960-01-01", ..., "2018-01-01"]
+racer.skipBack();
+console.log(racer.getDate()); // "1960-01-01"
 
-  racer.changeOptions({ title: 'Updated title!' });
+console.log(racer.getAllDates()); // ["1960-01-01", ..., "2021-01-01"]
 
+racer.changeOptions({ title: 'Updated title!' });
+
+setTimeout(() => {
   racer.destroy();
   racer.play(); // Error: Cannot perform this operation after calling destroy()
-});
+}, 5000);
 ```
 
 See the guide on [Chart Controls](../guides/chart-controls.md) for other alternatives of controlling charts.
@@ -195,12 +198,12 @@ See the guides on [Slider](../guides/slider.md) and [Scroller](../guides/scrolle
 
 ## Interfaces
 
-### [DOMCustomEvent](/api/interfaces/DOMCustomEvent.md)
+### [DOMCustomEvent](../api/interfaces/DOMCustomEvent.md)
 
-### [Data](/api/interfaces/Data.md)
+### [Data](../api/interfaces/Data.md)
 
-### [Options](/api/interfaces/Options.md)
+### [Options](../api/interfaces/Options.md)
 
-### [Race](/api/interfaces/Race.md)
+### [Race](../api/interfaces/Race.md)
 
-### [WideData](/api/interfaces/WideData.md)
+### [WideData](../api/interfaces/WideData.md)

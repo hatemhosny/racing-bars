@@ -125,7 +125,7 @@ const config: Config = {
             },
             {
               label: 'Sponsor 💚',
-              href: 'https://github.com/sponsors/hatemhosny/',
+              href: 'sponsor',
             },
           ],
         },

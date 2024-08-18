@@ -90,6 +90,7 @@ const sidebars: SidebarsConfig = {
     },
     'credits',
     'license',
+    'sponsor',
   ],
 };
 

@@ -4,4 +4,4 @@ _Racing Bars_ is released under the permissive [MIT License](https://github.com/
 
 The source code is available on [GitHub](https://github.com/hatemhosny/racing-bars).
 
-Please consider [sponsoring](https://github.com/sponsors/hatemhosny/) the project to support its maintenance and continued development.
+Please consider [sponsoring](./sponsor.md) the project to support its maintenance and continued development.

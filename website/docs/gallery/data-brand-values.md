@@ -1,7 +1,6 @@
 ---
 title: Brand Values Dataset
-toc_min_heading_level: 6
-toc_max_heading_level: 6
+hide_table_of_contents: true
 ---
 
 import RacingBars from '../../src/components/RacingBars';

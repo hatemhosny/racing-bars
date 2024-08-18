@@ -10,7 +10,7 @@ title: Features
 - Light and dark [themes](./guides/themes.md)
 - Good looking default [colors](./guides/colors.md), also configurable with color maps or paletts
 - Customizable title, sub-title, caption and date counter. They all allow displaying [calculated/dynamic values](./guides/dynamic-values.md)
-- Flexible handling various [data shapes and formats](./documentation/data.md)
+- Flexible handling for various [data shapes and formats](./documentation/data.md)
 - [Icons](./guides/icons.md)
 - [Labels](./guides/labels.md) on the bars or outside
 - [Groups](./guides/groups.md) with filters
@@ -18,12 +18,12 @@ title: Features
 - Autorun or start manually
 - Allows looping
 - Optional fixed scale
-- Filter by custom start/end date
+- Custom start/end dates
 - Allows changing speed
 - Controls for play/pause/skip-back/skip-forward ([chart controls](./guides/chart-controls.md))
 - Overlays for play/repeat ([chart controls](./guides/chart-controls.md))
 - Keyboard and mouse controls ([chart controls](./guides/chart-controls.md))
 - [Multiple charts](./guides/multiple-charts.md) can be inserted in the same page
-- API to control the chart (e.g [slider](./gallery/slider.md), [scroll](./gallery/scroll.md))
+- [API](./documentation/api.md) to control the chart
 - Emits custom DOM [events](./documentation/events.md)
 - Open-source ([MIT Licence](./license.md))
