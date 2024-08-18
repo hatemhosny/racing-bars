@@ -2,9 +2,13 @@
 title: Usage
 ---
 
-## `race`
+## JavaScript Library
 
-The library exports the function [`race`](../documentation/api.md#race), which creates the bar chart race. It has the following signature:
+After [installation](./installation.md), you can use the library in JavaScript as follows:
+
+### `race`
+
+The library exports the [`race`](../documentation/api.md#race) function, which creates the bar chart race. It has the following signature:
 
 Type: [`race(data, container?, options?): Promise<Race>`](/api/modules.md#race)
 
@@ -50,9 +54,9 @@ const options = {
 race('data/population.csv', '#race', options);
 ```
 
-## `loadData`
+### `loadData`
 
-For convenience, the library also exports the function [`loadData`](../documentation/api.md#loaddata) to allow fetching data from URL.
+For convenience, the library also exports the [`loadData`](../documentation/api.md#loaddata) function to allow fetching data from URL.
 
 Type: [`loadData(URL, type?): Promise<Data[]> | Promise<WideData[]>`](/api/modules.md#loadData)
 
@@ -73,4 +77,79 @@ import { loadData, race } from 'racing-bars';
 loadData('data/population.csv', 'csv').then((data) => {
   race(data, '#race', { title: 'World Population' });
 });
+```
+
+## TypeScript Support
+
+The library supports TypeScript. Documentation for the TypeScript definitions can be found [here](../api/modules.md).
+
+```ts
+import { race, type Options } from 'racing-bars';
+
+const options: Options = {
+  dataType: 'csv',
+  title: 'World Population',
+};
+
+race('/data/population.csv', '#race', options);
+```
+
+## Framework Support
+
+The library also supports rendering the bar chart race in React, Vue and Svelte.
+
+### React
+
+A wrapper React component is exported as the default export from `racing-bars/react`.
+
+```jsx
+import RacingBars from 'racing-bars/react';
+
+export default function App() {
+  const options = {
+    dataUrl: '/data/population.json',
+  };
+
+  return <RacingBars {...options}>Loading...</RacingBars>;
+}
+```
+
+### Vue
+
+A wrapper Vue component is exported as the default export from `racing-bars/vue`.
+
+```html
+<script setup>
+  import RacingBars from 'racing-bars/vue';
+
+  const options = {
+    dataUrl: '/data/population.json',
+    title: 'World Population',
+  };
+</script>
+
+<template>
+  <RacingBars v-bind="options">Loading...</RacingBars>
+</template>
+```
+
+### Svelte
+
+The JS/TS library can be used directly in Svelte components without the need for any wrappers.
+
+```html
+<script>
+  import { onMount } from 'svelte';
+  import { race } from 'racing-bars';
+
+  const options = {
+    title: 'World Population',
+  };
+
+  onMount(() => {
+    race('/data/population.json', '#race', options);
+  });
+</script>
+
+<div id="race">Loading...</div>
 ```
