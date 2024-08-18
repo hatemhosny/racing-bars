@@ -9,7 +9,7 @@ import { renderHeader } from './render-header';
 import { renderControls, renderOverlays, updateControls } from './controls';
 import { selectFn, highlightFn, halo } from './helpers';
 
-export function renderInitalView(data: Data[], store: Store, renderOptions: RenderOptions) {
+export function renderInitialView(data: Data[], store: Store, renderOptions: RenderOptions) {
   const { caption, dateCounter, labelsPosition, showIcons, fixedScale, fixedOrder } =
     store.getState().options;
 

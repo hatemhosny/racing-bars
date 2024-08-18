@@ -184,7 +184,7 @@ function fillGaps(
   return wideDataToLong('wide', true)(allData);
 }
 
-/** Interpolate only topN before and after the date range to improve performace */
+/** Interpolate only topN before and after the date range to improve performance */
 function interpolateTopN(data1: any = {}, data2: any = {}, topN: number) {
   const topData1 = getTopN(data1, topN);
   const topData2 = getTopN(data2, topN);

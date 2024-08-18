@@ -45,7 +45,7 @@ export async function race(
     stylesId = styleInject(root, theme);
   }
 
-  renderer.renderInitalView();
+  renderer.renderInitialView();
   ticker.start();
   if (!autorun) {
     ticker.stop();
@@ -185,7 +185,7 @@ export async function race(
         }
       }
 
-      renderer.renderInitalView();
+      renderer.renderInitialView();
       events.reregister();
 
       if (autorun) {

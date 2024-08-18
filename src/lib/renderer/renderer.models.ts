@@ -1,5 +1,5 @@
 export interface Renderer {
-  renderInitalView: () => void;
+  renderInitialView: () => void;
   renderFrame: () => void;
   resize: () => void;
 }
