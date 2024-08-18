@@ -29,14 +29,16 @@ const cssBuild = async () => {
   const cssnano = cssnanoPlugin({ preset: 'default' });
   const files = await fs.readdir(destination);
   return Promise.all(
-    files.map(async (file) => {
-      const css = await fs.readFile(path.join(destination, file));
-      const result = await postcss([cssnano]).process(css, {
-        from: path.join(destination, file),
-        to: path.join(destination, file),
-      });
-      await fs.writeFile(path.join(destination, file), result.css);
-    }),
+    files
+      .filter((file) => path.extname(file) === '.css')
+      .map(async (file) => {
+        const css = await fs.readFile(path.join(destination, file), 'utf-8');
+        const result = await postcss([cssnano]).process(css, {
+          from: path.join(destination, file),
+          to: path.join(destination, file),
+        });
+        await fs.writeFile(path.join(destination, file), result.css);
+      }),
   );
 };
 

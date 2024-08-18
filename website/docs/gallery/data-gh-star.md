@@ -5,7 +5,7 @@ hide_table_of_contents: true
 
 import RacingBars from '../../src/components/RacingBars';
 
-A demo showing the use of [Github Stars dataset](/docs/sample-datasets#github-stars).
+A demo showing the use of [Github Stars dataset](../sample-datasets.md#github-stars).
 
 <!--truncate-->
 
