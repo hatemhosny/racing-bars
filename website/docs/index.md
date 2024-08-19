@@ -3,6 +3,10 @@ title: RacingBars
 hide_table_of_contents: true
 ---
 
+<head>
+  <title>RacingBars</title>
+</head>
+
 ### **Bar Chart Race Made Easy 🎉**
 
 _RacingBars_ is an [open-source](https://github.com/hatemhosny/racing-bars), light-weight (~45kb gzipped), easy-to-use, and [feature-rich](./features.md) javascript library for bar chart race.
