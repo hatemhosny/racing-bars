@@ -28,14 +28,10 @@ const config: Config = {
         docs: {
           routeBasePath: '/',
           sidebarPath: './sidebars.ts',
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
           editUrl: 'https://github.com/hatemhosny/racing-bars/tree/main/website/',
         },
         blog: {
           showReadingTime: true,
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
           editUrl: 'https://github.com/hatemhosny/racing-bars/tree/main/website/',
         },
         theme: {
@@ -46,8 +42,7 @@ const config: Config = {
   ],
 
   themeConfig: {
-    // Replace with your project's social card
-    image: 'img/docusaurus-social-card.jpg',
+    image: 'img/racing-bars-social-card.jpg',
     navbar: {
       title: 'RacingBars',
       logo: {
@@ -78,19 +73,6 @@ const config: Config = {
     footer: {
       style: 'dark',
       links: [
-        // {
-        //   title: 'Docs',
-        //   items: [
-        //     {
-        //       label: 'Style Guide',
-        //       to: '',
-        //     },
-        //     {
-        //       label: 'Second Doc',
-        //       to: 'doc2/',
-        //     },
-        //   ],
-        // },
         {
           title: 'Docs',
           items: [
@@ -132,10 +114,6 @@ const config: Config = {
         {
           title: 'More',
           items: [
-            // {
-            //   label: 'Gallery',
-            //   to: 'gallery',
-            // },
             {
               label: 'GitHub',
               href: 'https://github.com/hatemhosny/racing-bars',
