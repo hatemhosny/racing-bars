@@ -89,7 +89,7 @@ race("/data.json", "#race", options);
 #### ESM
 
 ```html
-<div id="race"></div>
+<div id="race" style="height: 80vh"></div>
 <script type="module">
   import { race } from "https://cdn.jsdelivr.net/npm/racing-bars";
 
@@ -105,7 +105,7 @@ race("/data.json", "#race", options);
 #### UMD
 
 ```html
-<div id="race"></div>
+<div id="race" style="height: 80vh"></div>
 <script src="https://https://cdn.jsdelivr.net/npm/racing-bars/racing-bars.umd.js"></script>
 <script>
   const options = {
