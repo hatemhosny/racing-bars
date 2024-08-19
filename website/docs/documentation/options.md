@@ -849,7 +849,7 @@ If left `undefined`, the chart uses the width of the [container DOM element](./a
 which can be set by css for example.
 The width can be set to a number (in pixels), or can be set to ratio of window `innerWidth`. The string value `"window*0.8"` sets the width to 80% of the window `innerWidth`.
 
-Note that the minimum allowed width of the chart is 500px.
+Note that the minimum allowed width of the chart is 350px.
 
 If `width` is undefined or specified as ratio to window `innerWidth`, the chart is responsive (will resize on window resize).
 
