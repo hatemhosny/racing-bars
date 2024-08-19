@@ -42,7 +42,7 @@ const config: Config = {
   ],
 
   themeConfig: {
-    image: 'img/racing-bars-social-card.jpg',
+    image: 'img/racing-bars-social-card.png',
     metadata: [
       { name: 'og:type', content: 'website' },
       { name: 'og:description', content: 'Bar Chart Race Made Easy 🎉' },
