@@ -2,7 +2,7 @@
 title: Chart Size
 ---
 
-By default the chart will take the size of the containing element (specified by the [`selector`](../documentation/options.md#selector) option).
+By default the chart will take the size of the [container element](../getting-started/usage.md#race).
 So, the chart can be easily sized by sizing that element (e.g. by CSS).
 
 Example:
@@ -14,14 +14,14 @@ Example:
     width: 100%;
   }
 </style>
+
 <div id="race"></div>
 
-<script>
-  const options = {
-    selector: '#race',
-  };
-  racingBars.loadData('/data/population.csv', 'csv').then((data) => {
-    racingBars.race(data, options);
+<script type="module">
+  import { race } from 'https://cdn.jsdelivr.net/npm/racing-bars';
+
+  race('/data.json', '#race', {
+    /* options */
   });
 </script>
 ```
@@ -32,16 +32,10 @@ This example sets the chart size in pixels:
 
 ```html
 <div id="race"></div>
+<script type="module">
+  import { race } from 'https://cdn.jsdelivr.net/npm/racing-bars';
 
-<script>
-  const options = {
-    selector: '#race',
-    height: 700,
-    width: 900,
-  };
-  racingBars.loadData('/data/population.csv', 'csv').then((data) => {
-    racingBars.race(data, options);
-  });
+  race('/data.json', '#race', { height: 500, width: 900 });
 </script>
 ```
 
@@ -49,16 +43,10 @@ While this example sets the chart size as ratio of window size (`innerHeight` an
 
 ```html
 <div id="race"></div>
+<script type="module">
+  import { race } from 'https://cdn.jsdelivr.net/npm/racing-bars';
 
-<script>
-  const options = {
-    selector: '#race',
-    height: '0.9*window',
-    width: '0.8*window',
-  };
-  racingBars.loadData('/data/population.csv', 'csv').then((data) => {
-    racingBars.race(data, options);
-  });
+  race('/data.json', '#race', { height: 'window*0.8', width: 'window*0.9' });
 </script>
 ```
 

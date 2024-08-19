@@ -63,23 +63,24 @@ Example: `{labelsPosition: 'outside', labelsWidth: 200}`
 The style of the bar labels is set by CSS (see guide on [themes and styles](./themes-styles.md)).
 You can override it like that:
 
-```html
+```html {2-4}
 <style>
   #race text.label {
     fill: red !important;
   }
 </style>
+
 <div id="race"></div>
 
-<script>
+<script type="module">
+  import { race } from 'https://cdn.jsdelivr.net/npm/racing-bars';
+
   const options = {
-    selector: '#race',
+    dataType: 'csv',
     title: 'World Population',
     subTitle: 'in millions',
   };
-  racingBars.loadData('/data/population.csv', 'csv').then((data) => {
-    racingBars.race(data, options);
-  });
+  race('/data/population.csv', '#race', options);
 </script>
 ```
 

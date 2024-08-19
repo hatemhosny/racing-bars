@@ -5,7 +5,7 @@ title: Changing Options
 import { useState } from 'react';
 import RacingBars from '../../src/components/RacingBars';
 
-Chart options can be changed during runtime using the API method [`changeOptions()`](../documentation/api.md#changeoptionsoptions-options--void).
+Chart options can be changed during runtime using the API method [`changeOptions()`](../documentation/api.md#changeoptions-options-options--promisevoid).
 
 #### Example
 
@@ -29,6 +29,7 @@ dataType="csv"
 title={'Number of Bars: ' + count}
 autorun={true}
 topN={count}
+showCode={false}
 /></div>);
 };
 
@@ -37,23 +38,21 @@ topN={count}
 #### Code
 
 ```html
-<a href="#" onClick="addBar(event)">Add Bar</a> -
-<a href="#" onClick="resetBars(event)">Reset Bars</a>
+<a href="#" id="addBar">Add Bar</a> -
+<a href="#" id="resetBars">Reset Bars</a>
 <div id="race">Loading...</div>
 
-<script src="scripts/racing-bars.umd.js"></script>
-<script>
+<script type="module">
+  import { race } from 'https://cdn.jsdelivr.net/npm/racing-bars';
+
   let topN = 5;
   const options = {
-    selector: '#race',
+    dataType: 'csv',
     title: 'Number of Bars: ' + topN,
     topN,
   };
 
-  let racer;
-  racingBars.loadData('data/population.csv', 'csv').then((data) => {
-    racer = racingBars.race(data, options);
-  });
+  const racer = await race('/data/population.csv', '#race', options);
 
   function addBar(e) {
     topN += 1;
@@ -72,5 +71,8 @@ topN={count}
     });
     e.preventDefault();
   }
+
+  document.getElementById('addBar').addEventListener('click', addBar);
+  document.getElementById('resetBars').addEventListener('click', resetBars);
 </script>
 ```

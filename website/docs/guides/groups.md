@@ -16,7 +16,7 @@ To display groups:
 - set the [`showGroups`](../documentation/options.md#showgroups) option to `true`.
 - add the field `group`, to the [data items](../documentation/data.md#long-data).
 
-Example: [view in gallery](../gallery/show-groups)
+Example: [view in gallery](../gallery/show-groups.md)
 
 <div className="gallery">
   <RacingBars
@@ -26,17 +26,3 @@ Example: [view in gallery](../gallery/show-groups)
     showGroups={true}
   />
 </div>
-
-#### Code
-
-```js {4}
-const options = {
-  selector: '#race',
-  title: 'World Population',
-  showGroups: true,
-};
-
-racingBars.loadData('/data/population.csv', 'csv').then((data) => {
-  racingBars.race(data, options);
-});
-```

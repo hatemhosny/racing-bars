@@ -30,27 +30,9 @@ icon: `https://flagsapi.com/${d.code}/flat/64.png`,
     caption="Source: World Bank"
     showIcons={true}
     labelsPosition="outside"
+    dynamicProps={{dataTransform: `(data) => data.map((d) => ({
+      ...d,
+      icon: \`https://flagsapi.com/\${d.code}/flat/64.png\`,
+    }))`}}
   />
 </div>
-
-```js {6,13}
-const options = {
-  selector: '#race',
-  title: 'World Population in 60 Years',
-  subTitle: 'Country Population in millions',
-  caption: 'Source: World Bank',
-  showIcons: true,
-  labelsPosition: 'outside',
-};
-
-racingBars.loadData('/data/population.csv', 'csv').then((data) => {
-  const dataWithIcons = data.map((d) => ({
-    ...d,
-    icon: `https://flagsapi.com/${d.code}/flat/64.png`,
-  }));
-  racingBars.race(dataWithIcons, options);
-});
-```
-
-You may also use the [`dataTransform`](../documentation/options.md#datatransform) option for data transformation,
-like in [this example](../gallery/data-transform).

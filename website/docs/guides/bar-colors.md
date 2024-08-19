@@ -19,34 +19,32 @@ The [`colorSeed`](../documentation/options.md#colorseed) option can be used to c
 This causes shuffling the names/groups before being assigned to colors.
 The same seed guarantees the assignment to same color.
 
-Example: [view in gallery](../gallery/color-seed)
+Example: [view in gallery](../gallery/color-seed.md)
 
-```js {3}
+```js
+import { race } from 'racing-bars';
+
 const options = {
-  selector: '#race',
   colorSeed: 42,
 };
 
-racingBars.loadData('/data/population.csv', 'csv').then((data) => {
-  racingBars.race(data, options);
-});
+race('/data/population.json', '#race', options);
 ```
 
 ## Random Colors
 
 To set bar colors randomly, assign [`colorSeed`](../documentation/options.md#colorseed) option to a random value (e.g. `Math.round(Math.random() * 100)`).
 
-Example: [view in gallery](../gallery/color-seed-random)
+Example: [view in gallery](../gallery/color-seed-random.md)
 
-```js {3}
+```js
+import { race } from 'racing-bars';
+
 const options = {
-  selector: '#race',
   colorSeed: Math.round(Math.random() * 100), // random number between 0-100
 };
 
-racingBars.loadData('/data/population.csv', 'csv').then((data) => {
-  racingBars.race(data, options);
-});
+race('/data/population.json', '#race', options);
 ```
 
 ## Custom Color Palettes
@@ -54,11 +52,13 @@ racingBars.loadData('/data/population.csv', 'csv').then((data) => {
 If an array is passed to the [`colorMap`](../documentation/options.md#colormap) option, it will be used as a color palette.
 Note that if the number of data item names/groups are larger than the array length, the colors will be repeated.
 
-The colors can be color names (e.g 'red'), hex codes (e.g. '#FF0000') or RGB codes (e.g. 'rgb(255, 0, 0)').
+The colors can be color names (e.g `"red"`), hex codes (e.g. `"#ff0000"`) or RGB codes (e.g. `"rgb(255, 0, 0)"`).
 
-Example: [view in gallery](../gallery/color-palette)
+Example: [view in gallery](../gallery/color-palette.md)
 
-```js {16}
+```js
+import { race } from 'racing-bars';
+
 const palette = [
   '#636EFA',
   '#EF553B',
@@ -73,13 +73,10 @@ const palette = [
 ];
 
 const options = {
-  selector: '#race',
   colorMap: palette,
 };
 
-racingBars.loadData('/data/population.csv', 'csv').then((data) => {
-  racingBars.race(data, options);
-});
+race('/data/population.json', '#race', options);
 ```
 
 ## Set Colors of Specific Bars
@@ -88,9 +85,11 @@ If an object is passed to the [`colorMap`](../documentation/options.md#colormap)
 The object does not have to include all names. The other bars will get the default colors.
 Note that names are case-sensitive.
 
-This example uses an object to map specific names to colors: [view in gallery](../gallery/color-map)
+This example uses an object to map specific names to colors: [view in gallery](../gallery/color-map.md)
 
-```js {7}
+```js
+import { race } from 'racing-bars';
+
 const countryColors = {
   India: 'orange',
   'United States': 'blue',
@@ -100,14 +99,14 @@ const options = {
   colorMap: countryColors,
 };
 
-racingBars.loadData('/data/population.csv', 'csv').then((data) => {
-  racingBars.race(data, options);
-});
+race('/data/population.json', '#race', options);
 ```
 
 This example uses an object to map group colors: [view in gallery](../gallery/color-map-groups)
 
-```js {7}
+```js
+import { race } from 'racing-bars';
+
 const continentColors = {
   Asia: 'yellow',
   Europe: 'green',
@@ -118,14 +117,12 @@ const options = {
   showGroups: true,
 };
 
-racingBars.loadData('/data/population.csv', 'csv').then((data) => {
-  racingBars.race(data, options);
-});
+race('/data/population.json', '#race', options);
 ```
 
 :::info
-Notice that if groups are shown ([showGroups](#showgroups) is set to 'true', and the dataset has the field 'group'),
-[colorMap](../documentation/options.md#colormap) option affects 'group' colors, otherwise it affects 'name' colors, but not both.
+Notice that if groups are shown ([showGroups](#showgroups) is set to `true`, and the dataset has the field `group`),
+[`colorMap`](../documentation/options.md#colormap) option affects `group` colors, otherwise it affects `name` colors, but not both.
 :::
 
 ## Use Colors from Dataset

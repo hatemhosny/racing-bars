@@ -7,7 +7,7 @@ import RacingBars from '../../src/components/RacingBars';
 Bars can be hightlighted (on mouse hover) or selected (on click),
 by enabling the options [`highlightBars`](../documentation/options.md#highlightbars) and [`selectBars`](../documentation/options.md#selectbars), respectively.
 
-In addition, selection/unselection can be achieved programmaticaly using [`API`](../documentation/api.md) methods [`select`](../documentation/api.md#selectname-string--void), [`unselect`](../documentation/api.md#unselectname-string--void) and [`unselectAll`](../documentation/api.md#unselectall--void).
+In addition, selection/unselection can be achieved programmaticaly using [`API`](../documentation/api.md) methods [`select`](../documentation/api.md#select-name-string--void), [`unselect`](../documentation/api.md#unselect-name-string--void) and [`unselectAll`](../documentation/api.md#unselectall---void).
 
 Example: hover/click bars in this chart
 

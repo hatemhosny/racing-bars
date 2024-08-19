@@ -9,16 +9,16 @@ The default is the light theme.
 
 You can switch themes using the [`theme`](../documentation/options.md#theme) option.
 
-Example: [view in gallery](../gallery/theme-dark)
+Example: [view in gallery](../gallery/theme-dark.md)
 
-```js {2}
+```js
+import { race } from 'racing-bars';
+
 const options = {
   theme: 'dark',
 };
 
-racingBars.loadData('/data/population.csv', 'csv').then((data) => {
-  racingBars.race(data, options);
-});
+race('/data/population.json', '#race', options);
 ```
 
 ### Custom Themes
@@ -130,12 +130,9 @@ Example:
     <script src="scripts/racing-bars.umd.js"></script>
     <script>
       const options = {
-        selector: '#race',
         title: 'World Population',
       };
-      racingBars.loadData('data/population.json').then((data) => {
-        racingBars.race(data, options);
-      });
+      racingBars.race('data/population.json', '#race', options);
     </script>
   </body>
 </html>
@@ -168,12 +165,10 @@ You may override the styles like that:
     <script src="scripts/racing-bars.umd.js"></script>
     <script>
       const options = {
-        selector: '#race',
+        selector: ,
         title: 'World Population',
       };
-      racingBars.loadData('data/population.json').then((data) => {
-        racingBars.race(data, options);
-      });
+      racingBars.race('data/population.json', '#race', options);
     </script>
   </body>
 </html>

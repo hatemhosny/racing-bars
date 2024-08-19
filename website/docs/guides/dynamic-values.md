@@ -14,8 +14,8 @@ This example uses the [Github push events](../sample-datasets#github-push-events
 export const getYearRange = (currentDate, dateSlice, allDates) =>
 `Top Languages (${allDates[0].slice(0, 4)} - ${allDates[allDates.length - 1].slice(0, 4)})`;
 
-export const getTop3 = (currentDate, dateSlice, allDates) =>
-`Top 3: ${dateSlice.slice(0, 3).map(d => d.name).join(', ')}`;
+export const getTop5 = (currentDate, dateSlice, allDates) =>
+`Top 5: ${dateSlice.slice(0, 5).map(d => d.name).join(', ')}`;
 
 export const getYearQuarter = (currentDate, dateSlice, allDates) => {
 const month = Number(currentDate.slice(5, 7));
@@ -33,44 +33,25 @@ export const getTotal = (currentDate, dateSlice, allDates) =>
     dataUrl="/data/gh-push.csv"
     dataType="csv"
     title={getYearRange}
-    subTitle={getTop3}
+    subTitle={getTop5}
     dateCounter={getYearQuarter}
     caption={getTotal}
-  />
-</div>
-
-#### Code
-
-```js
-const getYearRange = (currentDate, dateSlice, allDates) =>
-  `Top Languages (${allDates[0].slice(0, 4)} - ${allDates[allDates.length - 1].slice(0, 4)})`;
-
-const getTop3 = (currentDate, dateSlice, allDates) =>
-  `Top 3: ${dateSlice
-    .slice(0, 3)
-    .map((d) => d.name)
-    .join(', ')}`;
-
-const getYearQuarter = (currentDate, dateSlice, allDates) => {
+    dynamicProps={{title: `function getYearRange(currentDate, dateSlice, allDates) {
+return \`Top Languages (\${allDates[0].slice(0, 4)} - \${allDates[allDates.length - 1].slice(0, 4)})\`;
+}`,
+subTitle: `function getTop5(currentDate, dateSlice, allDates) {
+return \`Top 5: \${dateSlice.slice(0, 5).map(d => d.name).join(', ')}\`;
+}`,
+dateCounter: `function getYearQuarter(currentDate, dateSlice, allDates) {
   const month = Number(currentDate.slice(5, 7));
   const year = Number(currentDate.slice(0, 4));
   const q = Math.floor(month / 3) + 1;
   const quarter = q > 4 ? q - 4 : q;
-  return `Q${quarter} ${year}`;
-};
-
-const getTotal = (currentDate, dateSlice, allDates) =>
-  `Total: ${Math.round(dateSlice.reduce((acc, curr) => acc + curr.value, 0))}`;
-
-const options = {
-  selector: '#race',
-  title: getYearRange,
-  subTitle: getTop3,
-  dateCounter: getYearQuarter,
-  caption: getTotal,
-};
-
-racingBars.loadData('/data/gh-push.csv', 'csv').then((data) => {
-  racingBars.race(data, options);
-});
-```
+  return \`Q\${quarter} \${year}\`;
+}`,
+caption: `function getTotal(currentDate, dateSlice, allDates) {
+return \`Total: \${Math.round(dateSlice.reduce((acc, curr) => acc + curr.value, 0))}\`;
+}`,
+}}
+  />
+</div>

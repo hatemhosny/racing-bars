@@ -16,19 +16,19 @@ The chart behaviour can be contolled by:
 
 [`controlButtons`](../documentation/options.md#controlbuttons) option shows/hides buttons that control the chart (play/pause/skip-back/skip-forward).
 
-- The value "all" shows all buttons.
-- The value "play" shows one button (play or pause).
-- The value "none" hides all buttons.
+- The value `"all"` shows all buttons.
+- The value `"play"` shows one button (play or pause).
+- The value `"none"` hides all buttons.
 
 ## Overlays
 
-[`overlays`](../documentation/options.md#overlays) option shows/hides semi-transparent overlays that cover the chart and show buttons that control it.
-There are 2 overlays: play (at the beginning) and repeat (at the end).
+[`overlays`](../documentation/options.md#overlays) option shows/hides semi-transparent overlays that cover the chart and shows buttons that control it.  
+There are 2 overlays: "play" (at the beginning) and "repeat" (at the end).
 
-- The value "all" shows both overlays.
-- The value "play" shows an overlay at the beginning of the race with a play button.
-- The value "repeat" shows an overlay at the end of the race with a repeat button.
-- The value "none" hides both overlays.
+- The value `"all"` shows both overlays.
+- The value `"play"` shows an overlay at the beginning of the race with a play button.
+- The value `"repeat"` shows an overlay at the end of the race with a repeat button.
+- The value `"none"` hides both overlays.
 
 ## Mouse Controls
 
@@ -63,15 +63,23 @@ export let chartObj;
 
 export const callback = (racer, data) => {
 chartObj = racer;
-const myControls = document.querySelector(".myControls");
-if (myControls) myControls.style.display = 'block';
+const button = document.querySelector(".myControls button");
+if (button) {
+button.disabled = false;
+button.onclick = () => {
+chartObj.toggle();
+};
+}
 };
 
-export const toggleChart = (e) => {
+export const toggleChart = () => {
 if (!chartObj) return;
 chartObj.toggle();
-e.preventDefault();
 }
+
+<div className="myControls" style={{margin: '30px'}}>
+  <span>API command: </span><button className="toggle" disabled>Play/Pause</button>
+</div>
 
 <div className="gallery">
   <RacingBars
@@ -85,29 +93,23 @@ e.preventDefault();
     mouseControls={true}
     keyboardControls={true}
     callback={callback}
+    showCode={false}
   />
-</div>
-
-<div className="myControls" style={{display: 'none', margin: '30px'}}>
-  <span>API command: </span>
-  <a href="#" className="toggle" onClick={toggleChart} style={{padding: '10px', border: '1px solid black'}}>
-    Play/Pause
-  </a>
 </div>
 
 #### Code
 
 ```html
+<div class="apiControl">
+  <span>API command: </span>
+  <button disabled>Play/Pause</button>
+</div>
 <div id="race"></div>
 
-<div class="apiControl" style="display: none;">
-  <span>API command: </span>
-  <a href="#">Play/Pause</a>
-</div>
-
-<script>
+<script type="module">
+  import { race } from 'https://cdn.jsdelivr.net/npm/racing-bars';
   const options = {
-    selector: '#race',
+    dataType: 'csv',
     title: 'Chart Controls Demo',
     autorun: false,
     loop: false,
@@ -117,13 +119,11 @@ e.preventDefault();
     keyboardControls: true,
   };
 
-  racingBars.loadData('/data/population.csv', 'csv').then((data) => {
-    const racer = racingBars.race(data, options);
-    document.querySelector('.apiControl').style.display = 'block';
-    document.querySelector('.apiControl a').addEventListener('click', (e) => {
-      racer.toggle();
-      e.preventDefault();
-    });
+  const racer = await race('/data/population.csv', '#race', options);
+  const button = document.querySelector('.apiControl button');
+  button.disabled = false;
+  button.addEventListener('click', () => {
+    racer.toggle();
   });
 </script>
 ```
