@@ -7,7 +7,7 @@ title: Features
 - [Highly configurable](./documentation/options.md), with sensible defaults.
 - Available for vanilla JavaScript,TypeScript, React, Vue and Svelte.
 - Responsive / configurable [chart size](./guides/chart-size.md).
-- Light and dark [themes](./guides/themes.md).
+- Light and dark [themes](./guides/themes-styles.md).
 - Good looking default [colors](./guides/colors.md), also configurable with color maps or palettes.
 - Customizable title, sub-title, caption and date counter. They all allow displaying [calculated/dynamic values](./guides/dynamic-values.md).
 - Flexible handling for various [data shapes and formats](./documentation/data.md).
@@ -27,4 +27,5 @@ title: Features
 - [Multiple charts](./guides/multiple-charts.md) can be inserted in the same page.
 - [API](./documentation/api.md) to control the chart.
 - Emits custom DOM [events](./documentation/events.md).
+- Comprehensive [documentation](./category/documentation/), with [usage guides](./category/guides/), [examples gallery](./category/gallery/) and an [online playground](./playground).
 - Open-source ([MIT License](./license.md)).

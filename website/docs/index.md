@@ -48,6 +48,10 @@ icon: `https://flagsapi.com/${d.code}/flat/64.png`,
     highlightBars={true}
     selectBars={true}
     theme="dark"
+    dynamicProps={{dataTransform: `(data) => data.map((d) => ({
+      ...d,
+      icon: \`https://flagsapi.com/\${d.code}/flat/64.png\`,
+    }))`}}
 
 />
 
