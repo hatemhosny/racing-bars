@@ -12,13 +12,13 @@ export interface Options {
   fillDateGapsInterval: null | 'year' | 'month' | 'day';
   fillDateGapsValue: 'last' | 'interpolate';
   makeCumulative: boolean;
-  title: string;
-  subTitle: string;
+  title: string | ((currentDate: string, dateSlice: Data[], allDates: string[]) => string);
+  subTitle: string | ((currentDate: string, dateSlice: Data[], allDates: string[]) => string);
   dateCounter: string | ((currentDate: string, dateSlice: Data[], allDates: string[]) => string);
+  caption: string | ((currentDate: string, dateSlice: Data[], allDates: string[]) => string);
   startDate: string;
   endDate: string;
   loop: boolean;
-  caption: string;
   labelsPosition: 'inside' | 'outside';
   labelsWidth: number;
   showIcons: boolean;
