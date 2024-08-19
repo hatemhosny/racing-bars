@@ -75,6 +75,7 @@ const reactBuild = () =>
     entryPoints: ['src/react.tsx'],
     outfile: 'build/react.js',
     external: ['react', 'react-dom'],
+    jsx: 'automatic',
   });
 
 const vueBuild = () =>

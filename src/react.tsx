@@ -1,6 +1,6 @@
 // @ts-ignore
 // eslint-disable-next-line import/no-unresolved
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { race, generateId, type Race, type Data, type WideData } from '.';
 import { processProps, type Props } from './shared';
 
