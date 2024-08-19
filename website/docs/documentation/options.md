@@ -443,7 +443,7 @@ see the guide on [`chart size`](../guides/chart-size.md).
 
 ### highlightBars
 
-If `true`, the racing bars are highlighted on mouseover.
+If `true`, the bars are highlighted on mouseover.
 This is implemented by adding the class `highlight` to the html element on mouseover and removing it on mouseout.
 The color of the highlight is determined by the [theme](../guides/themes-styles.md).
 

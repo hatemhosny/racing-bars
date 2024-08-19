@@ -3,7 +3,7 @@ import type { Config } from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
 
 const config: Config = {
-  title: 'Racing Bars',
+  title: 'RacingBars',
   tagline: 'Bar chart race made easy 🎉',
   url: 'https://racing-bars.hatemhosny.dev',
   baseUrl: '/',
@@ -49,9 +49,9 @@ const config: Config = {
     // Replace with your project's social card
     image: 'img/docusaurus-social-card.jpg',
     navbar: {
-      title: 'Racing Bars',
+      title: 'RacingBars',
       logo: {
-        alt: 'Racing Bars',
+        alt: 'RacingBars',
         src: 'img/logo.png',
       },
       items: [

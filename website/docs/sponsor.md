@@ -1,16 +1,16 @@
 # Sponsor 💚
 
-Thank you for considering becoming a sponsor of _Racing Bars_!
+Thank you for considering becoming a sponsor of _RacingBars_!
 
-_Racing Bars_ is a feature-rich and easy-to-use javascript library for racing bar charts. It is released under the permissive [MIT License](https://github.com/hatemhosny/racing-bars/blob/develop/LICENSE), which allows unrestricted use and redistribution even for commercial purposes.
+_RacingBars_ is a feature-rich and easy-to-use javascript library for racing bar charts. It is released under the permissive [MIT License](https://github.com/hatemhosny/racing-bars/blob/develop/LICENSE), which allows unrestricted use and redistribution even for commercial purposes.
 
 Please consider sponsoring the project to support its maintenance and continued development. In return, you will receive recognition as a sponsor on the [documentation website](index.md), [GitHub repo](https://github.com/hatemhosny/racing-bars) and [social media](https://x.com/hatem_hosny_) channels, as well as the opportunity to engage with our community of users and contributors.
 
-There are several ways to support _Racing Bars_ as a sponsor:
+There are several ways to support _RacingBars_ as a sponsor:
 
 ### Financial Contributions
 
-_Racing Bars_ relies on the support of sponsors like you to fund its ongoing development and maintenance. Your financial contribution will help to ensure that the project remains sustainable in the long term.
+_RacingBars_ relies on the support of sponsors like you to fund its ongoing development and maintenance. Your financial contribution will help to ensure that the project remains sustainable in the long term.
 
 Payments can be done via:
 
@@ -28,6 +28,6 @@ In-kind contributors are recognized (logo and name) in the [credits](./credits.m
 
 ### Marketing and Promotion
 
-Help us to spread the word about _Racing Bars_ by sharing our content on your social media channels, writing blog posts about _Racing Bars_ or by providing us with promotional opportunities.
+Help us to spread the word about _RacingBars_ by sharing our content on your social media channels, writing blog posts about _RacingBars_ or by providing us with promotional opportunities.
 
 Thank you 💚

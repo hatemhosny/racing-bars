@@ -5,10 +5,10 @@ title: Features
 - Easy to use.
 - Light-weight (~45kb gzipped).
 - [Highly configurable](./documentation/options.md), with sensible defaults.
-- Available for vanilla JavaScript,TypeScript, React, Vue and Svelte..
+- Available for vanilla JavaScript,TypeScript, React, Vue and Svelte.
 - Responsive / configurable [chart size](./guides/chart-size.md).
 - Light and dark [themes](./guides/themes.md).
-- Good looking default [colors](./guides/colors.md), also configurable with color maps or paletts.
+- Good looking default [colors](./guides/colors.md), also configurable with color maps or palettes.
 - Customizable title, sub-title, caption and date counter. They all allow displaying [calculated/dynamic values](./guides/dynamic-values.md).
 - Flexible handling for various [data shapes and formats](./documentation/data.md).
 - Data manipulation for [data transformation](./documentation/options.md#datatransform), [cumulative sums](./documentation/data.md#cumulative-sum) and [filling date gaps](./documentation/data.md#filling-gaps-in-data).

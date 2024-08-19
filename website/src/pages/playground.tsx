@@ -11,7 +11,7 @@ export default function Playground() {
     : useDocusaurusContext().siteConfig.url;
 
   const config: Partial<Config> = {
-    title: 'Racing Bars',
+    title: 'RacingBars',
     activeEditor: 'script',
     fontSize: 14,
     markup: {
@@ -88,7 +88,7 @@ race('${baseUrl}/data/population.csv', '#race', options);
   };
 
   return (
-    <Layout title="Racing Bars Playground" description="A playground for the racing-bars library">
+    <Layout title="RacingBars Playground" description="A playground for the racing-bars library">
       <div style={{ margin: '2em', textAlign: 'center' }}>
         <h1>Playground</h1>
         <main>

@@ -10,7 +10,7 @@ export default function OpenInPlayground(props: { language: Language; code: stri
     : useDocusaurusContext().siteConfig.url;
 
   const config: Partial<Config> = {
-    title: 'Racing Bars',
+    title: 'RacingBars',
     activeEditor: 'script',
     script: {
       language: props.language,
