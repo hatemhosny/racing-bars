@@ -43,6 +43,15 @@ const config: Config = {
 
   themeConfig: {
     image: 'img/racing-bars-social-card.jpg',
+    metadata: [
+      { name: 'og:type', content: 'website' },
+      { name: 'og:description', content: 'Bar Chart Race Made Easy 🎉' },
+      { name: 'og:image', content: 'img/racing-bars-social-card.png' },
+      { name: 'twitter:card', content: 'summary_large_image' },
+      { name: 'twitter:domain', content: 'racing-bars.hatemhosny.dev' },
+      { name: 'twitter:description', content: 'Bar Chart Race Made Easy 🎉' },
+      { name: 'twitter:image', content: 'img/racing-bars-social-card.png' },
+    ],
     navbar: {
       title: 'RacingBars',
       logo: {
