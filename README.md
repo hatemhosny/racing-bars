@@ -23,7 +23,7 @@ _RacingBars_ is available for JavaScript, TypeScript, React, Vue and Svelte.
 📖 [Documentations](https://racing-bars.hatemhosny.dev)
 
 <p align="center">
-<img src="https://racing-bars.hatemhosny.dev/img/racing-bars.gif"></img>
+<img height="322" width="716" src="https://racing-bars.hatemhosny.dev/img/racing-bars.gif"></img>
 </p>
 
 ## Features
