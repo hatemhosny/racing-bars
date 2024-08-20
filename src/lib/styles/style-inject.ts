@@ -1,12 +1,13 @@
+/* eslint-disable import/no-unresolved */
 import { generateId } from '../utils';
 // @ts-ignore
-import _styles from '../../../tmp/styles.css?raw';
+import rawStyles from '../../../tmp/styles.css?raw';
 // @ts-ignore
 import lightTheme from '../../../tmp/light.theme.css?raw';
 // @ts-ignore
 import darkTheme from '../../../tmp/dark.theme.css?raw';
 
-const _themes = {
+const allThemes = {
   light: lightTheme,
   dark: darkTheme,
 };
@@ -16,8 +17,8 @@ export function styleInject(
   container: HTMLElement,
   theme: string,
   insertAt = 'top',
-  styles = _styles,
-  themes = _themes,
+  styles = rawStyles,
+  themes = allThemes,
 ): string {
   let css = styles + (themes as any)[theme];
 

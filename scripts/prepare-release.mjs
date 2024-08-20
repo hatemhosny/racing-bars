@@ -115,10 +115,6 @@ const cancelRelease = async () => {
   if (!(await confirm({ message: `Change log added to ./CHANGELOG.md\nProceed?` }))) {
     await cancelRelease();
   }
-
-  execSync(`git checkout -b ${branchName}`);
-  execSync(`git add -A && git commit -m "release: ${version}"`);
-  execSync(`git push -u origin ${branchName}`);
 })();
 
 function streamToString(stream) {

@@ -1,6 +1,6 @@
 import { getDateSlice } from '../../data';
 import { generateTestData } from '../../../__test-utils';
-import { Store } from '../../../store';
+import type { Store } from '../../../store';
 
 describe('dates#getDateSlice', () => {
   const mockDispatch = jest.fn();

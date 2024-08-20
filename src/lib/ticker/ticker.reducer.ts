@@ -1,5 +1,5 @@
-import { Reducer } from '../store';
-import { TickerState, TickerAction } from './ticker.models';
+import type { Reducer } from '../store';
+import type { TickerState, TickerAction } from './ticker.models';
 import { actionTypes } from './ticker.actions';
 
 const initialState: TickerState = {

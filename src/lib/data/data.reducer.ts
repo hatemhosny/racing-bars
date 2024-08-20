@@ -1,6 +1,6 @@
-import { Reducer } from '../store';
+import type { Reducer } from '../store';
 import { actionTypes } from './data.actions';
-import { DataState, DataAction, DataCollections, DateSlice } from './data.models';
+import type { DataState, DataAction, DataCollections, DateSlice } from './data.models';
 
 const initialState: DataState = {
   names: [],

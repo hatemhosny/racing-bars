@@ -1,5 +1,5 @@
 import { loadOptions, changeOptions } from '../options.actions';
-import { Options } from '../options.models';
+import type { Options } from '../options.models';
 
 describe('options action creators', () => {
   const options = {

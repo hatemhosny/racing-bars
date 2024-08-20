@@ -1,4 +1,4 @@
-import { TickerAction } from './ticker.models';
+import type { TickerAction } from './ticker.models';
 
 export const actionTypes = {
   initialize: 'ticker/initialize',

@@ -1,7 +1,7 @@
-import { HSLColor } from 'd3';
+import type { HSLColor } from 'd3';
 import { getColor } from '../../utils';
-import { Data } from '../../..';
-import { Store } from '../../../store';
+import type { Data } from '../../..';
+import type { Store } from '../../../store';
 import { defaultOptions } from '../../../options';
 
 describe('utils#getColor', () => {

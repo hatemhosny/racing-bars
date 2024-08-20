@@ -1,6 +1,6 @@
 import { getDateString } from '../utils';
-import { Reducer } from '../store';
-import { Options, OptionsAction } from './options.models';
+import type { Reducer } from '../store';
+import type { Options, OptionsAction } from './options.models';
 import { actionTypes } from './options.actions';
 
 export const defaultOptions: Options = {

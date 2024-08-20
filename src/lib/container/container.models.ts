@@ -1,4 +1,4 @@
-import { Action } from '../store';
+import type { Action } from '../store';
 
 export interface ContainerAction extends Action {
   payload: HTMLElement;

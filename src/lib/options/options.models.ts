@@ -1,5 +1,5 @@
-import { Action } from '../store';
-import { Data, WideData } from '../data';
+import type { Action } from '../store';
+import type { Data, WideData } from '../data';
 
 export interface OptionsAction extends Action {
   payload: Partial<Options>;

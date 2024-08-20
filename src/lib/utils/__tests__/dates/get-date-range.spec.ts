@@ -11,7 +11,6 @@ describe('dates#getDateRange', () => {
     expect(dateRange.length).toBe(noDuplicates.length);
   });
 
-  // eslint-disable-next-line jest/no-disabled-tests
   test.skip('month intervals', () => {
     const startDate = new Date('1980-01-01');
     const endDate = new Date('1981-12-01');
@@ -23,7 +22,6 @@ describe('dates#getDateRange', () => {
     expect(dateRange.length).toBe(24);
   });
 
-  // eslint-disable-next-line jest/no-disabled-tests
   test.skip('day intervals', () => {
     const startDate = new Date('1980-01-01');
     const endDate = new Date('1981-12-31');

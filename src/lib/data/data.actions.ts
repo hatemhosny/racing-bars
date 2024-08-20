@@ -1,4 +1,4 @@
-import { DataAction, DataCollections, Data, DateSlice } from './data.models';
+import type { DataAction, DataCollections, Data, DateSlice } from './data.models';
 
 export const actionTypes = {
   dataLoaded: 'data/loaded',

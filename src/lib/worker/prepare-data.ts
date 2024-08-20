@@ -3,6 +3,7 @@ import { interpolate } from '../d3';
 import type { Data, WideData } from '../data';
 import type { Options } from '../options';
 import { loadData } from '../load-data';
+// eslint-disable-next-line import/no-internal-modules
 import { getDateString, getDateRange } from '../utils/dates';
 
 export function prepareData(

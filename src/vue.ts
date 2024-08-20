@@ -17,8 +17,8 @@ import type {
 } from '@vue/runtime-core';
 import { h, onMounted, onUnmounted, ref, watch } from '@vue/runtime-core';
 
-import { race, generateId, type Race, type Data, type WideData } from '.';
 import { processProps, type Props } from './shared';
+import { race, generateId, type Race, type Data, type WideData } from '.';
 
 const props = {
   dataShape: String,

@@ -1,5 +1,5 @@
-import { Options } from './options';
-import { TickDetails, EventType } from './events';
+import type { Options } from './options';
+import type { TickDetails, EventType } from './events';
 
 export interface Race {
   play: () => void;

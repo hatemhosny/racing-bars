@@ -1,6 +1,6 @@
 import { createTicker } from '../ticker';
-import { Ticker } from '../ticker.models';
-import { Store, actions } from '../../store';
+import type { Ticker } from '../ticker.models';
+import { actions, type Store } from '../../store';
 
 let justStarted = true;
 jest.mock('d3', () => ({
@@ -48,7 +48,6 @@ describe('ticker', () => {
     expect(ticker).toHaveProperty('goToDate');
   });
 
-  // eslint-disable-next-line jest/no-test-callback
   test('start should set running to true and increment', (done) => {
     ticker.start();
     expect(mockDispatch).toHaveBeenCalledWith(actions.ticker.setRunning(true));
@@ -56,7 +55,6 @@ describe('ticker', () => {
     done();
   });
 
-  // eslint-disable-next-line jest/no-test-callback
   test('starting on last date should rewind', (done) => {
     store = mockStore({ isLastDate: true });
     ticker = createTicker(store);
@@ -65,7 +63,6 @@ describe('ticker', () => {
     done();
   });
 
-  // eslint-disable-next-line jest/no-test-callback
   test('reaching last date should loop if enabled', (done) => {
     store = mockStore({ isLastDate: true, loop: true });
     ticker = createTicker(store);
@@ -74,7 +71,6 @@ describe('ticker', () => {
     done();
   });
 
-  // eslint-disable-next-line jest/no-test-callback
   test('reaching last date should stop if loop is disabled', (done) => {
     store = mockStore({ isLastDate: true, loop: false });
     ticker = createTicker(store);

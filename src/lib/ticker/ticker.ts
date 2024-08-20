@@ -1,6 +1,6 @@
 import * as d3 from '../d3';
-import { actions, Store } from '../store';
-import { Ticker } from './ticker.models';
+import { actions, type Store } from '../store';
+import type { Ticker } from './ticker.models';
 
 export function createTicker(store: Store): Ticker {
   let ticker: d3.Timer;

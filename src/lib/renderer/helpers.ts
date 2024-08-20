@@ -1,7 +1,7 @@
-import { Data } from '../data';
-import { Store, actions } from '../store';
+import type { Data } from '../data';
+import { actions, type Store } from '../store';
 import { safeName, toggleClass, getClicks } from '../utils';
-import { RenderOptions } from './render-options';
+import type { RenderOptions } from './render-options';
 
 export function halo(text: any, renderOptions: RenderOptions) {
   renderOptions.svg //

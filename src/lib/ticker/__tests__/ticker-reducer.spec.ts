@@ -1,4 +1,4 @@
-import { tickerReducer, TickerState } from '..';
+import { tickerReducer, type TickerState } from '..';
 import { actions } from '../../store';
 
 describe('ticker reducer', () => {

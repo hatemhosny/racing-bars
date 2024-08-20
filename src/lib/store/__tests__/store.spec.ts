@@ -1,4 +1,4 @@
-import { createStore, State } from '..';
+import { createStore, type State } from '..';
 
 describe('store', () => {
   test('should create store', () => {

@@ -1,5 +1,5 @@
 import { getText } from '../../utils';
-import { Data } from '../../..';
+import type { Data } from '../../..';
 
 describe('utils#getText', () => {
   const currentDate = '2020-02-01';

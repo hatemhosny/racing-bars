@@ -1,10 +1,10 @@
 import * as d3 from '../d3';
 
-import { Store } from '../store';
+import type { Store } from '../store';
 import { hideElement, showElement } from '../utils';
 import { elements } from './elements';
 import { buttons } from './buttons';
-import { RenderOptions } from './render-options';
+import type { RenderOptions } from './render-options';
 
 export function renderControls(store: Store, renderOptions: RenderOptions) {
   const { marginTop, controlButtons } = store.getState().options;

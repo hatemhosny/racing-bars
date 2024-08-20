@@ -12,7 +12,7 @@ import {
   addDateSlice,
   clearDateSlices,
 } from '../data.actions';
-import { Data, DataCollections } from '../data.models';
+import type { Data, DataCollections } from '../data.models';
 
 describe('options action creators', () => {
   const dataCollections = {

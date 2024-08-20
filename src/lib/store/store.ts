@@ -1,4 +1,4 @@
-import { Action, Reducer, State, Subscriber, Store } from './models';
+import type { Action, Reducer, State, Subscriber, Store } from './models';
 import { rootReducer } from './reducer';
 
 export function createStore(

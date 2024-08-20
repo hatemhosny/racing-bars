@@ -1,13 +1,13 @@
 import * as d3 from './d3';
 import { getDateString, prepareData, computeNextDateSubscriber, safeName } from './utils';
-import { Data, WideData } from './data';
-import { createRenderer, rendererSubscriber, Renderer } from './renderer';
+import type { Data, WideData } from './data';
+import { createRenderer, rendererSubscriber, type Renderer } from './renderer';
 import { createTicker } from './ticker';
 import { styleInject } from './styles';
-import { actions, createStore, rootReducer, Store } from './store';
-import { Options } from './options';
-import { registerEvents, DOMEventSubscriber, getTickDetails, EventType } from './events';
-import { Race, ApiCallback } from './models';
+import { actions, createStore, rootReducer, type Store } from './store';
+import type { Options } from './options';
+import { registerEvents, DOMEventSubscriber, getTickDetails, type EventType } from './events';
+import type { Race, ApiCallback } from './models';
 
 export async function race(
   data: Data[] | WideData[] | Promise<Data[]> | Promise<WideData[]> | string,

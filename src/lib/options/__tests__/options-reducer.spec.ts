@@ -1,6 +1,6 @@
 import { optionsReducer, defaultOptions } from '..';
 import { actions } from '../../store';
-import { Options } from '../options.models';
+import type { Options } from '../options.models';
 
 describe('options', () => {
   test('should use defaultOptions', () => {

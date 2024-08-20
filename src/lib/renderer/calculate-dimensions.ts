@@ -1,9 +1,9 @@
 import * as d3 from '../d3';
 
-import { Data } from '../data';
-import { Store } from '../store';
+import type { Data } from '../data';
+import type { Store } from '../store';
 import { getHeight, getWidth } from '../utils';
-import { RenderOptions } from './render-options';
+import type { RenderOptions } from './render-options';
 
 export function calculateDimensions(store: Store, renderOptions: RenderOptions) {
   const {

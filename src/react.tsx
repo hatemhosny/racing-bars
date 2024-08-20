@@ -1,8 +1,8 @@
 // @ts-ignore
 // eslint-disable-next-line import/no-unresolved
 import { useEffect, useRef, useState } from 'react';
-import { race, generateId, type Race, type Data, type WideData } from '.';
 import { processProps, type Props } from './shared';
+import { race, generateId, type Race, type Data, type WideData } from '.';
 
 export default function RacingBars(props: Props & { children?: React.ReactNode }) {
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -33,11 +33,9 @@ export default function RacingBars(props: Props & { children?: React.ReactNode }
     }
   }, [props]);
 
-  useEffect(() => {
-    return () => {
+  useEffect(() => () => {
       racer?.destroy();
-    };
-  }, []);
+    }, []);
 
   return (
     <div ref={containerRef} className={className}>

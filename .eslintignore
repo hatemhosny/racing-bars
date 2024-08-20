@@ -7,3 +7,4 @@ vendor
 vendor_modules
 **/*.json
 scripts
+python

@@ -1,13 +1,5 @@
-export { Props } from './shared';
-export {
-  DOMCustomEvent,
-  loadData,
-  race,
-  generateId,
-  Race,
-  Data,
-  WideData,
-  defaultOptions,
-} from './lib';
-import { Options as AllOptions } from './lib';
-export interface Options extends Partial<AllOptions> {}
+export type { Props } from './shared';
+export type { DOMCustomEvent, Race, Data, WideData } from './lib';
+export { loadData, race, generateId, defaultOptions } from './lib';
+import type { Options as AllOptions } from './lib';
+export type Options = Partial<AllOptions>

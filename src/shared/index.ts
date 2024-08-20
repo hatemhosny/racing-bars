@@ -1,4 +1,4 @@
-import { loadData, Data, WideData, Options, defaultOptions, Race } from '..';
+import { loadData, defaultOptions, type Data, type WideData, type Options, type Race } from '..';
 
 export function processProps(props: any, elementId: string) {
   const selector = '#' + elementId;
@@ -36,35 +36,34 @@ function isPromise(p: any) {
  * Defines props passed to components (react/vue).
  * See [options documentations](https://racing-bars.hatemhosny.dev/documentation/options) for the rest of props.
  */
-export interface Props
-  extends Partial<
-    Options & {
-      /** Data array */
-      data: Data[] | WideData[];
+export type Props = Partial<
+  Options & {
+    /** Data array */
+    data: Data[] | WideData[];
 
-      /** Url to fetch data from. This is ignored if [[Props.data]] is specified. */
-      dataUrl: string;
+    /** Url to fetch data from. This is ignored if [[Props.data]] is specified. */
+    dataUrl: string;
 
-      /** Type of data fetched from Url by [[Props.dataUrl]] */
-      dataType: 'json' | 'csv' | 'tsv' | 'xml';
+    /** Type of data fetched from Url by [[Props.dataUrl]] */
+    dataType: 'json' | 'csv' | 'tsv' | 'xml';
 
-      /** An `id` to assign to the generated DOM element */
-      elementId: string;
+    /** An `id` to assign to the generated DOM element */
+    elementId: string;
 
-      /** A `class` to assign to the generated DOM element */
-      className: string;
+    /** A `class` to assign to the generated DOM element */
+    className: string;
 
-      /** A `class` to assign to the generated DOM element */
-      style: Record<string, string>;
+    /** A `class` to assign to the generated DOM element */
+    style: Record<string, string>;
 
-      /** Callback function that is executed after the chart loads.
-       *
-       * @param racer chart object ([[Race]]). Exposes the chart API.
-       * @param data data array. The data used by the chart before any transformation
-       */
-      callback: (racer: Race, data: Data[] | WideData[]) => void;
-    }
-  > {}
+    /** Callback function that is executed after the chart loads.
+     *
+     * @param racer chart object ([[Race]]). Exposes the chart API.
+     * @param data data array. The data used by the chart before any transformation
+     */
+    callback: (racer: Race, data: Data[] | WideData[]) => void;
+  }
+>;
 
 export const defaultProps: Props = {
   ...defaultOptions,

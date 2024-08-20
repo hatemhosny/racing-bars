@@ -1,8 +1,8 @@
 import { elements } from '../renderer';
-import { Store } from '../store';
-import { Ticker } from '../ticker';
+import type { Store } from '../store';
+import type { Ticker } from '../ticker';
 import { hideElement, getElement, getClicks } from '../utils';
-import { DOMCustomEvent, EventType, Event, TickDetails } from './models';
+import type { DOMCustomEvent, EventType, Event, TickDetails } from './models';
 
 export function registerEvents(store: Store, ticker: Ticker) {
   const root = store.getState().container.element;

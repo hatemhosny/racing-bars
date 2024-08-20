@@ -34,7 +34,6 @@ describe('style inject', () => {
   test('should return id of inerted style element', () => {
     const styleId = styleInject(document.querySelector('#race')!, 'light');
     expect(typeof styleId).toBe('string');
-    console.log(styleId);
     expect(styleId.startsWith('styles')).toBe(true);
   });
 

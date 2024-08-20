@@ -1,5 +1,5 @@
-import { HSLColor } from 'd3';
-import { Action } from '../store';
+import type { HSLColor } from 'd3';
+import type { Action } from '../store';
 
 export interface DataAction extends Action {
   payload?: DataCollections | string | DateSlice;

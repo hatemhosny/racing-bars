@@ -1,4 +1,4 @@
-import { rootReducer, State } from '..';
+import { rootReducer, type State } from '..';
 
 describe('root reducer', () => {
   test('should return state with slices', () => {

@@ -1,4 +1,4 @@
-import { Data } from '..';
+import type { Data } from '..';
 import { getDateRange, getDateString } from '../utils';
 
 export const generateTestData = (

@@ -1,9 +1,9 @@
 import * as d3 from '../d3';
 
-import { Data } from '../data';
-import { Store } from '../store';
+import type { Data } from '../data';
+import type { Store } from '../store';
 import { getDateSlice, safeName, getColor, getIconID, getText } from '../utils';
-import { RenderOptions } from './render-options';
+import type { RenderOptions } from './render-options';
 import { selectFn, highlightFn, halo } from './helpers';
 import { updateControls } from './controls';
 
