@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file. See [standa
 
 ---
 
+## [0.1.1](https://github.com/hatemhosny/racing-bars/compare/v0.1.0...0.1.1) (2024-08-20)
+
+- Automate preparing releases
+- Add README and LICENSE to published package
+
+---
+
 ## 0.1.0 (2024-08-20)
 
 Initial public release 🎉
