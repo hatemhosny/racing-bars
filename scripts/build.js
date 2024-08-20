@@ -89,19 +89,19 @@ const vueBuild = () =>
     },
   });
 
+const copyFiles = async () => {
+  await fs.copyFile(path.resolve('src/package.lib.json'), path.resolve('build/package.json'));
+  await fs.copyFile(path.resolve('README.md'), path.resolve('build/README.md'));
+  await fs.copyFile(path.resolve('LICENSE'), path.resolve('build/LICENSE'));
+};
+
 const copyLibToWebsite = async () => {
   const source = path.resolve('build');
   const destination = path.resolve('website/static/lib');
   return rfs.copy(source, destination);
 };
 
-const copyPackageJson = async () => {
-  const source = path.resolve('src/package.lib.json');
-  const destination = path.resolve('build/package.json');
-  return fs.copyFile(source, destination);
-};
-
 Promise.all([cssBuild(), workerBuild()])
   .then(() => Promise.all([iifeBuild(), esmBuild(), reactBuild(), vueBuild()]))
-  .then(() => copyPackageJson())
+  .then(() => copyFiles())
   .then(() => copyLibToWebsite());
