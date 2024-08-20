@@ -1,10 +1,17 @@
 {
   "name": "racing-bars",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Bar chart race made easy 📶",
   "author": "Hatem Hosny",
   "license": "MIT",
-  "keywords": ["Bar chart race", "Bar chart", "Chart race", "Bar", "Chart", "Race"],
+  "keywords": [
+    "Bar chart race",
+    "Bar chart",
+    "Chart race",
+    "Bar",
+    "Chart",
+    "Race"
+  ],
   "private": false,
   "repository": {
     "url": "https://github.com/hatemhosny/racing-bars"
