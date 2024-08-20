@@ -33,9 +33,12 @@ export default function RacingBars(props: Props & { children?: React.ReactNode }
     }
   }, [props]);
 
-  useEffect(() => () => {
+  useEffect(
+    () => () => {
       racer?.destroy();
-    }, []);
+    },
+    [],
+  );
 
   return (
     <div ref={containerRef} className={className}>
