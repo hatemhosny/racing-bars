@@ -84,38 +84,5 @@
     "typedoc": "0.25.4",
     "typedoc-plugin-missing-exports": "2.1.0",
     "typescript": "5.3.3"
-  },
-  "prettier": {
-    "semi": true,
-    "singleQuote": true,
-    "trailingComma": "all",
-    "printWidth": 100
-  },
-  "jest": {
-    "preset": "ts-jest",
-    "testEnvironment": "jsdom",
-    "setupFiles": [
-      "<rootDir>/.jest/setup.js"
-    ],
-    "testPathIgnorePatterns": [
-      "/node_modules/",
-      "/build/",
-      "/src/modules/"
-    ],
-    "moduleNameMapper": {
-      "^d3$": "<rootDir>/node_modules/d3/dist/d3.min.js",
-      "^.+\\.css\\?raw": "<rootDir>/.jest/CSSStub.js"
-    },
-    "collectCoverageFrom": [
-      "src/**/*.ts",
-      "!**/build/**",
-      "!**/vendor/**",
-      "!src/modules/**"
-    ],
-    "coverageReporters": [
-      "json",
-      "html",
-      "lcov"
-    ]
   }
 }

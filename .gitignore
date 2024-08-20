@@ -13,3 +13,4 @@ website/static/lib
 /test-results/
 /playwright-report/
 /playwright/.cache/
+pnpm-lock.yaml
