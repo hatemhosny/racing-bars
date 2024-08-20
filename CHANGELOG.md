@@ -8,6 +8,8 @@ All notable changes to this project will be documented in this file. See [standa
 
 - Automate preparing releases
 - Add README and LICENSE to published package
+- Improve build system
+- Add CI
 
 ---
 
