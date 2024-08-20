@@ -40,7 +40,7 @@
     "reset": "git clean -dfx && git reset --hard && npm i",
     "clean": "recursive-delete build && recursive-delete tmp && recursive-delete website/build && recursive-delete website/static/data && recursive-delete website/docs/api",
     "release-notes": "node ./scripts/prepare-release.mjs",
-    "prepare-release": "run-s build test release-notes"
+    "prepare-release": "run-s release-notes build test"
   },
   "dependencies": {
     "@inquirer/prompts": "^5.3.8",

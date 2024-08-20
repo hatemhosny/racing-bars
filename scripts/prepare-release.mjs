@@ -95,8 +95,6 @@ const cancelRelease = async () => {
   }
   fs.writeFileSync(new URL(pkgPath, import.meta.url), stringify(pkg), 'utf8');
 
-  const branchName = 'prepare-release/' + version;
-
   const changelog = fs.readFileSync(new URL(changelogPath, import.meta.url), 'utf8');
   const changelogSeparator = '\n---';
   const [changelogHeader, ...prevLogs] = changelog.split(changelogSeparator);
