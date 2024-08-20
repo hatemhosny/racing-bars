@@ -39,7 +39,7 @@
     "postinstall": "cd website && npm install",
     "reset": "git clean -dfx && git reset --hard && npm i",
     "clean": "recursive-delete build && recursive-delete tmp && recursive-delete website/build && recursive-delete website/static/data && recursive-delete website/docs/api",
-    "prepare-release": "node ./scripts/start-release.mjs"
+    "prepare-release": "node ./scripts/prepare-release.mjs"
   },
   "dependencies": {
     "@inquirer/prompts": "^5.3.8",
