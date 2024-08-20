@@ -7,7 +7,7 @@ title: Events
 When the chart loads and with each frame change (date change), a custom DOM event is fired.
 
 Listening to these events allows getting the current state of the chart and can be used with [chart controls](../guides/chart-controls.md) to interact with the chart.
-See the guide on creating a [slider](../guides/slider.md) for usage examples.
+See the example for creating a [slider](../gallery/slider.md).
 
 - Event type:
   - `"dateChange"`: fires when the date changes.

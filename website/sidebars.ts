@@ -71,8 +71,6 @@ const sidebars: SidebarsConfig = {
         'guides/changing-options',
         'guides/fill-date-gaps',
         'guides/multiple-charts',
-        'guides/slider',
-        'guides/scroller',
       ],
     },
     {

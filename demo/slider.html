@@ -61,10 +61,9 @@
   <script src="scripts/racing-bars.umd.js"></script>
   <script>
     let options = {
-      title: 'A Tale of 11 Years',
-      subTitle: 'Top 10 Surgical Procedures',
+      title: 'World Population',
+      subTitle: 'in millions',
       dateCounterFormat: 'MM/YYYY',
-      caption: 'Aswan Heart Centre',
       autorun: false,
     };
 
@@ -77,12 +76,12 @@
       slider.oninput = function () {
         racer.setDate(dates[slider.value]);
       };
-      document.addEventListener('racingBars/dateChange', (e) => {
+      document.addEventListener('dateChange', (e) => {
         slider.value = dates.indexOf(e.detail.date);
       });
     });
 
-    document.addEventListener('racingBars/dateChange', (e) => {
+    document.addEventListener('dateChange', (e) => {
       console.log(e.target);
       console.log(e.detail.date);
       console.log(e.detail.isFirst);

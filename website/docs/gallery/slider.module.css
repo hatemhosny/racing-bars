@@ -1,0 +1,28 @@
+.slider_container {
+  width: 90%;
+  margin: 20px auto;
+}
+.slider {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 15px;
+  border-radius: 5px;
+  background: #dedddd;
+  outline: none;
+}
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background: var(--ifm-color-primary-light);
+  cursor: pointer;
+}
+.slider::-moz-range-thumb {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background: var(--ifm-color-primary-light);
+  cursor: pointer;
+}

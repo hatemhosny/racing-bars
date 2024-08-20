@@ -5,8 +5,8 @@ hide_table_of_contents: true
 
 <head>
   <title>RacingBars</title>
-  <meta property="og:title" content="RacingBars">
-  <meta name="twitter:title" content="RacingBars">
+  <meta property="og:title" content="RacingBars" />
+  <meta name="twitter:title" content="RacingBars" />
 </head>
 
 ### **Bar Chart Race Made Easy 🎉**

@@ -229,7 +229,7 @@ setTimeout(() => {
 ```
 
 See the guide on [Chart Controls](../guides/chart-controls.md) for other alternatives of controlling charts.
-See the guides on [Slider](../guides/slider.md) and [Scroller](../guides/scroller.md) for usage examples.
+See the examples for [Slider](../gallery/slider.md) and [Scroller](../gallery/scroller.md) for usage examples.
 
 ## Interfaces
 
