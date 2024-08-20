@@ -13,7 +13,7 @@ describe('utils#getColor', () => {
     colorMap: defaultOptions.colorMap,
   };
   const mockStore = (opts: any = {}) =>
-    (({
+    ({
       getState() {
         return {
           data: {
@@ -27,7 +27,7 @@ describe('utils#getColor', () => {
           },
         };
       },
-    } as unknown) as Store);
+    } as unknown as Store);
 
   const dataDefaults = {
     name: 'a',

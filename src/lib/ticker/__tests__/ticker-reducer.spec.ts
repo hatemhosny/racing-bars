@@ -2,7 +2,7 @@ import { tickerReducer, TickerState } from '..';
 import { actions } from '../../store';
 
 describe('ticker reducer', () => {
-  const noState = (undefined as unknown) as TickerState;
+  const noState = undefined as unknown as TickerState;
   const dates = ['1980-01-01', '1980-02-01', '1980-03-01'];
   const currentState = {
     isRunning: false,

@@ -11,7 +11,7 @@ describe('options', () => {
 
   test('should exclude null, undefined and excluded options, yet keep false and empty strings', () => {
     const options: Partial<Options> = {
-      showGroups: (null as unknown) as undefined,
+      showGroups: null as unknown as undefined,
       labelsPosition: undefined,
       autorun: false,
       loop: false,
@@ -39,12 +39,12 @@ describe('options', () => {
   test('should validate user input', () => {
     const options: Partial<Options> = {
       startDate: '1980-01-01',
-      endDate: (new Date('2020-01-01') as unknown) as string,
+      endDate: new Date('2020-01-01') as unknown as string,
       height: '10',
       width: '10',
       fixedOrder: ['a', 'b', 'c'],
       colorMap: { a: 'red', b: 'blue', c: 'yellow' },
-      tickDuration: ('600' as unknown) as number,
+      tickDuration: '600' as unknown as number,
       labelsWidth: 250,
     };
     const state = optionsReducer(defaultOptions, actions.options.loadOptions(options));

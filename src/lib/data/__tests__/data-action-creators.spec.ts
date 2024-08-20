@@ -15,10 +15,10 @@ import {
 import { Data, DataCollections } from '../data.models';
 
 describe('options action creators', () => {
-  const dataCollections = ({
+  const dataCollections = {
     collection1: ['value1'],
     collection2: ['value2'],
-  } as unknown) as DataCollections;
+  } as unknown as DataCollections;
   const data: Data[] = [
     { name: 'a', value: 10, date: '1980-01-01' },
     { name: 'b', value: 5, date: '1980-01-01' },

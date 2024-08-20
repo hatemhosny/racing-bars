@@ -13,20 +13,20 @@ describe('store', () => {
 
   test('should use preloaded state', () => {
     const mockReducer = jest.fn();
-    const preState = ({
+    const preState = {
       preloaded: true,
       hello: 'world',
-    } as unknown) as State;
+    } as unknown as State;
     const store = createStore(mockReducer, preState);
     expect(store.getState()).toEqual(preState);
   });
 
   test('should call reducer with state and action', () => {
     const mockReducer = jest.fn();
-    const preState = ({
+    const preState = {
       preloaded: true,
       hello: 'world',
-    } as unknown) as State;
+    } as unknown as State;
     const store = createStore(mockReducer, preState);
     const action = { type: 'mock', payload: { some: 'data' } };
     store.dispatch(action);

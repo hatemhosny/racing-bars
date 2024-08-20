@@ -2,10 +2,10 @@ import { loadOptions, changeOptions } from '../options.actions';
 import { Options } from '../options.models';
 
 describe('options action creators', () => {
-  const options = ({
+  const options = {
     option1: 'value1',
     option2: ['value2'],
-  } as unknown) as Options;
+  } as unknown as Options;
 
   test('loadOptions', () => {
     expect(loadOptions(options)).toEqual({

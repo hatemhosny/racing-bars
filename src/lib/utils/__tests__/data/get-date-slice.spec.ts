@@ -5,7 +5,7 @@ import { Store } from '../../../store';
 describe('dates#getDateSlice', () => {
   const mockDispatch = jest.fn();
   const mockStore = (opts: any = {}) =>
-    (({
+    ({
       getState: () => ({
         options: {
           fixedOrder: [],
@@ -16,7 +16,7 @@ describe('dates#getDateSlice', () => {
         },
       }),
       dispatch: mockDispatch,
-    } as unknown) as Store);
+    } as unknown as Store);
 
   test('getDateSlice', () => {
     const date = '1985-01-01';

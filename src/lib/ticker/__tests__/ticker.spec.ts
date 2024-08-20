@@ -17,7 +17,7 @@ describe('ticker', () => {
   let store: Store;
   let mockDispatch = jest.fn();
   const mockStore = (opts: any = {}) =>
-    (({
+    ({
       getState: () => ({
         options: {
           tickDuration: opts.tickDuration ?? 50,
@@ -29,7 +29,7 @@ describe('ticker', () => {
         },
       }),
       dispatch: mockDispatch,
-    } as unknown) as Store);
+    } as unknown as Store);
 
   beforeEach(() => {
     justStarted = true;
