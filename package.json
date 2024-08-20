@@ -83,7 +83,7 @@
     "prettier": "3.2.5",
     "recursive-fs": "2.1.0",
     "sass": "1.49.7",
-    "stylelint": "14.5.0",
+    "stylelint": "14.5.3",
     "stylelint-config-sass-guidelines": "9.0.1",
     "ts-jest": "29.1.0",
     "tslib": "2.6.2",
