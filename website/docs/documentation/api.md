@@ -52,7 +52,7 @@ This is the main function that generates the racing bar chart.
   The chart container HTML element or a string representing a CSS selector for it. If not provided, a new `<div>` element is created, added to the document `<body>` and used.
   Note that any content inside that element will be deleted before embedding the chart.
 
-- options: [`Options`](/api/interfaces/Options.md)
+- options: [`Options`](../api/interfaces/internal.Options.md)
 
   An optional configuration object for chart options. The options are documented in the ["Options" section](./options.md)
 
@@ -237,7 +237,7 @@ See the examples for [Slider](../gallery/slider.md) and [Scroller](../gallery/sc
 
 ### [Data](../api/interfaces/Data.md)
 
-### [Options](../api/interfaces/Options.md)
+### [Options](../api/interfaces/internal.Options.md)
 
 ### [Race](../api/interfaces/Race.md)
 

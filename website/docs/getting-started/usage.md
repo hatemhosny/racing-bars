@@ -10,7 +10,7 @@ After [installation](./installation.md), you can use the library in JavaScript a
 
 The library exports the [`race`](../documentation/api.md#race) function, which creates the bar chart race. It has the following signature:
 
-Type: [`race(data, container?, options?): Promise<Race>`](/api/modules.md#race)
+Type: [`race(data, container?, options?): Promise<Race>`](../api/modules.md#race)
 
 The function accepts the following parameters:
 
@@ -29,7 +29,7 @@ The function accepts the following parameters:
 
 - `options`:
 
-  Type: `Partial`&lt;[`Options`](/api/interfaces/Options.md)&gt;
+  Type: `Partial`&lt;[`Options`](../api/interfaces/internal.Options.md)&gt;
 
   An optional configuration object. See [section about options](../documentation/options.md) for details
 

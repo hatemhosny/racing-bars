@@ -2,11 +2,11 @@ import type { Data, WideData } from '../data';
 import type { Options } from '../options';
 import { actions, type Store } from '../store';
 import { loadData } from '../load-data';
+// @ts-ignore
 // eslint-disable-next-line import/no-internal-modules
 import workerSrc from '../../../tmp/racing-bars.worker.js';
 import { getDates, getNextDate } from './dates';
 import { createWorkerFromContent } from './utils';
-// @ts-ignore
 
 const worker = createWorkerFromContent(workerSrc);
 
