@@ -16,7 +16,7 @@ describe('dates#getDateSlice', () => {
         },
       }),
       dispatch: mockDispatch,
-    } as unknown as Store);
+    }) as unknown as Store;
 
   test('getDateSlice', () => {
     const date = '1985-01-01';

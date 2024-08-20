@@ -7,24 +7,24 @@ __selector__ text.title {
 }
 
 __selector__ text.subTitle {
-  fill: #cccccc;
+  fill: #ccc;
 }
 
 __selector__ text.dateCounterText {
-  fill: #cccccc;
+  fill: #ccc;
   opacity: 1;
 }
 
 __selector__ text.caption {
-  fill: #cccccc;
+  fill: #ccc;
 }
 
 __selector__ .halo {
   fill: #313639;
-  stroke: #313639;
-  stroke-width: 10;
-  stroke-linejoin: round;
   opacity: 1;
+  stroke: #313639;
+  stroke-linejoin: round;
+  stroke-width: 10;
 }
 
 __selector__ text.legend-text {
@@ -44,29 +44,29 @@ __selector__ text.valueLabel {
 }
 
 __selector__ .tick text {
-  fill: #cccccc;
+  fill: #ccc;
 }
 
 __selector__ .tick line {
   shape-rendering: CrispEdges;
-  stroke: #dddddd;
+  stroke: #ddd;
 }
 
 __selector__ .tick line.origin {
-  stroke: #aaaaaa;
+  stroke: #aaa;
 }
 
 __selector__ .controls div,
 __selector__ .overlay div {
-  color: #ffffff;
-  background: #777777;
+  background: #777;
   border: 1px solid black;
+  color: #fff;
   opacity: 0.5;
 }
 
 __selector__ .controls div:hover,
 __selector__ .overlay div:hover {
-  background: #aaaaaa;
+  background: #aaa;
   color: black;
 }
 
@@ -81,6 +81,6 @@ __selector__ .highlight {
 
 __selector__ .selected {
   fill: #d12020 !important;
-  stroke: #777777 !important;
+  stroke: #777 !important;
   stroke-width: 1 !important;
 }

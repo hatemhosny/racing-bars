@@ -30,10 +30,10 @@ export const tickerReducer: Reducer<TickerState, TickerAction> = (state = initia
         dates.indexOf(state.currentDate) !== -1
           ? state.currentDate
           : state.currentDate < dates[0]
-          ? dates[0]
-          : state.currentDate > dates[dates.length - 1]
-          ? dates[dates.length - 1]
-          : dates[[...dates, state.currentDate].sort().indexOf(state.currentDate)];
+            ? dates[0]
+            : state.currentDate > dates[dates.length - 1]
+              ? dates[dates.length - 1]
+              : dates[[...dates, state.currentDate].sort().indexOf(state.currentDate)];
       return {
         ...state,
         currentDate,

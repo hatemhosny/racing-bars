@@ -23,15 +23,15 @@
 }
 
 .gallery {
+  align-items: center;
   display: flex;
   justify-content: center;
-  align-items: center;
 }
 
 .gallery .racing-bars {
+  height: 80vh;
   min-height: 300px;
   width: 100%;
-  height: 80vh;
 }
 
 summary {
@@ -49,9 +49,9 @@ time {
 }
 
 a.external::after {
+  color: var(--ifm-link-color);
   content: ' \f35d';
   font-family: 'FontAwesomeSolid';
-  color: var(--ifm-link-color);
   font-size: small;
 }
 

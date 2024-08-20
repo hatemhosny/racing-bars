@@ -1,6 +1,8 @@
 __selector__ text {
+  font-family:
+    Open Sans,
+    sans-serif;
   font-size: 16px;
-  font-family: Open Sans, sans-serif;
 }
 
 __selector__ text.title {
@@ -13,16 +15,18 @@ __selector__ text.subTitle {
 }
 
 __selector__ text.caption {
-  font-weight: 400;
   font-size: 24px;
+  font-weight: 400;
 }
+
 __selector__ text.legend-text {
   user-select: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
+  user-select: none;
+  user-select: none;
+  user-select: none;
+  user-select: none;
 }
+
 __selector__ text.label {
   font-weight: 600;
 }
@@ -59,45 +63,47 @@ __selector__ .controls {
 
 __selector__ .controls div,
 __selector__ .overlay div {
+  border-radius: 5px;
+  border-radius: 5px;
+  border-radius: 5px;
   cursor: pointer;
   font-size: 24px;
   font-weight: 700;
-  width: 38px;
   height: 38px;
-  -moz-border-radius: 5px;
-  -webkit-border-radius: 5px;
-  border-radius: 5px;
   margin: 5px;
   text-align: center;
+  width: 38px;
 }
 
 __selector__ .controls svg {
+  height: 28px;
   margin: 5px auto;
   width: 28px;
-  height: 28px;
 }
 
 __selector__ .overlay {
+  align-items: center;
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  left: 0;
   position: absolute;
   top: 0;
-  left: 0;
   width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
+
 __selector__ .overlay div {
-  position: relative;
-  display: flex;
   align-items: center;
-  justify-content: center;
-  width: 200px;
-  height: 200px;
-  -moz-border-radius: 100px;
-  -webkit-border-radius: 100px;
   border-radius: 100px;
+  border-radius: 100px;
+  border-radius: 100px;
+  display: flex;
+  height: 200px;
+  justify-content: center;
+  position: relative;
+  width: 200px;
 }
+
 __selector__ .overlay svg {
   height: 50%;
   width: 50%;

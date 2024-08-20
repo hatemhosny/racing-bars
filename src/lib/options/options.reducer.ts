@@ -75,8 +75,8 @@ export const optionsReducer: Reducer<Options, OptionsAction> = (state = defaultO
       const colorMap = Array.isArray(options.colorMap)
         ? [...options.colorMap].map(String)
         : typeof options.colorMap === 'object'
-        ? { ...options.colorMap }
-        : state.colorMap;
+          ? { ...options.colorMap }
+          : state.colorMap;
 
       const topN = fixedOrder.length || Number(options.topN) || state.topN;
 

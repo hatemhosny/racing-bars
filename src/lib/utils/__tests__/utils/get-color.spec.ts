@@ -27,7 +27,7 @@ describe('utils#getColor', () => {
           },
         };
       },
-    } as unknown as Store);
+    }) as unknown as Store;
 
   const dataDefaults = {
     name: 'a',
@@ -40,7 +40,7 @@ describe('utils#getColor', () => {
     ({
       ...dataDefaults,
       ...data,
-    } as Data);
+    }) as Data;
 
   test('uses data.color', () => {
     const data = makeDataObj({ color: 'red' });

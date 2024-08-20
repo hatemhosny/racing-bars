@@ -29,7 +29,7 @@ describe('ticker', () => {
         },
       }),
       dispatch: mockDispatch,
-    } as unknown as Store);
+    }) as unknown as Store;
 
   beforeEach(() => {
     justStarted = true;
