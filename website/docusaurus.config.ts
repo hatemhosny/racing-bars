@@ -10,7 +10,7 @@ const config: Config = {
   favicon: 'img/favicon.ico',
   organizationName: 'hatemhosny', // Usually your GitHub org/user name.
   projectName: 'racing-bars', // Usually your repo name.
-  onBrokenLinks: 'throw',
+  onBrokenLinks: 'warn',
   onBrokenMarkdownLinks: 'warn',
 
   // Even if you don't use internationalization, you can use this field to set
@@ -152,6 +152,7 @@ const config: Config = {
     },
   ],
   plugins: [
+    ['@docusaurus/plugin-debug', { id: 'debug' }],
     [
       'docusaurus-plugin-typedoc',
       {

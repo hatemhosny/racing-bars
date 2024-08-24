@@ -34,5 +34,6 @@ build/
 *.yml
 *.yaml
 
+website/static/lib/
 LICENSE
 PKG-INFO
