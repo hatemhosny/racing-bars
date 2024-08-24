@@ -10,7 +10,7 @@ const config: Config = {
   favicon: 'img/favicon.ico',
   organizationName: 'hatemhosny', // Usually your GitHub org/user name.
   projectName: 'racing-bars', // Usually your repo name.
-  onBrokenLinks: 'warn',
+  onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
 
   // Even if you don't use internationalization, you can use this field to set
@@ -107,7 +107,7 @@ const config: Config = {
             },
             {
               label: 'Sponsor 💚',
-              href: 'sponsor',
+              to: 'sponsor',
             },
           ],
         },
