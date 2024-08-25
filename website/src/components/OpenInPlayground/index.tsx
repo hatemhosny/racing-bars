@@ -47,7 +47,7 @@ export default function OpenInPlayground(props: { language: Language; code: stri
   );
 }
 
-function getCode(language: Language, code: string, baseUrl: string) {
+export function getCode(language: Language, code: string, baseUrl: string) {
   code = code?.replace(/\/data\//g, baseUrl + '/data/') || '';
 
   if (language === 'js') {
