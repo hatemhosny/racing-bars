@@ -5,7 +5,7 @@ hide_table_of_contents: true
 
 import RacingBars from '../../src/components/RacingBars';
 
-A demo for using [`keyboardControls`](../documentation/options.md#keyboardControls).
+A demo for using [`keyboardControls`](../documentation/options.md#keyboardcontrols).
 See the guide on [`chart controls`](../guides/chart-controls.md).
 
 <!--truncate-->
