@@ -2,7 +2,7 @@
 title: Chart Size
 ---
 
-By default the chart will take the size of the [container element](../getting-started/usage.md#race).
+By default the chart will take the size of the [container element](../documentation/api.md#race).
 So, the chart can be easily sized by sizing that element (e.g. by CSS).
 
 Example:

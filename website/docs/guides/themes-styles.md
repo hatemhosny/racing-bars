@@ -142,7 +142,7 @@ Example:
 
 The chart styles are defined in CSS which is bundled in the JS library.
 When the chart loads, the styles are dynamically injected in the top of the HTML document head.
-The styles are scoped to the element specified by the [`selector`](../documentation/options.md#selector) option.
+The styles are scoped to the [container element](../documentation/api.md#race).
 
 The CSS used can be <a href="https://github.com/hatemhosny/racing-bars/tree/master/src/lib/css" target="_blank" className="external">found here</a>.
 

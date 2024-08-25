@@ -10,13 +10,13 @@ After [installation](./installation.md), you can use the library in JavaScript a
 
 The library exports the [`race`](../documentation/api.md#race) function, which creates the bar chart race. It has the following signature:
 
-Type: [`race(data, container?, options?): Promise<Race>`](../api/modules.md#race)
+Type: [`race(data, container?, options?): Promise<Race>`](../api/functions/race.md)
 
 The function accepts the following parameters:
 
 - `data`:
 
-  Type: [`Data`](/api/interfaces/Data.md)[] | `Promise`&lt;[`Data`](/api/interfaces/Data.md)[]&gt; | [`WideData`](/api/interfaces/WideData.md)[] | `Promise`&lt;[`WideData`](/api/interfaces/WideData.md)[]&gt; | `string`
+  Type: [`Data`](../api/interfaces/Data.md)[] | `Promise`&lt;[`Data`](../api/interfaces/Data.md)[]&gt; | [`WideData`](../api/interfaces/WideData.md)[] | `Promise`&lt;[`WideData`](../api/interfaces/WideData.md)[]&gt; | `string`
 
   The data object, a promise that resolves to it or a URL to it.  
   See [section about data](../documentation/data.md) for details.
@@ -29,7 +29,7 @@ The function accepts the following parameters:
 
 - `options`:
 
-  Type: `Partial`&lt;[`Options`](../api/interfaces/internal.Options.md)&gt;
+  Type: `Partial`&lt;[`Options`](../api/internal/interfaces/Options.md)&gt;
 
   An optional configuration object. See [section about options](../documentation/options.md) for details
 
@@ -57,7 +57,7 @@ race('data/population.csv', '#race', options);
 
 For convenience, the library also exports the [`loadData`](../documentation/api.md#loaddata) function to allow fetching data from URL.
 
-Type: [`loadData(URL, type?): Promise<Data[]> | Promise<WideData[]>`](/api/modules.md#loadData)
+Type: [`loadData(URL, type?): Promise<Data[]> | Promise<WideData[]>`](../api/functions/loadData.md)
 
 It supports the following data formats, by specifying the second optional parameter:
 
@@ -80,7 +80,7 @@ loadData('data/population.csv', 'csv').then((data) => {
 
 ## TypeScript Support
 
-The library supports TypeScript. Documentation for the TypeScript definitions can be found [here](../api/modules.md).
+The library supports TypeScript. Documentation for the TypeScript definitions can be found [here](../api/globals.md).
 
 ```ts
 import { race, type Options } from 'racing-bars';

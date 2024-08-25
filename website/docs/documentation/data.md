@@ -160,7 +160,7 @@ import { race } from 'racing-bars';
 race('long.csv', '#race', { dataType: 'csv' });
 ```
 
-In addition, the [`loadData`](./api.md#loaddataurltype) function can be used to load data from a URL into a JavaScript array.
+In addition, the [`loadData`](./api.md#loaddata) function can be used to load data from a URL into a JavaScript array.
 
 ```js
 import { loadData, race } from 'racing-bars';

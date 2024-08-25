@@ -11,7 +11,7 @@ The color assignment is consistent (every time the chart loads, each bar name ge
 
 If the dataset contains a lot of names (or groups), the bar colors may start becoming near each other.
 
-This default behaviour can be changed in different ways.
+This default behavior can be changed in different ways.
 
 ## Change Default Colors
 
@@ -121,7 +121,7 @@ race('/data/population.json', '#race', options);
 ```
 
 :::info
-Notice that if groups are shown ([showGroups](#showgroups) is set to `true`, and the dataset has the field `group`),
+Notice that if groups are shown ([showGroups](../documentation/options.md#showgroups) is set to `true`, and the dataset has the field `group`),
 [`colorMap`](../documentation/options.md#colormap) option affects `group` colors, otherwise it affects `name` colors, but not both.
 :::
 
