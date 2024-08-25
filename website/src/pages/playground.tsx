@@ -89,21 +89,38 @@ export default function Playground() {
     },
   };
 
+  const allowedLanguages = ['js', 'ts', 'jsx', 'vue', 'svelte'] as const;
+  const fix = (lang: string | undefined) => (lang === 'jsx' ? 'react' : lang);
+  const selectLanguage = () => {
+    const getLanguage = (lang: string | undefined) => {
+      if (lang === 'react') {
+        lang = 'jsx';
+      }
+      if (lang && !allowedLanguages.includes(lang as (typeof allowedLanguages)[number])) {
+        lang = undefined;
+      }
+      return lang as (typeof allowedLanguages)[number] | undefined;
+    };
+
+    const queryLanguage = getLanguage(new URL(location.href).searchParams.get('lang'));
+    if (queryLanguage) {
+      return queryLanguage;
+    }
+
+    const savedLanguage = getLanguage(localStorage.getItem('docusaurus.tab.sdk-code'));
+    if (savedLanguage) {
+      return savedLanguage;
+    }
+    return 'js';
+  };
+
   const sdkReady = (sdk: Playground) => {
     setPlayground(sdk);
     if (!ExecutionEnvironment.canUseDOM) return;
-    const savedLanguage = localStorage.getItem('docusaurus.tab.sdk-code') as
-      | 'js'
-      | 'ts'
-      | 'react'
-      | 'vue'
-      | 'svelte'
-      | undefined;
-    const language = savedLanguage === 'react' ? 'jsx' : savedLanguage;
-    updateLanguage(language || 'js', sdk);
+    updateLanguage(selectLanguage(), sdk);
   };
 
-  const updateLanguage = (language: 'js' | 'ts' | 'jsx' | 'vue' | 'svelte', sdk?: Playground) => {
+  const updateLanguage = (language: (typeof allowedLanguages)[number], sdk?: Playground) => {
     const playgroundSDK = playground || sdk;
     if (!playgroundSDK) return;
     const langName = language === 'jsx' ? 'react' : language;
@@ -134,7 +151,7 @@ export default function Playground() {
       <div style={{ margin: '2em', textAlign: 'center' }}>
         <h1>Playground</h1>
         <main>
-          <Tabs queryString="code" groupId="sdk-code">
+          <Tabs queryString="lang" groupId="sdk-code" defaultValue={fix(selectLanguage())}>
             <TabItem
               value="js"
               label="JS"
