@@ -1,8 +1,9 @@
+/* eslint-disable import/no-unresolved */
 import React from 'react';
 import { getPlaygroundUrl, type Config, type Language } from 'livecodes';
-import styles from './styles.module.css';
 import ExecutionEnvironment from '@docusaurus/ExecutionEnvironment';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
+import styles from './styles.module.css';
 
 export default function OpenInPlayground(props: { language: Language; code: string }) {
   const baseUrl = ExecutionEnvironment.canUseDOM
