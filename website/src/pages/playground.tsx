@@ -11,7 +11,7 @@ import ExecutionEnvironment from '@docusaurus/ExecutionEnvironment';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import { getFrameworkCode } from '../helpers/get-framework-code';
 import { getCode } from '../components/OpenInPlayground';
-import * as demos from '../../docs/gallery/gallery-demos';
+import * as demos from '../../docs/gallery/_gallery-demos';
 export default function Playground() {
   const baseUrl = ExecutionEnvironment.canUseDOM
     ? location.origin
@@ -178,7 +178,11 @@ export default function Playground() {
     const playgroundSDK = playground || sdk;
     if (!playgroundSDK) return;
     const langName = lang === 'jsx' ? 'react' : lang;
-    const content = prepareCode(getFrameworkCode(demo)[`${langName}Code`] || '', lang);
+    const { dynamicProps, ...demoOptions } = demo;
+    const content = prepareCode(
+      getFrameworkCode(demoOptions, dynamicProps)[`${langName}Code`] || '',
+      lang,
+    );
     playgroundSDK.setConfig(getConfig(lang, content));
     updateQueryString(langName);
   };
@@ -189,14 +193,20 @@ export default function Playground() {
     if (!demo) return;
     setDemo(demo);
     const langName = language === 'jsx' ? 'react' : language;
-    const content = prepareCode(getFrameworkCode(demo)[`${langName}Code`] || '', language);
+    const { dynamicProps, ...demoOptions } = demo;
+    const content = prepareCode(
+      getFrameworkCode(demoOptions, dynamicProps)[`${langName}Code`] || '',
+      language,
+    );
     playground.setConfig(getConfig(language, content));
     updateQueryString(language, id);
   };
 
   const [playground, setPlayground] = useState<LiveCodesPlayground | null>(null);
   const [language, setLanguage] = useState<(typeof allowedLanguages)[number]>(selectLanguage());
-  const [demo, setDemo] = useState<Options>(demoInUrl ?? options);
+  const [demo, setDemo] = useState<
+    Options & { dynamicProps: Partial<Record<keyof Options, string>> }
+  >(demoInUrl ?? options);
 
   return (
     <Layout title="RacingBars Playground" description="A playground for the racing-bars library">
