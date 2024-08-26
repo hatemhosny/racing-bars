@@ -12,57 +12,14 @@ import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import { getFrameworkCode } from '../helpers/get-framework-code';
 import { getCode } from '../components/OpenInPlayground';
 import * as demos from '../../docs/gallery/_gallery-demos';
+
 export default function Playground() {
   const baseUrl = ExecutionEnvironment.canUseDOM
     ? location.origin
     : useDocusaurusContext().siteConfig.url;
 
-  const options: Options & { dataUrl: string } = {
-    dataUrl: baseUrl + '/data/population.csv',
-    dataType: 'csv',
-    // dataShape: 'long',
-    // fillDateGaps: 'months',
-    // fillDateGapsValue: 'last',
-    dataTransform: (data) =>
-      data.map((d) => ({
-        ...d,
-        value: Number(d.value) * 1000,
-        icon: `https://flagsapi.com/${d.code}/flat/64.png`,
-      })),
-    title: 'World Population in 60 Years',
-    subTitle: 'Top 10 World Population',
-    dateCounter: 'YYYY',
-    // dateCounter: (currentDate, dateSlice, dates) =>
-    //   `${dates.indexOf(currentDate) + 1} of ${dates.length}`,
-    caption: 'Source: World Bank',
-    // caption: (date, dateSlice, allDates) =>
-    //   `Total: ${Math.round(dateSlice.reduce((acc, curr) => acc + curr.value, 0))}`,
-    // `Max: ${Math.round(Math.max(...dateSlice.map((d) => d.value)))}`,
-    // startDate: '1960-1-1',
-    endDate: '2020-12-31',
-    // loop: true,
-    // loopDelay: 5000,
-    tickDuration: 500,
-    // topN: 15,
-    // height: "window*0.85",
-    // width: 'window*0.5',
-    // disableClickEvents: true,
-    // disableKeyboardEvents: true,
-    showGroups: false,
-    // showControls: 'all',
-    // showOverlays: 'all',
-    // showGroups: false,
-    showIcons: true,
-    // autorun: false,
-    // colorSeed: "asdfs",
-    // labelsOnBars: false,
-    // labelsWidth: 250,
-    // embedStyles: false,
-    // theme: 'dark',
-    // fixedScale: true,
-    // highlightBars: true,
-    // selectBars: true,
-  };
+  const defaultOptions = demos.datasetPopulation;
+  delete defaultOptions.label;
 
   const config: Partial<Config> = {
     title: 'RacingBars',
@@ -78,7 +35,7 @@ export default function Playground() {
     },
     script: {
       language: 'js',
-      content: getFrameworkCode(options).jsCode,
+      content: getFrameworkCode(defaultOptions).jsCode,
     },
     imports: {
       'racing-bars': baseUrl + '/lib/racing-bars.js',
@@ -90,7 +47,10 @@ export default function Playground() {
     },
   };
 
-  const demoInUrl = demos[new URL(location.href).searchParams.get('demo')];
+  const demoInUrl = ExecutionEnvironment.canUseDOM
+    ? demos[new URL(location.href).searchParams.get('demo')]
+    : undefined;
+  delete demoInUrl?.label;
 
   const getConfig = (
     lang: (typeof allowedLanguages)[number],
@@ -117,6 +77,8 @@ export default function Playground() {
   const getLangName = (lang: string | undefined) => (lang === 'jsx' ? 'react' : lang);
 
   const selectLanguage = () => {
+    if (!ExecutionEnvironment.canUseDOM) return 'js';
+
     const getLanguage = (lang: string | undefined) => {
       if (lang === 'react') {
         lang = 'jsx';
@@ -142,7 +104,7 @@ export default function Playground() {
   const onSdkReady = (sdk: LiveCodesPlayground) => {
     setPlayground(sdk);
     if (!ExecutionEnvironment.canUseDOM) return;
-    updateLanguage(selectLanguage(), sdk);
+    updateLanguage(selectLanguage(), sdk, false);
   };
 
   const format = (code: string, lang = 'js') => {
@@ -173,7 +135,11 @@ export default function Playground() {
     history.replaceState(null, '', url);
   };
 
-  const updateLanguage = (lang: (typeof allowedLanguages)[number], sdk?: LiveCodesPlayground) => {
+  const updateLanguage = (
+    lang: (typeof allowedLanguages)[number],
+    sdk?: LiveCodesPlayground,
+    updateUrl = true,
+  ) => {
     setLanguage(lang);
     const playgroundSDK = playground || sdk;
     if (!playgroundSDK) return;
@@ -184,13 +150,17 @@ export default function Playground() {
       lang,
     );
     playgroundSDK.setConfig(getConfig(lang, content));
-    updateQueryString(langName);
+    if (updateUrl) {
+      setLangQueryString('');
+      updateQueryString(lang);
+    }
   };
 
   const updateDemoCode = (id: string) => {
     if (!playground) return;
-    const { label, ...demo } = demos[id];
+    const demo = demos[id];
     if (!demo) return;
+    delete demo.label;
     setDemo(demo);
     const langName = language === 'jsx' ? 'react' : language;
     const { dynamicProps, ...demoOptions } = demo;
@@ -206,7 +176,8 @@ export default function Playground() {
   const [language, setLanguage] = useState<(typeof allowedLanguages)[number]>(selectLanguage());
   const [demo, setDemo] = useState<
     Options & { dynamicProps: Partial<Record<keyof Options, string>> }
-  >(demoInUrl ?? options);
+  >(demoInUrl ?? defaultOptions);
+  const [langQueryString, setLangQueryString] = useState('lang');
 
   return (
     <Layout title="RacingBars Playground" description="A playground for the racing-bars library">
@@ -239,7 +210,7 @@ export default function Playground() {
               </ul>
             </div>
           </div>
-          <Tabs queryString="lang" groupId="sdk-code">
+          <Tabs queryString={langQueryString} groupId="sdk-code">
             <TabItem
               value="js"
               label="JS"
