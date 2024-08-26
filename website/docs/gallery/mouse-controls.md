@@ -4,6 +4,7 @@ hide_table_of_contents: true
 ---
 
 import RacingBars from '../../src/components/RacingBars';
+import { mouseControls } from './\_gallery-demos.ts';
 
 A demo for using [`mouseControls`](../documentation/options.md#mousecontrols).
 See the guide on [`chart controls`](../guides/chart-controls.md).
@@ -18,10 +19,7 @@ Notice that this does not interfere with click/double-click/triple-click on grou
 
 <div className="gallery">
   <RacingBars
-    dataUrl="/data/population.csv"
-    dataType="csv"
-    mouseControls={true}
-    showGroups={true}
+    {...mouseControls}
 />
 
 </div>

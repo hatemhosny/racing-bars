@@ -4,6 +4,7 @@ hide_table_of_contents: true
 ---
 
 import RacingBars from '../../src/components/RacingBars';
+import { themeDark } from './\_gallery-demos.ts';
 
 A demo for showing the [dark theme](../documentation/options.md#theme).
 
@@ -13,8 +14,6 @@ A demo for showing the [dark theme](../documentation/options.md#theme).
 
 <div className="gallery">
   <RacingBars
-    dataUrl="/data/population.csv"
-    dataType="csv"
-    theme="dark"
+    {...themeDark}
   />
 </div>

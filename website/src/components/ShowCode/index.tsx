@@ -1,13 +1,11 @@
 /* eslint-disable import/no-unresolved */
-/* eslint-disable import/no-extraneous-dependencies */
-/* eslint-disable import/no-internal-modules */
 import React, { useState, useRef, useEffect } from 'react';
 import ExecutionEnvironment from '@docusaurus/ExecutionEnvironment';
 import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
-import styles from './styles.module.css';
 import OpenInPlayground from '../OpenInPlayground';
+import styles from './styles.module.css';
 
 export default function ShowCode(props: {
   js: string;

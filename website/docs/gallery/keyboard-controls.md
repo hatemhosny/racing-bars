@@ -4,6 +4,7 @@ hide_table_of_contents: true
 ---
 
 import RacingBars from '../../src/components/RacingBars';
+import { keyboardControls } from './\_gallery-demos.ts';
 
 A demo for using [`keyboardControls`](../documentation/options.md#keyboardcontrols).
 See the guide on [`chart controls`](../guides/chart-controls.md).
@@ -18,22 +19,14 @@ Notice that both charts are affected. Also notice that typing in the `input` and
 
 <div className="gallery">
   <RacingBars
-    dataUrl="/data/population.csv"
-    dataType="csv"
-    title="World Population"
-    subTitle="in millions"
-    keyboardControls={true}
+    {...keyboardControls}
     showGroups={true}
 />
 </div>
 
 <div className="gallery">
 <RacingBars
-    dataUrl="/data/population.csv"
-    dataType="csv"
-    title="World Population"
-    subTitle="in millions"
-    keyboardControls={true}
+    {...keyboardControls}
     showGroups={false}
 />
 </div>

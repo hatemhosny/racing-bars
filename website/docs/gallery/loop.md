@@ -4,6 +4,7 @@ hide_table_of_contents: true
 ---
 
 import RacingBars from '../../src/components/RacingBars';
+import { loop } from './\_gallery-demos.ts';
 
 A demo for using [`loop`](../documentation/options.md#loop).
 
@@ -13,10 +14,6 @@ A demo for using [`loop`](../documentation/options.md#loop).
 
 <div className="gallery">
   <RacingBars
-    dataUrl="/data/population.csv"
-    dataType="csv"
-    startDate="1970-01-01"
-    endDate="1980-01-01"
-    loop={true}
+    {...loop}
   />
 </div>

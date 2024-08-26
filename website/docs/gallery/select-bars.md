@@ -4,6 +4,7 @@ hide_table_of_contents: true
 ---
 
 import RacingBars from '../../src/components/RacingBars';
+import { selectBars } from './\_gallery-demos.ts';
 
 A demo for using [`selectBars`](../documentation/options.md#selectbars). Click on the bars for selection.
 
@@ -13,9 +14,7 @@ A demo for using [`selectBars`](../documentation/options.md#selectbars). Click o
 
 <div className="gallery">
   <RacingBars
-    dataUrl="/data/population.csv"
-    dataType="csv"
-    selectBars={true}
+    {...selectBars}
   />
 </div>
 

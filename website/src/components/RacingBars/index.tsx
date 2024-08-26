@@ -1,10 +1,13 @@
+/* eslint-disable import/no-unresolved */
+/* eslint-disable import/no-extraneous-dependencies */
+/* eslint-disable import/no-internal-modules */
 import React, { Suspense, lazy } from 'react';
-import type { Props } from '../../../../src/index';
-import ShowCode from '../ShowCode';
-import styles from './styles.module.css';
 import { useColorMode } from '@docusaurus/theme-common';
 import BrowserOnly from '@docusaurus/BrowserOnly';
 import { getFrameworkCode } from '@site/src/helpers/get-framework-code';
+import type { Props } from '../../../../src';
+import ShowCode from '../ShowCode';
+import styles from './styles.module.css';
 
 export default function RacingBars(
   props: Props & {
@@ -12,9 +15,10 @@ export default function RacingBars(
     className?: string;
     showCode?: 'open' | 'closed' | false;
     dynamicProps?: Record<keyof Props, string>;
+    label?: string;
   },
 ): JSX.Element {
-  const { className, style, showCode, dynamicProps, ...options } = props;
+  const { label, className, style, showCode, dynamicProps, ...options } = props;
   const { jsCode, tsCode, reactCode, vueCode, svelteCode } = getFrameworkCode(
     options,
     dynamicProps,
