@@ -8,4 +8,6 @@ vendor_modules
 **/*.json
 scripts
 python
-static
+website/.docusaurus
+website/docs/api
+website/static
