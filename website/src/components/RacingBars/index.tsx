@@ -5,7 +5,7 @@ import React, { Suspense, lazy } from 'react';
 import { useColorMode } from '@docusaurus/theme-common';
 import BrowserOnly from '@docusaurus/BrowserOnly';
 import { getFrameworkCode } from '@site/src/helpers/get-framework-code';
-import type { Props } from '../../../../src/index';
+import type { Props } from '../../../../src';
 import ShowCode from '../ShowCode';
 import styles from './styles.module.css';
 

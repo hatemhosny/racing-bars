@@ -1,5 +1,4 @@
-import type { Props } from 'racing-bars';
-
+import type { Props } from '../../../src';
 type ChartProps = Props & {
   label: string;
   dynamicProps?: Partial<Record<keyof Props, string>>;
