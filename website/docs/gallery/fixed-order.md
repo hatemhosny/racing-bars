@@ -4,6 +4,7 @@ hide_table_of_contents: true
 ---
 
 import RacingBars from '../../src/components/RacingBars';
+import { fixedOrder } from './\_gallery-demos.ts';
 
 A demo for using [`fixedOrder`](../documentation/options.md#fixedorder).
 
@@ -17,12 +18,7 @@ Also note that with this setting it is more likely that the date counter will ov
 
 <div className="gallery">
   <RacingBars
-    dataUrl="/data/population.csv"
-    dataType="csv"
-    dateCounter="YYYY"
-    fixedOrder={['Algeria', 'Italy', 'Canada', 'France', 'Argentina']}
-    topN="3"
-    tickDuration="200"
+    {...fixedOrder}
 />
 
 </div>

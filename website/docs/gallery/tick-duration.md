@@ -4,6 +4,7 @@ hide_table_of_contents: true
 ---
 
 import RacingBars from '../../src/components/RacingBars';
+import { tickDuration } from './\_gallery-demos.ts';
 
 A demo for using [`tickDuration`](../documentation/options.md#tickduration) to control chart "speed".
 
@@ -13,8 +14,6 @@ A demo for using [`tickDuration`](../documentation/options.md#tickduration) to c
 
 <div className="gallery">
   <RacingBars
-    dataUrl="/data/population.csv"
-    dataType="csv"
-    tickDuration={100}
+    {...tickDuration}
   />
 </div>

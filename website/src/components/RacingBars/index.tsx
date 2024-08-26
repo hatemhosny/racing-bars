@@ -15,9 +15,10 @@ export default function RacingBars(
     className?: string;
     showCode?: 'open' | 'closed' | false;
     dynamicProps?: Record<keyof Props, string>;
+    label?: string;
   },
 ): JSX.Element {
-  const { className, style, showCode, dynamicProps, ...options } = props;
+  const { label, className, style, showCode, dynamicProps, ...options } = props;
   const { jsCode, tsCode, reactCode, vueCode, svelteCode } = getFrameworkCode(
     options,
     dynamicProps,

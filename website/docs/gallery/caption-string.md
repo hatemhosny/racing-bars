@@ -4,6 +4,7 @@ hide_table_of_contents: true
 ---
 
 import RacingBars from '../../src/components/RacingBars';
+import { captionString } from './\_gallery-demos.ts';
 
 This example shows the use of a string as a [caption](../documentation/options#caption).
 
@@ -11,14 +12,8 @@ This example shows the use of a string as a [caption](../documentation/options#c
 
 ### Chart
 
-export const options = {
-caption: 'Source: World Bank',
-};
-
 <div className="gallery">
   <RacingBars
-    dataUrl="/data/population.csv"
-    dataType="csv"
-    caption={options.caption}
+    {...captionString}
   />
 </div>

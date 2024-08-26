@@ -4,6 +4,7 @@ hide_table_of_contents: true
 ---
 
 import RacingBars from '../../src/components/RacingBars';
+import { dateCounterFormat } from './\_gallery-demos.ts';
 
 This example shows the use of date formatting in [`dateCounter`](../documentation/options#datecounter)
 
@@ -13,8 +14,6 @@ This example shows the use of date formatting in [`dateCounter`](../documentatio
 
 <div className="gallery">
   <RacingBars
-    dataUrl="/data/population.csv"
-    dataType="csv"
-    dateCounter="MMM DD, YYYY 🌍"
+    {...dateCounterFormat}
   />
 </div>

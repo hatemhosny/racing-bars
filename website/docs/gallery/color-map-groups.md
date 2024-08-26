@@ -4,6 +4,7 @@ hide_table_of_contents: true
 ---
 
 import RacingBars from '../../src/components/RacingBars';
+import { colorMapGroups } from './\_gallery-demos.ts';
 
 A demo for using a [color map](../documentation/options.md#colormap) for [groups](../documentation/options.md#showgroups).
 
@@ -11,17 +12,8 @@ A demo for using a [color map](../documentation/options.md#colormap) for [groups
 
 ### Chart
 
-export const continentColors = {
-Asia: 'yellow',
-Europe: 'green',
-};
-
 <div className="gallery">
   <RacingBars
-    dataUrl="/data/population.csv"
-    dataType="csv"
-    title="World Population"
-    colorMap={continentColors}
-    showGroups={true}
+    {...colorMapGroups}
   />
 </div>

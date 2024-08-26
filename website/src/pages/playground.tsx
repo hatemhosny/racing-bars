@@ -19,7 +19,6 @@ export default function Playground() {
     : useDocusaurusContext().siteConfig.url;
 
   const defaultOptions = demos.datasetPopulation;
-  delete defaultOptions.label;
 
   const config: Partial<Config> = {
     title: 'RacingBars',
@@ -50,7 +49,6 @@ export default function Playground() {
   const demoInUrl = ExecutionEnvironment.canUseDOM
     ? demos[new URL(location.href).searchParams.get('demo')]
     : undefined;
-  delete demoInUrl?.label;
 
   const getConfig = (
     lang: (typeof allowedLanguages)[number],
@@ -144,7 +142,7 @@ export default function Playground() {
     const playgroundSDK = playground || sdk;
     if (!playgroundSDK) return;
     const langName = lang === 'jsx' ? 'react' : lang;
-    const { dynamicProps, ...demoOptions } = demo;
+    const { label: _, dynamicProps, ...demoOptions } = demo;
     const content = prepareCode(
       getFrameworkCode(demoOptions, dynamicProps)[`${langName}Code`] || '',
       lang,
@@ -160,10 +158,9 @@ export default function Playground() {
     if (!playground) return;
     const demo = demos[id];
     if (!demo) return;
-    delete demo.label;
     setDemo(demo);
     const langName = language === 'jsx' ? 'react' : language;
-    const { dynamicProps, ...demoOptions } = demo;
+    const { label: _, dynamicProps, ...demoOptions } = demo;
     const content = prepareCode(
       getFrameworkCode(demoOptions, dynamicProps)[`${langName}Code`] || '',
       language,
@@ -175,7 +172,7 @@ export default function Playground() {
   const [playground, setPlayground] = useState<LiveCodesPlayground | null>(null);
   const [language, setLanguage] = useState<(typeof allowedLanguages)[number]>(selectLanguage());
   const [demo, setDemo] = useState<
-    Options & { dynamicProps: Partial<Record<keyof Options, string>> }
+    Options & { label: string; dynamicProps: Partial<Record<keyof Options, string>> }
   >(demoInUrl ?? defaultOptions);
   const [langQueryString, setLangQueryString] = useState('lang');
 

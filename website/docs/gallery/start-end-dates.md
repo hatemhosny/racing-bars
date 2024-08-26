@@ -4,6 +4,7 @@ hide_table_of_contents: true
 ---
 
 import RacingBars from '../../src/components/RacingBars';
+import { startEndDates } from './\_gallery-demos.ts';
 
 A demo for using [`startDate`](../documentation/options.md#startdate) and [`endDate`](../documentation/options.md#enddate).
 
@@ -16,9 +17,6 @@ So the chart will end at the date that is less than or equal to the `endDate`.
 
 <div className="gallery">
   <RacingBars
-    dataUrl="/data/population.csv"
-    dataType="csv"
-    startDate="1970-01-01"
-    endDate="1999-12-31"
+    {...startEndDates}
   />
 </div>
