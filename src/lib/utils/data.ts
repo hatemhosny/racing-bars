@@ -26,6 +26,7 @@ export async function prepareData(
     type: 'prepare-data',
     data,
     options: removeFnOptions(store.getState().options),
+    baseUrl: location.href,
   });
   const preparedData = await new Promise<Data[]>((resolve) => {
     worker.addEventListener(
