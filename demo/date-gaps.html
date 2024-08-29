@@ -21,28 +21,17 @@
     <div id="race" class="race"></div>
   </div>
 
-  <script src="scripts/d3.min.js"></script>
-  <script src="scripts/racing-bars.umd.js"></script>
-  <script>
+  <script type="module">
+    import { race } from '../build/racing-bars.js';
     const options = {
-      selector: '#race',
+      dataType: 'csv',
       fillDateGapsInterval: 'month',
       // fillDateGapsValue: 'last',
       // endDate: '2004-01-01',
       controlButtons: 'all',
       dateCounter: 'DD/MM/YYYY',
     };
-    racingBars.loadData('../data/population.csv', 'csv').then((data) => {
-    // racingBars.loadData('../data/gdp.csv', 'csv').then((data) => {
-    // racingBars.loadData('../data/covid-19.csv', 'csv').then((data) => {
-    // racingBars.loadData('../data/brands.csv', 'csv').then((data) => {
-    // racingBars.loadData('../data/gh-push.csv', 'csv').then((data) => {
-      // data = data.map((d) => ({
-      //   ...d,
-      //   value: Number(d.value) * 1000,
-      // }));
-      const racer = racingBars.race(data, options);
-    });
+    race('../data/population.csv', '#race', options);
   </script>
 </body>
 </html>

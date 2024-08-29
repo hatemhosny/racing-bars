@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
   <head>
     <style>
@@ -12,16 +12,14 @@
   <body>
     <div id="race"></div>
 
-    <script src="scripts/d3.min.js"></script>
-    <script src="scripts/racing-bars.umd.js"></script>
-    <script>
+    <script type="module">
+      import { race } from '../build/racing-bars.js';
+
       const options = {
-        selector: '#race',
+        dataType: 'csv',
         title: 'World Population',
       };
-      racingBars.loadData('../data/population.json').then((data) => {
-        racingBars.race(data, options);
-      });
+      race('../data/population.csv', '#race', options);
     </script>
   </body>
 </html>

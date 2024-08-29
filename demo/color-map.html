@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <head>
   <meta charset="utf-8" />
   <style>
@@ -24,9 +24,8 @@
     <div id="race" class="race"></div>
   </div>
 
-  <script src="scripts/d3.min.js"></script>
-  <script src="scripts/racing-bars.umd.js"></script>
-  <script>
+  <script type="module">
+    import { race } from '../build/racing-bars.js';
     const colorMap = {
       India: 'red',
       'United States': 'blue',
@@ -45,39 +44,21 @@
       '#FECB52',
     ];
     const options = {
-      selector: '#race',
-      // dataShape: "wide",
-      // fillDateGaps: "months",
-      // fillDateGapsValue: "zero",
+      dataType: 'csv',
       title: 'A Tale of 11 Years',
       subTitle: 'Top 10 Surgical Procedures',
       dateCounter: 'MM/YYYY',
       caption: (date, dateSlice, allDates) =>
         `Total: ${Math.round(dateSlice.reduce((acc, curr) => acc + curr.value, 0))}`,
-      // startDate: '2009-4-1',
-      // endDate: '2010-12-31',
       loop: false,
       tickDuration: 500,
-      // topN: 15,
-      // height: "window*0.85",
-      // width: 'window*0.5',
-      // disableClickEvents: true,
-      // disableKeyboardEvents: true,
       showControls: 'all',
       showOverlays: 'none',
       autorun: false,
-      // colorSeed: 42,
-      // embedStyles: false,
-      // theme: 'dark',
       showGroups: false,
       colorMap: colorScale,
     };
 
-    racingBars.loadData('../data/population.csv', 'csv').then((data) => {
-      // data = data.map((d) => {
-      //   return d.name === 'Indonesia' ? { ...d, color: 'teal' } : d;
-      // });
-      racingBars.race(data, options);
-    });
+    race('../data/population.csv', '#race', options);
   </script>
 </body>
