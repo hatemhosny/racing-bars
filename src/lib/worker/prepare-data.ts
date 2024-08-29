@@ -9,8 +9,9 @@ import { getDateString, getDateRange } from '../utils/dates';
 export function prepareData(
   data: Data[] | WideData[] | Promise<Data[]> | Promise<WideData[]> | string,
   options: Options,
+  baseUrl: string,
 ): Promise<Data[]> {
-  return fetchData(data, options.dataType)
+  return fetchData(data, options.dataType, baseUrl)
     .then(filterByDate(options.startDate, options.endDate))
     .then(wideDataToLong(options.dataShape))
     .then(processFixedOrder(options.fixedOrder))
@@ -22,11 +23,24 @@ export function prepareData(
 function fetchData(
   data: Data[] | WideData[] | Promise<Data[]> | Promise<WideData[]> | string,
   dataType: 'json' | 'csv' | 'tsv' | 'xml',
+  baseUrl: string,
 ) {
   if (typeof data === 'string') {
-    return loadData(data, dataType);
+    let dataUrl = data;
+    if (isRelativeUrl(dataUrl)) {
+      try {
+        dataUrl = new URL(data, baseUrl).href;
+      } catch {
+        throw new Error(`Invalid URL: ${data}`);
+      }
+    }
+    return loadData(dataUrl, dataType);
   }
   return Promise.resolve(data);
+}
+
+function isRelativeUrl(url: string) {
+  return !url.startsWith('https://') && !url.startsWith('http://') && !url.startsWith('data:');
 }
 
 function filterByDate(startDate: string, endDate: string) {
