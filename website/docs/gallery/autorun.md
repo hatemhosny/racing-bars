@@ -4,6 +4,7 @@ hide_table_of_contents: true
 ---
 
 import RacingBars from '../../src/components/RacingBars';
+import { autorunFalse } from './\_gallery-demos.ts';
 
 A demo for using [`autorun`](../documentation/options.md#autorun) to control auto-starting the chart race.
 
@@ -15,8 +16,7 @@ A demo for using [`autorun`](../documentation/options.md#autorun) to control aut
 
 <div className="gallery">
   <RacingBars
-    dataUrl="/data/population.csv"
-    dataType="csv"
+    {...autorunFalse}
     autorun={true}
   />
 </div>
@@ -27,8 +27,6 @@ A demo for using [`autorun`](../documentation/options.md#autorun) to control aut
 
 <div className="gallery">
   <RacingBars
-    dataUrl="/data/population.csv"
-    dataType="csv"
-    autorun={false}
+    {...autorunFalse}
   />
 </div>

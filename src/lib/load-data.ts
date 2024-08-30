@@ -2,18 +2,21 @@ import { json, csv, tsv, xml } from './d3';
 import type { Data, WideData } from './data';
 
 export function loadData(
-  URL: string,
+  url: string,
   type: 'json' | 'csv' | 'tsv' | 'xml' = 'json',
 ): Promise<Data[]> | Promise<WideData[]> {
+  const handleError = () => {
+    throw new Error(`Failed to load data as ${type.toUpperCase()} from ${url}`);
+  };
   switch (type) {
     case 'json':
-      return json(URL) as Promise<Data[]> | Promise<WideData[]>;
+      return json(url).catch(handleError) as Promise<Data[]> | Promise<WideData[]>;
     case 'csv':
-      return csv(URL) as unknown as Promise<Data[]> | Promise<WideData[]>;
+      return csv(url).catch(handleError) as unknown as Promise<Data[]> | Promise<WideData[]>;
     case 'tsv':
-      return tsv(URL) as unknown as Promise<Data[]> | Promise<WideData[]>;
+      return tsv(url).catch(handleError) as unknown as Promise<Data[]> | Promise<WideData[]>;
     case 'xml':
-      return xml(URL) as unknown as Promise<Data[]> | Promise<WideData[]>;
+      return xml(url).catch(handleError) as unknown as Promise<Data[]> | Promise<WideData[]>;
     default:
       throw new Error(`Unsupported data type: ${type}`);
   }

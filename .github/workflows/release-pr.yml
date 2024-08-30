@@ -1,0 +1,24 @@
+name: Release PR
+
+# on creating a release branch (releases/**) create a PR to main
+
+on: create
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    if: contains(github.ref, 'refs/heads/releases/')
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GH_ACTIONS_REPO_PAT }}
+
+      - name: Get version
+        id: vars
+        run: echo ::set-output name=version::$(echo ${{github.ref_name}} | sed 's/^releases\///')
+
+      - name: Create pull request to main
+        run: gh pr create --title "Prepare release ${{steps.vars.outputs.version}}" --body "Prepare release ${{steps.vars.outputs.version}}" --base main --head "${{github.ref_name}}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_REPO_PAT }}

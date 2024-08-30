@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
   <head>
     <meta charset="utf-8" />
@@ -29,7 +29,7 @@
     <script src="../build/racing-bars.umd.js"></script>
     <script>
       const options = {
-        selector: '#race',
+        dataType: 'csv',
         // dataShape: 'wide',
         // fillDateGaps: 'months',
         // fillDateGapsValue: 'last',
@@ -71,7 +71,7 @@
       // document.getElementById('race').addEventListener('firstDate', () => console.log('event fired'));
 
       racingBars.loadData('/data/population.csv', 'csv').then(async (data) => {
-        const racer = await racingBars.race(data, options);
+        const racer = await racingBars.race(data, '#race', options);
 
         racer.on('firstDate', () => console.log('firstDate'));
         const watcher = racer.on('dateChange', ({ date }) => console.log('date change', date));

@@ -4,6 +4,7 @@ hide_table_of_contents: true
 ---
 
 import RacingBars from '../../src/components/RacingBars';
+import { controlButtonsAll, controlButtonsPlay, controlButtonsNone } from './\_gallery-demos.ts';
 
 A demo for using [`controlButtons`](../documentation/options#controlbuttons).
 
@@ -17,11 +18,7 @@ See the guide on [`chart controls`](../guides/chart-controls).
 
 <div className="gallery">
   <RacingBars
-    dataUrl="/data/population.csv"
-    dataType="csv"
-    title="World Population"
-    subTitle="in millions"
-    controlButtons="all"
+    {...controlButtonsAll}
 />
 
 </div>
@@ -32,11 +29,7 @@ See the guide on [`chart controls`](../guides/chart-controls).
 
 <div className="gallery">
   <RacingBars
-    dataUrl="/data/population.csv"
-    dataType="csv"
-    title="World Population"
-    subTitle="in millions"
-    controlButtons="play"
+    {...controlButtonsPlay}
 />
 
 </div>
@@ -47,11 +40,7 @@ See the guide on [`chart controls`](../guides/chart-controls).
 
 <div className="gallery">
   <RacingBars
-    dataUrl="/data/population.csv"
-    dataType="csv"
-    title="World Population"
-    subTitle="in millions"
-    controlButtons="none"
+    {...controlButtonsNone}
 />
 
 </div>

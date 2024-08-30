@@ -223,7 +223,7 @@ const options = {
 race('/data/population.json', '#race', options);
 ```
 
-Note that the transformation could have been done after loading the data with [`loadData`](../documentation/api.md#loaddataurl-type) method and before calling the [`race`](../documentation/api.md#racedata-options) method, as follows:
+Note that the transformation could have been done after loading the data with [`loadData`](../documentation/api.md#loaddata) method and before calling the [`race`](../documentation/api.md#race) method, as follows:
 
 ```js
 import { loadData, race } from 'racing-bars';
@@ -562,7 +562,7 @@ const options = {
 
 ### makeCumulative
 
-If `true`, the values are converted to [cumulative sums](./data.md#cumulativesum) (running totals).
+If `true`, the values are converted to [cumulative sums](./data.md#cumulative-sum) (running totals).
 
 - Type: `boolean`
 - Default: `false`

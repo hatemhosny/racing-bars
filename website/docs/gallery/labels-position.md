@@ -4,6 +4,7 @@ hide_table_of_contents: true
 ---
 
 import RacingBars from '../../src/components/RacingBars';
+import { labelsPosition } from './\_gallery-demos.ts';
 
 A demo for using [`labelsPosition`](../documentation/options.md#labelsposition).
 
@@ -15,8 +16,7 @@ A demo for using [`labelsPosition`](../documentation/options.md#labelsposition).
 
 <div className="gallery">
   <RacingBars
-    dataUrl="/data/population.csv"
-    dataType="csv"
+    {...labelsPosition}
     labelsPosition="inside"
   />
 </div>
@@ -27,9 +27,7 @@ A demo for using [`labelsPosition`](../documentation/options.md#labelsposition).
 
 <div className="gallery">
   <RacingBars
-    dataUrl="/data/population.csv"
-    dataType="csv"
-    labelsPosition="outside"
+    {...labelsPosition}
 />
 
 </div>

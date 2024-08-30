@@ -4,6 +4,7 @@ hide_table_of_contents: true
 ---
 
 import RacingBars from '../../src/components/RacingBars';
+import { icons } from './\_gallery-demos.ts';
 
 A demo showing the use of [icons](../guides/icons.md).
 
@@ -18,18 +19,7 @@ icon: `https://flagsapi.com/${d.code}/flat/64.png`,
 
 <div className="gallery">
   <RacingBars
-    dataUrl="/data/population.csv"
-    dataType="csv"
-    dataTransform={transformFn}
-    title="World Population in 60 Years"
-    subTitle="Country Population in millions"
-    caption="Source: World Bank"
-    showIcons={true}
-    labelsPosition="outside"
-    dynamicProps={{dataTransform: `(data) => data.map((d) => ({
-      ...d,
-      icon: \`https://flagsapi.com/\${d.code}/flat/64.png\`,
-    }))`}}
+    {...icons}
   />
 </div>
 

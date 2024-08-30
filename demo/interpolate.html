@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -7,7 +7,7 @@
     <style></style>
   </head>
   <body>
-    <script src="scripts/d3.min.js"></script>
+    <script src="https://unpkg.com/d3@7.9.0/dist/d3.min.js"></script>
 
     <div id="container">
       <div id="race" class="race"></div>
@@ -15,7 +15,7 @@
     <button>change</button>
 
     <script>
-      d3.csv('data/population.csv').then((data) => {
+      d3.csv('../data/population.csv').then((data) => {
         const period = 'days';
         console.log(data);
         data = data.map((d) => ({ ...d, date: new Date(d.date) }));
@@ -26,10 +26,10 @@
           period === 'years'
             ? d3.timeYear
             : period === 'months'
-            ? d3.timeMonth
-            : period === 'days'
-            ? d3.timeDay
-            : null;
+              ? d3.timeMonth
+              : period === 'days'
+                ? d3.timeDay
+                : null;
 
         if (!interval || dates.length === 0) {
           return;

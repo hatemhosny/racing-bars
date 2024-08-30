@@ -4,6 +4,28 @@ All notable changes to this project will be documented in this file. See [standa
 
 ---
 
+## [v0.1.2](https://github.com/hatemhosny/racing-bars/compare/v0.1.1...v0.1.2) (2024-08-30)
+
+### Bug Fixes
+
+- **data:** fix relative urls in web worker ([ee8296d](https://github.com/hatemhosny/racing-bars/commit/ee8296da3566455abe610ec2aeee0e24fd1a9018))
+
+### Features
+
+- **data:** handle loading data errors ([ef615d7](https://github.com/hatemhosny/racing-bars/commit/ef615d7bca13d16973d7a329a38b12325f0daa4a))
+
+### Others
+
+- **website:** add all gallery demos to playground ([b2c288e](https://github.com/hatemhosny/racing-bars/commit/b2c288e8c7b03748ba99dfa943bd6031c306d7be))
+- **website:** allow playground to change languages ([12f7f48](https://github.com/hatemhosny/racing-bars/commit/12f7f487fee06df7b994794a09db15a4f76073d8))
+- **website:** allow selecting playground language in querystring ([5725e5f](https://github.com/hatemhosny/racing-bars/commit/5725e5f13a626021d702a2d09d45245955b6d235))
+- **website:** load gallery demos in embedded playground ([747eade](https://github.com/hatemhosny/racing-bars/commit/747eadea98e48558537e7b169532a3f278e6d6df))
+- lint:stylelint and test:lint scripts ([fd43d45](https://github.com/hatemhosny/racing-bars/commit/fd43d45461297e791e1620569d5613ff3ba5fd81))
+
+- **build:** upgrade most dependencies, including docusaurus that powers the website (Thanks @AhmedElbohoty)
+
+---
+
 ## [0.1.1](https://github.com/hatemhosny/racing-bars/compare/v0.1.0...0.1.1) (2024-08-20)
 
 - Automate preparing releases

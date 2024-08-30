@@ -4,6 +4,7 @@ import conventionalChangelog from 'conventional-changelog';
 import fs from 'fs';
 import { execSync } from 'child_process';
 import { createRequire } from 'module';
+
 const require = createRequire(import.meta.url);
 const pkgPath = '../src/package.lib.json';
 const changelogPath = '../CHANGELOG.md';
@@ -80,7 +81,7 @@ const stringify = (obj) => JSON.stringify(obj, null, 2) + '\n';
 
 const cancelRelease = async () => {
   if (await confirm({ message: 'Cancelling release. Do you want to discard all changes?' })) {
-    execSync(`git reset --hard && git clean -fxd`);
+    execSync(`git reset --hard`);
   }
   console.log('Release cancelled!');
   process.exit(1);
@@ -88,14 +89,12 @@ const cancelRelease = async () => {
 
 (async () => {
   const libBump = await getBump();
-  const version = libBump === 'specify' ? await getVersion() : bumpVersion(libBump);
-  pkg.version = version;
-  if (!(await confirm({ message: `Creating library version: ${version}\nProceed?` }))) {
+  pkg.version = libBump === 'specify' ? await getVersion() : bumpVersion(libBump);
+  const version = 'v' + pkg.version;
+  if (!(await confirm({ message: `Creating version: ${version}\nProceed?` }))) {
     await cancelRelease();
   }
   fs.writeFileSync(new URL(pkgPath, import.meta.url), stringify(pkg), 'utf8');
-
-  const branchName = 'prepare-release/' + version;
 
   const changelog = fs.readFileSync(new URL(changelogPath, import.meta.url), 'utf8');
   const changelogSeparator = '\n---';
@@ -115,6 +114,11 @@ const cancelRelease = async () => {
   if (!(await confirm({ message: `Change log added to ./CHANGELOG.md\nProceed?` }))) {
     await cancelRelease();
   }
+
+  const branchName = 'releases/' + version;
+  execSync(`git checkout -b ${branchName}`);
+  execSync(`git add -A && git commit -m "release: ${version}"`);
+  execSync(`git push -u origin ${branchName}`);
 })();
 
 function streamToString(stream) {

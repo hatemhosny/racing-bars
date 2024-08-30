@@ -1,0 +1,83 @@
+name: Release
+
+# on merging a release branch (releases/**) to main:
+# - create a GitHub release (with release notes and attached files)
+# - create a tag
+# - publish to npm
+# - create a pull request to develop to incorporate back the changes
+
+on:
+  pull_request:
+    branches:
+      - main
+    types: [closed]
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.merged && startsWith(github.head_ref, 'releases/')
+    env:
+      NODE_OPTIONS: '--max_old_space_size=4096'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GH_ACTIONS_REPO_PAT }}
+
+      - name: Get version
+        id: vars
+        run: echo ::set-output name=version::$(echo ${{github.head_ref}} | sed 's/^releases\///')
+
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '18.x'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Test
+        run: npm run test
+
+      - name: Release notes
+        run: node ./scripts/release-notes.js
+
+      - name: Create tag
+        run: git tag ${{steps.vars.outputs.version}} && git push origin --tags
+
+      - name: Compress build directory (tar)
+        run: tar -czf racing-bars-${{steps.vars.outputs.version}}.tar.gz build
+
+      - name: Compress build directory (zip)
+        uses: vimtor/action-zip@v1
+        with:
+          files: build/
+          dest: racing-bars-${{steps.vars.outputs.version}}.zip
+
+      - name: Create release
+        uses: softprops/action-gh-release@v1
+        with:
+          name: ${{steps.vars.outputs.version}}
+          tag_name: ${{steps.vars.outputs.version}}
+          body_path: CHANGELOG.tmp.md
+          files: |
+            racing-bars-${{steps.vars.outputs.version}}.tar.gz
+            racing-bars-${{steps.vars.outputs.version}}.zip
+          token: ${{ secrets.GH_ACTIONS_REPO_PAT }}
+
+      - name: Publish to NPM
+        run: |
+          echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
+          npm publish --access=public
+        working-directory: ./build
+        env:
+          NPM_TOKEN: ${{secrets.NPM_TOKEN}}
+
+      - name: Create a pull request to develop
+        if: startsWith(github.head_ref, 'releases/v')
+        run: gh pr create --title "release ${{steps.vars.outputs.version}}" --body "https://www.npmjs.com/package/racing-bars" --base develop --head main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_REPO_PAT }}

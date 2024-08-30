@@ -107,7 +107,7 @@ const config: Config = {
             },
             {
               label: 'Sponsor 💚',
-              href: 'sponsor',
+              to: 'sponsor',
             },
           ],
         },
@@ -152,6 +152,7 @@ const config: Config = {
     },
   ],
   plugins: [
+    ['@docusaurus/plugin-debug', { id: 'debug' }],
     [
       'docusaurus-plugin-typedoc',
       {

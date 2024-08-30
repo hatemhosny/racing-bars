@@ -4,6 +4,7 @@ hide_table_of_contents: true
 ---
 
 import RacingBars from '../../src/components/RacingBars';
+import { margins } from './\_gallery-demos.ts';
 
 A demo for using [margins](../documentation/options.md#marginbottom).
 
@@ -13,12 +14,6 @@ A demo for using [margins](../documentation/options.md#marginbottom).
 
 <div className="gallery" style={{border: '1px solid black'}}>
   <RacingBars
-    dataUrl="/data/population.csv"
-    dataType="csv"
-    marginTop={40}
-    marginBottom={40}
-    marginRight={40}
-    marginLeft={40}
-    labelsPosition="outside"
+    {...margins}
   />
 </div>
