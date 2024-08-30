@@ -1,5 +1,5 @@
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
 
 const changelog = fs.readFileSync(path.resolve('./CHANGELOG.md'), 'utf8');
 const changelogSeparator = '\n---';

@@ -43,7 +43,7 @@
     "postinstall": "cd website && npm install",
     "reset": "git clean -dfx && git reset --hard && npm i",
     "clean": "recursive-delete build && recursive-delete tmp && recursive-delete website/build && recursive-delete website/static/data && recursive-delete website/docs/api",
-    "start-release": "node ./scripts/start-release.mjs"
+    "start-release": "node ./scripts/start-release.js"
   },
   "dependencies": {
     "d3": "7.9.0"
