@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <head>
   <meta charset="utf-8" />
   <style>
@@ -46,23 +46,22 @@
     </div>
   </div>
 
-  <script src="scripts/d3.min.js"></script>
-  <script src="scripts/racing-bars.umd.js"></script>
-  <script>
+  <script type="module">
+    import { race } from '../build/racing-bars.js';
+
     let options = {
-      title: 'A Tale of 11 Years',
-      subTitle: 'Top 10 Surgical Procedures',
+      title: 'World Population',
+      subTitle: 'in millions',
       dateCounterFormat: 'MM/YYYY',
-      caption: 'Aswan Heart Centre',
       disableClickEvents: true,
       disableKeyboardEvents: true,
       showControls: 'none',
       autorun: false,
     };
 
-    racingBars.loadData('../data/population.json').then((data) => {
-      let racer = racingBars.race(data, options);
-      racer.createScroller();
-    });
+    const racer = await race('../data/population.json', '#race', options);
+
+    // TODO
+    // racer.createScroller();
   </script>
 </body>

@@ -21,10 +21,11 @@
   <div id="race" class="race"></div>
 </div>
 
-<script src="scripts/d3.min.js"></script>
-<script src="scripts/racing-bars.umd.js"></script>
-<script>
-const dates = [
+<script src="https://unpkg.com/d3@7.9.0/dist/d3.min.js"></script>
+<script type="module">
+  import { race } from '../build/racing-bars.js';
+
+  const dates = [
   "2012-06-30",
   "2012-09-28",
   "2012-12-30",

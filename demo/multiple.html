@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <head>
   <meta charset="utf-8" />
   <style>
@@ -29,13 +29,13 @@
     <div id="race3" class="race"></div>
   </div>
 
-  <script src="scripts/d3.min.js"></script>
-  <script src="scripts/racing-bars.umd.js"></script>
-  <script>
+  <script type="module">
+    import { race } from '../build/racing-bars.js';
+
     const options = {
-      selector: '#race',
-      title: 'A Tale of 11 Years',
-      subTitle: 'Top 10 Surgical Procedures',
+      dataType: 'csv',
+      title: 'World Population',
+      subTitle: 'in millions',
       dateCounter: 'MM/YYYY',
       caption: (date, dateSlice, allDates) =>
         `Total: ${dateSlice.reduce((acc, curr) => acc + curr.value, 0)}`,
@@ -62,19 +62,17 @@
       highlightBars: true,
       selectBars: true,
     };
-    racingBars.loadData('../data/population.csv', 'csv').then((data) => {
-      racingBars.race(data, { ...options, selector: '#race1' });
+    race('../data/population.csv', '#race1', options);
+
+    race('../data/population.csv', '#race2', {
+      ...options,
+      theme: 'dark',
+      labelsPosition: 'inside',
     });
-    racingBars.loadData('../data/population.csv', 'csv').then((data) => {
-      racingBars.race(data, {
-        ...options,
-        selector: '#race2',
-        theme: 'dark',
-        labelsPosition: 'inside',
-      });
-    });
-    racingBars.loadData('../data/population.csv', 'csv').then((data) => {
-      racingBars.race(data, { ...options, selector: '#race3', startDate: '2010-12-31' });
+
+    race('../data/population.csv', '#race3', {
+      ...options,
+      startDate: '2010-12-31',
     });
   </script>
 </body>

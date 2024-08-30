@@ -6,26 +6,22 @@
 
 <body>
   <br /><br /><br /><br /><br /><br />
-  <button onClick="addBar()">Add Bar</button> - <button onClick="resetBars()">Reset Bars</button></p>
+  <button id="add">Add Bar</button> - <button id="reset">Reset Bars</button></p>
 
   <div id="container">
     <div id="race" class="race">Loading...</div>
   </div>
 
-  <script src="scripts/d3.min.js"></script>
-  <script src="scripts/racing-bars.umd.js"></script>
-  <script>
+  <script type="module">
+    import { race } from '../build/racing-bars.js';
     let topN = 5;
     const options = {
-      selector: '#race',
+      dataType: 'csv',
       title: 'Number of Bars: ' + topN,
       topN,
     };
 
-    let racer;
-    racingBars.loadData('../data/population.csv', 'csv').then((data) => {
-      racer = racingBars.race(data, options);
-    });
+    const racer = await race('../data/population.csv', '#race', options);
 
     function addBar() {
       topN += 1;
@@ -42,6 +38,9 @@
         topN,
       });
     }
+
+    document.getElementById('add').addEventListener('click', addBar);
+    document.getElementById('reset').addEventListener('click', resetBars);
 
   </script>
 </body>

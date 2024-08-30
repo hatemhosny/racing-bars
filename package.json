@@ -13,7 +13,7 @@
   "scripts": {
     "start": "run-p watch serve website",
     "website": "npm run copy:data && cd website && npm run start",
-    "serve": "live-server . --open=demo/index.html --watch=build,demo --cors --quiet",
+    "serve": "live-server . --open=demo/ --watch=build,demo --cors --quiet",
     "watch": "nodemon --watch src -e \"*\" ./scripts/build.js --dev",
     "build": "run-s clean build:*",
     "build:lib": "node ./scripts/build.js",
