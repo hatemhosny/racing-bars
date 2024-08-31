@@ -16,8 +16,8 @@
     "serve": "live-server . --open=demo/ --watch=build,demo --cors --quiet",
     "watch": "nodemon --watch src -e \"*\" ./scripts/build.js --dev",
     "build": "run-s clean build:*",
-    "build:lib": "node ./scripts/build.js",
     "build:ts": "tsc --emitDeclarationOnly --outFile build/racing-bars.d.ts && node ./scripts/patch-types.js",
+    "build:lib": "node ./scripts/build.js",
     "build:ts-website": "cd website && npm run typecheck",
     "build:website": "npm run copy:data && cd website && npm run build",
     "copy:data": "recursive-copy data website/static/data",
@@ -42,7 +42,7 @@
     "lint:stylelint-website": "stylelint \"website/**/*.{css,scss}\"",
     "postinstall": "cd website && npm install",
     "reset": "git clean -dfx && git reset --hard && npm i",
-    "clean": "recursive-delete build && recursive-delete tmp && recursive-delete website/build && recursive-delete website/static/data && recursive-delete website/docs/api",
+    "clean": "recursive-delete build && recursive-delete tmp && recursive-delete website/build && recursive-delete website/static/data && recursive-delete website/static/lib && recursive-delete website/docs/api",
     "start-release": "node ./scripts/start-release.js"
   },
   "dependencies": {
