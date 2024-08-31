@@ -32,6 +32,7 @@ Happy linting! 💖
     "ticker",
     "utils",
     "store",
-    "styles"
+    "styles",
+    "types"
   ]
 }
