@@ -36,7 +36,6 @@ icon: `https://flagsapi.com/${d.code}/flat/64.png`,
   <RacingBars
     style={{width: 800, height: 450}}
     dataUrl="/data/population.csv"
-    dataType="csv"
     dataTransform={transformFn}
     title="World Population in 60 Years"
     subTitle="Country Population in millions"
