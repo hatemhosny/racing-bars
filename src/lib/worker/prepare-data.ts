@@ -22,7 +22,7 @@ export function prepareData(
 
 function fetchData(
   data: Data[] | WideData[] | Promise<Data[]> | Promise<WideData[]> | string,
-  dataType: 'json' | 'csv' | 'tsv' | 'xml',
+  dataType: Options['dataType'],
   baseUrl: string,
 ) {
   if (typeof data === 'string') {
