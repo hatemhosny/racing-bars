@@ -12,6 +12,7 @@ export function prepareData(
   baseUrl: string,
 ): Promise<Data[]> {
   return fetchData(data, options.dataType, baseUrl)
+    .then(handleEmptyData)
     .then(filterByDate(options.startDate, options.endDate))
     .then(wideDataToLong(options.dataShape))
     .then(processFixedOrder(options.fixedOrder))
@@ -41,6 +42,12 @@ function fetchData(
 
 function isRelativeUrl(url: string) {
   return !url.startsWith('https://') && !url.startsWith('http://') && !url.startsWith('data:');
+}
+
+function handleEmptyData(data: Data[] | WideData[]): Data[] | WideData[] {
+  return !Array.isArray(data) || data.length === 0
+    ? [{ date: getDateString(new Date()), value: 0, name: '' }]
+    : data;
 }
 
 function filterByDate(startDate: string, endDate: string) {
