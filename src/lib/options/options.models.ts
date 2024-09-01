@@ -5,10 +5,12 @@ export interface OptionsAction extends Action {
   payload: Partial<Options>;
 }
 
+export type DataTransformType = null | ((data: Data[] | WideData[]) => Data[] | WideData[]);
+
 export interface Options {
   dataShape: 'long' | 'wide' | 'auto';
   dataType: 'json' | 'csv' | 'tsv' | 'xml' | 'auto';
-  dataTransform: null | ((data: Data[] | WideData[]) => Data[] | WideData[]);
+  dataTransform: DataTransformType;
   fillDateGapsInterval: null | 'year' | 'month' | 'day';
   fillDateGapsValue: 'last' | 'interpolate';
   makeCumulative: boolean;
