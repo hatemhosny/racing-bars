@@ -14,7 +14,7 @@ Example:
 
 <div className="gallery">
   <RacingBars
-    dataUrl="/data/population.csv"
+    dataUrl="/data/brands.csv"
     dataType="csv"
     title="Chart 1"
     labelsPosition="outside"

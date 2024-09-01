@@ -6,8 +6,8 @@ export interface OptionsAction extends Action {
 }
 
 export interface Options {
-  dataShape: 'long' | 'wide';
-  dataType: 'json' | 'csv' | 'tsv' | 'xml';
+  dataShape: 'long' | 'wide' | 'auto';
+  dataType: 'json' | 'csv' | 'tsv' | 'xml' | 'auto';
   dataTransform: null | ((data: Data[] | WideData[]) => Data[] | WideData[]);
   fillDateGapsInterval: null | 'year' | 'month' | 'day';
   fillDateGapsValue: 'last' | 'interpolate';

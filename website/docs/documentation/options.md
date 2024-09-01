@@ -175,11 +175,11 @@ See the guide on [`chart controls`](../guides/chart-controls.md) for other alter
 
 ### dataShape
 
-Instruction whether the data shape is <a href="https://en.wikipedia.org/wiki/Wide_and_narrow_data" target="_blank">"long" or "wide"</a>.
+Instruction whether the data shape is <a href="https://en.wikipedia.org/wiki/Wide_and_narrow_data" target="_blank">"long" or "wide"</a>. By default, the library tries to detect the data shape automatically from its structure (after any [transformation](#dataTransform), by finding the columns `date`, `name` and `value`). If the data shape is not detected correctly, it can be manually specified.  
 See ["Data" section](./data.md) for more details and examples.
 
-- Type: `"long" | "wide"`
-- Default: `"long"`
+- Type: `"long" | "wide" | "auto"`
+- Default: `"auto"`
 - Example:
 
 This example uses `"wide"` data shape
@@ -243,17 +243,18 @@ So it would be more convenient to be able to also pass a transformation function
 
 ### dataType
 
-When a URL to a file containing the data is supplied as the first argument to the [`race`](./api.md#race) function,
-the type of that file can be specified using the `"dataType"` option.
+When a URL to a file containing the data is supplied as the first argument to the [`race`](./api.md#race) function, the type of that file can be specified using the `"dataType"` option.  
+By default, the library will try to detect the data type automatically from the file extension, otherwise it is assumed to be `"json"`.
 
-- Type: `"json" | "csv" | "tsv" | "xml"`
-- Default: `"json"`
+- Type: `"json" | "csv" | "tsv" | "xml" | "auto"`
+- Default: `"auto"`
 - Example:
 
-This example uses `"csv"` data type
+These examples use `"csv"` data type
 
 ```js
-race('/data.csv', '#race', { dataType: 'csv' });
+race('/data.csv', '#race');
+race('/data', '#race', { dataType: 'csv' });
 ```
 
 ### dateCounter
