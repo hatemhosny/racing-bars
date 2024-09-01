@@ -1,14 +1,30 @@
 import { json, csv, tsv, xml } from './d3';
-import type { Data, WideData } from './data';
+import type { Options, Data, WideData } from './index';
 
 export function loadData(
   url: string,
-  type: 'json' | 'csv' | 'tsv' | 'xml' = 'json',
+  type: Options['dataType'] = 'auto',
 ): Promise<Data[]> | Promise<WideData[]> {
+  const supportedTypes: Array<Exclude<Options['dataType'], 'auto'>> = ['json', 'csv', 'tsv', 'xml'];
+  const isSupported = (t: any) => supportedTypes.includes(t);
+
+  const detectDataType = () => {
+    const t = type.toLowerCase();
+    if (isSupported(t)) {
+      return t;
+    }
+    const extension = url.split('.').pop()?.toLowerCase() || '';
+    if (isSupported(extension)) {
+      return extension;
+    }
+    return 'json';
+  };
+
   const handleError = () => {
     throw new Error(`Failed to load data as ${type.toUpperCase()} from ${url}`);
   };
-  switch (type) {
+
+  switch (detectDataType()) {
     case 'json':
       return json(url).catch(handleError) as Promise<Data[]> | Promise<WideData[]>;
     case 'csv':

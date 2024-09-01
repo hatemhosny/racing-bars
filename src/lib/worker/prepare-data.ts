@@ -12,6 +12,7 @@ export function prepareData(
   baseUrl: string,
 ): Promise<Data[]> {
   return fetchData(data, options.dataType, baseUrl)
+    .then(handleEmptyData)
     .then(filterByDate(options.startDate, options.endDate))
     .then(wideDataToLong(options.dataShape))
     .then(processFixedOrder(options.fixedOrder))
@@ -22,7 +23,7 @@ export function prepareData(
 
 function fetchData(
   data: Data[] | WideData[] | Promise<Data[]> | Promise<WideData[]> | string,
-  dataType: 'json' | 'csv' | 'tsv' | 'xml',
+  dataType: Options['dataType'],
   baseUrl: string,
 ) {
   if (typeof data === 'string') {
@@ -41,6 +42,12 @@ function fetchData(
 
 function isRelativeUrl(url: string) {
   return !url.startsWith('https://') && !url.startsWith('http://') && !url.startsWith('data:');
+}
+
+function handleEmptyData(data: Data[] | WideData[]): Data[] | WideData[] {
+  return !Array.isArray(data) || data.length === 0
+    ? [{ date: getDateString(new Date()), value: 0, name: '' }]
+    : data;
 }
 
 function filterByDate(startDate: string, endDate: string) {
@@ -107,9 +114,20 @@ function calculateLastValues(makeCumulative = false) {
   };
 }
 
+function detectDataShape(data: Data[] | WideData[], dataShape: Options['dataShape']) {
+  if (dataShape === 'long' || dataShape === 'wide') return dataShape;
+  const firstRow = data[0];
+  if ('date' in firstRow && 'name' in firstRow && 'value' in firstRow) {
+    return 'long';
+  }
+  return 'wide';
+}
+
 function wideDataToLong(dataShape: Options['dataShape'], nested = false) {
   return function (data: WideData[]) {
-    if (dataShape === 'long') return data as Data[];
+    if (dataShape === 'long' || detectDataShape(data, dataShape) === 'long') {
+      return data as Data[];
+    }
 
     const long = [] as Data[];
     data.forEach((row) => {
