@@ -4,6 +4,21 @@ All notable changes to this project will be documented in this file. See [standa
 
 ---
 
+## [v0.2.0](https://github.com/hatemhosny/racing-bars/compare/v0.1.2...v0.2.0) (2024-09-01)
+
+### Bug Fixes
+
+- **data:** fix worker mixing data for multiple charts ([5160018](https://github.com/hatemhosny/racing-bars/commit/5160018b08c8a07683f8865cc9a194fac8cd2adb))
+- **types:** fix library type definitions ([929f0af](https://github.com/hatemhosny/racing-bars/commit/929f0af452dacb28f341b47edabad3a0235507af))
+
+### Features
+
+- **data:** auto detect `dataShape` ([5ede0f7](https://github.com/hatemhosny/racing-bars/commit/5ede0f7a02a60d2d66e3ddd7dcca4a4be57423a5))
+- **data:** handle empty or invalid data ([544c39d](https://github.com/hatemhosny/racing-bars/commit/544c39d56f5bf6e914f080e5d3c235e5b8455bfd))
+- **options:** auto detect `dataType` ([9030de4](https://github.com/hatemhosny/racing-bars/commit/9030de44ce89fb4552aa8508983fb1e4f0570cad))
+
+---
+
 ## [v0.1.2](https://github.com/hatemhosny/racing-bars/compare/v0.1.1...v0.1.2) (2024-08-30)
 
 ### Bug Fixes
