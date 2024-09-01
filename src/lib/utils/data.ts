@@ -31,11 +31,13 @@ export async function prepareData(
     messageId,
   });
   const preparedData = await new Promise<Data[]>((resolve) => {
-    worker.addEventListener('message', (event) => {
+    const onMessage = (event: MessageEvent) => {
       if (event.data.type === 'data-prepared' && event.data.messageId === messageId) {
         resolve(event.data.data);
+        worker.removeEventListener('message', onMessage);
       }
-    });
+    };
+    worker.addEventListener('message', onMessage);
   });
   storeDataCollections(preparedData, store, changingOptions);
   return preparedData;
