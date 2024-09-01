@@ -6,7 +6,7 @@ import { loadData } from '../load-data';
 // eslint-disable-next-line import/no-internal-modules
 import workerSrc from '../../../tmp/racing-bars.worker.js';
 import { getDates, getNextDate } from './dates';
-import { createWorkerFromContent } from './utils';
+import { createWorkerFromContent, generateId } from './utils';
 
 const worker = createWorkerFromContent(workerSrc);
 
@@ -22,22 +22,22 @@ export async function prepareData(
     }
     data = dataTransform(await data);
   }
+  const messageId = generateId();
   worker.postMessage({
     type: 'prepare-data',
     data,
     options: removeFnOptions(store.getState().options),
     baseUrl: location.href,
+    messageId,
   });
   const preparedData = await new Promise<Data[]>((resolve) => {
-    worker.addEventListener(
-      'message',
-      (event) => {
-        if (event.data.type === 'data-prepared') {
-          resolve(event.data.data);
-        }
-      },
-      { once: true },
-    );
+    const onMessage = (event: MessageEvent) => {
+      if (event.data.type === 'data-prepared' && event.data.messageId === messageId) {
+        resolve(event.data.data);
+        worker.removeEventListener('message', onMessage);
+      }
+    };
+    worker.addEventListener('message', onMessage);
   });
   storeDataCollections(preparedData, store, changingOptions);
   return preparedData;

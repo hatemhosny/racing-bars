@@ -35,7 +35,6 @@ icon: `https://flagsapi.com/${d.code}/flat/64.png`,
 <div className="gallery">
   <RacingBars
     style={{width: 800, height: 450}}
-
     dataUrl="/data/population.csv"
     dataType="csv"
     dataTransform={transformFn}
@@ -57,7 +56,5 @@ icon: `https://flagsapi.com/${d.code}/flat/64.png`,
       ...d,
       icon: \`https://flagsapi.com/\${d.code}/flat/64.png\`,
     }))`}}
-
 />
-
 </div>
