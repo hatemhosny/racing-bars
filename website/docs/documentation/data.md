@@ -142,7 +142,9 @@ race(data, '#race');
 #### Load data from URL
 
 Data can be loaded from a URL. The following formats are supported:
-`json` (default), `csv`, `tsv` and `xml`.
+`json`, `csv`, `tsv` and `xml`.
+
+Data type is automatically detected by file extension, otherwise `json` is assumed.
 
 - Load JSON from URL
 
@@ -216,7 +218,7 @@ date,Canada,Egypt,Greece,Panama,Singapore
 
 ### Usage
 
-For wide data to be processed, the [`options`](./options.md) object should have the field [`dataShape`](./options.md#datashape) set to `"wide"`
+For wide data to be processed, the [`options`](./options.md) object should have the field [`dataShape`](./options.md#datashape) set (or auto-detected) to `"wide"`
 
 - JS array of objects
 
@@ -281,70 +283,70 @@ Example for long data with [optional fields](#long-data):
     "date": "2017-01-01",
     "name": "Egypt",
     "value": 96.44,
-    "icon": "https://www.countryflags.io/eg/flat/64.png",
+    "icon": "https://flagsapi.com/EG/flat/64.png",
     "group": "Africa"
   },
   {
     "date": "2017-01-01",
     "name": "Singapore",
     "value": 5.61,
-    "icon": "https://www.countryflags.io/sg/flat/64.png",
+    "icon": "https://flagsapi.com/SG/flat/64.png",
     "group": "Asia"
   },
   {
     "date": "2017-01-01",
     "name": "Greece",
     "value": 10.75,
-    "icon": "https://www.countryflags.io/gr/flat/64.png",
+    "icon": "https://flagsapi.com/GR/flat/64.png",
     "group": "Europe"
   },
   {
     "date": "2017-01-01",
     "name": "Panama",
     "value": 4.11,
-    "icon": "https://www.countryflags.io/pa/flat/64.png",
+    "icon": "https://flagsapi.com/PA/flat/64.png",
     "group": "North America"
   },
   {
     "date": "2018-01-01",
     "name": "Greece",
     "value": 10.73,
-    "icon": "https://www.countryflags.io/gr/flat/64.png",
+    "icon": "https://flagsapi.com/GR/flat/64.png",
     "group": "Europe"
   },
   {
     "date": "2018-01-01",
     "name": "Singapore",
     "value": 5.64,
-    "icon": "https://www.countryflags.io/sg/flat/64.png",
+    "icon": "https://flagsapi.com/SG/flat/64.png",
     "group": "Asia"
   },
   {
     "date": "2018-01-01",
     "name": "Canada",
     "value": 37.06,
-    "icon": "https://www.countryflags.io/ca/flat/64.png",
+    "icon": "https://flagsapi.com/CA/flat/64.png",
     "group": "North America"
   },
   {
     "date": "2018-01-01",
     "name": "Egypt",
     "value": 98.42,
-    "icon": "https://www.countryflags.io/eg/flat/64.png",
+    "icon": "https://flagsapi.com/EG/flat/64.png",
     "group": "Africa"
   },
   {
     "date": "2017-01-01",
     "name": "Canada",
     "value": 36.54,
-    "icon": "https://www.countryflags.io/ca/flat/64.png",
+    "icon": "https://flagsapi.com/CA/flat/64.png",
     "group": "North America"
   },
   {
     "date": "2018-01-01",
     "name": "Panama",
     "value": 4.18,
-    "icon": "https://www.countryflags.io/pa/flat/64.png",
+    "icon": "https://flagsapi.com/PA/flat/64.png",
     "group": "North America"
   }
 ]
