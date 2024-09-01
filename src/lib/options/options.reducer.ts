@@ -4,7 +4,7 @@ import type { Options, OptionsAction } from './options.models';
 import { actionTypes } from './options.actions';
 
 export const defaultOptions: Options = {
-  dataShape: 'long',
+  dataShape: 'auto',
   dataType: 'auto',
   dataTransform: null,
   fillDateGapsInterval: null,

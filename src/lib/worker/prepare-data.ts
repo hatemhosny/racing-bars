@@ -114,9 +114,20 @@ function calculateLastValues(makeCumulative = false) {
   };
 }
 
+function detectDataShape(data: Data[] | WideData[], dataShape: Options['dataShape']) {
+  if (dataShape === 'long' || dataShape === 'wide') return dataShape;
+  const firstRow = data[0];
+  if ('date' in firstRow && 'name' in firstRow && 'value' in firstRow) {
+    return 'long';
+  }
+  return 'wide';
+}
+
 function wideDataToLong(dataShape: Options['dataShape'], nested = false) {
   return function (data: WideData[]) {
-    if (dataShape === 'long') return data as Data[];
+    if (dataShape === 'long' || detectDataShape(data, dataShape) === 'long') {
+      return data as Data[];
+    }
 
     const long = [] as Data[];
     data.forEach((row) => {
