@@ -1,0 +1,18 @@
+name: livecodes
+
+on: [pull_request]
+
+jobs:
+  build_and_prepare:
+    runs-on: ubuntu-latest
+    name: Generate Playgrounds
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Build and generate
+        uses: live-codes/preview-in-livecodes@v1
+        with:
+          install-command: 'npm install'
+          build-command: 'npm run build'
+          base-url: 'https://deploy-preview-{{LC::PR}}--racingbars.netlify.app/'
