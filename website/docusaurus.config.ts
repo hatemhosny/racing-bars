@@ -136,6 +136,18 @@ const config: Config = {
       darkTheme: prismThemes.dracula,
       additionalLanguages: ['json'],
     },
+    algolia: {
+      appId: 'PGI61GHXJD',
+      apiKey: '6c4c87fe6ec8c139e4a941f00d4b5717',
+      indexName: 'racing-bars',
+      contextualSearch: true,
+      replaceSearchResultPathname: {
+        from: '/docs/',
+        to: '/',
+      },
+      searchParameters: {},
+      searchPagePath: 'search',
+    },
   } satisfies Preset.ThemeConfig,
   scripts: [
     {
