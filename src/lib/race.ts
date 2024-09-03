@@ -34,11 +34,11 @@ export async function race(
     typeof container === 'string' ? document.querySelector<HTMLElement>(container) : container;
   if (!root) throw new Error('Container element is not found.');
 
-  const config = validateOptions(options);
+  const validOptions = validateOptions(options);
 
   const store = createStore(rootReducer);
   store.dispatch(actions.container.setContainer({ element: root }));
-  store.dispatch(actions.options.loadOptions(options));
+  store.dispatch(actions.options.loadOptions(validOptions));
   const ticker = createTicker(store);
   let preparedData = await prepareData(data, store);
   let renderer = createRenderer(preparedData, store, root);
