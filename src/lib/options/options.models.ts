@@ -5,7 +5,7 @@ export interface OptionsAction extends Action {
   payload: Partial<Options>;
 }
 
-export type DataTransformType = null | ((data: Data[] | WideData[]) => Data[] | WideData[]);
+type DataTransformType = null | ((data: Data[] | WideData[]) => Data[] | WideData[]);
 
 export interface Options {
   dataShape: 'long' | 'wide' | 'auto';
@@ -13,43 +13,49 @@ export interface Options {
   dataTransform: DataTransformType;
   fillDateGapsInterval: null | 'year' | 'month' | 'day';
   fillDateGapsValue: 'last' | 'interpolate';
-  makeCumulative: boolean;
-  title: string | ((currentDate: string, dateSlice: Data[], allDates: string[]) => string);
-  subTitle: string | ((currentDate: string, dateSlice: Data[], allDates: string[]) => string);
-  dateCounter: string | ((currentDate: string, dateSlice: Data[], allDates: string[]) => string);
-  caption: string | ((currentDate: string, dateSlice: Data[], allDates: string[]) => string);
-  startDate: string;
-  endDate: string;
-  loop: boolean;
   labelsPosition: 'inside' | 'outside';
-  labelsWidth: number;
+  controlButtons: 'all' | 'play' | 'none';
+  overlays: 'all' | 'play' | 'repeat' | 'none';
+
+  makeCumulative: boolean;
+  loop: boolean;
   showIcons: boolean;
-  colorSeed: string | number;
   showGroups: boolean;
+  mouseControls: boolean;
+  keyboardControls: boolean;
+  autorun: boolean;
+  injectStyles: boolean;
+  fixedScale: boolean;
+  highlightBars: boolean;
+  selectBars: boolean;
+
+  labelsWidth: number;
   tickDuration: number;
   topN: number;
-  inputHeight: number | string;
-  inputWidth: number | string;
   minHeight: number;
   minWidth: number;
-  height: number | string;
-  width: number | string;
   marginTop: number;
   marginRight: number;
   marginBottom: number;
   marginLeft: number;
-  mouseControls: boolean;
-  keyboardControls: boolean;
-  controlButtons: 'all' | 'play' | 'none';
-  overlays: 'all' | 'play' | 'repeat' | 'none';
-  autorun: boolean;
-  injectStyles: boolean;
+
+  startDate: string;
+  endDate: string;
   theme: string;
+
+  colorSeed: number | string;
+  inputHeight: number | string;
+  inputWidth: number | string;
+  height: number | string;
+  width: number | string;
+
+  title: string | ((currentDate: string, dateSlice: Data[], allDates: string[]) => string);
+  subTitle: string | ((currentDate: string, dateSlice: Data[], allDates: string[]) => string);
+  dateCounter: string | ((currentDate: string, dateSlice: Data[], allDates: string[]) => string);
+  caption: string | ((currentDate: string, dateSlice: Data[], allDates: string[]) => string);
+
   colorMap: { [key: string]: string } | string[];
-  fixedScale: boolean;
   fixedOrder: string[];
-  highlightBars: boolean;
-  selectBars: boolean;
 }
 
 export type TransformFn = (data: Data[] | WideData[]) => Data[] | WideData[];
