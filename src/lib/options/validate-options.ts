@@ -41,8 +41,16 @@ export function validateOptions(options: Partial<Options>): Partial<Options> {
 
   // Validate boolean options
   boolOpts.forEach((opt) => {
-    if (!is(options[opt], 'boolean')) return;
-    newOptions[opt] = options[opt];
+    if (is(options[opt], 'boolean')) {
+      newOptions[opt] = options[opt];
+    } else if (is(options[opt], 'string')) {
+      // Ignore typescript until option types is updated.
+      // @ts-expect-error
+      if (options[opt] === 'true' || options[opt] === 'false') {
+        // @ts-expect-error
+        newOptions[opt] = options[opt] === 'true';
+      }
+    }
   });
 
   // Validate number options
@@ -130,41 +138,36 @@ function validateColorMap(value: string[] | { [key: string]: string } | undefine
   // Check if color map is array of string
   if (is(value, 'array', 'string')) return true;
 
-  if (is(value, 'object')) {
-    for (const [k, v] of Object.entries(value)) {
-      if (!is(k, 'string')) return false;
-      if (!is(v, 'string')) return false;
-    }
-  }
-
-  return false;
+  // Check if color map is object and every value within that object is a string
+  return is(value, 'object') && Object.values(value).every((v) => typeof v === 'string');
 }
 
 type types = 'array' | 'boolean' | 'object' | 'number' | 'string' | 'undefined' | 'function';
-export function is(value: any, type: types, arrayType?: types): boolean {
+function is(value: any, type: types, arrayType?: types): boolean {
   if (typeof value === 'undefined') return false;
 
   if (type === 'number') {
-    return typeof value === 'number' && !Number.isNaN(Number(value));
+    return typeof value === 'number' && !isNaN(Number(value));
+  }
+
+  if (type === 'boolean') {
+    return typeof value === 'boolean' || value === 'true' || value === 'false';
   }
 
   if (type === 'array') {
     if (!Array.isArray(value)) return false;
     if (!arrayType) return true;
 
-    for (const val of value) if (!is(val, arrayType)) return false;
-
-    return true;
+    return value.every((val) => is(val, arrayType));
   }
 
   if (type === 'object') {
-    return value && typeof value === 'object';
+    return value !== null && typeof value === 'object';
   }
 
   return typeof value === type;
 }
 
-export function includes<T>(array: T[], value: T): boolean {
-  if (typeof value === 'undefined') return false;
-  return array.includes(value);
+function includes(arr: any[], x: any) {
+  return x != null && arr.includes(x);
 }

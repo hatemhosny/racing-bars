@@ -1,39 +1,6 @@
-import { includes, is, validateOptions } from '../index';
+import { validateOptions } from '../index';
 
-test('Tests for "is" function', () => {
-  expect(is(undefined, 'string')).toBe(false);
-
-  expect(is(5, 'number')).toBe(true);
-  expect(is('5', 'number')).toBe(false);
-  expect(is(NaN, 'number')).toBe(false);
-
-  expect(is([], 'array')).toBe(true);
-  expect(is({}, 'array')).toBe(false);
-  expect(is([1, 2, 3], 'array', 'number')).toBe(true);
-  expect(is([1, '2', 3], 'array', 'number')).toBe(false);
-
-  expect(is(true, 'boolean')).toBe(true);
-  expect(is(false, 'boolean')).toBe(true);
-  expect(is('true', 'boolean')).toBe(false);
-
-  expect(is({}, 'object')).toBe(true);
-  expect(is([], 'object')).toBe(true);
-
-  expect(is('hello', 'string')).toBe(true);
-  expect(is(5, 'string')).toBe(false);
-
-  expect(is(() => 1, 'function')).toBe(true);
-  expect(is({}, 'function')).toBe(false);
-});
-
-test('Tests for "includes" function', () => {
-  const array = [1, 2, 3, 4, 5];
-
-  expect(includes(array, 3)).toBe(true);
-  expect(includes(array, 6)).toBe(false);
-});
-
-test('should validate boolean options', () => {
+test('Tests to validate boolean options', () => {
   const options: any = {
     makeCumulative: true,
     loop: false,
@@ -65,7 +32,7 @@ test('should validate boolean options', () => {
   expect(validatedOptions.selectBars).toBe(undefined);
 });
 
-test('should validate number options', () => {
+test('Tests to validate number options', () => {
   const options: any = {
     labelsWidth: 100,
     tickDuration: 500,
@@ -137,4 +104,88 @@ test('Tests to validate function or string options', () => {
   // Invalid options
   expect(validatedOpts.dateCounter).toBe(undefined);
   expect(validatedOpts.caption).toBe(undefined);
+});
+
+test('Tests to validate dataShape option', () => {
+  // Valid options
+  const options: any = { dataShape: 'long' };
+  const validatedOpts = validateOptions(options);
+  expect(validatedOpts.dataShape).toBe('long');
+
+  // Invalid options
+  options.dataShape = 'invalid';
+  const invalidOpts = validateOptions(options);
+  expect(invalidOpts.dataShape).toBeUndefined();
+});
+
+test('Tests to validate dataType option', () => {
+  // Valid options
+  const options: any = { dataType: 'json' };
+  const validatedOpts = validateOptions(options);
+  expect(validatedOpts.dataType).toBe('json');
+
+  // Invalid options
+  options.dataType = 'invalid';
+  const invalidOpts = validateOptions(options);
+  expect(invalidOpts.dataType).toBeUndefined();
+});
+
+test('Tests to validate labelsPosition option', () => {
+  // Valid options
+  const options: any = { labelsPosition: 'inside' };
+  const validatedOpts = validateOptions(options);
+  expect(validatedOpts.labelsPosition).toBe('inside');
+
+  // Invalid options
+  options.labelsPosition = 'invalid';
+  const invalidOpts = validateOptions(options);
+  expect(invalidOpts.labelsPosition).toBeUndefined();
+});
+
+test('Tests to validate controlButtons option', () => {
+  // Valid options
+  const options: any = { controlButtons: 'all' };
+  const validatedOpts = validateOptions(options);
+  expect(validatedOpts.controlButtons).toBe('all');
+
+  // Invalid options
+  options.controlButtons = 'invalid';
+  const invalidOpts = validateOptions(options);
+  expect(invalidOpts.controlButtons).toBeUndefined();
+});
+
+test('Tests to validate overlays option', () => {
+  // Valid options
+  const options: any = { overlays: 'play' };
+  const validatedOpts = validateOptions(options);
+  expect(validatedOpts.overlays).toBe('play');
+
+  // Invalid options
+  options.overlays = 'invalid';
+  const invalidOpts = validateOptions(options);
+  expect(invalidOpts.overlays).toBeUndefined();
+});
+
+test('Tests to validate fillDateGapsInterval option', () => {
+  // Valid options
+  const options: any = { fillDateGapsInterval: 'year' };
+  const validatedOpts = validateOptions(options);
+  expect(validatedOpts.fillDateGapsInterval).toBe('year');
+
+  // Invalid options
+  options.fillDateGapsInterval = 'invalid';
+  const invalidOpts = validateOptions(options);
+  expect(invalidOpts.fillDateGapsInterval).toBeUndefined();
+});
+
+test('Tests to validate fillDateGapsValue option', () => {
+  // Valid options
+  const options: any = { fillDateGapsValue: 'last' };
+  const validatedOpts = validateOptions(options);
+  expect(validatedOpts.fillDateGapsValue).toBe('last');
+
+  // Invalid options
+  options.fillDateGapsValue = 'invalid';
+  const invalidOpts = validateOptions(options);
+  expect(invalidOpts.fillDateGapsValue).toBeUndefined();
 });

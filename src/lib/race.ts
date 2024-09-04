@@ -160,6 +160,8 @@ export async function race(
         }
       });
 
+      const validOptions = validateOptions(newOptions);
+
       const dataOptions: Array<keyof Options> = [
         'dataTransform',
         'fillDateGapsInterval',
@@ -170,12 +172,12 @@ export async function race(
       ];
       let dataOptionsChanged = false;
       dataOptions.forEach((key) => {
-        if (newOptions[key] && newOptions[key] !== store.getState().options[key]) {
+        if (validOptions[key] && validOptions[key] !== store.getState().options[key]) {
           dataOptionsChanged = true;
         }
       });
 
-      store.dispatch(actions.options.changeOptions(newOptions));
+      store.dispatch(actions.options.changeOptions(validOptions));
       const { injectStyles, theme, autorun } = store.getState().options;
 
       if (dataOptionsChanged) {
@@ -186,7 +188,7 @@ export async function race(
         subscribeToStore(store, renderer, preparedData);
       }
 
-      if ('injectStyles' in newOptions || 'theme' in newOptions) {
+      if ('injectStyles' in validOptions || 'theme' in validOptions) {
         document.getElementById(stylesId)?.remove();
         if (injectStyles) {
           stylesId = styleInject(root, theme);
