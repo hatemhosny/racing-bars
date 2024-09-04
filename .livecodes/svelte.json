@@ -3,7 +3,7 @@
   "activeEditor": "script",
   "script": {
     "language": "svelte",
-    "content": "<script>\n  import { onMount } from \"svelte\";\n  import { race } from \"racing-bars\";\n\n  const options = {\n    dataTransform: (data) =>\n      data.map((d) => ({\n        ...d,\n        icon: `https://flagsapi.com/${d.code}/flat/64.png`,\n      })),\n    title: \"World Population in 60 Years\",\n    subTitle: \"Country Population in millions\",\n    caption: \"Source: World Bank\",\n    dateCounter: \"YYYY\",\n    showIcons: true,\n    labelsPosition: \"outside\",\n  };\n\n  onMount(() => {\n    race(\"{{LC::TO_URL(./data/population.csv)}}\", \"#race\", options);\n  });\n</script>\n\n<div id=\"race\">Loading...</div>\n\n<style>\n  #race {\n    height: 80vh;\n  }\n</style>\n"
+    "content": "<script>\n  import { onMount } from \"svelte\";\n  import { race } from \"racing-bars\";\n\n  const options = {\n    dataTransform: (data) =>\n      data.map((d) => ({\n        ...d,\n        icon: `https://flagsapi.com/${d.code}/flat/64.png`,\n      })),\n    title: \"World Population\",\n    subTitle: \"Country Population in millions\",\n    caption: \"Source: World Bank\",\n    dateCounter: \"YYYY\",\n    showIcons: true,\n    labelsPosition: \"outside\",\n  };\n\n  onMount(() => {\n    race(\"{{LC::TO_URL(./data/population.csv)}}\", \"#race\", options);\n  });\n</script>\n\n<div id=\"race\">Loading...</div>\n\n<style>\n  #race {\n    height: 80vh;\n  }\n</style>\n"
   },
   "customSettings": {
     "imports": {
