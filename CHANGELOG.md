@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file. See [standa
 
 ---
 
+## [v0.2.2](https://github.com/hatemhosny/racing-bars/compare/v0.2.0...v0.2.2) (2024-09-04)
+
+
+### Features
+
+* **website:** add search ([00015fc](https://github.com/hatemhosny/racing-bars/commit/00015fce403e40099c8288a4d6fd4e6fffe32d71))
+
+
+
+
+---
+
 ## [v0.2.0](https://github.com/hatemhosny/racing-bars/compare/v0.1.2...v0.2.0) (2024-09-01)
 
 ### Bug Fixes
