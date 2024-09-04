@@ -1,12 +1,21 @@
+__selector__ {
+  --base-font-size: max(1vw, 12px);
+  --text-font-size: calc(var(--base-font-size) * 1.2);
+  --title-font-size: calc(var(--base-font-size) * 2);
+  --caption-font-size: calc(var(--base-font-size) * 1.5);
+  --counter-font-size: calc(var(--base-font-size) * 4);
+  --controls-font-size: calc(var(--base-font-size) * 1.5);
+}
+
 __selector__ text {
   font-family:
     Open Sans,
     sans-serif;
-  font-size: 16px;
+  font-size: var(--text-font-size);
 }
 
 __selector__ text.title {
-  font-size: 24px;
+  font-size: var(--title-font-size);
   font-weight: 500;
 }
 
@@ -15,7 +24,7 @@ __selector__ text.subTitle {
 }
 
 __selector__ text.caption {
-  font-size: 24px;
+  font-size: var(--caption-font-size);
   font-weight: 400;
 }
 
@@ -36,7 +45,7 @@ __selector__ text.valueLabel {
 }
 
 __selector__ text.dateCounterText {
-  font-size: 64px;
+  font-size: var(--counter-font-size);
   font-weight: 700;
 }
 
@@ -63,22 +72,29 @@ __selector__ .controls {
 
 __selector__ .controls div,
 __selector__ .overlay div {
+  align-items: center;
   border-radius: 5px;
   border-radius: 5px;
   border-radius: 5px;
   cursor: pointer;
-  font-size: 24px;
-  font-weight: 700;
-  height: 38px;
+  display: flex;
+  justify-content: center;
   margin: 5px;
-  text-align: center;
-  width: 38px;
+}
+
+__selector__ .controls div {
+  height: 10vw;
+  max-height: 32px;
+  max-width: 32px;
+  width: 10vw;
 }
 
 __selector__ .controls svg {
-  height: 28px;
+  height: 7vw;
   margin: 5px auto;
-  width: 28px;
+  max-height: 24px;
+  max-width: 24px;
+  width: 7vw;
 }
 
 __selector__ .overlay {
@@ -98,10 +114,12 @@ __selector__ .overlay div {
   border-radius: 100px;
   border-radius: 100px;
   display: flex;
-  height: 200px;
+  height: 20vw;
   justify-content: center;
   position: relative;
-  width: 200px;
+  max-height: 200px;
+  max-width: 200px;
+  width: 20vw;
 }
 
 __selector__ .overlay svg {

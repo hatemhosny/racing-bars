@@ -135,6 +135,16 @@ export function renderInitialView(data: Data[], store: Store, renderOptions: Ren
         .attr('x', 0)
         .attr('y', 0);
 
+      // avoid icons overflow outside bars
+      svg
+        .append('clipPath')
+        .attr('id', 'icons-rect-clip')
+        .append('rect')
+        .attr('x', x(0) + 1)
+        .attr('y', margin.top)
+        .attr('width', width)
+        .attr('height', height);
+
       svg
         .selectAll('circle')
         .data(dateSlice, (d: Data) => d.name)
@@ -144,7 +154,8 @@ export function renderInitialView(data: Data[], store: Store, renderOptions: Ren
         .attr('cy', (d: Data) => y(d.rank as number) + barHalfHeight)
         .attr('r', iconSize / 2)
         .style('fill', 'transparent')
-        .style('fill', (d: Data) => `url(#${getIconID(d)})`);
+        .style('fill', (d: Data) => `url(#${getIconID(d)})`)
+        .attr('clip-path', 'url(#icons-rect-clip)');
     }
 
     const endY = height - margin.bottom;

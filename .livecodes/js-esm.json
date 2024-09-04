@@ -11,7 +11,7 @@
   },
   "script": {
     "language": "javascript",
-    "content": "import { race } from \"racing-bars\";\n\n/** @type {import('racing-bars').Options} */\nconst options = {\n  dataTransform: (data) =>\n    data.map((d) => ({\n      ...d,\n      icon: `https://flagsapi.com/${d.code}/flat/64.png`,\n    })),\n  title: \"World Population in 60 Years\",\n  subTitle: \"Country Population in millions\",\n  caption: \"Source: World Bank\",\n  dateCounter: \"YYYY\",\n  showIcons: true,\n  labelsPosition: \"outside\",\n};\n\nrace(\"{{LC::TO_URL(./data/population.csv)}}\", \"#race\", options);\n"
+    "content": "import { race } from \"racing-bars\";\n\n/** @type {import('racing-bars').Options} */\nconst options = {\n  dataTransform: (data) =>\n    data.map((d) => ({\n      ...d,\n      icon: `https://flagsapi.com/${d.code}/flat/64.png`,\n    })),\n  title: \"World Population\",\n  subTitle: \"Country Population in millions\",\n  caption: \"Source: World Bank\",\n  dateCounter: \"YYYY\",\n  showIcons: true,\n  labelsPosition: \"outside\",\n};\n\nrace(\"{{LC::TO_URL(./data/population.csv)}}\", \"#race\", options);\n"
   },
   "customSettings": {
     "imports": {

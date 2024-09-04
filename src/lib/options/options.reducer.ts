@@ -33,7 +33,7 @@ export const defaultOptions: Options = {
   inputHeight: '',
   inputWidth: '',
   minHeight: 300,
-  minWidth: 350,
+  minWidth: 250,
   height: '',
   width: '',
   marginTop: 0,
