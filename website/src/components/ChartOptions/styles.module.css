@@ -1,0 +1,17 @@
+.container {
+  display: flex;
+  justify-content: center;
+  min-width: 100%;
+  gap: 1em;
+}
+
+.tweakpane {
+  width: 300px;
+}
+
+@media screen and (max-width: 600px) {
+  .container {
+    align-items: center;
+    flex-direction: column;
+  }
+}

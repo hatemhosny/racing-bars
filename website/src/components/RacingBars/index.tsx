@@ -18,7 +18,7 @@ export default function RacingBars(
     label?: string;
   },
 ): JSX.Element {
-  const { label, className, style, showCode, dynamicProps, ...options } = props;
+  const { label, className, style, showCode, dynamicProps, callback, ...options } = props;
   const { jsCode, tsCode, reactCode, vueCode, svelteCode } = getFrameworkCode(
     options,
     dynamicProps,
@@ -55,6 +55,7 @@ export default function RacingBars(
                 }}
                 {...{
                   theme: colorMode,
+                  callback,
                   ...options,
                 }}
               >
