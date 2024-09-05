@@ -74,8 +74,8 @@ export async function race(
       computeNextDateSubscriber(data, store),
       DOMEventSubscriber(store),
     ];
-    [...subscriptions, ...apiSubscriptions].forEach((subcsription) => {
-      store.subscribe(subcsription);
+    [...subscriptions, ...apiSubscriptions].forEach((subscription) => {
+      store.subscribe(subscription);
     });
   }
 
