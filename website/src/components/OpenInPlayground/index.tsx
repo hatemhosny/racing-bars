@@ -1,15 +1,11 @@
 /* eslint-disable import/no-unresolved */
 import React from 'react';
 import { getPlaygroundUrl, type Config, type Language } from 'livecodes';
-import ExecutionEnvironment from '@docusaurus/ExecutionEnvironment';
-import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
+import { getBaseUrl } from '@site/src/helpers/base-url';
 import styles from './styles.module.css';
 
 export default function OpenInPlayground(props: { language: Language; code: string }) {
-  const baseUrl = ExecutionEnvironment.canUseDOM
-    ? location.origin
-    : useDocusaurusContext().siteConfig.url;
-
+  const baseUrl = getBaseUrl();
   const config: Partial<Config> = {
     title: 'RacingBars',
     activeEditor: 'script',

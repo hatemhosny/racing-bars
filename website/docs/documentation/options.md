@@ -175,7 +175,7 @@ See the guide on [`chart controls`](../guides/chart-controls.md) for other alter
 
 ### dataShape
 
-Instruction whether the data shape is <a href="https://en.wikipedia.org/wiki/Wide_and_narrow_data" target="_blank">"long" or "wide"</a>. By default, the library tries to detect the data shape automatically from its structure (after any [transformation](#dataTransform), by finding the columns `date`, `name` and `value`). If the data shape is not detected correctly, it can be manually specified.  
+Instruction whether the data shape is <a href="https://en.wikipedia.org/wiki/Wide_and_narrow_data" target="_blank">"long" or "wide"</a>. By default, the library tries to detect the data shape automatically from its structure (after any [transformation](#datatransform), by finding the columns `date`, `name` and `value`). If the data shape is not detected correctly, it can be manually specified.  
 See ["Data" section](./data.md) for more details and examples.
 
 - Type: `"long" | "wide" | "auto"`

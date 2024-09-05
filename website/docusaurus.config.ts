@@ -70,6 +70,11 @@ const config: Config = {
         },
       ],
     },
+    docs: {
+      sidebar: {
+        hideable: true,
+      },
+    },
     footer: {
       style: 'dark',
       links: [
@@ -151,15 +156,15 @@ const config: Config = {
   } satisfies Preset.ThemeConfig,
   scripts: [
     {
-      src: 'https://unpkg.com/prettier@2.4.1/standalone.js',
+      src: '/js/prettier-2.4.1/standalone.js',
       async: true,
     },
     {
-      src: 'https://unpkg.com/prettier@2.4.1/parser-babel.js',
+      src: '/js/prettier-2.4.1/parser-babel.js',
       async: true,
     },
     {
-      src: 'https://unpkg.com/prettier@2.4.1/parser-html.js',
+      src: '/js/prettier-2.4.1/parser-html.js',
       async: true,
     },
   ],

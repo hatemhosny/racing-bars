@@ -1,7 +1,12 @@
 import * as d3 from './d3';
 import { getDateString, prepareData, computeNextDateSubscriber, safeName } from './utils';
 import type { Data, WideData } from './data';
-import { createRenderer, rendererSubscriber, type Renderer } from './renderer';
+import {
+  createRenderer,
+  createResizeObserver,
+  rendererSubscriber,
+  type Renderer,
+} from './renderer';
 import { createTicker } from './ticker';
 import { styleInject } from './styles';
 import { actions, createStore, rootReducer, type Store } from './store';
@@ -60,7 +65,8 @@ export async function race(
   }
 
   const events = registerEvents(store, ticker);
-  window.addEventListener('resize', resize);
+  const resizeObserver = createResizeObserver(resize);
+  resizeObserver?.observe(root);
 
   function subscribeToStore(store: Store, renderer: Renderer, data: Data[]) {
     const subscriptions = [
@@ -68,8 +74,8 @@ export async function race(
       computeNextDateSubscriber(data, store),
       DOMEventSubscriber(store),
     ];
-    [...subscriptions, ...apiSubscriptions].forEach((subcsription) => {
-      store.subscribe(subcsription);
+    [...subscriptions, ...apiSubscriptions].forEach((subscription) => {
+      store.subscribe(subscription);
     });
   }
 
@@ -88,7 +94,6 @@ export async function race(
   }
 
   const API = {
-    // TODO: validate user input
     play() {
       if (!store.getState().ticker.isRunning) {
         ticker.start();
@@ -107,10 +112,12 @@ export async function race(
       ticker.skipForward();
     },
     inc(value = 1) {
-      store.dispatch(actions.ticker.inc(+value));
+      if (!isNaN(Number(value))) value = 1;
+      store.dispatch(actions.ticker.inc(Number(value)));
     },
     dec(value = 1) {
-      store.dispatch(actions.ticker.dec(+value));
+      if (!isNaN(Number(value))) value = 1;
+      store.dispatch(actions.ticker.dec(Number(value)));
     },
     setDate(inputDate: string | Date) {
       store.dispatch(actions.ticker.updateDate(getDateString(inputDate)));
@@ -128,13 +135,13 @@ export async function race(
       d3.select(root)
         .select('rect.' + safeName(name))
         .classed('selected', true);
-      store.dispatch(actions.data.addSelection(name));
+      store.dispatch(actions.data.addSelection(String(name)));
     },
     unselect(name: string) {
       d3.select(root)
         .select('rect.' + safeName(name))
         .classed('selected', false);
-      store.dispatch(actions.data.removeSelection(name));
+      store.dispatch(actions.data.removeSelection(String(name)));
     },
     unselectAll() {
       d3.select(root).selectAll('rect').classed('selected', false);
@@ -206,12 +213,15 @@ export async function race(
       }
     },
     onDate(date: string | Date, fn: ApiCallback) {
+      if (typeof fn !== 'function') {
+        throw new Error('The second argument must be a function');
+      }
       const dateString = getDateString(date);
       let lastDate = '';
       const watcher = addApiSubscription(() => {
         if (store.getState().ticker.currentDate === dateString && dateString !== lastDate) {
           lastDate = store.getState().ticker.currentDate; // avoid infinite loop if fn dispatches action
-          fn.call(API, getTickDetails(store));
+          fn(getTickDetails(store));
         }
         lastDate = store.getState().ticker.currentDate;
       });
@@ -222,8 +232,11 @@ export async function race(
       };
     },
     on(event: EventType, fn: ApiCallback) {
+      if (typeof fn !== 'function') {
+        throw new Error('The second argument must be a function');
+      }
       const watcher = events.addApiEventHandler(event, () => {
-        fn.call(API, getTickDetails(store));
+        fn(getTickDetails(store));
       });
       return {
         remove() {
@@ -235,7 +248,7 @@ export async function race(
       ticker.stop();
       store.unsubscribeAll();
       events.unregister();
-      window.removeEventListener('resize', resize);
+      resizeObserver?.unobserve(root);
       root.innerHTML = '';
       document.getElementById(stylesId)?.remove();
       for (const method of Object.keys(this)) {

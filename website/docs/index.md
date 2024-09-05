@@ -16,8 +16,11 @@ _RacingBars_ is an [open-source](https://github.com/hatemhosny/racing-bars), lig
 _RacingBars_ is available for JavaScript, TypeScript, React, Vue and Svelte.
 
 import RacingBars from '../src/components/RacingBars';
+import ChartOptions from '../src/components/ChartOptions';
 
 **Examples:**
+
+This is a basic chart with the default options
 
 <div className="gallery">
   <RacingBars
@@ -27,33 +30,8 @@ import RacingBars from '../src/components/RacingBars';
 
 <p style={{height: 30}}> </p>
 
-export const transformFn = (data) => data.map((d) => ({
-...d,
-icon: `https://flagsapi.com/${d.code}/flat/64.png`,
-}));
+Try playing with some of the [options](./documentation/options.md). Or check the code [playground](./playground).
 
 <div className="gallery">
-  <RacingBars
-    style={{width: 800, height: 450}}
-    dataUrl="/data/population.csv"
-    dataTransform={transformFn}
-    title="World Population in 60 Years"
-    subTitle="Country Population in millions"
-    caption="Source: World Bank"
-    dateCounter= "YYYY"
-    showGroups={true}
-    showIcons={true}
-    labelsPosition="outside"
-    labelsWidth={160}
-    autorun={false}
-    overlays="all"
-    controlButtons="all"
-    highlightBars={true}
-    selectBars={true}
-    theme="dark"
-    dynamicProps={{dataTransform: `(data) => data.map((d) => ({
-      ...d,
-      icon: \`https://flagsapi.com/\${d.code}/flat/64.png\`,
-    }))`}}
-/>
+  <ChartOptions />
 </div>
