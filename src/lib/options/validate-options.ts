@@ -12,7 +12,7 @@ const boolOpts = [
   'highlightBars',
   'selectBars',
   'fixedScale',
-] as const;
+] as const satisfies Array<keyof Options>;
 const numberOpts = [
   'labelsWidth',
   'tickDuration',
@@ -23,18 +23,31 @@ const numberOpts = [
   'marginRight',
   'marginBottom',
   'marginLeft',
-] as const;
-const strOpts = ['theme', 'startDate', 'endDate'] as const;
-const strOrNumberOpts = ['colorSeed', 'inputHeight', 'inputWidth', 'height', 'width'] as const;
-const strOrFuncOpts = ['title', 'subTitle', 'dateCounter', 'caption'] as const;
+] as const satisfies Array<keyof Options>;
+const strOpts = ['theme', 'startDate', 'endDate'] as const satisfies Array<keyof Options>;
+const strOrNumberOpts = [
+  'colorSeed',
+  'inputHeight',
+  'inputWidth',
+  'height',
+  'width',
+] as const satisfies Array<keyof Options>;
+const strOrFuncOpts = ['title', 'subTitle', 'dateCounter', 'caption'] as const satisfies Array<
+  keyof Options
+>;
 
-const validDataShapes = ['long', 'wide'];
-const validDataTypes = ['json', 'csv', 'tsv', 'xml'];
-const validLabelsPositions = ['inside', 'outside'];
-const validControlButtons = ['all', 'play', 'none'];
-const validOverlays = ['all', 'play', 'repeat', 'none'];
-const validFillDateGapsIntervals = [null, 'year', 'month', 'day'];
-const validFillDateGapsValues = ['last', 'interpolate'];
+const validDataShapes: Array<Options['dataShape']> = ['long', 'wide', 'auto'];
+const validDataTypes: Array<Options['dataType']> = ['json', 'csv', 'tsv', 'xml', 'auto'];
+const validLabelsPositions: Array<Options['labelsPosition']> = ['inside', 'outside'];
+const validControlButtons: Array<Options['controlButtons']> = ['all', 'play', 'none'];
+const validOverlays: Array<Options['overlays']> = ['all', 'play', 'repeat', 'none'];
+const validFillDateGapsIntervals: Array<Options['fillDateGapsInterval']> = [
+  null,
+  'year',
+  'month',
+  'day',
+];
+const validFillDateGapsValues: Array<Options['fillDateGapsValue']> = ['last', 'interpolate'];
 
 export function validateOptions(options: Partial<Options>): Partial<Options> {
   const newOptions: Partial<Options> = {};
@@ -44,11 +57,9 @@ export function validateOptions(options: Partial<Options>): Partial<Options> {
     if (is(options[opt], 'boolean')) {
       newOptions[opt] = options[opt];
     } else if (is(options[opt], 'string')) {
-      // Ignore typescript until option types is updated.
-      // @ts-expect-error
-      if (options[opt] === 'true' || options[opt] === 'false') {
-        // @ts-expect-error
-        newOptions[opt] = options[opt] === 'true';
+      const booleanOption = options[opt] as unknown;
+      if (booleanOption === 'true' || booleanOption === 'false') {
+        newOptions[opt] = booleanOption === 'true';
       }
     }
   });

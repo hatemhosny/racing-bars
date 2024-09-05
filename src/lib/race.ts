@@ -153,14 +153,14 @@ export async function race(
       store.dispatch(actions.data.resetFilters());
     },
     async changeOptions(newOptions: Partial<Options>) {
+      const validOptions = validateOptions(newOptions);
+
       const unAllowedOptions: Array<keyof Options> = ['dataShape', 'dataType'];
       unAllowedOptions.forEach((key) => {
-        if (newOptions[key] && newOptions[key] !== store.getState().options[key]) {
+        if (validOptions[key] && validOptions[key] !== store.getState().options[key]) {
           throw new Error(`The option "${key}" cannot be changed.`);
         }
       });
-
-      const validOptions = validateOptions(newOptions);
 
       const dataOptions: Array<keyof Options> = [
         'dataTransform',
