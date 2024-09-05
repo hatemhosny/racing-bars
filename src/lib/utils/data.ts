@@ -25,7 +25,7 @@ export async function prepareData(
   const messageId = generateId();
   worker.postMessage({
     type: 'prepare-data',
-    data,
+    data: await data,
     options: removeFnOptions(store.getState().options),
     baseUrl: location.href,
     messageId,
