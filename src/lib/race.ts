@@ -153,11 +153,11 @@ export async function race(
       store.dispatch(actions.data.resetFilters());
     },
     async changeOptions(newOptions: Partial<Options>) {
-      const validOptions = validateOptions(newOptions);
+      const newValidOptions = validateOptions(newOptions);
 
       const unAllowedOptions: Array<keyof Options> = ['dataShape', 'dataType'];
       unAllowedOptions.forEach((key) => {
-        if (validOptions[key] && validOptions[key] !== store.getState().options[key]) {
+        if (newValidOptions[key] && newValidOptions[key] !== store.getState().options[key]) {
           throw new Error(`The option "${key}" cannot be changed.`);
         }
       });
@@ -172,12 +172,12 @@ export async function race(
       ];
       let dataOptionsChanged = false;
       dataOptions.forEach((key) => {
-        if (validOptions[key] && validOptions[key] !== store.getState().options[key]) {
+        if (newValidOptions[key] && newValidOptions[key] !== store.getState().options[key]) {
           dataOptionsChanged = true;
         }
       });
 
-      store.dispatch(actions.options.changeOptions(validOptions));
+      store.dispatch(actions.options.changeOptions(newValidOptions));
       const { injectStyles, theme, autorun } = store.getState().options;
 
       if (dataOptionsChanged) {
@@ -188,7 +188,7 @@ export async function race(
         subscribeToStore(store, renderer, preparedData);
       }
 
-      if ('injectStyles' in validOptions || 'theme' in validOptions) {
+      if ('injectStyles' in newValidOptions || 'theme' in newValidOptions) {
         document.getElementById(stylesId)?.remove();
         if (injectStyles) {
           stylesId = styleInject(root, theme);
