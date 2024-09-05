@@ -30,11 +30,6 @@ This is a basic chart with the default options
 
 <p style={{height: 30}}> </p>
 
-export const transformFn = (data) => data.map((d) => ({
-...d,
-icon: `https://flagsapi.com/${d.code}/flat/64.png`,
-}));
-
 Try playing with some of the [options](./documentation/options.md). Or check the code [playground](./playground).
 
 <div className="gallery">

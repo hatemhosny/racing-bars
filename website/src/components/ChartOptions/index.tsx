@@ -1,5 +1,5 @@
 // eslint-disable-next-line import/no-unresolved
-import { baseUrl } from '@site/src/helpers/base-url';
+import { getBaseUrl } from '@site/src/helpers/base-url';
 import RacingBars from '../RacingBars';
 import type { Props } from '../../../../src';
 import styles from './styles.module.css';
@@ -31,6 +31,7 @@ const PARAMS: Props = {
 };
 
 async function initPane(racer) {
+  const baseUrl = getBaseUrl();
   const mod = await import(/* webpackIgnore: true */ `${baseUrl}/js/tweakpane.min.js`);
   const { Pane } = mod;
   const pane = new Pane({

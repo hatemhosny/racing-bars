@@ -1,10 +1,11 @@
 /* eslint-disable import/no-unresolved */
 import React from 'react';
 import { getPlaygroundUrl, type Config, type Language } from 'livecodes';
-import { baseUrl } from '@site/src/helpers/base-url';
+import { getBaseUrl } from '@site/src/helpers/base-url';
 import styles from './styles.module.css';
 
 export default function OpenInPlayground(props: { language: Language; code: string }) {
+  const baseUrl = getBaseUrl();
   const config: Partial<Config> = {
     title: 'RacingBars',
     activeEditor: 'script',
