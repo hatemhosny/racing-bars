@@ -1,7 +1,12 @@
 import * as d3 from './d3';
 import { getDateString, prepareData, computeNextDateSubscriber, safeName } from './utils';
 import type { Data, WideData } from './data';
-import { createRenderer, rendererSubscriber, type Renderer } from './renderer';
+import {
+  createRenderer,
+  createResizeObserver,
+  rendererSubscriber,
+  type Renderer,
+} from './renderer';
 import { createTicker } from './ticker';
 import { styleInject } from './styles';
 import { actions, createStore, rootReducer, type Store } from './store';
@@ -60,7 +65,8 @@ export async function race(
   }
 
   const events = registerEvents(store, ticker);
-  window.addEventListener('resize', resize);
+  const resizeObserver = createResizeObserver(resize);
+  resizeObserver?.observe(root);
 
   function subscribeToStore(store: Store, renderer: Renderer, data: Data[]) {
     const subscriptions = [
@@ -235,7 +241,7 @@ export async function race(
       ticker.stop();
       store.unsubscribeAll();
       events.unregister();
-      window.removeEventListener('resize', resize);
+      resizeObserver?.unobserve(root);
       root.innerHTML = '';
       document.getElementById(stylesId)?.remove();
       for (const method of Object.keys(this)) {
