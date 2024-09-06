@@ -470,3 +470,10 @@ export const topN: ChartProps = {
   title: 'World Population',
   topN: 5,
 };
+
+export const valueDecimals: ChartProps = {
+  label: 'Value Decimals',
+  dataUrl: '/data/population.csv',
+  title: 'World Population',
+  valueDecimals: 3,
+};

@@ -844,6 +844,20 @@ const options = {
 };
 ```
 
+### valueDecimals
+
+Number of decimal places to display for values. By default (`"preserve"`), the values in the data are used as is.
+
+- Type: `number | "preserve"`
+- Default: `"preserve"`
+- Example: [view in gallery](../gallery/value-decimals.md)
+
+```js
+const options = {
+  valueDecimals: 0,
+};
+```
+
 ### width
 
 Specifies the width of the chart.
