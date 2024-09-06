@@ -43,7 +43,7 @@ export function calculateDimensions(store: Store, renderOptions: RenderOptions) 
     10,
   );
 
-  const labelsArea = labelsPosition === 'inside' ? 0 : labelsWidth;
+  const labelsArea = labelsPosition !== 'outside' ? 0 : labelsWidth;
   const topAxisPadding = 15;
 
   const margin = {
@@ -73,7 +73,7 @@ export function calculateDimensions(store: Store, renderOptions: RenderOptions) 
   const iconSize = (renderOptions.iconSize = showIcons ? barHeight * 0.9 : 0);
   const iconSpace = (renderOptions.iconSpace = showIcons ? iconSize + labelPadding : 0);
   renderOptions.labelX =
-    labelsPosition === 'inside'
+    labelsPosition !== 'outside'
       ? (d: Data) => x(d.value) - labelPadding - iconSpace
       : margin.left - labelPadding;
 

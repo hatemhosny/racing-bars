@@ -11,7 +11,7 @@ export interface Options {
   dataTransform: null | ((data: Data[] | WideData[]) => Data[] | WideData[]);
   fillDateGapsInterval: null | 'year' | 'month' | 'day';
   fillDateGapsValue: 'last' | 'interpolate';
-  labelsPosition: 'inside' | 'outside';
+  labelsPosition: 'inside' | 'outside' | 'none';
   controlButtons: 'all' | 'play' | 'none';
   overlays: 'all' | 'play' | 'repeat' | 'none';
 

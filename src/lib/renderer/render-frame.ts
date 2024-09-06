@@ -114,7 +114,8 @@ export function renderFrame(data: Data[], store: Store, renderOptions: RenderOpt
     .enter()
     .append('text')
     .attr('class', 'label')
-    .classed('outside-bars', labelsPosition !== 'inside')
+    .classed('outside-bars', labelsPosition === 'outside')
+    .classed('hidden', labelsPosition === 'none')
     .attr('x', labelX)
     .attr('y', () => y(topN + 1) + marginBottom + 5 + barHalfHeight)
     .style('text-anchor', 'end')
@@ -225,7 +226,7 @@ export function renderFrame(data: Data[], store: Store, renderOptions: RenderOpt
       .duration(tickDuration)
       .ease(d3.easeLinear)
       .attr('cy', (d: Data) => y(d.rank as number) + barHalfHeight)
-      .attr('clip-path', 'url(#icons-rect-clip)');
+      .attr('clip-path', `url(#clipPath-${store.getState().container.element.id})`);
 
     icons
       .transition()
