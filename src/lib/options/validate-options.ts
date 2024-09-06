@@ -38,7 +38,7 @@ const strOrFuncOpts = ['title', 'subTitle', 'dateCounter', 'caption'] as const s
 
 const validDataShapes: Array<Options['dataShape']> = ['long', 'wide', 'auto'];
 const validDataTypes: Array<Options['dataType']> = ['json', 'csv', 'tsv', 'xml', 'auto'];
-const validLabelsPositions: Array<Options['labelsPosition']> = ['inside', 'outside'];
+const validLabelsPositions: Array<Options['labelsPosition']> = ['inside', 'outside', 'none'];
 const validControlButtons: Array<Options['controlButtons']> = ['all', 'play', 'none'];
 const validOverlays: Array<Options['overlays']> = ['all', 'play', 'repeat', 'none'];
 const validFillDateGapsIntervals: Array<Options['fillDateGapsInterval']> = [

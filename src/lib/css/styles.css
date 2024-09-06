@@ -40,6 +40,10 @@ __selector__ text.label {
   font-weight: 600;
 }
 
+__selector__ text.label.hidden {
+  visibility: hidden;
+}
+
 __selector__ text.valueLabel {
   font-weight: 300;
 }

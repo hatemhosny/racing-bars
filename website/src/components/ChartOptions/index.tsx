@@ -49,7 +49,7 @@ async function initPane(racer) {
   pane.addBinding(PARAMS, 'showGroups');
   pane.addBinding(PARAMS, 'topN', { min: 2, max: 15, step: 1 });
   pane.addBinding(PARAMS, 'labelsPosition', {
-    options: { inside: 'inside', outside: 'outside' },
+    options: { inside: 'inside', outside: 'outside', none: 'none' },
   });
   pane.addBinding(PARAMS, 'labelsWidth', { min: 0, max: 300, step: 1 });
   pane.addBinding(PARAMS, 'loop');
