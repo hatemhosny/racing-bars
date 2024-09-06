@@ -136,10 +136,9 @@ export function renderInitialView(data: Data[], store: Store, renderOptions: Ren
         .attr('x', 0)
         .attr('y', 0);
 
-      // avoid icons overflow outside bars
       svg
         .append('clipPath')
-        .attr('id', 'icons-rect-clip')
+        .attr('id', 'clipPath-' + store.getState().container.element.id)
         .append('rect')
         .attr('x', x(0) + 1)
         .attr('y', margin.top)
@@ -156,7 +155,7 @@ export function renderInitialView(data: Data[], store: Store, renderOptions: Ren
         .attr('r', iconSize / 2)
         .style('fill', 'transparent')
         .style('fill', (d: Data) => `url(#${getIconID(d)})`)
-        .attr('clip-path', 'url(#icons-rect-clip)');
+        .attr('clip-path', `url(#clipPath-${store.getState().container.element.id})`);
     }
 
     const endY = height - margin.bottom;

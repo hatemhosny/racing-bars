@@ -226,7 +226,7 @@ export function renderFrame(data: Data[], store: Store, renderOptions: RenderOpt
       .duration(tickDuration)
       .ease(d3.easeLinear)
       .attr('cy', (d: Data) => y(d.rank as number) + barHalfHeight)
-      .attr('clip-path', 'url(#icons-rect-clip)');
+      .attr('clip-path', `url(#clipPath-${store.getState().container.element.id})`);
 
     icons
       .transition()
