@@ -368,6 +368,22 @@ export const labelsPosition: ChartProps = {
   labelsPosition: 'outside',
 };
 
+export const labelsPositionNone: ChartProps = {
+  label: 'Labels Position',
+  dataUrl: '/data/population.csv',
+  dataTransform: (data) =>
+    data.map((d) => ({
+      ...d,
+      icon: `https://flagsapi.com/${d.code}/flat/64.png`,
+    })),
+  title: 'World Population',
+  labelsPosition: 'none',
+  showIcons: true,
+  dynamicProps: {
+    dataTransform: `(data) => data.map((d) => ({ ...d, icon: \`https://flagsapi.com/\${d.code}/flat/64.png\` }))`,
+  },
+};
+
 export const loop: ChartProps = {
   label: 'Loop',
   dataUrl: '/data/population.csv',

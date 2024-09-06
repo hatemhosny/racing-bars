@@ -4,7 +4,7 @@ hide_table_of_contents: true
 ---
 
 import RacingBars from '../../src/components/RacingBars';
-import { icons } from './\_gallery-demos.ts';
+import { icons, labelsPositionNone } from './\_gallery-demos.ts';
 
 A demo showing the use of [icons](../guides/icons.md).
 
@@ -27,3 +27,14 @@ Notice setting [`labelsPosition`](../documentation/options.md#labelsposition) to
 
 You may also use the [`dataTransform`](../documentation/options.md#datatransform) option for data transformation,
 like in [this example](./data-transform.md).
+
+### Show icons only
+
+Bars can have icons only (without labels), by combining the `showIcons: true` option with `labelsPosition: 'none'`.
+
+<div className="gallery">
+  <RacingBars
+    {...labelsPositionNone}
+/>
+
+</div>

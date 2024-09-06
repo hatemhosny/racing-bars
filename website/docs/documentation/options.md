@@ -516,12 +516,13 @@ See the guide on [`chart controls`](../guides/chart-controls.md) for other alter
 ### labelsPosition
 
 Sets the position of bar labels. If set to `"inside"`, the labels are positioned inside the bars.
-Otherwise, the labels are positioned on the left side of the bars.
+If set to `"outside"`, the labels are positioned on the left side of the bars.
+If set to `"none"`, the labels are not displayed (this can be useful to show icons only - see [example in gallery](../gallery/labels-position.md)).
 
 Note that if this is set to `"inside"` (default),
 bars with small width (low values) may have their labels partially invisible ([demo](../gallery/fixed-scale)).
 
-- Type: `"inside" | "outside"`
+- Type: `"inside" | "outside" | "none"`
 - Default: `"inside"`
 - Example: [view in gallery](../gallery/labels-position.md)
 
