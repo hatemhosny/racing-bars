@@ -9,6 +9,7 @@ export interface Options {
   dataShape: 'long' | 'wide' | 'auto';
   dataType: 'json' | 'csv' | 'tsv' | 'xml' | 'auto';
   dataTransform: null | ((data: Data[] | WideData[]) => Data[] | WideData[]);
+  valueDecimals: 'preserve' | number;
   fillDateGapsInterval: null | 'year' | 'month' | 'day';
   fillDateGapsValue: 'last' | 'interpolate';
   labelsPosition: 'inside' | 'outside' | 'none';
