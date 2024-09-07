@@ -189,3 +189,20 @@ test('Tests to validate fillDateGapsValue option', () => {
   const invalidOpts = validateOptions(options);
   expect(invalidOpts.fillDateGapsValue).toBeUndefined();
 });
+
+test('Tests to validate valueDecimals option', () => {
+  // Valid options
+  const options: any = { valueDecimals: 'preserve' };
+  const validatedOpts = validateOptions(options);
+  expect(validatedOpts.valueDecimals).toBe('preserve');
+
+  // Valid options
+  const options2: any = { valueDecimals: 2 };
+  const validatedOpts2 = validateOptions(options2);
+  expect(validatedOpts2.valueDecimals).toBe(2);
+
+  // Invalid options
+  options.valueDecimals = 'invalid';
+  const invalidOpts = validateOptions(options);
+  expect(invalidOpts.valueDecimals).toBeUndefined();
+});
