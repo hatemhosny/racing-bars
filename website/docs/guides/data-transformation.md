@@ -28,6 +28,8 @@ const options = {
 race('/data/population.csv', '#race', options);
 ```
 
+[View in gallery](../gallery/data-transform.md)
+
 ## Manually loading and transforming data
 
 The [`loadData`](../documentation/api.md#loaddata) function can be used to load data. It can then be transformed before it is used in the chart.
@@ -49,6 +51,42 @@ const options = {
 race(transformedData, '#race', options);
 ```
 
+## `startDate` and `endDate` options
+
+The data can be filtered by setting the [`startDate`](../documentation/options.md#startDate) and [`endDate`](../documentation/options.md#endDate) options.
+
+```js
+import { race } from 'racing-bars';
+
+const options = {
+  title: 'World Population',
+  startDate: '1970-01-01',
+  endDate: '1999-12-31',
+};
+
+race('/data/population.csv', '#race', options);
+```
+
+[View in gallery](../gallery/start-end-dates.md)
+
+## `makeCumulative` option
+
+The data values can be converted to cumulative sums (running totals) by setting the [`makeCumulative`](../documentation/options.md#makecummulative) option to `true`.
+
+```js
+import { race } from 'racing-bars';
+
+const options = {
+  title: 'Github Stars',
+  makeCumulative: true,
+  // ...
+};
+
+race('/data/gh-star.csv', '#race', options);
+```
+
+[View in gallery](../gallery/data-gh-star.md)
+
 ## `valueDecimals` option
 
 In case you just need to control the number of decimal places to display for values, you do not need to transform the data. You may just use the [`valueDecimals`](../documentation/options.md#valuedecimals) option.
@@ -64,3 +102,24 @@ const options = {
 
 race('/data/population.csv', '#race', options);
 ```
+
+[View in gallery](../gallery/value-decimals.md)
+
+## Filling gaps in data
+
+Dates that are missing from data will be skipped.
+If you need to fill date gaps, you may use the options [`fillDateGapsInterval`](./options.md#filldategapsinterval) and [`fillDateGapValue`](./options.md#filldategapsvalue).
+
+```js
+import { race } from 'racing-bars';
+
+const options = {
+  fillDateGapsInterval: 'month',
+  fillDateGapsValue: 'interpolate',
+  valueDecimals: 2,
+};
+
+race('/data/population.csv', '#race', options);
+```
+
+[View in gallery](../gallery/fill-date-gaps.md)
