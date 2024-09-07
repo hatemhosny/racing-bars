@@ -61,6 +61,8 @@ function toNumber(s: string | number) {
   return +nums;
 }
 
+export const countDecimals = (n: number) => String(n).split('.')[1]?.length || 0;
+
 export function random(InputSeed: string | number) {
   const seed = toNumber(InputSeed);
   const x = Math.sin(seed) * 10000;

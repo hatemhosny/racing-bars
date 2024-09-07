@@ -189,3 +189,45 @@ test('Tests to validate fillDateGapsValue option', () => {
   const invalidOpts = validateOptions(options);
   expect(invalidOpts.fillDateGapsValue).toBeUndefined();
 });
+
+test('Tests to validate valueDecimals option', () => {
+  // Valid options
+  const options: any = { valueDecimals: 'preserve' };
+  const validatedOpts = validateOptions(options);
+  expect(validatedOpts.valueDecimals).toBe('preserve');
+
+  // Valid options
+  const options2: any = { valueDecimals: 2 };
+  const validatedOpts2 = validateOptions(options2);
+  expect(validatedOpts2.valueDecimals).toBe(2);
+
+  // Invalid options
+  options.valueDecimals = 'invalid';
+  const invalidOpts = validateOptions(options);
+  expect(invalidOpts.valueDecimals).toBeUndefined();
+});
+
+test('Tests to validate colorMap option', () => {
+  // Valid options
+  const options: any = { colorMap: ['blue', 'red'] };
+  const validatedOpts = validateOptions(options);
+  expect(validatedOpts.colorMap).toStrictEqual(['blue', 'red']);
+
+  // Valid options
+  const options2: any = {
+    colorMap: {
+      India: 'orange',
+      'United States': 'blue',
+    },
+  };
+  const validatedOpts2 = validateOptions(options2);
+  expect(validatedOpts2.colorMap).toStrictEqual({
+    India: 'orange',
+    'United States': 'blue',
+  });
+
+  // Invalid options
+  options.colorMap = 'invalid';
+  const invalidOpts = validateOptions(options);
+  expect(invalidOpts.colorMap).toBeUndefined();
+});

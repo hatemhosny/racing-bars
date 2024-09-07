@@ -67,7 +67,7 @@ export function validateOptions(options: Partial<Options>): Partial<Options> {
   // Validate number options
   numberOpts.forEach((opt) => {
     if (!is(options[opt], 'number')) return;
-    newOptions[opt] = options[opt];
+    newOptions[opt] = Number(options[opt]);
   });
 
   // Validate string options
@@ -117,6 +117,13 @@ export function validateOptions(options: Partial<Options>): Partial<Options> {
     newOptions.fillDateGapsValue = options.fillDateGapsValue;
   }
 
+  if (options.valueDecimals === 'preserve') {
+    newOptions.valueDecimals = 'preserve';
+  }
+  if (is(options.valueDecimals, 'number')) {
+    newOptions.valueDecimals = Number(options.valueDecimals);
+  }
+
   // Validate array of options
   if (is(options.fixedOrder, 'array', 'string')) {
     newOptions.fixedOrder = options.fixedOrder;
@@ -127,7 +134,9 @@ export function validateOptions(options: Partial<Options>): Partial<Options> {
     newOptions.dataTransform = options.dataTransform;
   }
 
-  validateColorMap(options.colorMap);
+  if (validateColorMap(options.colorMap)) {
+    newOptions.colorMap = options.colorMap;
+  }
 
   return newOptions;
 }
