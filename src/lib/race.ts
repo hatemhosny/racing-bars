@@ -176,6 +176,7 @@ export async function race(
         'startDate',
         'endDate',
         'fixedOrder',
+        'makeCumulative',
       ];
       let dataOptionsChanged = false;
       dataOptions.forEach((key) => {
