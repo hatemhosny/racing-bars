@@ -108,7 +108,7 @@ race('/data/population.csv', '#race', options);
 ## Filling gaps in data
 
 Dates that are missing from data will be skipped.
-If you need to fill date gaps, you may use the options [`fillDateGapsInterval`](./options.md#filldategapsinterval) and [`fillDateGapValue`](./options.md#filldategapsvalue).
+If you need to fill date gaps, you may use the options [`fillDateGapsInterval`](../documentation/options.md#filldategapsinterval) and [`fillDateGapValue`](../documentation/options.md#filldategapsvalue).
 
 ```js
 import { race } from 'racing-bars';
