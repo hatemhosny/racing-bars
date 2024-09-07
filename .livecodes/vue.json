@@ -1,0 +1,18 @@
+{
+  "title": "Vue",
+  "activeEditor": "script",
+  "script": {
+    "language": "vue",
+    "content": "<script setup>\n  import RacingBars from \"racing-bars/vue\";\n\n  const options = {\n    dataUrl: \"{{LC::TO_URL(./data/population.csv)}}\",\n    dataTransform: (data) =>\n      data.map((d) => ({\n        ...d,\n        icon: `https://flagsapi.com/${d.code}/flat/64.png`,\n      })),\n    title: \"World Population\",\n    subTitle: \"Country Population in millions\",\n    caption: \"Source: World Bank\",\n    dateCounter: \"YYYY\",\n    showIcons: true,\n    labelsPosition: \"outside\",\n  };\n</script>\n\n<template>\n  <RacingBars class=\"race\" v-bind=\"options\">Loading...</RacingBars>\n</template>\n\n<style scoped>\n  .race {\n    height: 80vh;\n  }\n</style>\n"
+  },
+  "customSettings": {
+    "imports": {
+      "racing-bars": "{{LC::TO_URL(./lib/racing-bars.js)}}",
+      "racing-bars/react": "{{LC::TO_URL(./lib/react.js)}}",
+      "racing-bars/vue": "{{LC::TO_URL(./lib/vue.js)}}"
+    },
+    "types": {
+      "racing-bars": "{{LC::TO_URL(./lib/racing-bars.d.ts)}}"
+    }
+  }
+}

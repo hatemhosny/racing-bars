@@ -254,20 +254,6 @@ export const fillDateGapsNull: ChartProps = {
   label: 'Filling Date Gaps: null (default)',
   dataUrl: '/data/population.csv',
   fillDateGapsInterval: null,
-  dataTransform: function multiplyBy1000(data) {
-    return data.map((d) => ({
-      ...d,
-      value: Number(d.value) * 1000,
-    }));
-  },
-  dynamicProps: {
-    dataTransform: `function multiplyBy1000(data) {
-return data.map((d) => ({
-  ...d,
-  value: Number(d.value) * 1000,
-}));
-}`,
-  },
 };
 
 export const fillDateGapsMonthInterpolate: ChartProps = {
@@ -275,20 +261,7 @@ export const fillDateGapsMonthInterpolate: ChartProps = {
   dataUrl: '/data/population.csv',
   fillDateGapsInterval: 'month',
   fillDateGapsValue: 'interpolate',
-  dataTransform: function multiplyBy1000(data) {
-    return data.map((d) => ({
-      ...d,
-      value: Number(d.value) * 1000,
-    }));
-  },
-  dynamicProps: {
-    dataTransform: `function multiplyBy1000(data) {
-return data.map((d) => ({
-  ...d,
-  value: Number(d.value) * 1000,
-}));
-}`,
-  },
+  valueDecimals: 2,
 };
 
 export const fillDateGapsMonthLast: ChartProps = {
@@ -296,20 +269,7 @@ export const fillDateGapsMonthLast: ChartProps = {
   dataUrl: '/data/population.csv',
   fillDateGapsInterval: 'month',
   fillDateGapsValue: 'last',
-  dataTransform: function multiplyBy1000(data) {
-    return data.map((d) => ({
-      ...d,
-      value: Number(d.value) * 1000,
-    }));
-  },
-  dynamicProps: {
-    dataTransform: `function multiplyBy1000(data) {
-return data.map((d) => ({
-  ...d,
-  value: Number(d.value) * 1000,
-}));
-}`,
-  },
+  valueDecimals: 2,
 };
 
 export const fixedOrder: ChartProps = {
@@ -366,6 +326,22 @@ export const labelsPosition: ChartProps = {
   dataUrl: '/data/population.csv',
   title: 'World Population',
   labelsPosition: 'outside',
+};
+
+export const labelsPositionNone: ChartProps = {
+  label: 'Hidden Labels',
+  dataUrl: '/data/population.csv',
+  dataTransform: (data) =>
+    data.map((d) => ({
+      ...d,
+      icon: `https://flagsapi.com/${d.code}/flat/64.png`,
+    })),
+  title: 'World Population',
+  labelsPosition: 'none',
+  showIcons: true,
+  dynamicProps: {
+    dataTransform: `(data) => data.map((d) => ({ ...d, icon: \`https://flagsapi.com/\${d.code}/flat/64.png\` }))`,
+  },
 };
 
 export const loop: ChartProps = {
@@ -453,4 +429,11 @@ export const topN: ChartProps = {
   dataUrl: '/data/population.csv',
   title: 'World Population',
   topN: 5,
+};
+
+export const valueDecimals: ChartProps = {
+  label: 'Value Decimals',
+  dataUrl: '/data/population.csv',
+  title: 'World Population',
+  valueDecimals: 3,
 };

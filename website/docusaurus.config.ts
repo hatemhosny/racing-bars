@@ -70,6 +70,11 @@ const config: Config = {
         },
       ],
     },
+    docs: {
+      sidebar: {
+        hideable: true,
+      },
+    },
     footer: {
       style: 'dark',
       links: [
@@ -136,18 +141,30 @@ const config: Config = {
       darkTheme: prismThemes.dracula,
       additionalLanguages: ['json'],
     },
+    algolia: {
+      appId: 'PGI61GHXJD',
+      apiKey: '6c4c87fe6ec8c139e4a941f00d4b5717',
+      indexName: 'racing-bars',
+      contextualSearch: true,
+      replaceSearchResultPathname: {
+        from: '/docs/',
+        to: '/',
+      },
+      searchParameters: {},
+      searchPagePath: 'search',
+    },
   } satisfies Preset.ThemeConfig,
   scripts: [
     {
-      src: 'https://unpkg.com/prettier@2.4.1/standalone.js',
+      src: '/js/prettier-2.4.1/standalone.js',
       async: true,
     },
     {
-      src: 'https://unpkg.com/prettier@2.4.1/parser-babel.js',
+      src: '/js/prettier-2.4.1/parser-babel.js',
       async: true,
     },
     {
-      src: 'https://unpkg.com/prettier@2.4.1/parser-html.js',
+      src: '/js/prettier-2.4.1/parser-html.js',
       async: true,
     },
   ],

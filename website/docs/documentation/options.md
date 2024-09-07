@@ -175,7 +175,7 @@ See the guide on [`chart controls`](../guides/chart-controls.md) for other alter
 
 ### dataShape
 
-Instruction whether the data shape is <a href="https://en.wikipedia.org/wiki/Wide_and_narrow_data" target="_blank">"long" or "wide"</a>. By default, the library tries to detect the data shape automatically from its structure (after any [transformation](#dataTransform), by finding the columns `date`, `name` and `value`). If the data shape is not detected correctly, it can be manually specified.  
+Instruction whether the data shape is <a href="https://en.wikipedia.org/wiki/Wide_and_narrow_data" target="_blank">"long" or "wide"</a>. By default, the library tries to detect the data shape automatically from its structure (after any [transformation](#datatransform), by finding the columns `date`, `name` and `value`). If the data shape is not detected correctly, it can be manually specified.  
 See ["Data" section](./data.md) for more details and examples.
 
 - Type: `"long" | "wide" | "auto"`
@@ -516,12 +516,13 @@ See the guide on [`chart controls`](../guides/chart-controls.md) for other alter
 ### labelsPosition
 
 Sets the position of bar labels. If set to `"inside"`, the labels are positioned inside the bars.
-Otherwise, the labels are positioned on the left side of the bars.
+If set to `"outside"`, the labels are positioned on the left side of the bars.
+If set to `"none"`, the labels are not displayed (this can be useful to show icons only - see [example in gallery](../gallery/labels-position.md)).
 
 Note that if this is set to `"inside"` (default),
 bars with small width (low values) may have their labels partially invisible ([demo](../gallery/fixed-scale)).
 
-- Type: `"inside" | "outside"`
+- Type: `"inside" | "outside" | "none"`
 - Default: `"inside"`
 - Example: [view in gallery](../gallery/labels-position.md)
 
@@ -840,6 +841,20 @@ Number of bars to show. This represents the number of data items with highest va
 ```js
 const options = {
   topN: 5,
+};
+```
+
+### valueDecimals
+
+Number of decimal places to display for values. By default (`"preserve"`), the values in the data are used as is.
+
+- Type: `number | "preserve"`
+- Default: `"preserve"`
+- Example: [view in gallery](../gallery/value-decimals.md)
+
+```js
+const options = {
+  valueDecimals: 0,
 };
 ```
 

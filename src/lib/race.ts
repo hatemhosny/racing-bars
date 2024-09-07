@@ -1,11 +1,16 @@
 import * as d3 from './d3';
 import { getDateString, prepareData, computeNextDateSubscriber, safeName } from './utils';
 import type { Data, WideData } from './data';
-import { createRenderer, rendererSubscriber, type Renderer } from './renderer';
+import {
+  createRenderer,
+  createResizeObserver,
+  rendererSubscriber,
+  type Renderer,
+} from './renderer';
 import { createTicker } from './ticker';
 import { styleInject } from './styles';
 import { actions, createStore, rootReducer, type Store } from './store';
-import type { Options } from './options';
+import { type Options, validateOptions } from './options';
 import { registerEvents, DOMEventSubscriber, getTickDetails, type EventType } from './events';
 import type { Race, ApiCallback } from './models';
 
@@ -34,9 +39,11 @@ export async function race(
     typeof container === 'string' ? document.querySelector<HTMLElement>(container) : container;
   if (!root) throw new Error('Container element is not found.');
 
+  const validOptions = validateOptions(options);
+
   const store = createStore(rootReducer);
   store.dispatch(actions.container.setContainer({ element: root }));
-  store.dispatch(actions.options.loadOptions(options));
+  store.dispatch(actions.options.loadOptions(validOptions));
   const ticker = createTicker(store);
   let preparedData = await prepareData(data, store);
   let renderer = createRenderer(preparedData, store, root);
@@ -58,7 +65,8 @@ export async function race(
   }
 
   const events = registerEvents(store, ticker);
-  window.addEventListener('resize', resize);
+  const resizeObserver = createResizeObserver(resize);
+  resizeObserver?.observe(root);
 
   function subscribeToStore(store: Store, renderer: Renderer, data: Data[]) {
     const subscriptions = [
@@ -66,8 +74,8 @@ export async function race(
       computeNextDateSubscriber(data, store),
       DOMEventSubscriber(store),
     ];
-    [...subscriptions, ...apiSubscriptions].forEach((subcsription) => {
-      store.subscribe(subcsription);
+    [...subscriptions, ...apiSubscriptions].forEach((subscription) => {
+      store.subscribe(subscription);
     });
   }
 
@@ -86,7 +94,6 @@ export async function race(
   }
 
   const API = {
-    // TODO: validate user input
     play() {
       if (!store.getState().ticker.isRunning) {
         ticker.start();
@@ -105,10 +112,12 @@ export async function race(
       ticker.skipForward();
     },
     inc(value = 1) {
-      store.dispatch(actions.ticker.inc(+value));
+      if (!isNaN(Number(value))) value = 1;
+      store.dispatch(actions.ticker.inc(Number(value)));
     },
     dec(value = 1) {
-      store.dispatch(actions.ticker.dec(+value));
+      if (!isNaN(Number(value))) value = 1;
+      store.dispatch(actions.ticker.dec(Number(value)));
     },
     setDate(inputDate: string | Date) {
       store.dispatch(actions.ticker.updateDate(getDateString(inputDate)));
@@ -126,13 +135,13 @@ export async function race(
       d3.select(root)
         .select('rect.' + safeName(name))
         .classed('selected', true);
-      store.dispatch(actions.data.addSelection(name));
+      store.dispatch(actions.data.addSelection(String(name)));
     },
     unselect(name: string) {
       d3.select(root)
         .select('rect.' + safeName(name))
         .classed('selected', false);
-      store.dispatch(actions.data.removeSelection(name));
+      store.dispatch(actions.data.removeSelection(String(name)));
     },
     unselectAll() {
       d3.select(root).selectAll('rect').classed('selected', false);
@@ -151,9 +160,11 @@ export async function race(
       store.dispatch(actions.data.resetFilters());
     },
     async changeOptions(newOptions: Partial<Options>) {
+      const newValidOptions = validateOptions(newOptions);
+
       const unAllowedOptions: Array<keyof Options> = ['dataShape', 'dataType'];
       unAllowedOptions.forEach((key) => {
-        if (newOptions[key] && newOptions[key] !== store.getState().options[key]) {
+        if (newValidOptions[key] && newValidOptions[key] !== store.getState().options[key]) {
           throw new Error(`The option "${key}" cannot be changed.`);
         }
       });
@@ -165,15 +176,16 @@ export async function race(
         'startDate',
         'endDate',
         'fixedOrder',
+        'makeCumulative',
       ];
       let dataOptionsChanged = false;
       dataOptions.forEach((key) => {
-        if (newOptions[key] && newOptions[key] !== store.getState().options[key]) {
+        if (newValidOptions[key] && newValidOptions[key] !== store.getState().options[key]) {
           dataOptionsChanged = true;
         }
       });
 
-      store.dispatch(actions.options.changeOptions(newOptions));
+      store.dispatch(actions.options.changeOptions(newValidOptions));
       const { injectStyles, theme, autorun } = store.getState().options;
 
       if (dataOptionsChanged) {
@@ -184,7 +196,7 @@ export async function race(
         subscribeToStore(store, renderer, preparedData);
       }
 
-      if ('injectStyles' in newOptions || 'theme' in newOptions) {
+      if ('injectStyles' in newValidOptions || 'theme' in newValidOptions) {
         document.getElementById(stylesId)?.remove();
         if (injectStyles) {
           stylesId = styleInject(root, theme);
@@ -202,12 +214,15 @@ export async function race(
       }
     },
     onDate(date: string | Date, fn: ApiCallback) {
+      if (typeof fn !== 'function') {
+        throw new Error('The second argument must be a function');
+      }
       const dateString = getDateString(date);
       let lastDate = '';
       const watcher = addApiSubscription(() => {
         if (store.getState().ticker.currentDate === dateString && dateString !== lastDate) {
           lastDate = store.getState().ticker.currentDate; // avoid infinite loop if fn dispatches action
-          fn.call(API, getTickDetails(store));
+          fn(getTickDetails(store));
         }
         lastDate = store.getState().ticker.currentDate;
       });
@@ -218,8 +233,11 @@ export async function race(
       };
     },
     on(event: EventType, fn: ApiCallback) {
+      if (typeof fn !== 'function') {
+        throw new Error('The second argument must be a function');
+      }
       const watcher = events.addApiEventHandler(event, () => {
-        fn.call(API, getTickDetails(store));
+        fn(getTickDetails(store));
       });
       return {
         remove() {
@@ -231,7 +249,7 @@ export async function race(
       ticker.stop();
       store.unsubscribeAll();
       events.unregister();
-      window.removeEventListener('resize', resize);
+      resizeObserver?.unobserve(root);
       root.innerHTML = '';
       document.getElementById(stylesId)?.remove();
       for (const method of Object.keys(this)) {

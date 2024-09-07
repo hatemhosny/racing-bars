@@ -25,6 +25,7 @@ const props = {
   dataTransform: [Function, Object], // Object for null
   fillDateGapsInterval: [String, Object], // Object for null
   fillDateGapsValue: String,
+  valueDecimals: Number,
   makeCumulative: String, // Boolean
   title: String,
   subTitle: String,

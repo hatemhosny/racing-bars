@@ -1,0 +1,26 @@
+{
+  "title": "JavaScript (ESM)",
+  "activeEditor": "script",
+  "markup": {
+    "language": "html",
+    "content": "<div id=\"race\">Loading...</div>"
+  },
+  "style": {
+    "language": "css",
+    "content": "#race {\n  height: 80vh;\n}\n"
+  },
+  "script": {
+    "language": "javascript",
+    "content": "import { race } from \"racing-bars\";\n\n/** @type {import('racing-bars').Options} */\nconst options = {\n  dataTransform: (data) =>\n    data.map((d) => ({\n      ...d,\n      icon: `https://flagsapi.com/${d.code}/flat/64.png`,\n    })),\n  title: \"World Population\",\n  subTitle: \"Country Population in millions\",\n  caption: \"Source: World Bank\",\n  dateCounter: \"YYYY\",\n  showIcons: true,\n  labelsPosition: \"outside\",\n};\n\nrace(\"{{LC::TO_URL(./data/population.csv)}}\", \"#race\", options);\n"
+  },
+  "customSettings": {
+    "imports": {
+      "racing-bars": "{{LC::TO_URL(./lib/racing-bars.js)}}",
+      "racing-bars/react": "{{LC::TO_URL(./lib/react.js)}}",
+      "racing-bars/vue": "{{LC::TO_URL(./lib/vue.js)}}"
+    },
+    "types": {
+      "racing-bars": "{{LC::TO_URL(./lib/racing-bars.d.ts)}}"
+    }
+  }
+}

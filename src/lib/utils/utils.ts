@@ -61,6 +61,8 @@ function toNumber(s: string | number) {
   return +nums;
 }
 
+export const countDecimals = (n: number) => String(n).split('.')[1]?.length || 0;
+
 export function random(InputSeed: string | number) {
   const seed = toNumber(InputSeed);
   const x = Math.sin(seed) * 10000;
@@ -170,7 +172,7 @@ export function getText(
 
 export function safeName(name: string) {
   // replace non-alphanumeric with underscore
-  return name.replace(/[\W]+/g, '_');
+  return String(name).replace(/[\W]+/g, '_');
 }
 
 export function toggleClass(root: HTMLElement, selector: string, className: string) {

@@ -7,17 +7,14 @@ import Layout from '@theme/Layout';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import ExecutionEnvironment from '@docusaurus/ExecutionEnvironment';
-import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import type { Options } from '../../../src';
 import { getFrameworkCode } from '../helpers/get-framework-code';
+import { getBaseUrl } from '../helpers/base-url';
 import { getCode } from '../components/OpenInPlayground';
 import * as demos from '../../docs/gallery/_gallery-demos';
 
 export default function Playground() {
-  const baseUrl = ExecutionEnvironment.canUseDOM
-    ? location.origin
-    : useDocusaurusContext().siteConfig.url;
-
+  const baseUrl = getBaseUrl();
   const defaultOptions = demos.datasetPopulation;
 
   const config: Partial<Config> = {

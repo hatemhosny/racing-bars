@@ -1,0 +1,22 @@
+{
+  "title": "React",
+  "activeEditor": "script",
+  "style": {
+    "language": "css",
+    "content": ".race {\n  height: 80vh;\n}\n"
+  },
+  "script": {
+    "language": "jsx",
+    "content": "import RacingBars from \"racing-bars/react\";\n\nexport default function App() {\n  /** @type {import('racing-bars').Options} */\n  const options = {\n    dataUrl: \"{{LC::TO_URL(./data/population.csv)}}\",\n    dataTransform: (data) =>\n      data.map((d) => ({\n        ...d,\n        icon: `https://flagsapi.com/${d.code}/flat/64.png`,\n      })),\n    title: \"World Population\",\n    subTitle: \"Country Population in millions\",\n    caption: \"Source: World Bank\",\n    dateCounter: \"YYYY\",\n    showIcons: true,\n    labelsPosition: \"outside\",\n  };\n\n  return <RacingBars className=\"race\" {...options}>Loading...</RacingBars>;\n}\n"
+  },
+  "customSettings": {
+    "imports": {
+      "racing-bars": "{{LC::TO_URL(./lib/racing-bars.js)}}",
+      "racing-bars/react": "{{LC::TO_URL(./lib/react.js)}}",
+      "racing-bars/vue": "{{LC::TO_URL(./lib/vue.js)}}"
+    },
+    "types": {
+      "racing-bars": "{{LC::TO_URL(./lib/racing-bars.d.ts)}}"
+    }
+  }
+}

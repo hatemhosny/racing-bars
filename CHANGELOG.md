@@ -4,6 +4,38 @@ All notable changes to this project will be documented in this file. See [standa
 
 ---
 
+## [v0.3.0](https://github.com/hatemhosny/racing-bars/compare/v0.2.0...v0.3.0) (2024-09-07)
+
+### Highlights for this release
+
+- The charts are now responsive and works much better on smaller screens. Dynamically resizing the container element will also resize the chart.
+- Added the option `valueDecimals` to control decimal spaces.
+- The `labelsPosition` option can now be set to `"none"` to hide the labels (e.g. for icons only).
+
+In addition to some bug fixes.
+
+The website homepage now has a GUI editor for chart options. Also added search capability in the website.
+
+Thank you @AhmedElbohoty for the valuable contribution.
+
+### Bug Fixes
+
+- **api:** re-prepare data when `makeCumulative` option is changed by `changeOptions` API method ([80584ca](https://github.com/hatemhosny/racing-bars/commit/80584ca3622499a4b5c6e2b7f6b070ac31bfa758))
+- **data:** fix passing data to worker ([94aadd5](https://github.com/hatemhosny/racing-bars/commit/94aadd5a0bd3ebc7ec917dd3eacb43c7f8c132b5))
+- **renderer:** avoid icons overflow outside bars ([b75dedb](https://github.com/hatemhosny/racing-bars/commit/b75dedb51cde6778431a97d85c4000a104c993e8))
+
+### Features
+
+- **options:** add labelPositions `"none"` ([4127c7a](https://github.com/hatemhosny/racing-bars/commit/4127c7a5dd49c5add1b1bf323815d0ccef965ec3))
+- **options:** add the option `valueDecimals` ([330202a](https://github.com/hatemhosny/racing-bars/commit/330202aa7b432e2ff6b509128c0da53226b3d064))
+- **options:** validate options ([0dccf85](https://github.com/hatemhosny/racing-bars/commit/0dccf850d4af29eda795a37490606dc11f80cf9c))
+- **renderer:** resize chart on resizing root element ([daec0cd](https://github.com/hatemhosny/racing-bars/commit/daec0cdebf95d15736edc52a4101fdd14c231f47))
+- **styles:** make the chart text & controls responsive ([eb2a353](https://github.com/hatemhosny/racing-bars/commit/eb2a35341dcda6fbfe3563d7c7cfc1d5f5253430))
+- **website:** add options editor GUI ([a023795](https://github.com/hatemhosny/racing-bars/commit/a023795a1f78bbb7ae3562a736641f09d50245b6))
+- **website:** add search ([00015fc](https://github.com/hatemhosny/racing-bars/commit/00015fce403e40099c8288a4d6fd4e6fffe32d71))
+
+---
+
 ## [v0.2.0](https://github.com/hatemhosny/racing-bars/compare/v0.1.2...v0.2.0) (2024-09-01)
 
 ### Bug Fixes
