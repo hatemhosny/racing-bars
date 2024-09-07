@@ -329,7 +329,7 @@ export const labelsPosition: ChartProps = {
 };
 
 export const labelsPositionNone: ChartProps = {
-  label: 'Labels Position',
+  label: 'Hidden Labels',
   dataUrl: '/data/population.csv',
   dataTransform: (data) =>
     data.map((d) => ({

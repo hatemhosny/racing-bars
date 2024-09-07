@@ -206,3 +206,28 @@ test('Tests to validate valueDecimals option', () => {
   const invalidOpts = validateOptions(options);
   expect(invalidOpts.valueDecimals).toBeUndefined();
 });
+
+test('Tests to validate colorMap option', () => {
+  // Valid options
+  const options: any = { colorMap: ['blue', 'red'] };
+  const validatedOpts = validateOptions(options);
+  expect(validatedOpts.colorMap).toStrictEqual(['blue', 'red']);
+
+  // Valid options
+  const options2: any = {
+    colorMap: {
+      India: 'orange',
+      'United States': 'blue',
+    },
+  };
+  const validatedOpts2 = validateOptions(options2);
+  expect(validatedOpts2.colorMap).toStrictEqual({
+    India: 'orange',
+    'United States': 'blue',
+  });
+
+  // Invalid options
+  options.colorMap = 'invalid';
+  const invalidOpts = validateOptions(options);
+  expect(invalidOpts.colorMap).toBeUndefined();
+});

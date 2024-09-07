@@ -134,7 +134,9 @@ export function validateOptions(options: Partial<Options>): Partial<Options> {
     newOptions.dataTransform = options.dataTransform;
   }
 
-  validateColorMap(options.colorMap);
+  if (validateColorMap(options.colorMap)) {
+    newOptions.colorMap = options.colorMap;
+  }
 
   return newOptions;
 }
