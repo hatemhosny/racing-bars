@@ -2,6 +2,7 @@ import type { Props } from '../../../src';
 
 export const getFrameworkCode = (options: any) => {
   const dataUrl = options.dataUrl || '';
+
   const dynamicProps = Object.keys(options)
     .filter((key) => typeof options[key] === 'function')
     .reduce((acc, key) => ({ ...acc, [key]: options[key].toString() }), {});
