@@ -1,7 +1,6 @@
 import type { Props } from '../../../src';
 type ChartProps = Props & {
   label: string;
-  dynamicProps?: Partial<Record<keyof Props, string>>;
 };
 
 export const autorunFalse: ChartProps = {
@@ -13,12 +12,8 @@ export const autorunFalse: ChartProps = {
 export const captionDataFunction: ChartProps = {
   label: 'Caption (data function)',
   dataUrl: '/data/population.csv',
-  caption: (_currentDate, dateSlice, _allDates) =>
+  caption: (currentDate, dateSlice, allDates) =>
     `Total: ${Math.round(dateSlice.reduce((acc, curr) => acc + curr.value, 0))}`,
-  dynamicProps: {
-    caption: `(currentDate, dateSlice, allDates) =>
-\`Total: \${Math.round(dateSlice.reduce((acc, curr) => acc + curr.value, 0))}\``,
-  },
 };
 
 export const captionString: ChartProps = {
@@ -73,7 +68,6 @@ export const colorSeedRandom: ChartProps = {
   dataUrl: '/data/population.csv',
   title: 'World Population',
   colorSeed: Math.round(Math.random() * 100),
-  dynamicProps: { colorSeed: 'Math.round(Math.random() * 100)' },
 };
 
 export const colorSeed: ChartProps = {
@@ -146,9 +140,6 @@ export const datasetGdp: ChartProps = {
   dateCounter: 'YYYY',
   showIcons: true,
   labelsPosition: 'outside',
-  dynamicProps: {
-    dataTransform: `(data) => data.map((d) => ({ ...d, icon: \`https://flagsapi.com/\${d.code}/flat/64.png\` }))`,
-  },
 };
 
 export const datasetGhPush: ChartProps = {
@@ -156,21 +147,12 @@ export const datasetGhPush: ChartProps = {
   dataUrl: '/data/gh-push.csv',
   title: 'Top Programming Languages',
   subTitle: 'Github Push Events',
-  dateCounter: (currentDate, _dateSlice, _allDates) => {
+  dateCounter: (currentDate, dateSlice, allDates) => {
     const month = Number(currentDate.slice(5, 7));
     const year = Number(currentDate.slice(0, 4));
     const q = Math.floor(month / 3) + 1;
     const quarter = q > 4 ? q - 4 : q;
     return `Q${quarter} ${year}`;
-  },
-  dynamicProps: {
-    dateCounter: `(currentDate, dateSlice, allDates) => {
-  const month = Number(currentDate.slice(5, 7));
-  const year = Number(currentDate.slice(0, 4));
-  const q = Math.floor(month / 3) + 1;
-  const quarter = q > 4 ? q - 4 : q;
-  return \`Q\${quarter} \${year}\`;
-}`,
   },
 };
 
@@ -180,21 +162,12 @@ export const datasetGhStars: ChartProps = {
   title: 'Top Programming Languages',
   subTitle: 'Github Stars',
   makeCumulative: true,
-  dateCounter: (currentDate, _dateSlice, _allDates) => {
+  dateCounter: (currentDate, dateSlice, allDates) => {
     const month = Number(currentDate.slice(5, 7));
     const year = Number(currentDate.slice(0, 4));
     const q = Math.floor(month / 3) + 1;
     const quarter = q > 4 ? q - 4 : q;
     return `Q${quarter} ${year}`;
-  },
-  dynamicProps: {
-    dateCounter: `(currentDate, dateSlice, allDates) => {
-  const month = Number(currentDate.slice(5, 7));
-  const year = Number(currentDate.slice(0, 4));
-  const q = Math.floor(month / 3) + 1;
-  const quarter = q > 4 ? q - 4 : q;
-  return \`Q\${quarter} \${year}\`;
-}`,
   },
 };
 
@@ -212,9 +185,6 @@ export const datasetPopulation: ChartProps = {
   dateCounter: 'YYYY',
   showIcons: true,
   labelsPosition: 'outside',
-  dynamicProps: {
-    dataTransform: `(data) => data.map((d) => ({ ...d, icon: \`https://flagsapi.com/\${d.code}/flat/64.png\` }))`,
-  },
 };
 
 export const dataTransform: ChartProps = {
@@ -228,9 +198,6 @@ export const dataTransform: ChartProps = {
   title: 'World Population',
   showIcons: true,
   labelsPosition: 'outside',
-  dynamicProps: {
-    dataTransform: `(data) => data.map((d) => ({ ...d, icon: \`https://flagsapi.com/\${d.code}/flat/64.png\` }))`,
-  },
 };
 
 export const dateCounterFormat: ChartProps = {
@@ -242,12 +209,8 @@ export const dateCounterFormat: ChartProps = {
 export const dateCounterDataFunction: ChartProps = {
   label: 'Date Counter (data function)',
   dataUrl: '/data/population.csv',
-  dateCounter: (currentDate, _dateSlice, allDates) =>
+  dateCounter: (currentDate, dateSlice, allDates) =>
     `${allDates.indexOf(currentDate) + 1} of ${allDates.length}`,
-  dynamicProps: {
-    dateCounter: `(currentDate, dateSlice, allDates) =>
-    \`\${allDates.indexOf(currentDate) + 1} of \${allDates.length}\``,
-  },
 };
 
 export const fillDateGapsNull: ChartProps = {
@@ -309,9 +272,6 @@ export const icons: ChartProps = {
   caption: 'Source: World Bank',
   showIcons: true,
   labelsPosition: 'outside',
-  dynamicProps: {
-    dataTransform: `(data) => data.map((d) => ({ ...d, icon: \`https://flagsapi.com/\${d.code}/flat/64.png\` }))`,
-  },
 };
 
 export const keyboardControls: ChartProps = {
@@ -339,9 +299,6 @@ export const labelsPositionNone: ChartProps = {
   title: 'World Population',
   labelsPosition: 'none',
   showIcons: true,
-  dynamicProps: {
-    dataTransform: `(data) => data.map((d) => ({ ...d, icon: \`https://flagsapi.com/\${d.code}/flat/64.png\` }))`,
-  },
 };
 
 export const loop: ChartProps = {

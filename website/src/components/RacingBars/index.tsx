@@ -14,15 +14,11 @@ export default function RacingBars(
     style?: Record<string, string>;
     className?: string;
     showCode?: 'open' | 'closed' | false;
-    dynamicProps?: Record<keyof Props, string>;
     label?: string;
   },
 ): JSX.Element {
-  const { label, className, style, showCode, dynamicProps, callback, ...options } = props;
-  const { jsCode, tsCode, reactCode, vueCode, svelteCode } = getFrameworkCode(
-    options,
-    dynamicProps,
-  );
+  const { label, className, style, showCode, callback, ...options } = props;
+  const { jsCode, tsCode, reactCode, vueCode, svelteCode } = getFrameworkCode(options);
   const { colorMode } = useColorMode();
 
   const RacingBarsReact: React.ComponentType<Props & { children?: React.ReactNode }> = lazy(
