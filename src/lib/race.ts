@@ -14,6 +14,44 @@ import { type Options, validateOptions } from './options';
 import { registerEvents, DOMEventSubscriber, getTickDetails, type EventType } from './events';
 import type { Race, ApiCallback } from './models';
 
+/**
+ * The main function that generates the racing bar chart.
+ *
+ * @param {Data[] | WideData[] | Promise<Data[]> | Promise<WideData[]> | string} data
+ * The data for the race visualization can be one of:
+ * ```text
+ * 1- Array of `Data` objects.
+ * 2- Array of `WideData` objects.
+ * 3- Promise that resolves to an array of `Data` objects.
+ * 4- Promise that resolves to an array of `WideData` objects.
+ * 5- String representing the file path to load the data from.
+ * ```
+ * @see {@link https://racing-bars.hatemhosny.dev/documentation/data/} for more information.
+ *
+ * @param {string | HTMLElement} [container] Optional. The container element or selector.
+ * If not provided, a new `<div>` element will be created and appended to the document body.
+ *
+ * @param {Partial<Options>} [options={}] Optional. Configuration object for chart options. Defaults to an empty object.
+ * @see {@link https://racing-bars.hatemhosny.dev/api/internal/interfaces/Options/} for detailed options.
+ *
+ * @returns {Promise<Race>} The function returns a promise that resolves to an object that allows interaction with the chart.
+ *
+ * @example
+ * const data: Data[] | WideData[] | Promise<Data[]> | Promise<WideData[]> | string = [ ...fill with data... ];
+ *
+ * const container = document.getElementById('race-container');
+ *
+ * const options: Partial<Options>  = {
+ *   width: 800,
+ *   height: 400,
+ * };
+ *
+ * const raceAPI = await race(data, container, options);
+ *
+ * raceAPI.play();
+ *
+ * @see {@link https://racing-bars.hatemhosny.dev/documentation/api#race} for more details.
+ */
 export async function race(
   data: Data[] | WideData[] | Promise<Data[]> | Promise<WideData[]> | string,
   container?: string | HTMLElement,
