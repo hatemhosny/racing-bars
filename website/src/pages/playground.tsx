@@ -139,11 +139,8 @@ export default function Playground() {
     const playgroundSDK = playground || sdk;
     if (!playgroundSDK) return;
     const langName = lang === 'jsx' ? 'react' : lang;
-    const { label: _, dynamicProps, ...demoOptions } = demo;
-    const content = prepareCode(
-      getFrameworkCode(demoOptions, dynamicProps)[`${langName}Code`] || '',
-      lang,
-    );
+    const { label: _, ...demoOptions } = demo;
+    const content = prepareCode(getFrameworkCode(demoOptions)[`${langName}Code`] || '', lang);
     playgroundSDK.setConfig(getConfig(lang, content));
     if (updateUrl) {
       setLangQueryString('');
@@ -157,20 +154,15 @@ export default function Playground() {
     if (!demo) return;
     setDemo(demo);
     const langName = language === 'jsx' ? 'react' : language;
-    const { label: _, dynamicProps, ...demoOptions } = demo;
-    const content = prepareCode(
-      getFrameworkCode(demoOptions, dynamicProps)[`${langName}Code`] || '',
-      language,
-    );
+    const { label: _, ...demoOptions } = demo;
+    const content = prepareCode(getFrameworkCode(demoOptions)[`${langName}Code`] || '', language);
     playground.setConfig(getConfig(language, content));
     updateQueryString(language, id);
   };
 
   const [playground, setPlayground] = useState<LiveCodesPlayground | null>(null);
   const [language, setLanguage] = useState<(typeof allowedLanguages)[number]>(selectLanguage());
-  const [demo, setDemo] = useState<
-    Options & { label: string; dynamicProps: Partial<Record<keyof Options, string>> }
-  >(demoInUrl ?? defaultOptions);
+  const [demo, setDemo] = useState<Options & { label: string }>(demoInUrl ?? defaultOptions);
   const [langQueryString, setLangQueryString] = useState('lang');
 
   return (

@@ -30,9 +30,5 @@ icon: `https://flagsapi.com/${d.code}/flat/64.png`,
     caption="Source: World Bank"
     showIcons={true}
     labelsPosition="outside"
-    dynamicProps={{dataTransform: `(data) => data.map((d) => ({
-      ...d,
-      icon: \`https://flagsapi.com/\${d.code}/flat/64.png\`,
-    }))`}}
   />
 </div>
