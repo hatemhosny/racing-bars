@@ -83,6 +83,7 @@ const options = {
 race("/data.json", "#race", options);
 ```
 
+[Open in LiveCodes](https://livecodes.io/?x=id/k9djehhdtzq)
 
 ### Option 2: Load from CDN
 
@@ -102,11 +103,13 @@ race("/data.json", "#race", options);
 </script>
 ```
 
+[Open in LiveCodes](https://livecodes.io/?x=id/ztr5k5yayjh)
+
 #### UMD
 
 ```html
 <div id="race" style="height: 80vh"></div>
-<script src="https://https://cdn.jsdelivr.net/npm/racing-bars/racing-bars.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/racing-bars/racing-bars.umd.js"></script>
 <script>
   const options = {
     title: 'My Racing Bars',
@@ -117,6 +120,8 @@ race("/data.json", "#race", options);
   racingBars.race("/data.json", "#race", options);
 </script>
 ```
+
+[Open in LiveCodes](https://livecodes.io/?x=id/zen24gm8irn)
 
 <!-- prettier-ignore-end -->
 
