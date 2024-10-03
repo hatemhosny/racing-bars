@@ -27,9 +27,11 @@ export function getColor(d: Data, store: Store) {
         index = index - colorMap.length;
       }
       return colorMap[index];
-    } else {
-      if (colorMap[currentValue]) {
-        return colorMap[currentValue];
+    } else if (typeof colorMap === 'object' && colorMap !== null) {
+      // Check if colorMap is an object
+      if (currentValue in colorMap) {
+        // Check if currentValue is a valid key
+        return colorMap[currentValue]; // Safely access the property
       }
     }
   }
