@@ -50,12 +50,6 @@ const validFillDateGapsIntervals: Array<Options['fillDateGapsInterval']> = [
 ];
 const validFillDateGapsValues: Array<Options['fillDateGapsValue']> = ['last', 'interpolate'];
 
-const paletteSet: Set<Palette> = new Set([
-  'deep', 'deep6', 'muted', 'muted6',
-  'pastel', 'pastel6', 'bright', 'bright6',
-  'dark', 'dark6', 'colorblind', 'colorblind6'
-]);
-
 export function validateOptions(options: Partial<Options>): Partial<Options> {
   const newOptions: Partial<Options> = {};
 
@@ -162,9 +156,9 @@ function validateColorMap(value: string[] | { [key: string]: string } | Palette 
   if (typeof value === 'undefined' || value === null) return false;
 
   // Check if value is one of the defined Palettes
-  if (typeof value === 'string' && paletteSet.has(value as Palette)) {
+  if (typeof value === 'string' && isPalette(value)) {
     return true;
-  }
+}
 
   // Check if color map is array of string
   if (is(value, 'array', 'string')) return true;
@@ -201,4 +195,13 @@ function is(value: any, type: types, arrayType?: types): boolean {
 
 function includes(arr: any[], x: any) {
   return x != null && arr.includes(x);
+}
+
+// Type guard for checking if the value is a Palette
+function isPalette(value: string): value is Palette {
+  return (
+      value === 'deep' || value === 'deep6' || value === 'muted' || value === 'muted6' ||
+      value === 'pastel' || value === 'pastel6' || value === 'bright' || value === 'bright6' ||
+      value === 'dark' || value === 'dark6' || value === 'colorblind' || value === 'colorblind6'
+  );
 }
