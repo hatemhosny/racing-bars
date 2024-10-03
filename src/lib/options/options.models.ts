@@ -1,5 +1,6 @@
 import type { Action } from '../store';
 import type { Data, WideData } from '../data';
+import { Palette } from './palette';
 
 export interface OptionsAction extends Action {
   payload: Partial<Options>;
@@ -53,7 +54,7 @@ export interface Options {
   dateCounter: string | ((currentDate: string, dateSlice: Data[], allDates: string[]) => string);
   caption: string | ((currentDate: string, dateSlice: Data[], allDates: string[]) => string);
 
-  colorMap: { [key: string]: string } | string[];
+  colorMap: { [key: string]: string } | string[] | Palette;
   fixedOrder: string[];
 }
 

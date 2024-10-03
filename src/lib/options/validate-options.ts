@@ -1,4 +1,5 @@
 import type { Options } from './index';
+import { Palette } from './palette';
 
 const boolOpts = [
   'makeCumulative',
@@ -48,6 +49,12 @@ const validFillDateGapsIntervals: Array<Options['fillDateGapsInterval']> = [
   'day',
 ];
 const validFillDateGapsValues: Array<Options['fillDateGapsValue']> = ['last', 'interpolate'];
+
+const paletteSet: Set<Palette> = new Set([
+  'deep', 'deep6', 'muted', 'muted6',
+  'pastel', 'pastel6', 'bright', 'bright6',
+  'dark', 'dark6', 'colorblind', 'colorblind6'
+]);
 
 export function validateOptions(options: Partial<Options>): Partial<Options> {
   const newOptions: Partial<Options> = {};
@@ -151,9 +158,13 @@ function validateDataTransform(value: Options['dataTransform'] | undefined): boo
   return false;
 }
 
-function validateColorMap(value: string[] | { [key: string]: string } | undefined): boolean {
-  if (typeof value === 'undefined') return false;
-  if (value === null) return false;
+function validateColorMap(value: string[] | { [key: string]: string } | Palette | undefined): boolean {
+  if (typeof value === 'undefined' || value === null) return false;
+
+  // Check if value is one of the defined Palettes
+  if (typeof value === 'string' && paletteSet.has(value as Palette)) {
+    return true;
+  }
 
   // Check if color map is array of string
   if (is(value, 'array', 'string')) return true;
