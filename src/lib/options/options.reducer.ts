@@ -2,6 +2,7 @@ import { getDateString } from '../utils';
 import type { Reducer } from '../store';
 import type { Options, OptionsAction } from './options.models';
 import { actionTypes } from './options.actions';
+import { palettes } from './palette';
 
 export const defaultOptions: Options = {
   dataShape: 'auto',
@@ -77,7 +78,9 @@ export const optionsReducer: Reducer<Options, OptionsAction> = (state = defaultO
         ? [...options.colorMap].map(String)
         : typeof options.colorMap === 'object'
           ? { ...options.colorMap }
-          : state.colorMap;
+          : options.colorMap && options.colorMap in palettes
+            ? palettes[options.colorMap]
+            : state.colorMap;
 
       const topN = fixedOrder.length || Number(options.topN) || state.topN;
 

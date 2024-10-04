@@ -1,5 +1,4 @@
 import { hsl, select } from '../d3';
-
 import type { Data } from '../data';
 import type { ParamFunction } from '../options';
 import type { Store } from '../store';
@@ -28,10 +27,8 @@ export function getColor(d: Data, store: Store) {
       }
       return colorMap[index];
     } else if (typeof colorMap === 'object' && colorMap !== null) {
-      // Check if colorMap is an object
       if (currentValue in colorMap) {
-        // Check if currentValue is a valid key
-        return colorMap[currentValue]; // Safely access the property
+        return colorMap[currentValue]; 
       }
     }
   }

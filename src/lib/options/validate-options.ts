@@ -1,5 +1,5 @@
 import type { Options } from './index';
-import { Palette } from './palette';
+import { palettes, type Palette } from './palette';
 
 const boolOpts = [
   'makeCumulative',
@@ -153,12 +153,11 @@ function validateDataTransform(value: Options['dataTransform'] | undefined): boo
 }
 
 function validateColorMap(value: string[] | { [key: string]: string } | Palette | undefined): boolean {
-  if (typeof value === 'undefined' || value === null) return false;
+  if (value === null || value === undefined) return false;
 
   // Check if value is one of the defined Palettes
-  if (typeof value === 'string' && isPalette(value)) {
-    return true;
-}
+  if (typeof value === 'string') 
+    return Object.keys(palettes).includes(value);
 
   // Check if color map is array of string
   if (is(value, 'array', 'string')) return true;
@@ -168,6 +167,7 @@ function validateColorMap(value: string[] | { [key: string]: string } | Palette 
 }
 
 type types = 'array' | 'boolean' | 'object' | 'number' | 'string' | 'undefined' | 'function';
+
 function is(value: any, type: types, arrayType?: types): boolean {
   if (typeof value === 'undefined') return false;
 
@@ -195,13 +195,4 @@ function is(value: any, type: types, arrayType?: types): boolean {
 
 function includes(arr: any[], x: any) {
   return x != null && arr.includes(x);
-}
-
-// Type guard for checking if the value is a Palette
-function isPalette(value: string): value is Palette {
-  return (
-      value === 'deep' || value === 'deep6' || value === 'muted' || value === 'muted6' ||
-      value === 'pastel' || value === 'pastel6' || value === 'bright' || value === 'bright6' ||
-      value === 'dark' || value === 'dark6' || value === 'colorblind' || value === 'colorblind6'
-  );
 }
