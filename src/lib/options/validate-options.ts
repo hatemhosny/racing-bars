@@ -152,12 +152,13 @@ function validateDataTransform(value: Options['dataTransform'] | undefined): boo
   return false;
 }
 
-function validateColorMap(value: string[] | { [key: string]: string } | Palette | undefined): boolean {
+function validateColorMap(
+  value: string[] | { [key: string]: string } | Palette | undefined,
+): boolean {
   if (value === null || value === undefined) return false;
 
   // Check if value is one of the defined Palettes
-  if (typeof value === 'string') 
-    return Object.keys(palettes).includes(value);
+  if (typeof value === 'string') return Object.keys(palettes).includes(value);
 
   // Check if color map is array of string
   if (is(value, 'array', 'string')) return true;

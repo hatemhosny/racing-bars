@@ -28,7 +28,7 @@ export function getColor(d: Data, store: Store) {
       return colorMap[index];
     } else if (typeof colorMap === 'object' && colorMap !== null) {
       if (currentValue in colorMap) {
-        return colorMap[currentValue]; 
+        return colorMap[currentValue];
       }
     }
   }
