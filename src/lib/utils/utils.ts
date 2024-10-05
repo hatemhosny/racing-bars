@@ -1,5 +1,4 @@
 import { hsl, select } from '../d3';
-
 import type { Data } from '../data';
 import type { ParamFunction } from '../options';
 import type { Store } from '../store';
@@ -27,8 +26,8 @@ export function getColor(d: Data, store: Store) {
         index = index - colorMap.length;
       }
       return colorMap[index];
-    } else {
-      if (colorMap[currentValue]) {
+    } else if (typeof colorMap === 'object' && colorMap !== null) {
+      if (currentValue in colorMap) {
         return colorMap[currentValue];
       }
     }

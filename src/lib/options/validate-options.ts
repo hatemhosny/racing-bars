@@ -1,3 +1,4 @@
+import { palettes, type Palette } from './palette';
 import type { Options } from './index';
 
 const boolOpts = [
@@ -151,9 +152,13 @@ function validateDataTransform(value: Options['dataTransform'] | undefined): boo
   return false;
 }
 
-function validateColorMap(value: string[] | { [key: string]: string } | undefined): boolean {
-  if (typeof value === 'undefined') return false;
-  if (value === null) return false;
+function validateColorMap(
+  value: string[] | { [key: string]: string } | Palette | undefined,
+): boolean {
+  if (value === null || value === undefined) return false;
+
+  // Check if value is one of the defined Palettes
+  if (typeof value === 'string') return Object.keys(palettes).includes(value);
 
   // Check if color map is array of string
   if (is(value, 'array', 'string')) return true;
@@ -163,6 +168,7 @@ function validateColorMap(value: string[] | { [key: string]: string } | undefine
 }
 
 type types = 'array' | 'boolean' | 'object' | 'number' | 'string' | 'undefined' | 'function';
+
 function is(value: any, type: types, arrayType?: types): boolean {
   if (typeof value === 'undefined') return false;
 
