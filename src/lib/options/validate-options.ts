@@ -1,5 +1,5 @@
-import type { Options } from './index';
 import { palettes, type Palette } from './palette';
+import type { Options } from './index';
 
 const boolOpts = [
   'makeCumulative',

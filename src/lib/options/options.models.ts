@@ -1,6 +1,6 @@
 import type { Action } from '../store';
 import type { Data, WideData } from '../data';
-import { Palette } from './palette';
+import type { Palette } from './palette';
 
 export interface OptionsAction extends Action {
   payload: Partial<Options>;
