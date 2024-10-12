@@ -88,9 +88,9 @@ export function renderInitialView(data: Data[], store: Store, renderOptions: Ren
       .attr('y', barY)
       .attr('height', barHeight)
       .style('fill', (d: Data) => getColor(d, store))
-      .on('click', (_ev: Event, d: Data) => selectFn(d, store, renderOptions))
-      .on('mouseover', (_ev: Event, d: Data) => highlightFn(d, store, renderOptions))
-      .on('mouseout', (_ev: Event, d: Data) => highlightFn(d, store, renderOptions));
+      .on('click', (_ev: Event, d: Data) => selectFn(d.name, store, renderOptions))
+      .on('mouseover', (_ev: Event, d: Data) => highlightFn(d.name, store, renderOptions))
+      .on('mouseout', (_ev: Event, d: Data) => highlightFn(d.name, store, renderOptions));
 
     svg
       .selectAll('text.label')
@@ -104,9 +104,9 @@ export function renderInitialView(data: Data[], store: Store, renderOptions: Ren
       .attr('y', (d: Data) => barY(d) + barHalfHeight)
       .style('text-anchor', 'end')
       .html((d: Data) => d.name)
-      .on('click', (_ev: Event, d: Data) => selectFn(d, store, renderOptions))
-      .on('mouseover', (_ev: Event, d: Data) => highlightFn(d, store, renderOptions))
-      .on('mouseout', (_ev: Event, d: Data) => highlightFn(d, store, renderOptions));
+      .on('click', (_ev: Event, d: Data) => selectFn(d.name, store, renderOptions))
+      .on('mouseover', (_ev: Event, d: Data) => highlightFn(d.name, store, renderOptions))
+      .on('mouseout', (_ev: Event, d: Data) => highlightFn(d.name, store, renderOptions));
 
     svg
       .selectAll('text.valueLabel')

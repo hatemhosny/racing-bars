@@ -131,75 +131,182 @@ export async function race(
     throw new Error('Cannot perform this operation after calling destroy()');
   }
 
+  /**
+   * API for controlling the ticker.
+   */
   const API = {
+    /**
+     * Starts the ticker if it is not already running.
+     */
     play() {
-      if (!store.getState().ticker.isRunning) {
-        ticker.start();
-      }
+      if (store.getState().ticker.isRunning) return;
+      ticker.start();
     },
+
+    /**
+     * Pauses the ticker.
+     */
     pause() {
       ticker.stop();
     },
+
+    /**
+     * Toggles the ticker between running and paused states.
+     */
     toggle() {
       ticker.toggle();
     },
+
+    /**
+     * Skips the ticker back by one step.
+     */
     skipBack() {
       ticker.skipBack();
     },
+
+    /**
+     * Skips the ticker forward by one step.
+     */
     skipForward() {
       ticker.skipForward();
     },
+
+    /**
+     * Increments the ticker by a specified value.
+     * @param {number} [value=1] - The value to increment by.
+     */
     inc(value = 1) {
       if (!isNaN(Number(value))) value = 1;
       store.dispatch(actions.ticker.inc(Number(value)));
     },
+
+    /**
+     * Decrements the ticker by a specified value.
+     * @param {number} [value=1] - The value to decrement by.
+     */
     dec(value = 1) {
       if (!isNaN(Number(value))) value = 1;
       store.dispatch(actions.ticker.dec(Number(value)));
     },
+
+    /**
+     * Sets the ticker to a specific date.
+     * @param {string | Date} inputDate - The date to set the ticker to.
+     */
     setDate(inputDate: string | Date) {
       store.dispatch(actions.ticker.updateDate(getDateString(inputDate)));
     },
+
+    /**
+     * Gets the current date of the ticker.
+     * @returns {string | Date} The current date.
+     */
     getDate() {
       return store.getState().ticker.currentDate;
     },
+
+    /**
+     * Gets all dates available in the ticker.
+     * @returns {Array<string | Date>} An array of all dates.
+     */
     getAllDates() {
       return [...store.getState().ticker.dates];
     },
+
+    /**
+     * Checks if the ticker is currently running.
+     * @returns {boolean} True if the ticker is running, false otherwise.
+     */
     isRunning() {
       return store.getState().ticker.isRunning;
     },
+
+    /**
+     * Selects a specific item by name.
+     * @param {string} name - The name of the item to select.
+     */
     select(name: string) {
       d3.select(root)
         .select('rect.' + safeName(name))
         .classed('selected', true);
       store.dispatch(actions.data.addSelection(String(name)));
     },
+
+    /**
+     * Unselects a specific item by name.
+     * @param {string} name - The name of the item to unselect.
+     */
     unselect(name: string) {
       d3.select(root)
         .select('rect.' + safeName(name))
         .classed('selected', false);
       store.dispatch(actions.data.removeSelection(String(name)));
     },
+
+    /**
+     * Unselects all items.
+     */
     unselectAll() {
       d3.select(root).selectAll('rect').classed('selected', false);
       store.dispatch(actions.data.resetSelections());
     },
+
+    /**
+     * Hides a specific group.
+     * @param {string} group - The name of the group to hide.
+     */
     hideGroup(group: string) {
       store.dispatch(actions.data.addFilter(String(group)));
     },
+
+    /**
+     * Shows a specific group.
+     * @param {string} group - The name of the group to show.
+     */
     showGroup(group: string) {
       store.dispatch(actions.data.removeFilter(String(group)));
     },
+
+    /**
+     * Shows only a specific group, hiding all others.
+     * @param {string} group - The name of the group to show only.
+     */
     showOnlyGroup(group: string) {
       store.dispatch(actions.data.allExceptFilter(String(group)));
     },
+
+    /**
+     * Shows all groups.
+     */
     showAllGroups() {
       store.dispatch(actions.data.resetFilters());
     },
+
+    /**
+     * Changes the options of the ticker.
+     * @param {Partial<Options>} newOptions - The new options to apply.
+     * @throws Will throw an error if an option cannot be changed.
+     */
     async changeOptions(newOptions: Partial<Options>) {
+      /**
+       * Validates and changes the options of the ticker.
+       *
+       * First:
+       * validates the provided options using the `validateOptions` function.
+       * It then checks for any options that are not allowed to be changed, specifically `dataShape`
+       * and `dataType`. If any of these options are attempted to be changed, an error is thrown.
+       *
+       * Second:
+       * it checks if any data-related options have changed. If so, it clears the current
+       * date slices and prepares new data before creating a new renderer.
+       *
+       * Third:
+       * it handles style injection and theme changes, and re-renders the initial view.
+       * If autorun is enabled and the ticker is at the first date, it starts the ticker.
+       */
       const newValidOptions = validateOptions(newOptions);
 
+      // First
       const unAllowedOptions: Array<keyof Options> = ['dataShape', 'dataType'];
       unAllowedOptions.forEach((key) => {
         if (newValidOptions[key] && newValidOptions[key] !== store.getState().options[key]) {
@@ -207,6 +314,7 @@ export async function race(
         }
       });
 
+      // Second
       const dataOptions: Array<keyof Options> = [
         'dataTransform',
         'fillDateGapsInterval',
@@ -234,6 +342,7 @@ export async function race(
         subscribeToStore(store, renderer, preparedData);
       }
 
+      // Third
       if ('injectStyles' in newValidOptions || 'theme' in newValidOptions) {
         document.getElementById(stylesId)?.remove();
         if (injectStyles) {
@@ -251,6 +360,14 @@ export async function race(
         }
       }
     },
+
+    /**
+     * Sets a callback function to be called when the ticker reaches a specific date.
+     * @param {string | Date} date - The date to watch for.
+     * @param {ApiCallback} fn - The callback function to execute.
+     * @returns {Object} An object with a remove method to unsubscribe.
+     * @throws Will throw an error if the second argument is not a function.
+     */
     onDate(date: string | Date, fn: ApiCallback) {
       if (typeof fn !== 'function') {
         throw new Error('The second argument must be a function');
@@ -270,6 +387,14 @@ export async function race(
         },
       };
     },
+
+    /**
+     * Sets a callback function to be called when a specific event occurs.
+     * @param {EventType} event - The event type to listen for.
+     * @param {ApiCallback} fn - The callback function to execute.
+     * @returns {Object} An object with a remove method to unsubscribe.
+     * @throws Will throw an error if the second argument is not a function.
+     */
     on(event: EventType, fn: ApiCallback) {
       if (typeof fn !== 'function') {
         throw new Error('The second argument must be a function');
@@ -283,6 +408,10 @@ export async function race(
         },
       };
     },
+
+    /**
+     * Destroys the API, stopping the ticker and cleaning up resources.
+     */
     destroy() {
       ticker.stop();
       store.unsubscribeAll();

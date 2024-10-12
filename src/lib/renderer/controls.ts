@@ -6,6 +6,13 @@ import { elements } from './elements';
 import { buttons } from './buttons';
 import type { RenderOptions } from './render-options';
 
+/**
+ * Renders the control buttons based on the current state of the store and render options.
+ *
+ * @param {Store} store - The store containing the current state and options.
+ * @param {RenderOptions} renderOptions - The options for rendering.
+ * @returns {void} - This function does not return a value; it modifies the DOM directly.
+ */
 export function renderControls(store: Store, renderOptions: RenderOptions) {
   const { marginTop, controlButtons } = store.getState().options;
   const { root, width, margin, barPadding } = renderOptions;
@@ -40,6 +47,13 @@ export function renderControls(store: Store, renderOptions: RenderOptions) {
   }
 }
 
+/**
+ * Updates the visibility of control buttons based on the current state of the store.
+ *
+ * @param {Store} store - The store containing the current state and options.
+ * @param {RenderOptions} renderOptions - The options for rendering.
+ * @returns {void} - This function does not return a value; it modifies the DOM directly.
+ */
 export function updateControls(store: Store, renderOptions: RenderOptions) {
   const { overlays, loop } = store.getState().options;
   const { root } = renderOptions;
@@ -76,6 +90,13 @@ export function updateControls(store: Store, renderOptions: RenderOptions) {
   }
 }
 
+/**
+ * Renders the overlay buttons based on the current state of the store and render options.
+ *
+ * @param {Store} store - The store containing the current state and options.
+ * @param {RenderOptions} renderOptions - The options for rendering.
+ * @returns {void} - This function does not return a value; it modifies the DOM directly.
+ */
 export function renderOverlays(store: Store, renderOptions: RenderOptions) {
   const { minHeight, minWidth } = store.getState().options;
   const { root } = renderOptions;

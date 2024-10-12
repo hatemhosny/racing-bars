@@ -186,8 +186,13 @@ export function getText(
   return param;
 }
 
+/**
+ * Converts a given name to a safe format by replacing non-alphanumeric characters with underscores.
+ *
+ * @param {string} name - The name to be converted.
+ * @returns {string} The safe name with non-alphanumeric characters replaced by underscores.
+ */
 export function safeName(name: string) {
-  // replace non-alphanumeric with underscore
   return String(name).replace(/[\W]+/g, '_');
 }
 
