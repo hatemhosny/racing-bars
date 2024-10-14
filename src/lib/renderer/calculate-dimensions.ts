@@ -5,6 +5,13 @@ import type { Store } from '../store';
 import { getHeight, getWidth } from '../utils';
 import type { RenderOptions } from './render-options';
 
+/**
+ * Calculates the dimensions for rendering based on the provided store and render options.
+ *
+ * @param {Store} store - The store containing the current state and options.
+ * @param {RenderOptions} renderOptions - The options for rendering.
+ * @returns {void} - This function does not return a value; it modifies the renderOptions object directly.
+ */
 export function calculateDimensions(store: Store, renderOptions: RenderOptions) {
   const {
     minHeight,

@@ -1,5 +1,9 @@
 import type { Options } from './index';
 
+/**
+ * List of boolean option keys.
+ * @const {Array<keyof Options>}
+ */
 const boolOpts = [
   'makeCumulative',
   'loop',
@@ -13,6 +17,11 @@ const boolOpts = [
   'selectBars',
   'fixedScale',
 ] as const satisfies Array<keyof Options>;
+
+/**
+ * List of number option keys.
+ * @const {Array<keyof Options>}
+ */
 const numberOpts = [
   'labelsWidth',
   'tickDuration',
@@ -24,7 +33,17 @@ const numberOpts = [
   'marginBottom',
   'marginLeft',
 ] as const satisfies Array<keyof Options>;
+
+/**
+ * List of string option keys.
+ * @const {Array<keyof Options>}
+ */
 const strOpts = ['theme', 'startDate', 'endDate'] as const satisfies Array<keyof Options>;
+
+/**
+ * List of option keys that can be either string or number.
+ * @const {Array<keyof Options>}
+ */
 const strOrNumberOpts = [
   'colorSeed',
   'inputHeight',
@@ -32,23 +51,67 @@ const strOrNumberOpts = [
   'height',
   'width',
 ] as const satisfies Array<keyof Options>;
+
+/**
+ * List of option keys that can be either string or function.
+ * @const {Array<keyof Options>}
+ */
 const strOrFuncOpts = ['title', 'subTitle', 'dateCounter', 'caption'] as const satisfies Array<
   keyof Options
 >;
 
+/**
+ * Valid data shapes for options.
+ * @const {Array<Options['dataShape']>}
+ */
 const validDataShapes: Array<Options['dataShape']> = ['long', 'wide', 'auto'];
+
+/**
+ * Valid data types for options.
+ * @const {Array<Options['dataType']>}
+ */
 const validDataTypes: Array<Options['dataType']> = ['json', 'csv', 'tsv', 'xml', 'auto'];
+
+/**
+ * Valid label positions for options.
+ * @const {Array<Options['labelsPosition']>}
+ */
 const validLabelsPositions: Array<Options['labelsPosition']> = ['inside', 'outside', 'none'];
+
+/**
+ * Valid control button options.
+ * @const {Array<Options['controlButtons']>}
+ */
 const validControlButtons: Array<Options['controlButtons']> = ['all', 'play', 'none'];
+
+/**
+ * Valid overlay options.
+ * @const {Array<Options['overlays']>}
+ */
 const validOverlays: Array<Options['overlays']> = ['all', 'play', 'repeat', 'none'];
+
+/**
+ * Valid intervals for filling date gaps.
+ * @const {Array<Options['fillDateGapsInterval']>}
+ */
 const validFillDateGapsIntervals: Array<Options['fillDateGapsInterval']> = [
   null,
   'year',
   'month',
   'day',
 ];
+
+/**
+ * Valid values for filling date gaps.
+ * @const {Array<Options['fillDateGapsValue']>}
+ */
 const validFillDateGapsValues: Array<Options['fillDateGapsValue']> = ['last', 'interpolate'];
 
+/**
+ * Validates the provided options and returns a new options object.
+ * @param {Partial<Options>} options - The options to validate.
+ * @returns {Partial<Options>} - The validated options.
+ */
 export function validateOptions(options: Partial<Options>): Partial<Options> {
   const newOptions: Partial<Options> = {};
 
@@ -141,6 +204,11 @@ export function validateOptions(options: Partial<Options>): Partial<Options> {
   return newOptions;
 }
 
+/**
+ * Validates the data transform option.
+ * @param {Options['dataTransform'] | undefined} value - The value to validate.
+ * @returns {boolean} - True if valid, false otherwise.
+ */
 function validateDataTransform(value: Options['dataTransform'] | undefined): boolean {
   if (typeof value === 'undefined') return false;
 
@@ -151,6 +219,11 @@ function validateDataTransform(value: Options['dataTransform'] | undefined): boo
   return false;
 }
 
+/**
+ * Validates the color map option.
+ * @param {string[] | { [key: string]: string } | undefined} value - The value to validate.
+ * @returns {boolean} - True if valid, false otherwise.
+ */
 function validateColorMap(value: string[] | { [key: string]: string } | undefined): boolean {
   if (typeof value === 'undefined') return false;
   if (value === null) return false;
@@ -162,6 +235,13 @@ function validateColorMap(value: string[] | { [key: string]: string } | undefine
   return is(value, 'object') && Object.values(value).every((v) => typeof v === 'string');
 }
 
+/**
+ * Checks if a value matches a specific type.
+ * @param {any} value - The value to check.
+ * @param {types} type - The type to check against.
+ * @param {types} [arrayType] - The type for array elements, if applicable.
+ * @returns {boolean} - True if the value matches the type, false otherwise.
+ */
 type types = 'array' | 'boolean' | 'object' | 'number' | 'string' | 'undefined' | 'function';
 function is(value: any, type: types, arrayType?: types): boolean {
   if (typeof value === 'undefined') return false;
@@ -188,6 +268,12 @@ function is(value: any, type: types, arrayType?: types): boolean {
   return typeof value === type;
 }
 
+/**
+ * Checks if an array includes a specific value.
+ * @param {any[]} arr - The array to check.
+ * @param {any} x - The value to check for.
+ * @returns {boolean} - True if the array includes the value, false otherwise.
+ */
 function includes(arr: any[], x: any) {
   return x != null && arr.includes(x);
 }

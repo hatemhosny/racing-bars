@@ -86,6 +86,22 @@ export function shuffle(arr: string[], seed: number) {
   return array;
 }
 
+/**
+ * Generates a unique identifier with a given prefix and length.
+ *
+ * @param {string} [prefix='racingbars'] - The prefix to be added to the generated identifier. Default is 'racingbars'.
+ * @param {number} [n=8] - The length of the generated identifier. Default is 8.
+ *
+ * @returns The generated unique identifier.
+ *
+ * @example
+ * ```
+ * const id = generateId('hello', 5);
+ * console.log(id); // Output: helloxxxxx
+ * ```
+ *
+ * @see {@link https://racing-bars.hatemhosny.dev/api/functions/generateId/} for more details.
+ */
 export function generateId(prefix = 'racingbars', n = 8) {
   const rnd = Array(3)
     .fill(null)
@@ -170,8 +186,13 @@ export function getText(
   return param;
 }
 
+/**
+ * Converts a given name to a safe format by replacing non-alphanumeric characters with underscores.
+ *
+ * @param {string} name - The name to be converted.
+ * @returns {string} The safe name with non-alphanumeric characters replaced by underscores.
+ */
 export function safeName(name: string) {
-  // replace non-alphanumeric with underscore
   return String(name).replace(/[\W]+/g, '_');
 }
 

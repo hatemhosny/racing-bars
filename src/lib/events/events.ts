@@ -43,31 +43,29 @@ export function registerEvents(store: Store, ticker: Ticker) {
   }
 
   function registerClickEvents() {
-    if (store.getState().options.mouseControls) {
-      const svg = root.querySelector('svg') as SVGSVGElement;
-      svg.addEventListener('click', (clickEvent) => {
-        // ignore clicks to group legends
-        const target = clickEvent.target as HTMLElement;
-        if (!target || target.classList.contains('legend')) return;
+    if (!store.getState().options.mouseControls) return;
+    const svg = root.querySelector('svg') as SVGSVGElement;
+    svg.addEventListener('click', (clickEvent) => {
+      // ignore clicks to group legends
+      const target = clickEvent.target as HTMLElement;
+      if (!target || target.classList.contains('legend')) return;
 
-        getClicks(clickEvent, function (event: any) {
-          const clicks = event.detail;
-          if (clicks === 3) {
-            ticker.skipBack();
-          } else if (clicks === 2) {
-            ticker.skipForward();
-          } else {
-            ticker.toggle();
-          }
-        });
+      getClicks(clickEvent, function (event: any) {
+        const clicks = event.detail;
+        if (clicks === 3) {
+          ticker.skipBack();
+        } else if (clicks === 2) {
+          ticker.skipForward();
+        } else {
+          ticker.toggle();
+        }
       });
-    }
+    });
   }
 
   function registerKeyboardEvents() {
-    if (store.getState().options.keyboardControls) {
-      addEventHandler(document, '', 'keyup', handleKeyboardEvents);
-    }
+    if (!store.getState().options.keyboardControls) return;
+    addEventHandler(document, '', 'keyup', handleKeyboardEvents);
   }
 
   function handleKeyboardEvents(e: KeyboardEvent) {
@@ -109,21 +107,21 @@ export function registerEvents(store: Store, ticker: Ticker) {
   }
 
   function addEventHandler(
-    root: HTMLElement | HTMLDocument,
+    root: HTMLElement | Document,
     className: string,
     eventType: Event['eventType'],
     handler: (e?: any) => void,
   ) {
     const element = getElement(root, className);
-    if (element) {
-      element.addEventListener(eventType, handler);
-      events.push({
-        element,
-        userDefined: false,
-        eventType,
-        handler,
-      });
-    }
+    if (!element) return;
+
+    element.addEventListener(eventType, handler);
+    events.push({
+      element,
+      userDefined: false,
+      eventType,
+      handler,
+    });
   }
 
   function addApiEventHandler(eventType: EventType, handler: () => void) {
@@ -156,12 +154,9 @@ export function getTickDetails(store: Store): TickDetails {
 function dispatchDOMEvent(store: Store, eventType: EventType) {
   const element = store.getState().container.element;
   if (!element) return;
-  element.dispatchEvent(
-    new CustomEvent(eventType, {
-      bubbles: true,
-      detail: getTickDetails(store),
-    } as DOMCustomEvent),
-  );
+
+  const customEvent = { bubbles: true, detail: getTickDetails(store) };
+  element.dispatchEvent(new CustomEvent(eventType, customEvent as DOMCustomEvent));
 }
 
 export function DOMEventSubscriber(store: Store) {

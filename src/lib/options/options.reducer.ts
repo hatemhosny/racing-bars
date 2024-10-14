@@ -49,65 +49,65 @@ export const defaultOptions: Options = {
   selectBars: false,
 };
 
+/**
+ * Reducer function to manage options state.
+ *
+ * @param {Options} state - The current state of options. Defaults to defaultOptions.
+ * @param {OptionsAction} action - The action dispatched to modify the options state.
+ * @returns {Options} The new state of options after applying the action.
+ */
 export const optionsReducer: Reducer<Options, OptionsAction> = (state = defaultOptions, action) => {
-  switch (action.type) {
-    case actionTypes.loadOptions:
-    case actionTypes.changeOptions: {
-      const excludedKeys = ['inputHeight', 'inputWidth', 'minHeight', 'minWidth'];
-      const options: Partial<Options> = {};
+  const { changeOptions, loadOptions } = actionTypes;
+  if (action.type !== changeOptions && action.type !== loadOptions) return state;
 
-      // remove null, undefined and excluded keys
-      (Object.keys(action.payload) as Array<keyof Options>).forEach((key) => {
-        if (!excludedKeys.includes(key)) {
-          (options[key] as any) = action.payload[key] ?? state[key];
-        }
-      });
+  const excludedKeys = ['inputHeight', 'inputWidth', 'minHeight', 'minWidth'];
+  const options: Partial<Options> = {};
 
-      const startDate = options.startDate ? getDateString(options.startDate) : state.startDate;
-      const endDate = options.endDate ? getDateString(options.endDate) : state.startDate;
-
-      const inputHeight = options.height || state.inputHeight;
-      const inputWidth = options.width || state.inputWidth;
-
-      const fixedOrder = Array.isArray(options.fixedOrder)
-        ? [...options.fixedOrder]
-        : state.fixedOrder;
-
-      const colorMap = Array.isArray(options.colorMap)
-        ? [...options.colorMap].map(String)
-        : typeof options.colorMap === 'object'
-          ? { ...options.colorMap }
-          : state.colorMap;
-
-      const topN = fixedOrder.length || Number(options.topN) || state.topN;
-
-      const tickDuration = Number(options.tickDuration) || state.tickDuration;
-      const labelsWidth = Number(options.labelsWidth) || state.labelsWidth;
-      const marginTop = Number(options.marginTop) || state.marginTop;
-      const marginRight = Number(options.marginRight) || state.marginRight;
-      const marginBottom = Number(options.marginBottom) || state.marginBottom;
-      const marginLeft = Number(options.marginLeft) || state.marginLeft;
-
-      return {
-        ...state,
-        ...options,
-        startDate,
-        endDate,
-        inputHeight,
-        inputWidth,
-        fixedOrder,
-        colorMap,
-        topN,
-        tickDuration,
-        labelsWidth,
-        marginTop,
-        marginRight,
-        marginBottom,
-        marginLeft,
-      };
+  // remove null, undefined and excluded keys
+  (Object.keys(action.payload) as Array<keyof Options>).forEach((key) => {
+    if (!excludedKeys.includes(key)) {
+      (options[key] as any) = action.payload[key] ?? state[key];
     }
+  });
 
-    default:
-      return state;
-  }
+  const startDate = options.startDate ? getDateString(options.startDate) : state.startDate;
+  const endDate = options.endDate ? getDateString(options.endDate) : state.startDate;
+
+  const inputHeight = options.height || state.inputHeight;
+  const inputWidth = options.width || state.inputWidth;
+
+  const fixedOrder = Array.isArray(options.fixedOrder) ? [...options.fixedOrder] : state.fixedOrder;
+
+  const colorMap = Array.isArray(options.colorMap)
+    ? [...options.colorMap].map(String)
+    : typeof options.colorMap === 'object'
+      ? { ...options.colorMap }
+      : state.colorMap;
+
+  const topN = fixedOrder.length || Number(options.topN) || state.topN;
+
+  const tickDuration = Number(options.tickDuration) || state.tickDuration;
+  const labelsWidth = Number(options.labelsWidth) || state.labelsWidth;
+  const marginTop = Number(options.marginTop) || state.marginTop;
+  const marginRight = Number(options.marginRight) || state.marginRight;
+  const marginBottom = Number(options.marginBottom) || state.marginBottom;
+  const marginLeft = Number(options.marginLeft) || state.marginLeft;
+
+  return {
+    ...state,
+    ...options,
+    startDate,
+    endDate,
+    inputHeight,
+    inputWidth,
+    fixedOrder,
+    colorMap,
+    topN,
+    tickDuration,
+    labelsWidth,
+    marginTop,
+    marginRight,
+    marginBottom,
+    marginLeft,
+  };
 };
