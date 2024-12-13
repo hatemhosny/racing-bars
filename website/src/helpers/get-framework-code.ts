@@ -27,6 +27,9 @@ export const getFrameworkCode = (
     if (lang === 'ts') {
       return `\nconst options: Options = ${stringify(codeOptions)};`;
     }
+    if (lang === 'svelte') {
+      return `\let options = $state(${stringify(codeOptions)});`;
+    }
     return `\nconst options = ${stringify(codeOptions)};`;
   };
 
