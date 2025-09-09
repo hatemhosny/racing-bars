@@ -14,8 +14,7 @@
   ],
   "private": false,
   "repository": {
-    "type": "git",
-    "url": "https://github.com/hatemhosny/racing-bars.git"
+    "url": "https://github.com/hatemhosny/racing-bars"
   },
   "type": "module",
   "main": "./racing-bars.js",
