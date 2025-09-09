@@ -13,4 +13,4 @@ jobs:
           cache: 'npm'
       - run: npm install
       - run: npm run build
-      - run: npx pkg-pr-new publish './build' --comment=update --packageManager=npm
+      - run: npx pkg-pr-new publish './build' --compact --comment=update --packageManager=npm
