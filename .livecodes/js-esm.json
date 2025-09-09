@@ -15,12 +15,11 @@
   },
   "customSettings": {
     "imports": {
-      "racing-bars": "{{LC::TO_URL(./lib/racing-bars.js)}}",
-      "racing-bars/react": "{{LC::TO_URL(./lib/react.js)}}",
-      "racing-bars/vue": "{{LC::TO_URL(./lib/vue.js)}}"
+      "racing-bars": "https://esm.sh/pr/hatemhosny/racing-bars@{{LC::SHORT_SHA}}",
+      "racing-bars/": "https://esm.sh/pr/hatemhosny/racing-bars@{{LC::SHORT_SHA}}/"
     },
     "types": {
-      "racing-bars": "{{LC::TO_URL(./lib/racing-bars.d.ts)}}"
+      "racing-bars": "https://esm.sh/pr/hatemhosny/racing-bars@{{LC::SHORT_SHA}}/racing-bars.d.ts"
     }
   }
 }
