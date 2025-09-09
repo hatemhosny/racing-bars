@@ -1,0 +1,17 @@
+name: Preview Release
+
+on: [push, pull_request]
+
+jobs:
+  preview_release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 'lts/*'
+          cache: 'npm'
+      - run: npm install
+      - run: npm run build
+      - run: npx pkg-pr-new publish './build' --compact --comment=update
