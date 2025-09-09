@@ -16,10 +16,11 @@
   "customSettings": {
     "imports": {
       "racing-bars": "https://esm.sh/pr/hatemhosny/racing-bars@{{LC::SHORT_SHA}}",
-      "racing-bars/": "https://esm.sh/pr/hatemhosny/racing-bars@{{LC::SHORT_SHA}}/"
+      "racing-bars/react": "https://esm.sh/pr/hatemhosny/racing-bars@{{LC::SHORT_SHA}}/react",
+      "racing-bars/vue": "https://esm.sh/pr/hatemhosny/racing-bars@{{LC::SHORT_SHA}}/vue?external=vue"
     },
     "types": {
-      "racing-bars": "https://esm.sh/pr/hatemhosny/racing-bars@{{LC::SHORT_SHA}}/racing-bars.d.ts"
+      "racing-bars": "{{LC::TO_URL(./lib/racing-bars.d.ts)}}"
     }
   }
 }
