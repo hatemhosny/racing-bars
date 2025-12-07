@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file. See [standa
 
 ---
 
+## [v0.3.1](https://github.com/hatemhosny/racing-bars/compare/v0.3.0...v0.3.1) (2025-12-07)
+
+- **ci:** Enable npm trusted publishing ([6ef7ce2](https://github.com/hatemhosny/racing-bars/pull/212/commits/6ef7ce2c801a7e882abd44a20fd0eda362986cb7))
+
+- **website:** update code samples to Svelte 5 ([b125d6c](https://github.com/hatemhosny/racing-bars/commit/b125d6c05e3e191f0934b98d29a0e20583ca2224))
+
+---
+
 ## [v0.3.0](https://github.com/hatemhosny/racing-bars/compare/v0.2.0...v0.3.0) (2024-09-07)
 
 ### Highlights for this release
