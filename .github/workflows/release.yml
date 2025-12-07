@@ -12,6 +12,10 @@ on:
       - main
     types: [closed]
 
+permissions:
+  id-token: write # Required for OIDC
+  contents: write
+
 jobs:
   release:
     runs-on: ubuntu-latest
@@ -73,12 +77,8 @@ jobs:
           token: ${{ secrets.GH_ACTIONS_REPO_PAT }}
 
       - name: Publish to NPM
-        run: |
-          echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
-          npm publish --access=public
         working-directory: ./build
-        env:
-          NPM_TOKEN: ${{secrets.NPM_TOKEN}}
+        run: npm publish --access=public
 
       - name: Create a pull request to develop
         if: startsWith(github.head_ref, 'releases/v')
