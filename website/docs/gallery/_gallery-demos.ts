@@ -372,6 +372,50 @@ export const mouseControls: ChartProps = {
   showGroups: true,
 };
 
+export const valueLocaleEn: ChartProps = {
+  label: 'Number Format',
+  dataUrl: '/data/population.csv',
+  title: 'World Population',
+  valueLocale: 'de-DE',
+  valueDecimals: 2,
+  dataTransform: (data) =>
+    data.map((d) => ({
+      ...d,
+      icon: `https://flagsapi.com/${d.code}/flat/64.png`,
+    })),
+  showIcons: true,
+  labelsPosition: 'none',
+  caption: (_currentDate, dateSlice, _allDates) =>
+    `Total: ${new Intl.NumberFormat('en-US').format(Math.round(dateSlice.reduce((acc, curr) => acc + curr.value, 0)))}`,
+  dynamicProps: {
+    caption: `(currentDate, dateSlice, allDates) =>
+\`Total: \${new Intl.NumberFormat('en-US').format(Math.round(dateSlice.reduce((acc, curr) => acc + curr.value, 0)))}\``,
+    dataTransform: `(data) => data.map((d) => ({ ...d, icon: \`https://flagsapi.com/\${d.code}/flat/64.png\` }))`,
+  },
+};
+
+export const valueLocaleDe: ChartProps = {
+  label: 'Number Format',
+  dataUrl: '/data/population.csv',
+  title: 'die Weltbevölkerung',
+  valueLocale: 'de-DE',
+  valueDecimals: 2,
+  dataTransform: (data) =>
+    data.map((d) => ({
+      ...d,
+      icon: `https://flagsapi.com/${d.code}/flat/64.png`,
+    })),
+  showIcons: true,
+  labelsPosition: 'none',
+  caption: (_currentDate, dateSlice, _allDates) =>
+    `Gesamt: ${new Intl.NumberFormat('de-DE').format(Math.round(dateSlice.reduce((acc, curr) => acc + curr.value, 0)))}`,
+  dynamicProps: {
+    caption: `(currentDate, dateSlice, allDates) =>
+\`Gesamt: \${new Intl.NumberFormat('de-DE').format(Math.round(dateSlice.reduce((acc, curr) => acc + curr.value, 0)))}\``,
+    dataTransform: `(data) => data.map((d) => ({ ...d, icon: \`https://flagsapi.com/\${d.code}/flat/64.png\` }))`,
+  },
+};
+
 export const overlays: ChartProps = {
   label: 'Overlays',
   dataUrl: '/data/population.csv',

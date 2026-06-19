@@ -24,7 +24,9 @@ const numberOpts = [
   'marginBottom',
   'marginLeft',
 ] as const satisfies Array<keyof Options>;
-const strOpts = ['theme', 'startDate', 'endDate'] as const satisfies Array<keyof Options>;
+const strOpts = ['valueLocale', 'theme', 'startDate', 'endDate'] as const satisfies Array<
+  keyof Options
+>;
 const strOrNumberOpts = [
   'colorSeed',
   'inputHeight',

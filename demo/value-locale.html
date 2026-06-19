@@ -1,0 +1,15 @@
+<!doctype html>
+<head> </head>
+
+<body>
+  <div id="race" style="width: 50vw; height: 70vh"></div>
+
+  <script type="module">
+    import { race } from '../build/racing-bars.js';
+
+    race('../data/population.json', '#race', {
+      valueLocale: 'de-DE',
+      valueDecimals: 0,
+    });
+  </script>
+</body>
