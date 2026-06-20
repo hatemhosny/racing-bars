@@ -2,7 +2,7 @@ import * as d3 from '../d3';
 
 import type { Data } from '../data';
 import type { Store } from '../store';
-import { getDateSlice, safeName, getColor, getIconID, getText, countDecimals } from '../utils';
+import { getDateSlice, safeName, getColor, getIconID, getText } from '../utils';
 import type { RenderOptions } from './render-options';
 import { selectFn, highlightFn, halo } from './helpers';
 import { updateControls } from './controls';
@@ -51,6 +51,16 @@ export function renderFrame(data: Data[], store: Store, renderOptions: RenderOpt
   const CompleteDateSlice = getDateSlice(currentDate, data, store);
   const dateSlice = CompleteDateSlice.slice(0, topN);
   const valueDecimals = store.getState().options.valueDecimals;
+  const valueLocale = store.getState().options.valueLocale;
+  const valueLocaleter = new Intl.NumberFormat(
+    valueLocale,
+    valueDecimals === 'preserve'
+      ? {}
+      : {
+          minimumFractionDigits: valueDecimals,
+          maximumFractionDigits: valueDecimals,
+        },
+  );
 
   if (showGroups) {
     svg
@@ -155,11 +165,7 @@ export function renderFrame(data: Data[], store: Store, renderOptions: RenderOpt
     .attr('class', 'valueLabel')
     .attr('x', (d: Data) => x(d.value) + 5)
     .attr('y', () => y(topN + 1) + marginBottom + 5)
-    .text((d: Data) =>
-      valueDecimals === 'preserve'
-        ? d.lastValue
-        : d3.format(`,.${countDecimals(d.lastValue ?? d.value)}f`)(d.lastValue as number),
-    )
+    .text((d: Data) => valueLocaleter.format(d.lastValue as number))
     .transition()
     .duration(tickDuration)
     .ease(d3.easeLinear)
@@ -176,11 +182,7 @@ export function renderFrame(data: Data[], store: Store, renderOptions: RenderOpt
       const lastValue = Number(sameDate ? d.value : (d.lastValue as number)) || 0;
       const i = d3.interpolate(lastValue, d.value);
       return function (t: number) {
-        const decimals =
-          valueDecimals === 'preserve'
-            ? Math.max(countDecimals(d.value), countDecimals(lastValue))
-            : valueDecimals;
-        this.textContent = d3.format(`,.${decimals || 0}f`)(i(t));
+        this.textContent = valueLocaleter.format(i(t));
       };
     });
 

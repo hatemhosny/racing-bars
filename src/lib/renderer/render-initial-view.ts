@@ -2,7 +2,7 @@ import * as d3 from '../d3';
 
 import type { Store } from '../store';
 import type { Data } from '../data';
-import { getDateSlice, getText, getColor, safeName, getIconID, countDecimals } from '../utils';
+import { getDateSlice, getText, getColor, safeName, getIconID } from '../utils';
 import type { RenderOptions } from './render-options';
 import { calculateDimensions } from './calculate-dimensions';
 import { renderHeader } from './render-header';
@@ -21,6 +21,16 @@ export function renderInitialView(data: Data[], store: Store, renderOptions: Ren
   const dateSlice = CompleteDateSlice.slice(0, topN);
   const lastDateIndex = dates.indexOf(currentDate) > 0 ? dates.indexOf(currentDate) - 1 : 0;
   const valueDecimals = store.getState().options.valueDecimals;
+  const valueLocale = store.getState().options.valueLocale;
+  const valueLocaleter = new Intl.NumberFormat(
+    valueLocale,
+    valueDecimals === 'preserve'
+      ? {}
+      : {
+          minimumFractionDigits: valueDecimals,
+          maximumFractionDigits: valueDecimals,
+        },
+  );
   renderOptions.lastDate = dates[lastDateIndex];
 
   if (!root || dateSlice.length === 0) return;
@@ -66,7 +76,9 @@ export function renderInitialView(data: Data[], store: Store, renderOptions: Ren
       .axisTop(x)
       .ticks(width > 500 ? 5 : 2)
       .tickSize(-(height - (margin.top + margin.bottom)))
-      .tickFormat((n: number | { valueOf(): number }) => d3.format(',')(n)));
+      .tickFormat((n: number | { valueOf(): number }) =>
+        new Intl.NumberFormat(valueLocale).format(typeof n === 'number' ? n : n.valueOf()),
+      ));
 
     svg
       .append('g')
@@ -116,11 +128,7 @@ export function renderInitialView(data: Data[], store: Store, renderOptions: Ren
       .attr('class', 'valueLabel')
       .attr('x', (d: Data) => x(d.value) + 5)
       .attr('y', (d: Data) => barY(d) + barHalfHeight)
-      .text((d: Data) =>
-        valueDecimals === 'preserve'
-          ? d.lastValue
-          : d3.format(`,.${countDecimals(d.lastValue ?? d.value)}f`)(d.lastValue as number),
-      );
+      .text((d: Data) => valueLocaleter.format(d.lastValue as number));
 
     if (showIcons) {
       const defs = (renderOptions.defs = svg.append('svg:defs'));

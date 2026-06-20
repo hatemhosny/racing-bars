@@ -858,6 +858,20 @@ const options = {
 };
 ```
 
+### valueLocale
+
+A string with a [BCP 47 language tag](https://developer.mozilla.org/en-US/docs/Glossary/BCP_47_language_tag) that specifies the locale used for the number format of bar values.
+
+- Type: `string`
+- Default: `"en-US"`
+- Example:
+
+```js
+const options = {
+  valueLocale: 'de-DE',
+};
+```
+
 ### width
 
 Specifies the width of the chart.
