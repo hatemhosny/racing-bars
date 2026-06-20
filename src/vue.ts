@@ -26,6 +26,7 @@ const props = {
   fillDateGapsInterval: [String, Object], // Object for null
   fillDateGapsValue: String,
   valueDecimals: Number,
+  valueLocale: String,
   makeCumulative: String, // Boolean
   title: String,
   subTitle: String,

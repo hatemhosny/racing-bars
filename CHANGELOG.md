@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file. See [standa
 
 ---
 
+## [v0.4.0](https://github.com/hatemhosny/racing-bars/compare/v0.3.1...v0.4.0) (2026-06-20)
+
+### Features
+
+- **options:** add `valueLocale` option to control number format of bar values. ([c5a8979](https://github.com/hatemhosny/racing-bars/commit/c5a897991458d4c426e08588288c6c78a97f10e9))
+
+Thank you @jasperverweij for the suggestion.
+
+---
+
 ## [v0.3.1](https://github.com/hatemhosny/racing-bars/compare/v0.3.0...v0.3.1) (2025-12-07)
 
 - **ci:** Enable npm trusted publishing ([6ef7ce2](https://github.com/hatemhosny/racing-bars/pull/212/commits/6ef7ce2c801a7e882abd44a20fd0eda362986cb7))

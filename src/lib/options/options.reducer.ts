@@ -7,6 +7,7 @@ export const defaultOptions: Options = {
   dataShape: 'auto',
   dataType: 'auto',
   dataTransform: null,
+  valueLocale: 'en-US',
   valueDecimals: 'preserve',
   fillDateGapsInterval: null,
   fillDateGapsValue: 'interpolate',
