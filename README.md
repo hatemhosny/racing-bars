@@ -127,6 +127,97 @@ race("/data.json", "#race", options);
 
 Please refer to [documentation website](https://racing-bars.hatemhosny.dev/) for [usage](https://racing-bars.hatemhosny.dev/getting-started/usage), [data preparation](https://racing-bars.hatemhosny.dev/documentation/data), [chart options](https://racing-bars.hatemhosny.dev/documentation/options), [API](https://racing-bars.hatemhosny.dev/documentation/api) and more.
 
+## Framework Support
+
+RacingBars works with vanilla JavaScript, TypeScript, React, Vue and Svelte. Dedicated docs for each:
+
+### JavaScript
+
+```js
+import { race } from 'racing-bars';
+
+race('/data/population.json', '#race', { title: 'World Population' });
+```
+
+Also available from CDN as [ESM](https://cdn.jsdelivr.net/npm/racing-bars) or [UMD](https://cdn.jsdelivr.net/npm/racing-bars/racing-bars.umd.js).
+
+📖 [JavaScript documentation](https://racing-bars.hatemhosny.dev/packages/js)
+
+### TypeScript
+
+```ts
+import { race, type Options } from 'racing-bars';
+
+const options: Options = {
+  title: 'World Population',
+  topN: 10,
+};
+
+race('/data/population.json', '#race', options);
+```
+
+📖 [TypeScript documentation](https://racing-bars.hatemhosny.dev/packages/ts)
+
+### React
+
+A wrapper React component is available as a default export from `racing-bars/react`.
+
+```jsx
+import RacingBars from 'racing-bars/react';
+
+export default function App() {
+  return (
+    <RacingBars dataUrl="/data/population.json" title="World Population">
+      Loading...
+    </RacingBars>
+  );
+}
+```
+
+All [chart options](https://racing-bars.hatemhosny.dev/documentation/options) are accepted as props, plus `data`, `dataUrl`, `dataType`, `callback`, `elementId`, `className`, and `style`.
+
+📖 [React documentation](https://racing-bars.hatemhosny.dev/packages/react)
+
+### Vue
+
+A wrapper Vue 3 component is available as a default export from `racing-bars/vue`.
+
+```html
+<script setup>
+  import RacingBars from 'racing-bars/vue';
+</script>
+
+<template>
+  <RacingBars dataUrl="/data/population.json" title="World Population">Loading...</RacingBars>
+</template>
+```
+
+All [chart options](https://racing-bars.hatemhosny.dev/documentation/options) are accepted as props, plus `data`, `dataUrl`, `dataType`, `callback`, `elementId`, `className`, and `style`.
+
+📖 [Vue documentation](https://racing-bars.hatemhosny.dev/packages/vue)
+
+### Svelte
+
+Use the JS/TS library directly in Svelte 5 components with runes.
+
+```html
+<script>
+  import { onMount } from 'svelte';
+  import { race } from 'racing-bars';
+
+  let chart = $state(null);
+
+  onMount(() => {
+    race('/data/population.json', '#race', { title: 'World Population' }).then((r) => (chart = r));
+    return () => chart?.destroy();
+  });
+</script>
+
+<div id="race">Loading...</div>
+```
+
+📖 [Svelte documentation](https://racing-bars.hatemhosny.dev/packages/svelte)
+
 ## Examples Gallery
 
 See [gallery](https://racing-bars.hatemhosny.dev/category/gallery/) for usage examples.

@@ -8,6 +8,7 @@ export default function RacingBars(props: Props & { children?: React.ReactNode }
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [racer, setRacer] = useState<Race | undefined>(undefined);
   const [className, setClassName] = useState<string>('');
+  const [style, setStyle] = useState<Record<string, string>>({});
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -18,8 +19,10 @@ export default function RacingBars(props: Props & { children?: React.ReactNode }
         options,
         callback,
         className: _className,
+        style: _style,
       } = processProps(props, containerRef.current.id);
       setClassName(_className);
+      setStyle(_style);
       dataPromise.then((data: Data[] | WideData[]) => {
         race(data, containerRef.current!, options).then((api: Race) => {
           setRacer(api);
@@ -41,7 +44,7 @@ export default function RacingBars(props: Props & { children?: React.ReactNode }
   );
 
   return (
-    <div ref={containerRef} className={className}>
+    <div ref={containerRef} className={className} style={style}>
       {props.children || ''}
     </div>
   );

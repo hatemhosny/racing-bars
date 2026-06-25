@@ -68,6 +68,30 @@ export const colorPalette: ChartProps = {
   showGroups: false,
 };
 
+export const colorPalettesVibrant: ChartProps = {
+  label: 'Color Palette: vibrantRedGoldGreen',
+  dataUrl: '/data/population.csv',
+  title: 'World Population',
+  colorMap: 'vibrantRedGoldGreen',
+  showGroups: false,
+};
+
+export const colorPalettesPastel: ChartProps = {
+  label: 'Color Palette: pastel',
+  dataUrl: '/data/population.csv',
+  title: 'World Population',
+  colorMap: 'pastel',
+  showGroups: false,
+};
+
+export const colorPalettesDeep: ChartProps = {
+  label: 'Color Palette: deep',
+  dataUrl: '/data/population.csv',
+  title: 'World Population',
+  colorMap: 'deep',
+  showGroups: false,
+};
+
 export const colorSeedRandom: ChartProps = {
   label: 'Random Color Seed',
   dataUrl: '/data/population.csv',

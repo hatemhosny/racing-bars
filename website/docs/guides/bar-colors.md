@@ -47,6 +47,28 @@ const options = {
 race('/data/population.json', '#race', options);
 ```
 
+## Built-in Color Palettes
+
+RacingBars comes with built-in color palettes that can be used by passing the palette name to the [`colorMap`](../documentation/options.md#colormap) option.
+
+```js
+import { race } from 'racing-bars';
+
+const options = {
+  colorMap: 'pastel',
+};
+
+race('/data/population.json', '#race', options);
+```
+
+### Available Palettes
+
+import PaletteGrid from '../../src/components/PaletteGrid';
+
+<PaletteGrid />
+
+[View the Gallery example](../gallery/color-palettes.md) for a live demo with these palettes.
+
 ## Custom Color Palettes
 
 If an array is passed to the [`colorMap`](../documentation/options.md#colormap) option, it will be used as a color palette.
@@ -54,7 +76,7 @@ Note that if the number of data item names/groups are larger than the array leng
 
 The colors can be color names (e.g `"red"`), hex codes (e.g. `"#ff0000"`) or RGB codes (e.g. `"rgb(255, 0, 0)"`).
 
-Example: [view in gallery](../gallery/color-palette.md)
+Example: [view in gallery](../gallery/color-palettes.md)
 
 ```js
 import { race } from 'racing-bars';
