@@ -4,6 +4,26 @@ All notable changes to this project will be documented in this file. See [standa
 
 ---
 
+## [v0.5.0](https://github.com/hatemhosny/racing-bars/compare/v0.4.0...v0.5.0) (2026-06-25)
+
+### Features
+
+- **options:** add built-in color palettes for bar colors.
+
+### Bug Fixes
+
+- Fix `style` prop use in React
+
+### Docs
+
+- Added a section in docs for usage in languages and frameworks including JavaScript, TypeScript, React, Vue and Svelte: https://racing-bars.hatemhosny.dev/category/frameworks-and-languages
+
+### Credits
+
+Thank you @ShubhamShakyawal for adding built-in color palettes.
+
+---
+
 ## [v0.4.0](https://github.com/hatemhosny/racing-bars/compare/v0.3.1...v0.4.0) (2026-06-20)
 
 ### Features
