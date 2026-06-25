@@ -267,6 +267,7 @@ export async function race(
         }
       });
 
+      const prevTickDuration = store.getState().options.tickDuration;
       store.dispatch(actions.options.changeOptions(newValidOptions));
       const { injectStyles, theme, autorun } = store.getState().options;
 
@@ -287,6 +288,13 @@ export async function race(
 
       renderer.renderInitialView();
       events.reregister();
+
+      const tickDurationChanged =
+        'tickDuration' in newValidOptions && newValidOptions.tickDuration !== prevTickDuration;
+      if (tickDurationChanged && store.getState().ticker.isRunning) {
+        ticker.stop();
+        ticker.start();
+      }
 
       if (autorun) {
         const { isFirstDate, isRunning } = store.getState().ticker;

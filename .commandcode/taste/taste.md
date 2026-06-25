@@ -8,3 +8,6 @@
 # mdx
 - In Docusaurus MDX files, use JSX style objects (`style={{display:'inline-block',width:20,height:20,background:'#xxx'}}`) instead of HTML style attribute strings (`style="display:inline-block;..."`). Confidence: 0.70
 
+# code-review
+- When checking if an option changed to trigger side effects, compare the new value against the current state value — checking key existence alone (`'key' in newOptions`) is insufficient and causes unnecessary operations when the value hasn't actually changed. Confidence: 0.70
+

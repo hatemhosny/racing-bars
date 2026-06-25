@@ -18,6 +18,7 @@ describe('options action creators', () => {
     expect(changeOptions(options)).toEqual({
       type: 'options/change',
       payload: options,
+      triggerRender: false,
     });
   });
 });
