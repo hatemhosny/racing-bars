@@ -44,13 +44,7 @@ const sidebars: SidebarsConfig = {
       link: {
         type: 'generated-index',
       },
-      items: [
-        'packages/js',
-        'packages/ts',
-        'packages/react',
-        'packages/vue',
-        'packages/svelte',
-      ],
+      items: ['packages/js', 'packages/ts', 'packages/react', 'packages/vue', 'packages/svelte'],
     },
     {
       type: 'category',

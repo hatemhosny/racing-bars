@@ -14,14 +14,14 @@ npm install racing-bars
 
 The library exports the following key types:
 
-| Type | Description |
-|---|---|
-| `Options` | Configuration object for the chart |
-| `Props` | Props type for framework components (React/Vue) |
-| `Race` | The chart API object returned by `race()` |
-| `Data` | A single row in long-format data |
-| `WideData` | A single row in wide-format data |
-| `DOMCustomEvent` | Custom DOM event types |
+| Type             | Description                                     |
+| ---------------- | ----------------------------------------------- |
+| `Options`        | Configuration object for the chart              |
+| `Props`          | Props type for framework components (React/Vue) |
+| `Race`           | The chart API object returned by `race()`       |
+| `Data`           | A single row in long-format data                |
+| `WideData`       | A single row in wide-format data                |
+| `DOMCustomEvent` | Custom DOM event types                          |
 
 ## Usage
 

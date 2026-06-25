@@ -48,11 +48,11 @@ The main function that creates a bar chart race.
 
 **Parameters:**
 
-| Param | Type | Description |
-|---|---|---|
-| `data` | `Data[] \| WideData[] \| Promise \| string` | Data array, promise resolving to data, or a URL to a JSON/CSV/TSV/XML file. |
-| `container` | `HTMLElement \| string` | The container element or a CSS selector. If omitted, a new `<div>` is appended to `<body>`. |
-| `options` | `Partial\<Options\>` | Configuration object. See [Options documentation](/documentation/options). |
+| Param       | Type                                        | Description                                                                                 |
+| ----------- | ------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| `data`      | `Data[] \| WideData[] \| Promise \| string` | Data array, promise resolving to data, or a URL to a JSON/CSV/TSV/XML file.                 |
+| `container` | `HTMLElement \| string`                     | The container element or a CSS selector. If omitted, a new `<div>` is appended to `<body>`. |
+| `options`   | `Partial\<Options\>`                        | Configuration object. See [Options documentation](/documentation/options).                  |
 
 **Returns:** A promise that resolves to a [`Race`](/documentation/api) object for controlling the chart.
 
@@ -125,30 +125,30 @@ console.log(defaultOptions.topN); // 12
 
 The `race()` function returns a promise that resolves to a `Race` object with methods to control the chart:
 
-| Method | Description |
-|---|---|
-| `play()` | Start or resume animation |
-| `pause()` | Pause animation |
-| `toggle()` | Toggle play/pause |
-| `skipBack()` | Go to the first date |
-| `skipForward()` | Go to the last date |
-| `inc(steps?)` | Advance N steps forward |
-| `dec(steps?)` | Go back N steps |
-| `setDate(date)` | Jump to a specific date |
-| `getDate()` | Get the current date string |
-| `getAllDates()` | Get all available dates |
-| `isRunning()` | Check if the animation is running |
-| `select(name)` | Select a bar by name |
-| `unselect(name)` | Unselect a bar |
-| `unselectAll()` | Clear all selections |
-| `hideGroup(group)` | Hide a group |
-| `showGroup(group)` | Show a group |
-| `showOnlyGroup(group)` | Show only one group |
-| `showAllGroups()` | Show all groups |
-| `changeOptions(opts)` | Change options at runtime |
-| `onDate(date, fn)` | Callback when a specific date is reached |
-| `on(event, fn)` | Listen to chart events (`dateChange`, `play`, `pause`, etc.) |
-| `destroy()` | Clean up and remove the chart |
+| Method                 | Description                                                  |
+| ---------------------- | ------------------------------------------------------------ |
+| `play()`               | Start or resume animation                                    |
+| `pause()`              | Pause animation                                              |
+| `toggle()`             | Toggle play/pause                                            |
+| `skipBack()`           | Go to the first date                                         |
+| `skipForward()`        | Go to the last date                                          |
+| `inc(steps?)`          | Advance N steps forward                                      |
+| `dec(steps?)`          | Go back N steps                                              |
+| `setDate(date)`        | Jump to a specific date                                      |
+| `getDate()`            | Get the current date string                                  |
+| `getAllDates()`        | Get all available dates                                      |
+| `isRunning()`          | Check if the animation is running                            |
+| `select(name)`         | Select a bar by name                                         |
+| `unselect(name)`       | Unselect a bar                                               |
+| `unselectAll()`        | Clear all selections                                         |
+| `hideGroup(group)`     | Hide a group                                                 |
+| `showGroup(group)`     | Show a group                                                 |
+| `showOnlyGroup(group)` | Show only one group                                          |
+| `showAllGroups()`      | Show all groups                                              |
+| `changeOptions(opts)`  | Change options at runtime                                    |
+| `onDate(date, fn)`     | Callback when a specific date is reached                     |
+| `on(event, fn)`        | Listen to chart events (`dateChange`, `play`, `pause`, etc.) |
+| `destroy()`            | Clean up and remove the chart                                |
 
 See the full [API documentation](/documentation/api) for details.
 

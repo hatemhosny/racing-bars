@@ -20,15 +20,15 @@ import RacingBars from 'racing-bars/vue';
 
 The Vue component accepts all [chart options](/documentation/options) plus the following component-specific props:
 
-| Prop | Type | Default | Description |
-|---|---|---|---|
-| `data` | `Data[] \| WideData[]` | — | Data array. If provided, `dataUrl` is ignored. |
-| `dataUrl` | `string` | — | URL to fetch data from. Ignored if `data` is provided. |
-| `dataType` | `'json' \| 'csv' \| 'tsv' \| 'xml'` | `'json'` | Type of data fetched from URL. |
-| `elementId` | `string` | auto-generated | An `id` to assign to the container `<div>`. |
-| `className` | `string` | `''` | A CSS class to assign to the container `<div>`. |
-| `style` | `Record<string, string>` | `{}` | Inline styles for the container `<div>`. |
-| `callback` | `(racer: Race, data: Data[]) => void` | — | Function called after the chart loads. Receives the chart API object and the data. |
+| Prop        | Type                                  | Default        | Description                                                                        |
+| ----------- | ------------------------------------- | -------------- | ---------------------------------------------------------------------------------- |
+| `data`      | `Data[] \| WideData[]`                | —              | Data array. If provided, `dataUrl` is ignored.                                     |
+| `dataUrl`   | `string`                              | —              | URL to fetch data from. Ignored if `data` is provided.                             |
+| `dataType`  | `'json' \| 'csv' \| 'tsv' \| 'xml'`   | `'json'`       | Type of data fetched from URL.                                                     |
+| `elementId` | `string`                              | auto-generated | An `id` to assign to the container `<div>`.                                        |
+| `className` | `string`                              | `''`           | A CSS class to assign to the container `<div>`.                                    |
+| `style`     | `Record<string, string>`              | `{}`           | Inline styles for the container `<div>`.                                           |
+| `callback`  | `(racer: Race, data: Data[]) => void` | —              | Function called after the chart loads. Receives the chart API object and the data. |
 
 ## Usage
 
@@ -36,16 +36,11 @@ The Vue component accepts all [chart options](/documentation/options) plus the f
 
 ```html
 <script setup>
-import RacingBars from 'racing-bars/vue';
+  import RacingBars from 'racing-bars/vue';
 </script>
 
 <template>
-  <RacingBars
-    dataUrl="/data/population.json"
-    title="World Population"
-  >
-    Loading...
-  </RacingBars>
+  <RacingBars dataUrl="/data/population.json" title="World Population"> Loading... </RacingBars>
 </template>
 ```
 
@@ -53,13 +48,13 @@ import RacingBars from 'racing-bars/vue';
 
 ```html
 <script setup>
-import RacingBars from 'racing-bars/vue';
+  import RacingBars from 'racing-bars/vue';
 
-const data = [
-  { name: 'China', value: 1444216107, date: '2023' },
-  { name: 'India', value: 1403800000, date: '2023' },
-  { name: 'USA', value: 335893238, date: '2023' },
-];
+  const data = [
+    { name: 'China', value: 1444216107, date: '2023' },
+    { name: 'India', value: 1403800000, date: '2023' },
+    { name: 'USA', value: 335893238, date: '2023' },
+  ];
 </script>
 
 <template>
@@ -71,23 +66,19 @@ const data = [
 
 ```html
 <script setup>
-import RacingBars from 'racing-bars/vue';
+  import RacingBars from 'racing-bars/vue';
 
-const handleCallback = (racer, data) => {
-  console.log('Data:', data);
-  racer.play();
-  racer.on('dateChange', (date) => {
-    console.log('Current date:', date);
-  });
-};
+  const handleCallback = (racer, data) => {
+    console.log('Data:', data);
+    racer.play();
+    racer.on('dateChange', (date) => {
+      console.log('Current date:', date);
+    });
+  };
 </script>
 
 <template>
-  <RacingBars
-    dataUrl="/data/population.json"
-    :callback="handleCallback"
-    title="World Population"
-  />
+  <RacingBars dataUrl="/data/population.json" :callback="handleCallback" title="World Population" />
 </template>
 ```
 
@@ -95,13 +86,13 @@ const handleCallback = (racer, data) => {
 
 ```html
 <script setup lang="ts">
-import RacingBars from 'racing-bars/vue';
-import type { Race, Data } from 'racing-bars';
+  import RacingBars from 'racing-bars/vue';
+  import type { Race, Data } from 'racing-bars';
 
-const handleCallback = (racer: Race, data: Data[]) => {
-  console.log('Chart loaded with', data.length, 'rows');
-  racer.play();
-};
+  const handleCallback = (racer: Race, data: Data[]) => {
+    console.log('Chart loaded with', data.length, 'rows');
+    racer.play();
+  };
 </script>
 
 <template>
@@ -120,7 +111,7 @@ const handleCallback = (racer: Race, data: Data[]) => {
 
 ```html
 <script setup>
-import RacingBars from 'racing-bars/vue';
+  import RacingBars from 'racing-bars/vue';
 </script>
 
 <template>
@@ -139,10 +130,10 @@ The component automatically detects prop changes and updates the chart via `chan
 
 ```html
 <script setup>
-import { ref } from 'vue';
-import RacingBars from 'racing-bars/vue';
+  import { ref } from 'vue';
+  import RacingBars from 'racing-bars/vue';
 
-const topN = ref(10);
+  const topN = ref(10);
 </script>
 
 <template>
@@ -152,11 +143,7 @@ const topN = ref(10);
       <input type="range" min="5" max="20" v-model.number="topN" />
       {{ topN }}
     </label>
-    <RacingBars
-      dataUrl="/data/population.json"
-      title="World Population"
-      :topN="topN"
-    />
+    <RacingBars dataUrl="/data/population.json" title="World Population" :topN="topN" />
   </div>
 </template>
 ```
@@ -165,7 +152,7 @@ const topN = ref(10);
 
 ```html
 <script setup>
-import RacingBars from 'racing-bars/vue';
+  import RacingBars from 'racing-bars/vue';
 </script>
 
 <template>
@@ -176,13 +163,7 @@ import RacingBars from 'racing-bars/vue';
       elementId="chart1"
       :loop="true"
     />
-    <RacingBars
-      dataUrl="/data/gdp.json"
-      title="GDP"
-      elementId="chart2"
-      theme="dark"
-      :loop="true"
-    />
+    <RacingBars dataUrl="/data/gdp.json" title="GDP" elementId="chart2" theme="dark" :loop="true" />
   </div>
 </template>
 ```

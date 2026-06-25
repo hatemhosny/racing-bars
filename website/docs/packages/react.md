@@ -20,16 +20,16 @@ import RacingBars from 'racing-bars/react';
 
 The React component accepts all [chart options](/documentation/options) plus the following component-specific props:
 
-| Prop | Type | Default | Description |
-|---|---|---|---|
-| `data` | `Data[] \| WideData[]` | — | Data array. If provided, `dataUrl` is ignored. |
-| `dataUrl` | `string` | — | URL to fetch data from. Ignored if `data` is provided. |
-| `dataType` | `'json' \| 'csv' \| 'tsv' \| 'xml'` | `'json'` | Type of data fetched from URL. |
-| `elementId` | `string` | auto-generated | An `id` to assign to the container `<div>`. |
-| `className` | `string` | `''` | A CSS class to assign to the container `<div>`. |
-| `style` | `Record<string, string>` | `{}` | Inline styles for the container `<div>`. |
-| `callback` | `(racer: Race, data: Data[]) => void` | — | Function called after the chart loads. Receives the chart API object and the data. |
-| `children` | `React.ReactNode` | — | Rendered inside the container as a loading fallback. |
+| Prop        | Type                                  | Default        | Description                                                                        |
+| ----------- | ------------------------------------- | -------------- | ---------------------------------------------------------------------------------- |
+| `data`      | `Data[] \| WideData[]`                | —              | Data array. If provided, `dataUrl` is ignored.                                     |
+| `dataUrl`   | `string`                              | —              | URL to fetch data from. Ignored if `data` is provided.                             |
+| `dataType`  | `'json' \| 'csv' \| 'tsv' \| 'xml'`   | `'json'`       | Type of data fetched from URL.                                                     |
+| `elementId` | `string`                              | auto-generated | An `id` to assign to the container `<div>`.                                        |
+| `className` | `string`                              | `''`           | A CSS class to assign to the container `<div>`.                                    |
+| `style`     | `Record<string, string>`              | `{}`           | Inline styles for the container `<div>`.                                           |
+| `callback`  | `(racer: Race, data: Data[]) => void` | —              | Function called after the chart loads. Receives the chart API object and the data. |
+| `children`  | `React.ReactNode`                     | —              | Rendered inside the container as a loading fallback.                               |
 
 ## Usage
 
@@ -40,10 +40,7 @@ import RacingBars from 'racing-bars/react';
 
 export default function App() {
   return (
-    <RacingBars
-      dataUrl="/data/population.json"
-      title="World Population"
-    >
+    <RacingBars dataUrl="/data/population.json" title="World Population">
       Loading...
     </RacingBars>
   );
@@ -156,11 +153,7 @@ export default function App() {
         />
         {topN}
       </label>
-      <RacingBars
-        dataUrl="/data/population.json"
-        title="World Population"
-        topN={topN}
-      />
+      <RacingBars dataUrl="/data/population.json" title="World Population" topN={topN} />
     </div>
   );
 }
@@ -174,19 +167,8 @@ import RacingBars from 'racing-bars/react';
 export default function App() {
   return (
     <div>
-      <RacingBars
-        dataUrl="/data/population.json"
-        title="Population"
-        elementId="chart1"
-        loop
-      />
-      <RacingBars
-        dataUrl="/data/gdp.json"
-        title="GDP"
-        elementId="chart2"
-        theme="dark"
-        loop
-      />
+      <RacingBars dataUrl="/data/population.json" title="Population" elementId="chart1" loop />
+      <RacingBars dataUrl="/data/gdp.json" title="GDP" elementId="chart2" theme="dark" loop />
     </div>
   );
 }
