@@ -52,26 +52,37 @@ const options = {
 
 ### colorMap
 
-This controls the colors of the bars. It can be either an array of strings or an object.
+This controls the colors of the bars. It can be a palette name string, an array of strings, or an object.
 
-If an array is supplied, it will be used as a color palette.
+If a **palette name string** is supplied, it selects from built-in color palettes. The [Bar Colors guide](../guides/bar-colors.md#available-palettes) lists all built-in palettes (see [gallery](../gallery/color-palettes.md) for visual preview).
+
+If an **array** is supplied, it will be used as a color palette.
 Only the colors in the array will be used.
 If the number of data item names/groups are larger than the array length, the colors will be repeated.
 
-On the other hand, an object can be supplied to map specific item names/groups to colors.
+If an **object** is supplied, it maps specific item names/groups to colors.
 The object does not have to include all bar names. The other bars will get the default colors.
 Note that names are case-sensitive.
 
 The colors specified in the array or object can be any valid CSS colors such as
 color names (e.g `"red"`), hex codes (e.g. `"#ff0000"`) or RGB colors (e.g. `"rgb(255, 0, 0)"`).
 
-- Type: `string[] | {[key: string]: string}`
-- Default: `""`
-- Example:
+- Type: `Palette | string[] | {[key: string]: string}`
+- Default: `""` (auto-generated colors)
+
+This example uses a built-in palette name.
+
+[view in gallery](../gallery/color-palettes.md)
+
+```js
+const options = {
+  colorMap: 'pastel',
+};
+```
 
 This example uses an array as a color palette.
 
-[view in gallery](../gallery/color-palette.md)
+[view in gallery](../gallery/color-palettes.md)
 
 ```js
 const palette = [
