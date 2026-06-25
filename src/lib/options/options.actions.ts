@@ -13,4 +13,5 @@ export const loadOptions = (options: Partial<Options>): OptionsAction => ({
 export const changeOptions = (options: Partial<Options>): OptionsAction => ({
   type: actionTypes.changeOptions,
   payload: options,
+  triggerRender: false,
 });

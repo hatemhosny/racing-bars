@@ -4,6 +4,11 @@ import type { Options, OptionsAction } from './options.models';
 import { actionTypes } from './options.actions';
 import { palettes } from './palette';
 
+/**
+ * Default chart options used when no custom options are provided to {@link race}.
+ *
+ * @see https://racing-bars.hatemhosny.dev/documentation/options
+ */
 export const defaultOptions: Options = {
   dataShape: 'auto',
   dataType: 'auto',

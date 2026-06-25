@@ -138,6 +138,30 @@ const RacingBars: RacingBarsComponent = {
   },
 };
 
+/**
+ * Vue component for the racing-bars chart.
+ *
+ * Renders a racing bar chart inside a `<div>` element. Accepts all {@link Props}
+ * as component props and reactively updates chart options when props change.
+ *
+ * @example
+ * ```vue
+ * <template>
+ *   <RacingBars
+ *     dataUrl="/data/population.csv"
+ *     dataType="csv"
+ *     :title="title"
+ *   />
+ * </template>
+ *
+ * <script setup>
+ * import RacingBars from 'racing-bars/vue';
+ * const title = 'World Population';
+ * </script>
+ * ```
+ *
+ * @see https://racing-bars.hatemhosny.dev/documentation/api
+ */
 export default RacingBars;
 
 // this avoids having to run the vue compiler (thus adding vue as dependency)
