@@ -4,6 +4,32 @@ import { useEffect, useRef, useState } from 'react';
 import { processProps, type Props } from './shared';
 import { race, generateId, type Race, type Data, type WideData } from '.';
 
+/**
+ * React component for the racing-bars chart.
+ *
+ * Renders a racing bar chart inside a `<div>` element and exposes the chart's
+ * {@link Race} API via the `callback` prop.
+ *
+ * @param props - Component props extending {@link Props} with optional React children.
+ * When props change, the chart options are updated via {@link Race.changeOptions}.
+ * @returns A `<div>` containing the racing bar chart.
+ *
+ * @example
+ * ```tsx
+ * import RacingBars from 'racing-bars/react';
+ * function App() {
+ *   return (
+ *     <RacingBars
+ *       dataUrl="/data/population.csv"
+ *       dataType="csv"
+ *       title="World Population"
+ *     />
+ *   );
+ * }
+ * ```
+ *
+ * @see https://racing-bars.hatemhosny.dev/documentation/api
+ */
 export default function RacingBars(props: Props & { children?: React.ReactNode }) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [racer, setRacer] = useState<Race | undefined>(undefined);

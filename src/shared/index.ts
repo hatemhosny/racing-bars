@@ -65,6 +65,13 @@ export type Props = Partial<
   }
 >;
 
+/**
+ * Default props for the React and Vue components.
+ *
+ * Merges the chart's {@link defaultOptions} with default values for component-specific props.
+ *
+ * @internal
+ */
 export const defaultProps: Props = {
   ...defaultOptions,
   data: undefined as unknown as Data[],
