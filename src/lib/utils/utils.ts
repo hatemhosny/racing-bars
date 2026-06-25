@@ -83,6 +83,19 @@ export function shuffle(arr: string[], seed: number) {
   return array;
 }
 
+/**
+ * Generates a unique ID string, typically used as a DOM element ID.
+ *
+ * @param prefix - String prefix for the ID (default: `'racingbars'`).
+ * @param n - Number of random characters to append (default: 8).
+ * @returns A unique ID string combining the prefix and random characters.
+ *
+ * @example
+ * ```ts
+ * generateId();                  // 'racingbars_a1b2c3d4'
+ * generateId('chart', 6);       // 'chart_x1y2z3'
+ * ```
+ */
 export function generateId(prefix = 'racingbars', n = 8) {
   const rnd = Array(3)
     .fill(null)
