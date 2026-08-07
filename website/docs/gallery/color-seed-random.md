@@ -9,6 +9,8 @@ A demo for using random [color seed](../documentation/options.md#colorseed).
 
 <!--truncate-->
 
+Example:  
+Use `Math.round(Math.random() * 100)` as a value for `colorSeed`.  
 Refresh the page to get different bar colors.
 
 ### Chart
@@ -19,6 +21,5 @@ Refresh the page to get different bar colors.
     dataType="csv"
     title="World Population"
     colorSeed={Math.round(Math.random() * 100)}
-    dynamicProps={{colorSeed: 'Math.round(Math.random() * 100)'}}
   />
 </div>

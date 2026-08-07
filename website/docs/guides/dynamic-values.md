@@ -36,22 +36,5 @@ export const getTotal = (currentDate, dateSlice, allDates) =>
     subTitle={getTop5}
     dateCounter={getYearQuarter}
     caption={getTotal}
-    dynamicProps={{title: `function getYearRange(currentDate, dateSlice, allDates) {
-return \`Top Languages (\${allDates[0].slice(0, 4)} - \${allDates[allDates.length - 1].slice(0, 4)})\`;
-}`,
-subTitle: `function getTop5(currentDate, dateSlice, allDates) {
-return \`Top 5: \${dateSlice.slice(0, 5).map(d => d.name).join(', ')}\`;
-}`,
-dateCounter: `function getYearQuarter(currentDate, dateSlice, allDates) {
-  const month = Number(currentDate.slice(5, 7));
-  const year = Number(currentDate.slice(0, 4));
-  const q = Math.floor(month / 3) + 1;
-  const quarter = q > 4 ? q - 4 : q;
-  return \`Q\${quarter} \${year}\`;
-}`,
-caption: `function getTotal(currentDate, dateSlice, allDates) {
-return \`Total: \${Math.round(dateSlice.reduce((acc, curr) => acc + curr.value, 0))}\`;
-}`,
-}}
   />
 </div>
